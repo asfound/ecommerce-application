@@ -11,12 +11,16 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "echo remove this after merge",
+    "format": "echo remove this after merge",
+    "stylelint": "echo remove this after merge"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "typescript": "~5.7.2",
     "vite": "^6.3.1"
   },
