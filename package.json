@@ -1,0 +1,23 @@
+{
+  "name": "ecommerce-application",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asfound/ecommerce-application.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "modern-normalize": "^3.0.1"
+  }
+}
