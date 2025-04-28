@@ -7,6 +7,11 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   base: './',
+  build: {
+    minify: true,
+    sourcemap: false,
+    assetsDir: '',
+  },
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
