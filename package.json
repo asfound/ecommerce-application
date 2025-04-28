@@ -10,7 +10,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier \"./src\" --write",
+    "format:check": "prettier \"./src\" --check"
   },
   "devDependencies": {
     "typescript": "~5.7.2",
