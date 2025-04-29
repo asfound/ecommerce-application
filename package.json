@@ -11,6 +11,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "lint": "eslint --fix \"./src/**/*.ts\"",
+    "lint:check": "eslint \"./src/**/*.ts\""
     "format": "prettier \"./src\" --write",
     "format:check": "prettier \"./src\" --check"
   },
