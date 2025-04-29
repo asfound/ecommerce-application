@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-css-modules",
+    "stylelint-config-clean-order"
+  ],
+
+  "overrides": [
+    {
+      "files": ["src/**/*.css"],
+      "rules": {
+        "selector-class-pattern": [
+          "^[a-z]+([A-Z0-9][a-zA-Z0-9]+)*$",
+          {
+            "message": "Expected class selector to be lowerCamelCase"
+          }
+        ]
+      }
+    }
+  ]
+}
