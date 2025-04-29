@@ -19,12 +19,14 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "noImplicitOverride": true,
+    "erasableSyntaxOnly": true,
 
     /* Path aliases */
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
-    },
+    }
   },
   "include": ["src"]
 }
