@@ -15,7 +15,8 @@
     "lint:check": "eslint \"./src/**/*.ts\"",
     "format": "prettier \"./src\" --write",
     "format:check": "prettier \"./src\" --check",
-    "stylelint": "stylelint \"./src/**/*.scss\"",
+    "stylelint": "stylelint \"./src/**/*.css\" --fix",
+    "stylelint:check": "stylelint \"./src/**/*.css\"",
     "prepare": "husky"
   },
   "devDependencies": {
