@@ -3,7 +3,7 @@
  * @type {import('lint-staged').Configuration}
  */
 export default {
-  'src/**/*.{js,ts,json,md,css}': 'prettier --write --ignore-unknown',
+  'src/**/*.{js,ts,cjs,mjs,json,md,css}': 'prettier --write --ignore-unknown',
   'src/**/*.{js,ts,cjs,mjs}': 'eslint --fix --max-warnings 0',
   'src/**/*.css': 'stylelint --fix',
 };
