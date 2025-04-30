@@ -43,13 +43,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           reviewers: ${{ steps.prepare.outputs.github_reviewers }}
 
-      - name: Notify in Telegram
-        uses: ./.github/workflows/notify-telegram.yml
-        with:
-          textMessage: |
-            🔔 New PR: ${{ github.event.pull_request.title }}
-            👉 ${{ github.event.pull_request.html_url }}
-            ${{ steps.prepare.outputs.telegram_reviewers }}
-        secrets:
-          TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}
-          TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
+  notify:
+    needs: assign-reviewers
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: |
+        🔔 New PR: ${{ github.event.pull_request.title }}
+        👉 ${{ github.event.pull_request.html_url }}
+        ${{ steps.prepare.outputs.telegram_reviewers }}
+    secrets:
+      TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
+      TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
