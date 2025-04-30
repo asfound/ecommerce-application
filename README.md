@@ -6,6 +6,7 @@ Welcome to the [HUH Coffee](https://huh-coffee.top/) project! ☕️
 
 - [About](#about)
 - [Technical Stack](#technical-stack)
+- [Local Setup](#local-setup)
 - [Team](#team)
 
 ## About
@@ -50,8 +51,23 @@ This project is the final task for the _JavaScript/Front-end 2024Q4_ course at [
 
 - **Architecture**: 🧩
 
+## Local Setup
+
+- Clone the repository: `git clone https://github.com/asfound/ecommerce-application.git`
+
+- Navigate to the project directory: `cd ecommerce-application`
+
+- Install dependencies: `npm install`
+
+- Create a `.env` file in the root directory and add your environment variables (e.g. CommerceTools credentials)
+
+- Run the project: `npm run dev`
+
+
+The application should now be available at `http://localhost:5173` 🚀
+
 ## Team
 
 - 💅 Ksenia Gorina / [asfound](https://github.com/asfound)
 - 💅 Alena Radomskaia / [radomskaia](https://github.com/radomskaia)
-- 💅 Ripetchor aka Grim / [ripetchor](https://github.com/ripetchor)
+- 💅 Grim / [ripetchor](https://github.com/ripetchor)
