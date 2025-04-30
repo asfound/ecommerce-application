@@ -40,5 +40,5 @@ jobs:
         Change state to ${{github.event.review.state}}
         👉 ${{ github.event.pull_request.html_url }}
     secrets:
-      TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
+      TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}
       TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
