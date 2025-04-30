@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: .github/workflows/netlify.yml
+    uses: ./.github/workflows/netlify.yml
     with:
       TG_CHAT_ID: ${{secrets.TG_PROD_CHAT_ID}}
       isProduction: true

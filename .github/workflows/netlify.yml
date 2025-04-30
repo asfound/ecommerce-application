@@ -43,20 +43,21 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
+    outputs:
+      deploy-url: ${{ steps.netlify.outputs.deploy-url }}
+
   notify:
-    uses: .github/workflows/notify-telegram.yml
+    needs: build
+    if: success()
+    uses: ./.github/workflows/notify-telegram.yml
     with:
-      textMessage: '✅ link: ${{ steps.netlify.outputs.deploy-url }}, message: ${{inputs.deployMessage}}'
+      textMessage: '✅ link: ${{ needs.build.outputs.deploy-url }}, message: ${{inputs.deployMessage}}'
       TG_CHAT_ID: ${{inputs.TG_CHAT_ID}}
 
   notify-failure:
-    name: Notify if Deploy Fails
-    runs-on: ubuntu-latest
     needs: build
     if: failure()
-    steps:
-      - name: Send Telegram message
-        uses: .github/workflows/notify-telegram.yml
-        with:
-          textMessage: "❌ Deploy failed on branch *${{ github.ref_name }}*.\n[View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-          TG_CHAT_ID: ${{inputs.TG_CHAT_ID}}
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: "❌ Deploy failed on branch *${{ github.ref_name }}*.\n[View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+      TG_CHAT_ID: ${{inputs.TG_CHAT_ID}}
