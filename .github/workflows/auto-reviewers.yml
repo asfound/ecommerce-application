@@ -18,8 +18,9 @@ jobs:
           github_list=()
           telegram_list=()
           GITHUB_ACTOR="${{ github.event.pull_request.user.login }}"
-           
           readonly PAIR_SEPARATOR='='
+
+          decoded_json=$(echo "$GITHUB_REVIEWERS_MAP" | base64 --decode)
 
           while IFS="${PAIR_SEPARATOR}" read -r github_username telegram_handle; do
 
@@ -28,7 +29,7 @@ jobs:
           telegram_list+=("${telegram_handle}")
           fi
 
-          done < <(printf '%s\n' "$GITHUB_REVIEWERS_MAP" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+          done < <(echo "$decoded_json" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
 
           github_json="[${github_list[*]}]"
           telegram_string="${telegram_list[*]}"
