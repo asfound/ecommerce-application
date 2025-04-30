@@ -1,0 +1,36 @@
+name: Build and Deploy to Netlify Preview
+
+on:
+  push:
+    branches:
+      - test-deploy
+      - 'feat/**'
+      - 'sprint-*'
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Netlify (Preview)
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: ./dist
+          production-branch: develop
+          production-deploy: false
+          deploy-message: ${{ github.event.pull_request.title }}
+          enable-commit-comment: true
+          netlify-config-path: ./netlify.toml
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
