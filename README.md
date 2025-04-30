@@ -33,3 +33,25 @@ Our sleek, easy-to-navigate website is designed to give you the smoothest shoppi
 ### Purpose:
 
 This project is the final task for the _JavaScript/Front-end 2024Q4_ course at [Rolling Scopes School](https://rs.school). It showcases the skills and knowledge gained throughout the program — from responsive layout and interactive UI to modern development practices and clean code.
+
+## Technical Stack
+
+- **Frontend**: Developed with [TypeScript](https://www.typescriptlang.org/), [HTML](https://www.w3schools.com/html/), [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS), and [modern-normalize](https://github.com/sindresorhus/modern-normalize) — delivering a responsive, clean, and consistent UI 🎨
+
+- **Backend Integration**: Powered by [CommerceTools](https://commercetools.com/), a leading provider of commerce solutions for B2C and B2B enterprises 🌐
+
+- **Bundler**: Uses [Vite](https://vitejs.dev/) for lightning-fast builds, HMR, and a modern development workflow ⚡
+
+- **Testing**: Ensures reliability with [Vitest](https://vitest.dev/) 🧪
+
+- **Code Quality**: Maintained through tools like [ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [Stylelint](https://stylelint.io/), [Perfectionist](https://eslint-plugin-perfectionist.azat.io/), [EditorConfig](https://editorconfig.org/), and [Husky](https://typicode.github.io/husky/) ✅
+
+- **CI/CD & Deployment**: Automations handled with [GitHub Actions](https://github.com/features/actions), and live deployment on [Netlify](https://www.netlify.com/) 🚀
+
+- **Architecture**: 🧩
+
+## Team
+
+- 💅 Ksenia Gorina / [asfound](https://github.com/asfound)
+- 💅 Alena Radomskaia / [radomskaia](https://github.com/radomskaia)
+- 💅 Ripetchor aka Grim / [ripetchor](https://github.com/ripetchor)
