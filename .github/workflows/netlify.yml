@@ -68,7 +68,6 @@ jobs:
     uses: ./.github/workflows/notify-telegram.yml
     with:
       textMessage: '❌ Deploy failed on branch *${{ github.ref_name }}*. View logs (${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
-
     secrets:
       TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
       TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
