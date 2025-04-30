@@ -12,4 +12,7 @@ jobs:
       isProduction: true
       deployMessage: '${{  github.event.pull_request.title }}'
     secrets:
-      TG_CHAT_ID: ${{secrets.TG_PROD_CHAT_ID}}
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      TG_CHAT_ID: ${{secrets.TG_PREVIEW_CHAT_ID}}
+      TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}

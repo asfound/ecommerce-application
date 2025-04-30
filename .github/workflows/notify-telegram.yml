@@ -9,6 +9,8 @@ on:
     secrets:
       TG_CHAT_ID:
         required: true
+      TG_BOT_TOKEN:
+        required: true
 jobs:
   notify-telegram:
     runs-on: ubuntu-latest

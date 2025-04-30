@@ -12,6 +12,12 @@ on:
     secrets:
       TG_CHAT_ID:
         required: true
+      NETLIFY_AUTH_TOKEN:
+        required: true
+      NETLIFY_SITE_ID:
+        required: true
+      TG_BOT_TOKEN:
+        required: true
 
 jobs:
   build:
@@ -54,12 +60,14 @@ jobs:
       textMessage: '✅ link: ${{ needs.build.outputs.deploy-url }}, message: ${{inputs.deployMessage}}'
     secrets:
       TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
+      TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
 
   notify-failure:
     needs: build
-    if: failure()
+    if: failure() || env.deploy-url == ''
     uses: ./.github/workflows/notify-telegram.yml
     with:
       textMessage: "❌ Deploy failed on branch *${{ github.ref_name }}*.\n[View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
     secrets:
       TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
+      TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
