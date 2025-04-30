@@ -23,14 +23,21 @@ jobs:
         run: npm run build
 
       - name: Deploy to Netlify (Preview)
+        id: netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
           publish-dir: ./dist
           production-branch: develop
           production-deploy: false
-          deploy-message: ${{ github.event.pull_request.title }}
+          deploy-message: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message }}
           enable-commit-comment: true
           netlify-config-path: ./netlify.toml
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Send Netlify preview link to Telegram
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TG_PREVIEW_BOT_TOKEN }}/sendMessage \
+              -d chat_id=${{ secrets.TG_PREVIEW_CHAT_ID }} \
+              -d text="✅ link: ${{ steps.netlify.outputs.deploy-url }}, message: ${{ steps.netlify.outputs.deploy-message }}"
