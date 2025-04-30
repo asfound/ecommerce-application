@@ -6,6 +6,10 @@ on:
 jobs:
   extract-author:
     runs-on: ubuntu-latest
+
+    outputs:
+      author_telegram: ${{ steps.prepare.outputs.author_telegram }}
+
     steps:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
@@ -37,7 +41,7 @@ jobs:
       textMessage: |
         🔔 ${{ needs.extract-author.outputs.author_telegram }}
         Your PR: ${{ github.event.pull_request.title }}
-        Change state to ${{github.event.review.state}}
+        Change state to **${{github.event.review.state}}**
         👉 ${{ github.event.pull_request.html_url }}
     secrets:
       TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}

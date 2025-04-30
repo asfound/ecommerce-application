@@ -8,6 +8,10 @@ jobs:
       contents: write
       pull-requests: write
     runs-on: ubuntu-latest
+
+    outputs:
+      telegram_reviewers: ${{ steps.prepare.outputs.telegram_reviewers }}
+
     steps:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
@@ -53,7 +57,7 @@ jobs:
       textMessage: |
         🔔 New PR: ${{ github.event.pull_request.title }}
         👉 ${{ github.event.pull_request.html_url }}
-        ${{ needs.prepare.outputs.telegram_reviewers }}
+        ${{ needs.assign-reviewers.outputs.telegram_reviewers }}
     secrets:
       TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}
       TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
