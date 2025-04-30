@@ -38,6 +38,6 @@ jobs:
 
       - name: Send Netlify preview link to Telegram
         run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TG_PREVIEW_BOT_TOKEN }}/sendMessage \
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendMessage \
               -d chat_id=${{ secrets.TG_PREVIEW_CHAT_ID }} \
-              -d text="✅ link: ${{ steps.netlify.outputs.deploy-url }}, message: ${{ steps.netlify.outputs.deploy-message }}"
+              -d text="✅ link: ${{ steps.netlify.outputs.deploy-url }}, message: ${{  github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'No message found' }}""
