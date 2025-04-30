@@ -16,7 +16,7 @@ jobs:
           GITHUB_REVIEWERS_MAP="${{ secrets.REVIEWERS_MAP }}"
           GITHUB_ACTOR="${{ github.event.pull_request.user.login }}"
           readonly PAIR_SEPARATOR='='
-
+          decoded_json=$(echo "$GITHUB_REVIEWERS_MAP" | base64 --decode)
           author_telegram=''
 
           while IFS="${PAIR_SEPARATOR}" read -r github_username telegram_handle; do
@@ -26,7 +26,7 @@ jobs:
            break
           fi
 
-          done < <(echo "${GITHUB_REVIEWERS_MAP}" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+          done < <(echo "${decoded_json}" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
            
           echo "author_telegram=${author_telegram}" >> "$GITHUB_OUTPUT"
 
