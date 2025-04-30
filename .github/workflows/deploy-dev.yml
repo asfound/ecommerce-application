@@ -1,0 +1,18 @@
+name: Build and Deploy to Netlify Preview
+
+on:
+  push:
+    branches:
+      - 'sprint-*'
+
+jobs:
+  build:
+    uses: ./.github/workflows/netlify.yml
+    with:
+      isProduction: false
+      deployMessage: "${{  github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'No message found' }}"
+    secrets:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      TG_CHAT_ID: ${{secrets.TG_DEV_CHAT_ID}}
+      TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
