@@ -1,0 +1,43 @@
+name: Notify Author on Approval
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  notify-author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Extract author telegram
+        id: prepare
+        run: |
+          GITHUB_REVIEWERS_MAP="${{ secrets.REVIEWERS_MAP }}"
+          GITHUB_ACTOR="${{ github.event.pull_request.user.login }}"
+          readonly PAIR_SEPARATOR='='
+
+          author_telegram = ''
+
+          while IFS="${PAIR_SEPARATOR}" read -r github_username telegram_handle; do
+
+          if [[ "${GITHUB_ACTOR}" == "${github_username}" ]]; then
+           author_telegram+=("${telegram_handle}")
+           break
+          fi
+
+          done < <(echo "${GITHUB_REVIEWERS_MAP}" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+           
+          echo "author_telegram=${author_telegram}" >> "$GITHUB_OUTPUT"
+
+      - name: Notify in Telegram
+        uses: ./.github/workflows/notify-telegram.yml
+        with:
+          textMessage: |
+            🔔 ${{ steps.prepare.outputs.author_telegram }}
+            Your PR: ${{ github.event.pull_request.title }}
+            Change state to ${{github.event.review.state}}
+            👉 ${{ github.event.pull_request.html_url }}
+        secrets:
+          TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}
+          TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}

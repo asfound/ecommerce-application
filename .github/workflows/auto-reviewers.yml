@@ -9,8 +9,47 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: octokit/request-action@v2.x
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Prepare reviewers
+        id: prepare
+        run: |
+          GITHUB_REVIEWERS_MAP="${{ secrets.REVIEWERS_MAP }}"
+          github_list=()
+          telegram_list=()
+          GITHUB_ACTOR="${{ github.event.pull_request.user.login }}"
+           
+          readonly PAIR_SEPARATOR='='
+
+          while IFS="${PAIR_SEPARATOR}" read -r github_username telegram_handle; do
+
+          if [[ "${GITHUB_ACTOR}" != "${github_username}" ]]; then
+          github_list+=("\"${github_username}\"")
+          telegram_list+=("${telegram_handle}")
+          fi
+
+          done < <(echo "${GITHUB_REVIEWERS_MAP}" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+
+          github_json="[${github_list[*]}]"
+          telegram_string="${telegram_list[*]}"
+
+          echo "github_reviewers=${github_json}" >> "$GITHUB_OUTPUT"
+          echo "telegram_reviewers=${telegram_string}" >> "$GITHUB_OUTPUT"
+
+      - name: Assign Reviewers
+        uses: octokit/request-action@v2.x
         with:
           route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers
           token: ${{ secrets.GITHUB_TOKEN }}
-          reviewers: '["asfound", "ripetchor", "radomskaia"]'
+          reviewers: ${{ steps.prepare.outputs.github_reviewers }}
+
+      - name: Notify in Telegram
+        uses: ./.github/workflows/notify-telegram.yml
+        with:
+          textMessage: |
+            🔔 New PR: ${{ github.event.pull_request.title }}
+            👉 ${{ github.event.pull_request.html_url }}
+            ${{ steps.prepare.outputs.telegram_reviewers }}
+        secrets:
+          TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}
+          TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
