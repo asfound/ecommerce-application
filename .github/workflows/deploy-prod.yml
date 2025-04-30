@@ -9,6 +9,7 @@ jobs:
   build:
     uses: ./.github/workflows/netlify.yml
     with:
-      TG_CHAT_ID: ${{secrets.TG_PROD_CHAT_ID}}
       isProduction: true
       deployMessage: '${{  github.event.pull_request.title }}'
+    secrets:
+      TG_CHAT_ID: ${{secrets.TG_PROD_CHAT_ID}}

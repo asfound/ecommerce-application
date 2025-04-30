@@ -11,6 +11,7 @@ jobs:
   build:
     uses: ./.github/workflows/netlify.yml
     with:
-      TG_CHAT_ID: ${{secrets.TG_PREVIEW_CHAT_ID}}
       isProduction: false
       deployMessage: "${{  github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'No message found' }}"
+    secrets:
+      TG_CHAT_ID: ${{secrets.TG_PREVIEW_CHAT_ID}}

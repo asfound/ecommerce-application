@@ -9,9 +9,9 @@ on:
       deployMessage:
         required: true
         type: string
+    secrets:
       TG_CHAT_ID:
         required: true
-        type: string
 
 jobs:
   build:
@@ -52,7 +52,8 @@ jobs:
     uses: ./.github/workflows/notify-telegram.yml
     with:
       textMessage: '✅ link: ${{ needs.build.outputs.deploy-url }}, message: ${{inputs.deployMessage}}'
-      TG_CHAT_ID: ${{inputs.TG_CHAT_ID}}
+    secrets:
+      TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
 
   notify-failure:
     needs: build
@@ -60,4 +61,5 @@ jobs:
     uses: ./.github/workflows/notify-telegram.yml
     with:
       textMessage: "❌ Deploy failed on branch *${{ github.ref_name }}*.\n[View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-      TG_CHAT_ID: ${{inputs.TG_CHAT_ID}}
+    secrets:
+      TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
