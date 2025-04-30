@@ -3,8 +3,8 @@ name: Build and Deploy to Netlify Preview
 on:
   push:
     branches:
-      - test-deploy
       - 'feat/**'
+      - 'test/**'
       - 'sprint-*'
 
 jobs:
