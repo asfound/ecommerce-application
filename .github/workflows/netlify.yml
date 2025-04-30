@@ -9,14 +9,11 @@ on:
       deployMessage:
         required: true
         type: string
-      NETLIFY_AUTH_TOKEN:
-        required: true
-        type: string
     secrets:
       TG_CHAT_ID:
         required: true
-      #      NETLIFY_AUTH_TOKEN:
-      #        required: true
+      NETLIFY_AUTH_TOKEN:
+        required: true
       NETLIFY_SITE_ID:
         required: true
       TG_BOT_TOKEN:
@@ -49,7 +46,7 @@ jobs:
           overwrites-pull-request-comment: false
           netlify-config-path: ./netlify.toml
         env:
-          NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
     outputs:
@@ -67,10 +64,11 @@ jobs:
 
   notify-failure:
     needs: build
-    if: failure() || needs.build.outputs.deploy-url == ''
+    if: failure()
     uses: ./.github/workflows/notify-telegram.yml
     with:
-      textMessage: "❌ Deploy failed on branch *${{ github.ref_name }}*.\n[View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+      textMessage: '❌ Deploy failed on branch *${{ github.ref_name }}*. View logs (${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+
     secrets:
       TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
       TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}

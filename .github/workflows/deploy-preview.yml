@@ -3,8 +3,6 @@ name: Build and Deploy to Netlify Preview
 on:
   push:
     branches:
-      - 'feat/**'
-      - 'test/**'
       - 'sprint-*'
 
 jobs:
@@ -13,7 +11,6 @@ jobs:
     with:
       isProduction: false
       deployMessage: "${{  github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'No message found' }}"
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
     secrets:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
