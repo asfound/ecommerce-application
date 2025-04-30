@@ -9,13 +9,16 @@
 **Example:**
 `feat(RSS-ECOMM-1_01): add product filter dropdown`
 
-
 ## Description 👇
 
 #### Changes Overview
 
-- Add description of changes
+- Add description of your changes here 🫵
 - ...
+
+#### Changes Rationale
+
+_Explain the context behind the changes if needed_
 
 #### Related issue(s)
 
