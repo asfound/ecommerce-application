@@ -36,9 +36,11 @@ jobs:
         run: npm run test:coverage
 
       - name: Upload coverage to Codecov
+        if: always()
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: asfound/ecommerce-application
           files: ./coverage/lcov.info
           flags: unittests
 
@@ -60,8 +62,11 @@ jobs:
           publish-dir: ./dist
           production-branch: develop
           production-deploy: ${{ github.base_ref == 'develop' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: ${{ github.event.pull_request.title }}
-          enable-pull-request-comment: true
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
           netlify-config-path: ./netlify.toml
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
