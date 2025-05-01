@@ -17,7 +17,7 @@ coverage
 package-lock.json
 
 # Environment variable files
-.env*
+.env
 
 # Editor directories and files
 .vscode/*
