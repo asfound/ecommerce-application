@@ -184,7 +184,7 @@ jobs:
           REPO: ${{ github.repository }}
           BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
         run: |
-          current_body="${{ steps.fetch-body.outputs.body }}"
+          current_body=$(echo "${{ steps.fetch-body.outputs.body }}" | sed 's/[`$]/\\&/g')
           updated_body="${current_body}
           ---
 
