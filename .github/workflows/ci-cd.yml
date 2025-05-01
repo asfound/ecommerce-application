@@ -127,7 +127,7 @@ jobs:
             echo "EOF" >> $GITHUB_OUTPUT
           fi
 
-      - name: Set telegram message
+      - name: Set PR message
         id: pr-message
         run: |
           LINT_RESULT="${{ needs.lint.outputs.result }}"
@@ -156,7 +156,7 @@ jobs:
           ${TEST_COVERAGE}
           "
 
-          echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+          echo "prMessage<<EOF" >> $GITHUB_OUTPUT
           echo "$SUMMARY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -190,7 +190,10 @@ jobs:
 
           ---
 
-          ${BODY_UPDATE}"
+          ${BODY_UPDATE}
+
+          END
+
           EOF
           )
 
