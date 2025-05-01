@@ -35,14 +35,24 @@ jobs:
       - name: Run tests and generate coverage
         run: npm run test:coverage
 
-      - name: Upload coverage to Codecov
-        if: always()
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: asfound/ecommerce-application
-          files: ./coverage/lcov.info
-          flags: unittests
+      - name: Read coverage and post comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+            total_lines=$(grep -E "^LF:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+            covered_lines=$(grep -E "^LH:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+            coverage=0
+            if [ "$total_lines" -gt 0 ]; then
+              coverage=$(awk "BEGIN { printf \"%.2f\", (${covered_lines}/${total_lines}) * 100 }")
+            fi
+
+            body="🧪 **Test Coverage**: ${coverage}%\n\n📄 \`npm run test:coverage\`"
+
+            curl -s -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d "{\"body\":\"${body}\"}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
 
   build:
     needs: [lint, format, test]
@@ -110,6 +120,20 @@ jobs:
             echo "$FAILURE_MSG" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           fi
+
+      - name: Comment deploy status in PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_MSG: ${{ steps.set-message.outputs.textMessage }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          body="${DEPLOY_MSG}"
+          curl -s -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\":\"${body}\"}" \
+            "https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments"
 
   notify:
     needs: notify-message
