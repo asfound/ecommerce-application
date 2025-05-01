@@ -103,8 +103,10 @@ jobs:
       deployUrl: ${{ needs.build.outputs.deploy-url }}
       prTitle: ${{ github.event.pull_request.title }}
       refName: ${{ github.ref_name }}
-      baseRef: ${{ github.base_ref }}
       prNumber: ${{ github.event.pull_request.number }}
+      runID: ${{ github.run_id }}
+      baseRef: ${{ github.base_ref }}
+      serverUrl: ${{ github.server_url }}
     secrets:
       GH_PAT: ${{ secrets.GH_PAT }}
       TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}

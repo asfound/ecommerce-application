@@ -30,7 +30,13 @@ on:
       prNumber:
         required: true
         type: string
+      runID:
+        required: true
+        type: string
       baseRef:
+        required: true
+        type: string
+      serverUrl:
         required: true
         type: string
     secrets:
@@ -48,14 +54,19 @@ jobs:
       textMessage: ${{ steps.telegram-message.outputs.textMessage }}
       prMessage: ${{ steps.pr-message.outputs.prMessage }}
     env:
-      DEPLOY_URL: ${{ inputs.deploy-url }}
-      BUILD_RESULT: ${{ inputs.build }}
-      PR_TITLE: ${{ inputs.prTitle }}
+      LINT_RESULT: "${{ inputs.lint }}"
+      FORMAT_RESULT: "${{ inputs.format }}"
       TEST_RESULT: ${{ inputs.test }}
+      BUILD_RESULT: ${{ inputs.build }}
+      TEST_COVERAGE: "${{ inputs.coverage }}"
+      DEPLOY_URL: ${{ inputs.deploy-url }}
+      PR_TITLE: ${{ inputs.prTitle }}
       REF_NAME: ${{ inputs.ref_name }}
-      SERVER_URL: ${{ inputs.server_url }}
+      SERVER_URL: ${{ inputs.serverUrl }}
       REPOSITORY: ${{ inputs.repository }}
       RUN_ID: ${{ inputs.run_id }}
+      BASE_REF: ${{ inputs.base_ref }}
+
     steps:
       - name: Set telegram message
         id: telegram-message
@@ -80,19 +91,11 @@ jobs:
       - name: Set PR message
         id: pr-message
         run: |
-          LINT_RESULT="${{ inputs.lint }}"
-          FORMAT_RESULT="${{ inputs.format }}"
-          TEST_RESULT="${{ inputs.test }}"
-          BUILD_RESULT="${{ inputs.build }}"
-
-
           LINT_ICON=$( [ "$LINT_RESULT" = "success" ] && echo "✅" || echo "❌" )
           FORMAT_ICON=$( [ "$FORMAT_RESULT" = "success" ] && echo "✅" || echo "❌" )
           TEST_ICON=$( [ "$TEST_RESULT" = "success" ] && echo "✅" || echo "❌" )
           BUILD_ICON=$( [ "$BUILD_RESULT" = "success" ] && echo "✅" || echo "❌" )
 
-          TEST_COVERAGE="${{ inputs.coverage }}"
-          DEPLOY_URL="${{ inputs.deploy-url }}"
           DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
           TEST_LINE=$([ "TEST_RESULT" = "success" ] && echo "${TEST_COVERAGE}" || echo "")
 
@@ -144,7 +147,7 @@ jobs:
           REPO: ${{ github.repository }}
           BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
         run: |
-          current_body=$(echo "${{ steps.fetch-body.outputs.body }}" | sed 's/[$]/\\&/g')
+          current_body="${{ steps.fetch-body.outputs.body }}"
           updated_body="${current_body}"$'\n\n---\n'"${BODY_UPDATE}"
 
           gh pr edit "$PR_NUMBER" \
