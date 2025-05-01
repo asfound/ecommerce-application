@@ -48,7 +48,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node-modules
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Build
         run: npm run build
@@ -93,7 +95,7 @@ jobs:
           SUCCESS_MSG="✅ Deploy succeed [link](${DEPLOY_URL})
           message: ${PR_TITLE}"
 
-          FAILURE_MSG="❌ Deploy failed on branch **${REF_NAME}**.
+          FAILURE_MSG="❌ Deploy failed on branch **${REF_NAME}**\\.
           [View logs](${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID})"
 
           if [ "$BUILD_RESULT" = "success" ]; then
