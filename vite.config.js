@@ -23,6 +23,7 @@ export default defineConfig({
     environment: 'jsdom',
     coverage: {
       reporter: ['text', 'html', 'lcov'],
+      include: ['src/**/*.{ts}']
     },
   }
 });
