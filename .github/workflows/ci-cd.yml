@@ -185,10 +185,15 @@ jobs:
           BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
         run: |
           current_body=$(echo "${{ steps.fetch-body.outputs.body }}" | sed 's/[`$]/\\&/g')
-          updated_body="${current_body}
+          updated_body=$(cat << EOF
+          ${current_body}
+
           ---
 
           ${BODY_UPDATE}"
+          EOF
+          )
+
 
           echo "$updated_body" | jq -Rs '{ body: . }' > payload.json
 
