@@ -53,30 +53,16 @@ jobs:
     outputs:
       textMessage: ${{ steps.telegram-message.outputs.textMessage }}
       prMessage: ${{ steps.pr-message.outputs.prMessage }}
-    env:
-      LINT_RESULT: "${{ inputs.lint }}"
-      FORMAT_RESULT: "${{ inputs.format }}"
-      TEST_RESULT: ${{ inputs.test }}
-      BUILD_RESULT: ${{ inputs.build }}
-      TEST_COVERAGE: "${{ inputs.coverage }}"
-      DEPLOY_URL: ${{ inputs.deploy-url }}
-      PR_TITLE: ${{ inputs.prTitle }}
-      REF_NAME: ${{ inputs.ref_name }}
-      SERVER_URL: ${{ inputs.serverUrl }}
-      REPOSITORY: ${{ inputs.repository }}
-      RUN_ID: ${{ inputs.run_id }}
-      BASE_REF: ${{ inputs.base_ref }}
-
     steps:
       - name: Set telegram message
         id: telegram-message
         env:
-          DEPLOY_URL: ${{ inputs.deploy-url }}
+          DEPLOY_URL: ${{ inputs.deployUrl }}
           PR_TITLE: ${{ inputs.prTitle }}
-          REF_NAME: ${{ inputs.ref_name }}
+          REF_NAME: ${{ inputs.refName }}
           SERVER_URL: ${{ inputs.serverUrl }}
           REPOSITORY: ${{ inputs.repository }}
-          RUN_ID: ${{ inputs.run_id }}
+          RUN_ID: ${{ inputs.runID }}
           BUILD_RESULT: ${{ inputs.build }}
 
         run: |
@@ -147,9 +133,11 @@ jobs:
         id: fetch-body
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
+          PR_NUMBER: ${{ inputs.prNumber }}
+          REPO: ${{ github.repository }}
         run: |
-             gh pr view ${{ inputs.prNumber }} \
-            --repo "${{ github.repository }}" \
+             gh pr view $PR_NUMBER \
+            --repo "${REPO}" \
             --json body -q '.body' > pr_body.txt
 
       - name: Update PR body
@@ -162,5 +150,5 @@ jobs:
           echo -e "\n---\n${BODY_UPDATE}" >> pr_body.txt
 
           gh pr edit "$PR_NUMBER" \
-            --repo "${{ github.repository }}" \
+            --repo "${REPO}" \
             --body-file pr_body.txt
