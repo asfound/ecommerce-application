@@ -61,7 +61,7 @@ jobs:
           production-branch: develop
           production-deploy: ${{ github.base_ref == 'develop' }}
           deploy-message: ${{ github.event.pull_request.title }}
-          enable-commit-comment: true
+          enable-pull-request-comment: true
           netlify-config-path: ./netlify.toml
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
