@@ -1,0 +1,157 @@
+name: Notify
+
+on:
+  workflow_call:
+    inputs:
+      lint:
+        required: true
+        type: string
+      format:
+        required: true
+        type: string
+      test:
+        required: true
+        type: string
+      build:
+        required: true
+        type: string
+      coverage:
+        required: false
+        type: string
+      deployUrl:
+        required: false
+        type: string
+      prTitle:
+        required: true
+        type: string
+      refName:
+        required: true
+        type: string
+      prNumber:
+        required: true
+        type: string
+      baseRef:
+        required: true
+        type: string
+    secrets:
+      GH_PAT:
+        required: true
+      TG_BOT_TOKEN:
+        required: true
+      TG_CHAT_ID:
+        required: true
+
+jobs:
+  set-message:
+    runs-on: ubuntu-latest
+    outputs:
+      textMessage: ${{ steps.telegram-message.outputs.textMessage }}
+      prMessage: ${{ steps.pr-message.outputs.prMessage }}
+
+    steps:
+      - name: Set telegram message
+        id: telegram-message
+        env:
+          DEPLOY_URL: ${{ inputs.deploy-url }}
+          BUILD_RESULT: ${{ inputs.build }}
+          PR_TITLE: ${{ inputs.prTitle }}
+          REF_NAME: ${{ inputs.ref_name }}
+          SERVER_URL: ${{ inputs.server_url }}
+          REPOSITORY: ${{ inputs.repository }}
+          RUN_ID: ${{ inputs.run_id }}
+        run: |
+          SUCCESS_MSG="✅ Deploy succeed [link](${DEPLOY_URL})
+          message: ${PR_TITLE}"
+
+          FAILURE_MSG="❌ Deploy failed on branch **${REF_NAME}**\\.
+          [View logs](${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID})"
+
+          if [ "$BUILD_RESULT" = "success" ]; then
+            echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+            echo "$SUCCESS_MSG" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+            echo "$FAILURE_MSG" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set PR message
+        id: pr-message
+        run: |
+          LINT_RESULT="${{ inputs.lint }}"
+          FORMAT_RESULT="${{ inputs.format }}"
+          TEST_RESULT="${{ inputs.test }}"
+          BUILD_RESULT="${{ inputs.build }}"
+
+
+          LINT_ICON=$( [ "$LINT_RESULT" = "success" ] && echo "✅" || echo "❌" )
+          FORMAT_ICON=$( [ "$FORMAT_RESULT" = "success" ] && echo "✅" || echo "❌" )
+          TEST_ICON=$( [ "$TEST_RESULT" = "success" ] && echo "✅" || echo "❌" )
+          BUILD_ICON=$( [ "$BUILD_RESULT" = "success" ] && echo "✅" || echo "❌" )
+
+          TEST_COVERAGE="${{ inputs.coverage }}"
+
+          DEPLOY_URL="${{ inputs.deploy-url }}"
+          DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
+
+          SUMMARY="### CI/CD Status
+          - ${LINT_ICON} Linter
+          - ${FORMAT_ICON} Formatter
+          - ${TEST_ICON} Tests
+          - ${BUILD_ICON} Build
+
+          ${DEPLOY_LINE}
+          ${TEST_COVERAGE}
+          "
+
+          echo "prMessage<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUMMARY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  notify-telegram:
+    needs: set-message
+    if: always()
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: ${{ needs.set-message.outputs.textMessage }}
+    secrets:
+      TG_CHAT_ID: ${{ inputs.baseRef == 'develop' && secrets.TG_PROD_CHAT_ID || secrets.TG_DEV_CHAT_ID }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+
+  update-pr:
+    needs: set-message
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch current PR body
+        id: fetch-body
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          body=$(gh pr view ${{ github.event.pull_request.number }} \
+            --repo "${{ github.repository }}" \
+            --json body -q '.body')
+          echo "body<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$body" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Update PR body
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          PR_NUMBER: ${{ inputs.prNumber }}
+          REPO: ${{ github.repository }}
+          BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
+        run: |
+          current_body=$(echo "${{ steps.fetch-body.outputs.body }}" | sed 's/[$]/\\&/g')
+          updated_body="$current_body
+          ---
+          $BODY_UPDATE"
+
+          echo "$updated_body" | jq -Rs '{ body: . }' > payload.json
+
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data @payload.json \
+            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}"
