@@ -48,9 +48,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: npm install
+      - uses: ./.github/actions/setup-node-modules
 
       - name: Build
         run: npm run build
