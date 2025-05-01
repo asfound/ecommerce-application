@@ -47,18 +47,19 @@ jobs:
     outputs:
       textMessage: ${{ steps.telegram-message.outputs.textMessage }}
       prMessage: ${{ steps.pr-message.outputs.prMessage }}
-
+    env:
+      DEPLOY_URL: ${{ inputs.deploy-url }}
+      BUILD_RESULT: ${{ inputs.build }}
+      PR_TITLE: ${{ inputs.prTitle }}
+      TEST_RESULT: ${{ inputs.test }}
+      REF_NAME: ${{ inputs.ref_name }}
+      SERVER_URL: ${{ inputs.server_url }}
+      REPOSITORY: ${{ inputs.repository }}
+      RUN_ID: ${{ inputs.run_id }}
     steps:
       - name: Set telegram message
         id: telegram-message
-        env:
-          DEPLOY_URL: ${{ inputs.deploy-url }}
-          BUILD_RESULT: ${{ inputs.build }}
-          PR_TITLE: ${{ inputs.prTitle }}
-          REF_NAME: ${{ inputs.ref_name }}
-          SERVER_URL: ${{ inputs.server_url }}
-          REPOSITORY: ${{ inputs.repository }}
-          RUN_ID: ${{ inputs.run_id }}
+
         run: |
           SUCCESS_MSG="✅ Deploy succeed [link](${DEPLOY_URL})
           message: ${PR_TITLE}"
@@ -91,9 +92,9 @@ jobs:
           BUILD_ICON=$( [ "$BUILD_RESULT" = "success" ] && echo "✅" || echo "❌" )
 
           TEST_COVERAGE="${{ inputs.coverage }}"
-
           DEPLOY_URL="${{ inputs.deploy-url }}"
           DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
+          TEST_LINE=$([ "TEST_RESULT" = "success" ] && echo "${TEST_COVERAGE}" || echo "")
 
           SUMMARY="### CI/CD Status
           - ${LINT_ICON} Linter
@@ -102,7 +103,7 @@ jobs:
           - ${BUILD_ICON} Build
 
           ${DEPLOY_LINE}
-          ${TEST_COVERAGE}
+          ${TEST_LINE}
           "
 
           echo "prMessage<<EOF" >> $GITHUB_OUTPUT
@@ -144,14 +145,8 @@ jobs:
           BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
         run: |
           current_body=$(echo "${{ steps.fetch-body.outputs.body }}" | sed 's/[$]/\\&/g')
-          updated_body="$current_body
-          ---
-          $BODY_UPDATE"
+          updated_body="${current_body}"$'\n\n---\n'"${BODY_UPDATE}"
 
-          echo "$updated_body" | jq -Rs '{ body: . }' > payload.json
-
-          curl -s -X PATCH \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data @payload.json \
-            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}"
+          gh pr edit "$PR_NUMBER" \
+            --repo "${{ github.repository }}" \
+            --body "$updated_body"
