@@ -17,6 +17,8 @@
     "format:check": "prettier \"./src\" --check",
     "stylelint": "stylelint \"./src/**/*.css\" --fix",
     "stylelint:check": "stylelint \"./src/**/*.css\"",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "prepare": "husky"
   },
   "devDependencies": {
