@@ -13,9 +13,6 @@ dist-ssr
 *.local
 coverage
 
-# Lock files
-package-lock.json
-
 # Environment variable files
 .env*
 
