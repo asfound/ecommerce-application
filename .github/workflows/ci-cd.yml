@@ -1,0 +1,108 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - 'sprint-*'
+      - 'chore/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules/action.yml
+
+      - name: check for lint issues
+        run: npm run lint:check
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules/action.yml
+
+      - name: check code formatting
+        run: npm run format:check
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules/action.yml
+
+      - name: Run tests and generate coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+
+  build:
+    needs: [lint, format, test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules/action.yml
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Netlify (Preview)
+        id: netlify
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: ./dist
+          production-branch: develop
+          production-deploy: ${{ github.base_ref == 'develop' }}
+          deploy-message: ${{ github.event.pull_request.title }}
+          enable-commit-comment: true
+          netlify-config-path: ./netlify.toml
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+    outputs:
+      deploy-url: ${{ steps.netlify.outputs.deploy-url }}
+
+  notify-message:
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+
+    outputs:
+      textMessage: ${{ steps.set-message.outputs.textMessage }}
+
+    steps:
+      - name: Set notify message
+        id: set-message
+        run: |
+          SUCCESS_MSG="✅ Deploy succeed [link](${{ needs.build.outputs.deploy-url }})
+          message: ${{ github.event.pull_request.title }}"
+
+          FAILURE_MSG="❌ Deploy failed on branch **${{ github.ref_name }}**.
+          [View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+
+          if [ "${{ needs.build.result }}" = "success" ]; then
+            echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+            echo "$SUCCESS_MSG" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+            echo "$FAILURE_MSG" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+  notify:
+    needs: notify-message
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: ${{ needs.notify-message.outputs.textMessage }}
+    secrets:
+      TG_CHAT_ID: ${{ github.base_ref == 'develop' && secrets.TG_PROD_CHAT_ID || secrets.TG_DEV_CHAT_ID }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
