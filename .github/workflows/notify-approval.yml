@@ -31,7 +31,7 @@ jobs:
           fi
 
           done < <(echo "${decoded_json}" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
-           
+
           echo "author_telegram=${author_telegram}" >> "$GITHUB_OUTPUT"
 
   notify:
@@ -42,7 +42,7 @@ jobs:
         🔔 ${{ needs.extract-author.outputs.author_telegram }}
         Your PR: ${{ github.event.pull_request.title }}
         Change state to **${{github.event.review.state}}**
-        👉 ${{ github.event.pull_request.html_url }}
+        👉 [link](${{ github.event.pull_request.html_url }})
     secrets:
       TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}
       TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}

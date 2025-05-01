@@ -6,9 +6,9 @@ on:
       isProduction:
         required: true
         type: boolean
-      deployMessage:
-        required: true
-        type: string
+#      deployMessage:
+#        required: true
+#        type: string
     secrets:
       TG_CHAT_ID:
         required: true
@@ -41,7 +41,7 @@ jobs:
           publish-dir: ./dist
           production-branch: develop
           production-deploy: ${{ inputs.isProduction }}
-          deploy-message: ${{ inputs.deployMessage }}
+          deploy-message: ${{ github.event.pull_request.title }}
           enable-commit-comment: true
           overwrites-pull-request-comment: false
           netlify-config-path: ./netlify.toml
@@ -57,7 +57,9 @@ jobs:
     if: success()
     uses: ./.github/workflows/notify-telegram.yml
     with:
-      textMessage: '✅ link: ${{ needs.build.outputs.deploy-url }}, message: ${{inputs.deployMessage}}'
+      textMessage: |
+        ✅ Deploy succeed [link](${{ needs.build.outputs.deploy-url }})
+        message: ${{ github.event.pull_request.title }}
     secrets:
       TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
       TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
@@ -67,7 +69,9 @@ jobs:
     if: failure()
     uses: ./.github/workflows/notify-telegram.yml
     with:
-      textMessage: '❌ Deploy failed on branch *${{ github.ref_name }}*. View logs (${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+      textMessage: |
+        ❌ Deploy failed on branch **${{ github.ref_name }}**.
+        [View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
     secrets:
       TG_CHAT_ID: ${{secrets.TG_CHAT_ID}}
       TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}

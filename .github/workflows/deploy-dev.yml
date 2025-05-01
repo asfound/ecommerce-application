@@ -1,16 +1,17 @@
 name: Build and Deploy to Netlify Preview
 
 on:
-  push:
+  pull_request:
     branches:
       - 'sprint-*'
+      - 'chore/*/**'
 
 jobs:
   build:
     uses: ./.github/workflows/netlify.yml
     with:
       isProduction: false
-      deployMessage: "${{  github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'No message found' }}"
+#      deployMessage: "${{  github.event.pull_request.title }}"
     secrets:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

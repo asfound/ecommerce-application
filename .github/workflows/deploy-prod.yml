@@ -1,7 +1,7 @@
 name: Build and Deploy to Netlify Production
 
 on:
-  push:
+  pull_request:
     branches:
       - deploy
 
@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/netlify.yml
     with:
       isProduction: true
-      deployMessage: '${{  github.event.pull_request.title }}'
+#      deployMessage: '${{  github.event.pull_request.title }}'
     secrets:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
