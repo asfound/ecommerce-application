@@ -5,13 +5,13 @@ import { createApiBuilder } from './client-builder';
 import { AUTH_FLOW_TYPE } from './constants';
 import { ClientTokenCache } from './token-cache';
 
-export class ClientManager {
-  public static get instance(): ClientManager {
-    ClientManager._instance ??= new ClientManager();
-    return ClientManager._instance;
+export class ApiBuilder {
+  public static get instance(): ApiBuilder {
+    ApiBuilder._instance ??= new ApiBuilder();
+    return ApiBuilder._instance;
   }
 
-  private static _instance: ClientManager | null = null;
+  private static _instance: ApiBuilder | null = null;
 
   public get apiRoot(): ByProjectKeyRequestBuilder {
     return this._apiRoot;
