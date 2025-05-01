@@ -7,6 +7,7 @@ Welcome to the [HUH Coffee](https://huh-coffee.top/) project! ☕️
 - [About](#about)
 - [Technical Stack](#technical-stack)
 - [Local Setup](#local-setup)
+- [Avaliable Scripts](#avaliable-scripts)
 - [Team](#team)
 
 ## About
@@ -65,6 +66,25 @@ This project is the final task for the _JavaScript/Front-end 2024Q4_ course at [
 
 
 The application should now be available at `http://localhost:5173` 🚀
+
+## Avaliable Scripts
+
+
+| Command                   | Description                                        |
+| ------------------------- | -------------------------------------------------- |
+| `npm run dev`             | Initiates the Vite development server              |
+| `npm run build`           | Compiles TypeScript and builds the app using Vite  |
+| `npm run preview`         | Serves the production build locally via Vite       |
+| `npm run lint`            | Fixes lint issues in `.ts` files using ESLint      |
+| `npm run lint:check`      | Checks for lint issues without fixing              |
+| `npm run format`          | Formats code in `./src` using Prettier             |
+| `npm run format:check`    | Checks code formatting with Prettier               |
+| `npm run stylelint`       | Fixes style issues in `.css` files using Stylelint |
+| `npm run stylelint:check` | Checks `.css` files for style issues               |
+| `npm run test`            | Runs all unit tests using Vitest                   |
+| `npm run test:coverage`   | Runs tests and generates a coverage report         |
+| `npm run prepare`         | Initializes Husky for Git hooks                    |
+
 
 ## Team
 
