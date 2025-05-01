@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node-modules/action.yml
+      - uses: ./.github/actions/setup-node-modules
 
       - name: check for lint issues
         run: npm run lint:check
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node-modules/action.yml
+      - uses: ./.github/actions/setup-node-modules
 
       - name: check code formatting
         run: npm run format:check
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node-modules/action.yml
+      - uses: ./.github/actions/setup-node-modules
 
       - name: Run tests and generate coverage
         run: npm run test:coverage
@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-node-modules/action.yml
+      - uses: ./.github/actions/setup-node-modules
 
       - name: Build
         run: npm run build
@@ -81,14 +81,22 @@ jobs:
     steps:
       - name: Set notify message
         id: set-message
+        env:
+          DEPLOY_URL: ${{ needs.build.outputs.deploy-url }}
+          BUILD_RESULT: ${{ needs.build.result }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          REF_NAME: ${{ github.ref_name }}
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
         run: |
-          SUCCESS_MSG="✅ Deploy succeed [link](${{ needs.build.outputs.deploy-url }})
-          message: ${{ github.event.pull_request.title }}"
+          SUCCESS_MSG="✅ Deploy succeed [link](${DEPLOY_URL})
+          message: ${PR_TITLE}"
 
-          FAILURE_MSG="❌ Deploy failed on branch **${{ github.ref_name }}**.
-          [View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          FAILURE_MSG="❌ Deploy failed on branch **${REF_NAME}**.
+          [View logs](${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID})"
 
-          if [ "${{ needs.build.result }}" = "success" ]; then
+          if [ "$BUILD_RESULT" = "success" ]; then
             echo "textMessage<<EOF" >> $GITHUB_OUTPUT
             echo "$SUCCESS_MSG" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
