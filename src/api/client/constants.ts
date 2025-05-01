@@ -31,3 +31,8 @@ export const AUTH_FLOW_TYPE = {
   PASSWORD: 'password',
   REFRESH: 'refresh',
 } as const;
+
+export const CLIENT_TOKEN_STORE_TYPE = {
+  ANONYMOUS: 'anonymous',
+  CUSTOMER: 'customer',
+} as const;
