@@ -20,7 +20,7 @@ export class ApiBuilder {
   private _apiRoot: ByProjectKeyRequestBuilder;
 
   private constructor() {
-    this._apiRoot = this.createApiWithAnonymous();
+    this._apiRoot = this.createAnonymousBuilder();
   }
 
   public initialize(): void {
@@ -28,29 +28,29 @@ export class ApiBuilder {
     const refreshToken = tokenCache.get().refreshToken;
 
     this._apiRoot = refreshToken
-      ? this.createApiWithRefreshToken(refreshToken)
-      : this.createApiWithAnonymous();
+      ? this.createWithRefreshTokenBuilder(refreshToken)
+      : this.createAnonymousBuilder();
   }
 
   public useAnonymousBuilder(): void {
-    this._apiRoot = this.createApiWithAnonymous();
+    this._apiRoot = this.createAnonymousBuilder();
   }
 
   public usePasswordBuilder(payload: UserAuthOptions): void {
-    this._apiRoot = this.createApiWithPassword(payload);
+    this._apiRoot = this.createWithPasswordBuilder(payload);
   }
 
-  private createApiWithAnonymous(): ByProjectKeyRequestBuilder {
+  private createAnonymousBuilder(): ByProjectKeyRequestBuilder {
     const tokenCache = ClientTokenCache.getAnonymousCache();
     return createApiBuilder({ tokenCache, type: AUTH_FLOW_TYPE.ANONYMOUS });
   }
 
-  private createApiWithPassword(payload: UserAuthOptions): ByProjectKeyRequestBuilder {
+  private createWithPasswordBuilder(payload: UserAuthOptions): ByProjectKeyRequestBuilder {
     const tokenCache = ClientTokenCache.getCustomerCache();
     return createApiBuilder({ tokenCache, type: AUTH_FLOW_TYPE.PASSWORD, user: payload });
   }
 
-  private createApiWithRefreshToken(refreshToken: string): ByProjectKeyRequestBuilder {
+  private createWithRefreshTokenBuilder(refreshToken: string): ByProjectKeyRequestBuilder {
     const tokenCache = ClientTokenCache.getCustomerCache();
     return createApiBuilder({ refreshToken, tokenCache, type: AUTH_FLOW_TYPE.REFRESH });
   }
