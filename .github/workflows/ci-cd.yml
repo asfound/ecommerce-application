@@ -10,32 +10,45 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    outputs:
+      result: ${{ job.status }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node-modules
 
       - name: check for lint issues
+        id: lint-job-result
         run: npm run lint:check
 
   format:
     runs-on: ubuntu-latest
+    outputs:
+      result: ${{ job.status }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node-modules
 
       - name: check code formatting
+        id: format-job-result
         run: npm run format:check
+
 
   test:
     runs-on: ubuntu-latest
+    outputs:
+      result: ${{ job.status }}
+      coverage: ${{ steps.test-coverage.outputs.coverage }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node-modules
 
       - name: Run tests and generate coverage
+        id: test-job-result
         run: npm run test:coverage
 
       - name: Read coverage and post comment
+        id: test-coverage
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
@@ -46,17 +59,15 @@ jobs:
               coverage=$(awk "BEGIN { printf \"%.2f\", (${covered_lines}/${total_lines}) * 100 }")
             fi
 
-            body="🧪 **Test Coverage**: ${coverage}%\n\n📄 \`npm run test:coverage\`"
-
-            curl -s -X POST \
-              -H "Authorization: Bearer ${GH_TOKEN}" \
-              -H "Content-Type: application/json" \
-              -d "{\"body\":\"${body}\"}" \
-              "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+            echo "coverage=📄**Test Coverage**: ${coverage}" >> "$GITHUB_OUTPUT"
 
   build:
     needs: [lint, format, test]
     runs-on: ubuntu-latest
+
+    outputs:
+      result: ${{ job.status }}
+      deploy-url: ${{ steps.netlify.outputs.deploy-url }}
 
     steps:
       - uses: actions/checkout@v4
@@ -74,28 +85,23 @@ jobs:
           production-deploy: ${{ github.base_ref == 'develop' }}
           github-token: ${{ secrets.GH_PAT }}
           deploy-message: ${{ github.event.pull_request.title }}
-          enable-pull-request-comment: false
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
           netlify-config-path: ./netlify.toml
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-    outputs:
-      deploy-url: ${{ steps.netlify.outputs.deploy-url }}
-
-  notify-message:
-    needs: build
+  set-message:
+    needs: [lint, test, format, build]
     if: always()
     runs-on: ubuntu-latest
 
     outputs:
-      textMessage: ${{ steps.set-message.outputs.textMessage }}
+      textMessage: ${{ steps.telegram-message.outputs.textMessage }}
+      prMessage: ${{ steps.pr-message.outputs.prMessage }}
 
     steps:
-      - name: Set notify message
-        id: set-message
+      - name: Set telegram message
+        id: telegram-message
         env:
           DEPLOY_URL: ${{ needs.build.outputs.deploy-url }}
           BUILD_RESULT: ${{ needs.build.result }}
@@ -121,26 +127,83 @@ jobs:
             echo "EOF" >> $GITHUB_OUTPUT
           fi
 
-      - name: Comment deploy status in PR
+      - name: Set telegram message
+        id: pr-message
+        run: |
+          LINT_RESULT="${{ needs.lint.outputs.result }}"
+          FORMAT_RESULT="${{ needs.format.outputs.result }}"
+          TEST_RESULT="${{ needs.test.outputs.result }}"
+          BUILD_RESULT="${{ needs.build.outputs.result }}"
+
+
+          LINT_ICON=$( [ "$LINT_RESULT" = "success" ] && echo "✅" || echo "❌" )
+          FORMAT_ICON=$( [ "$FORMAT_RESULT" = "success" ] && echo "✅" || echo "❌" )
+          TEST_ICON=$( [ "$TEST_RESULT" = "success" ] && echo "✅" || echo "❌" )
+          BUILD_ICON=$( [ "$BUILD_RESULT" = "success" ] && echo "✅" || echo "❌" )
+
+          TEST_COVERAGE="${{ needs.test.outputs.coverage }}"
+
+          DEPLOY_URL="${{ needs.build.outputs.deploy-url }}"
+          DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
+
+          SUMMARY="### CI/CD Status
+          - ${LINT_ICON} Linter
+          - ${FORMAT_ICON} Formatter
+          - ${TEST_ICON} Tests
+          - ${BUILD_ICON} Build
+
+          ${DEPLOY_LINE}
+          ${TEST_COVERAGE}
+          "
+
+          echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUMMARY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  update-pr:
+    needs: set-message
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch current PR body
+        id: fetch-body
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
-          DEPLOY_MSG: ${{ steps.set-message.outputs.textMessage }}
+        run: |
+          body=$(gh pr view ${{ github.event.pull_request.number }} \
+            --repo "${{ github.repository }}" \
+            --json body -q '.body')
+          echo "body<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$body" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Update PR body
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
+          BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
         run: |
-          body="${DEPLOY_MSG}"
-          curl -s -X POST \
+          current_body="${{ steps.fetch-body.outputs.body }}"
+          updated_body="${current_body}
+          ---
+
+          ${BODY_UPDATE}"
+
+          echo "$updated_body" | jq -Rs '{ body: . }' > payload.json
+
+          curl -s -X PATCH \
             -H "Authorization: Bearer ${GH_TOKEN}" \
             -H "Content-Type: application/json" \
-            -d "{\"body\":\"${body}\"}" \
-            "https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments"
+            --data @payload.json \
+            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}"
 
-  notify:
-    needs: notify-message
+  notify-telegram:
+    needs: set-message
     if: always()
     uses: ./.github/workflows/notify-telegram.yml
     with:
-      textMessage: ${{ needs.notify-message.outputs.textMessage }}
+      textMessage: ${{ needs.set-message.outputs.textMessage }}
     secrets:
       TG_CHAT_ID: ${{ github.base_ref == 'develop' && secrets.TG_PROD_CHAT_ID || secrets.TG_DEV_CHAT_ID }}
       TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
