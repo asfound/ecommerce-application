@@ -37,7 +37,7 @@ jobs:
 
       - name: Read coverage and post comment
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
             total_lines=$(grep -E "^LF:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
             covered_lines=$(grep -E "^LH:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
@@ -72,7 +72,7 @@ jobs:
           publish-dir: ./dist
           production-branch: develop
           production-deploy: ${{ github.base_ref == 'develop' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GH_PAT }}
           deploy-message: ${{ github.event.pull_request.title }}
           enable-pull-request-comment: false
           enable-commit-comment: true
@@ -123,7 +123,7 @@ jobs:
 
       - name: Comment deploy status in PR
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
           DEPLOY_MSG: ${{ steps.set-message.outputs.textMessage }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
