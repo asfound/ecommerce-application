@@ -108,6 +108,7 @@ jobs:
 
   notify:
     needs: notify-message
+    if: always()
     uses: ./.github/workflows/notify-telegram.yml
     with:
       textMessage: ${{ needs.notify-message.outputs.textMessage }}
