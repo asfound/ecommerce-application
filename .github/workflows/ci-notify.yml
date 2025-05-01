@@ -70,6 +70,14 @@ jobs:
     steps:
       - name: Set telegram message
         id: telegram-message
+        env:
+          DEPLOY_URL: ${{ inputs.deploy-url }}
+          PR_TITLE: ${{ inputs.prTitle }}
+          REF_NAME: ${{ inputs.ref_name }}
+          SERVER_URL: ${{ inputs.serverUrl }}
+          REPOSITORY: ${{ inputs.repository }}
+          RUN_ID: ${{ inputs.run_id }}
+          BUILD_RESULT: ${{ inputs.build }}
 
         run: |
           SUCCESS_MSG="✅ Deploy succeed [link](${DEPLOY_URL})
@@ -89,6 +97,13 @@ jobs:
           fi
 
       - name: Set PR message
+        env:
+          LINT_RESULT: ${{ inputs.lint }}
+          FORMAT_RESULT: ${{ inputs.format }}
+          TEST_RESULT: ${{ inputs.test }}
+          BUILD_RESULT: ${{ inputs.build }}
+          TEST_COVERAGE: ${{ inputs.coverage }}
+          DEPLOY_URL: ${{ inputs.deployUrl }}
         id: pr-message
         run: |
           LINT_ICON=$( [ "$LINT_RESULT" = "success" ] && echo "✅" || echo "❌" )
@@ -133,12 +148,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          body=$(gh pr view ${{ github.event.pull_request.number }} \
+             gh pr view ${{ inputs.prNumber }} \
             --repo "${{ github.repository }}" \
-            --json body -q '.body')
-          echo "body<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$body" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+            --json body -q '.body' > pr_body.txt
 
       - name: Update PR body
         env:
@@ -147,9 +159,8 @@ jobs:
           REPO: ${{ github.repository }}
           BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
         run: |
-          current_body="${{ steps.fetch-body.outputs.body }}"
-          updated_body="${current_body}"$'\n\n---\n'"${BODY_UPDATE}"
+          echo -e "\n---\n${BODY_UPDATE}" >> pr_body.txt
 
           gh pr edit "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
-            --body "$updated_body"
+            --body-file pr_body.txt
