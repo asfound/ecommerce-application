@@ -49,7 +49,7 @@ This project is the final task for the _JavaScript/Front-end 2024Q4_ course at [
 
 - **CI/CD & Deployment**: Automations handled with [GitHub Actions](https://github.com/features/actions), and live deployment on [Netlify](https://www.netlify.com/) 🚀
 
-- **Architecture**: 🧩
+- **Architecture**: While we haven’t committed to a specific architecture, we follow a component-based structure and aim to avoid unnecessary complexity, keeping things as simple and maintainable as the scale of the e-commerce application allows 🧩
 
 ## Local Setup
 
@@ -62,7 +62,6 @@ This project is the final task for the _JavaScript/Front-end 2024Q4_ course at [
 - Create a `.env` file in the root directory and add your environment variables (e.g. CommerceTools credentials)
 
 - Run the project: `npm run dev`
-
 
 The application should now be available at `http://localhost:5173` 🚀
 
