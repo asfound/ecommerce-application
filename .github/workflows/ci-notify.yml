@@ -133,11 +133,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           PR_NUMBER: ${{ inputs.prNumber }}
           REPO: ${{ github.repository }}
+          BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
         run: |
             CURRENT_BODY=$(curl -s \
           -H "Authorization: token ${GH_TOKEN}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
+          "https://aкpi.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
           | jq -r '.body // ""')
 
 
