@@ -97,7 +97,7 @@ jobs:
           DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
           TEST_LINE=$([ "TEST_RESULT" = "success" ] && ${TEST_COVERAGE} || echo "")
 
-          SUMMARY="### CI/CD Status
+          SUMMARY="## CI/CD Status
           - ${LINT_ICON} Linter
           - ${FORMAT_ICON} Formatter
           - ${TEST_ICON} Tests
@@ -140,12 +140,12 @@ jobs:
            -H "Accept: application/vnd.github.v3+json" \
            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
            | jq -r '.body // ""' \
-           | sed '/### CI\/CD Status/,$d' \
+           | sed '/## CI\/CD Status/,$d' \
            | sed -z 's/\n*$//')
 
           curl -s -X PATCH \
            -H "Authorization: token ${GH_TOKEN}" \
            -H "Accept: application/vnd.github.v3+json" \
            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
-           -d "$(jq -n --arg body "${CURRENT_BODY}"$'\n\n---\n'"${BODY_UPDATE}" '{body: $body}')"
+           -d "$(jq -n --arg body "${CURRENT_BODY}"$'\n\n'"${BODY_UPDATE}" '{body: $body}')"
 

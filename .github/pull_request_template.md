@@ -25,10 +25,6 @@ _Explain the context behind the changes if needed_
 - Closes #123
 - ...
 
-## Auto-check
-Teammates notified about PR [![Assign Reviewers](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml/badge.svg)](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml)
-My code passed all checks and was successfully deployed [![CI/CD](https://github.com/asfound/ecommerce-application/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/asfound/ecommerce-application/actions/workflows/ci-cd.yml)
-
 ## Self-check 👌
 
 Before requesting a review, please confirm the following:
@@ -38,3 +34,7 @@ Before requesting a review, please confirm the following:
 - [ ] All related issues numbers are referenced (`Closes #`)
 - [ ] The related issue is moved to the **In Review** column on the project board
 - [ ] The PR is clear and I'm ready to merge 🤌
+
+## Auto-check
+- Teammates notified about PR                                                 [![Assign Reviewers](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml/badge.svg)](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml)
+- My code passed all checks and was successfully deployed   [![CI/CD](https://github.com/asfound/ecommerce-application/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/asfound/ecommerce-application/actions/workflows/ci-cd.yml)
