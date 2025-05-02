@@ -1,0 +1,112 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - 'sprint-*'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ job.status }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules
+
+      - name: check for lint issues
+        id: lint-job-result
+        run: npm run lint:check
+
+  format:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ job.status }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules
+
+      - name: check code formatting
+        id: format-job-result
+        run: npm run format:check
+
+
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ job.status }}
+      coverage: ${{ steps.test-coverage.outputs.coverage }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules
+
+      - name: Run tests and generate coverage
+        id: test-job-result
+        run: npm run test:coverage
+
+      - name: Read coverage and post comment
+        id: test-coverage
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+            total_lines=$(grep -E "^LF:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+            covered_lines=$(grep -E "^LH:" coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+            coverage=0
+            if [ "$total_lines" -gt 0 ]; then
+              coverage=$(awk "BEGIN { printf \"%.2f\", (${covered_lines}/${total_lines}) * 100 }")
+            fi
+
+            echo "coverage=📄 **Test Coverage**: ${coverage}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: [lint, format, test]
+    runs-on: ubuntu-latest
+
+    outputs:
+      result: ${{ job.status }}
+      deploy-url: ${{ steps.netlify.outputs.deploy-url }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Netlify (Preview)
+        id: netlify
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: ./dist
+          production-branch: develop
+          production-deploy: ${{ github.base_ref == 'develop' }}
+          github-token: ${{ secrets.GH_PAT }}
+          deploy-message: ${{ github.event.pull_request.title }}
+          enable-pull-request-comment: false
+          netlify-config-path: ./netlify.toml
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+  notify:
+    if: always()
+    needs: [ lint, format, test, build ]
+    uses: ./.github/workflows/ci-notify.yml
+    with:
+      lint: ${{ needs.lint.outputs.result }}
+      format: ${{ needs.format.outputs.result }}
+      test: ${{ needs.test.outputs.result }}
+      build: ${{ needs.build.outputs.result }}
+      coverage: ${{ needs.test.outputs.coverage }}
+      deployUrl: ${{ needs.build.outputs.deploy-url }}
+      prTitle: ${{ github.event.pull_request.title }}
+      refName: ${{ github.ref_name }}
+      prNumber: ${{ github.event.pull_request.number }}
+      runID: ${{ github.run_id }}
+      serverUrl: ${{ github.server_url }}
+    secrets:
+      GH_PAT: ${{ secrets.GH_PAT }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+      TG_CHAT_ID: ${{ github.base_ref == 'develop' && secrets.TG_PROD_CHAT_ID || secrets.TG_DEV_CHAT_ID }}

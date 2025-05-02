@@ -56,7 +56,7 @@ jobs:
     with:
       textMessage: |
         🔔 New PR: ${{ github.event.pull_request.title }}
-        👉 ${{ github.event.pull_request.html_url }}
+        👉 [link](${{ github.event.pull_request.html_url }})
         ${{ needs.assign-reviewers.outputs.telegram_reviewers }}
     secrets:
       TG_CHAT_ID: ${{secrets.TG_PR_CHAT_ID}}
