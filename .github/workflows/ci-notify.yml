@@ -95,7 +95,7 @@ jobs:
           BUILD_ICON=$( [ "$BUILD_RESULT" = "success" ] && echo "✅" || echo "❌" )
 
           DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
-          TEST_LINE=$([ "TEST_RESULT" = "success" ] && echo "${TEST_COVERAGE}" || echo "")
+          TEST_LINE=$([ "TEST_RESULT" = "success" ] && ${TEST_COVERAGE} || echo "")
 
           SUMMARY="### CI/CD Status
           - ${LINT_ICON} Linter
@@ -104,6 +104,7 @@ jobs:
           - ${BUILD_ICON} Build
 
           ${DEPLOY_LINE}
+          ${TEST_COVERAGE}
           ${TEST_LINE}
           "
 
@@ -126,37 +127,24 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch current PR body
+      - name: Update PR description
         id: fetch-body
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           PR_NUMBER: ${{ inputs.prNumber }}
           REPO: ${{ github.repository }}
         run: |
-          body=$(gh pr view ${PR_NUMBER} \
-            --repo "${REPO}" \
-            --json body -q '.body')
-          echo "body<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$body" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+            CURRENT_BODY=$(curl -s \
+          -H "Authorization: token ${GH_TOKEN}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
+          | jq -r '.body // ""')
 
-
-      - name: Update PR body
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-          PR_NUMBER: ${{ inputs.prNumber }}
-          REPO: ${{ github.repository }}
-          BODY_UPDATE: ${{ needs.set-message.outputs.prMessage }}
-        run: |
-          current_body=$(echo "${{ steps.fetch-body.outputs.body }}" | sed 's/[`$]/\\&/g')
-          updated_body="$current_body
-          ---
-          $BODY_UPDATE"
-
-          echo "$updated_body" | jq -Rs '{ body: . }' > payload.json
 
           curl -s -X PATCH \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data @payload.json \
-            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}"
+          -H "Authorization: token ${GH_TOKEN}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
+          -d "$(jq -n \
+                --arg body "$CURRENT_BODY"$'\n\n---\n'"$BODY_UPDATE" \
+                '{body: $body}')"
