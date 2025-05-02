@@ -3,7 +3,7 @@ import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { ClientBuilder } from '@commercetools/ts-client';
 
-import type { ApiBuilderOptions } from './types';
+import type { ApiBuilderPayload } from './types';
 
 import {
   AUTH_FLOW_TYPE,
@@ -19,7 +19,7 @@ export const createClientBuilder = (): ClientBuilder => {
     .withHttpMiddleware(HTTP_MIDDLEWARE_OPTIONS);
 };
 
-export const createApiBuilder = (payload: ApiBuilderOptions): ByProjectKeyRequestBuilder => {
+export const createApiBuilder = (payload: ApiBuilderPayload): ByProjectKeyRequestBuilder => {
   const builder = createClientBuilder();
 
   switch (payload.type) {
