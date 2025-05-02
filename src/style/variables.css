@@ -1,0 +1,9 @@
+:root {
+  --color-white: #fcfcfc;
+  --color-accent: #3d5ff9;
+  --color-accent-light: #a6a9c0;
+  --color-dark: #2c2c2d;
+  --color-black: #141414;
+  --transition-duration: 0.3s;
+  --padding-card: 0.625rem 1.25rem 1.25rem;
+}
