@@ -105,7 +105,6 @@ jobs:
       refName: ${{ github.ref_name }}
       prNumber: ${{ github.event.pull_request.number }}
       runID: ${{ github.run_id }}
-      baseRef: ${{ github.base_ref }}
       serverUrl: ${{ github.server_url }}
     secrets:
       GH_PAT: ${{ secrets.GH_PAT }}
