@@ -139,7 +139,7 @@ jobs:
            -H "Authorization: token ${GH_TOKEN}" \
            -H "Accept: application/vnd.github.v3+json" \
            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
-           | jq -r '.body // ""')  \
+           | jq -r '.body // ""' \
            | sed '/### CI\/CD Status/,$d' \
            | sed -z 's/\n*$//')
 
@@ -147,5 +147,5 @@ jobs:
            -H "Authorization: token ${GH_TOKEN}" \
            -H "Accept: application/vnd.github.v3+json" \
            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
-           -d "$(jq -n --arg body "${CURRENT_BODY}"$'\n\n---\n'"${BODY_UPDATE2}" '{body: $body}')"
+           -d "$(jq -n --arg body "${CURRENT_BODY}"$'\n\n---\n'"${BODY_UPDATE}" '{body: $body}')"
 
