@@ -36,5 +36,5 @@ Before requesting a review, please confirm the following:
 - [ ] The PR is clear and I'm ready to merge 🤌
 
 ## Auto-check
-- Teammates notified about PR                                                 [![Assign Reviewers](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml/badge.svg)](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml)
+- Teammates notified about                                                    [![Assign Reviewers](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml/badge.svg)](https://github.com/asfound/ecommerce-application/actions/workflows/auto-reviewers.yml)
 - My code passed all checks and was successfully deployed   [![CI/CD](https://github.com/asfound/ecommerce-application/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/asfound/ecommerce-application/actions/workflows/ci-cd.yml)

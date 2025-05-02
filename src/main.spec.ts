@@ -6,6 +6,6 @@ describe('math', () => {
 
   it('adds numbers', () => {
     expect(testAdd(2, 3)).toBe(5);
-    expect(testAdd(6, 9)).toBe(16);
+    expect(testAdd(6, 9)).toBe(15);
   });
 });
