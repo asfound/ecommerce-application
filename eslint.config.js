@@ -12,7 +12,7 @@ export default tseslint.config(
   perfectionist.configs['recommended-natural'],
   eslintPluginUnicorn.configs.recommended,
   eslintPluginImport.flatConfigs.recommended,
-  { ignores: ['dist', 'node_modules', '**/*config.js', '**/*.spec.ts'] },
+  { ignores: ['dist', 'node_modules', '**/*config.js', '**/*.spec.ts', '**/global.d.ts'] },
   { linterOptions: { noInlineConfig: true, reportUnusedDisableDirectives: true } },
   {
     languageOptions: {

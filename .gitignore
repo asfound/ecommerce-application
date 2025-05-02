@@ -14,7 +14,7 @@ dist-ssr
 coverage
 
 # Environment variable files
-.env*
+.env
 
 # Editor directories and files
 .vscode/*
