@@ -22,8 +22,17 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     coverage: {
-      reporter: ['text', 'html', 'lcov'],
-      include: ['src/**/*.ts']
+      reporter: ['text', 'html', 'json', "json-summary"],
+      include: ['src/**/*.ts'],
+      exclude: [
+        '**/main.ts',
+        '**/*.d.ts',
+        '**/*-types.ts',
+        '**/types.ts',
+        '**/*-constants.ts',
+        '**/constants.ts',
+      ],
     },
+
   }
 });

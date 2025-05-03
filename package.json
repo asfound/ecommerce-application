@@ -18,7 +18,7 @@
     "stylelint": "stylelint \"./src/**/*.css\" --fix",
     "stylelint:check": "stylelint \"./src/**/*.css\"",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage --passWithNoTests",
     "prepare": "husky"
   },
   "devDependencies": {
