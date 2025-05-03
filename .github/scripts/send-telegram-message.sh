@@ -2,8 +2,16 @@
 set -e
 
 escape_md2() {
-  sed -E 's/([_*\[\]\(\)~`>#+=|{}\.\!\-])/\\\1/g' <<< "$1"
+    local text="$1"
+    local chars=( \\ _ "*" "[" "]" "(" ")" "~" "\`" ">" "<" "&" "#" "+" "-" "=" "|" "{" "}" "." "!" )
+
+    for char in "${chars[@]}"; do
+        text=${text//"$char"/\\$char}
+    done
+
+    echo "$text"
 }
+
 
 SAFE_MESSAGE=$(escape_md2 "${MESSAGE}")
 
