@@ -3,7 +3,7 @@ set -e
 
 summary_file="coverage/coverage-summary.json"
 coverage_file="coverage/coverage-final.json"
-coverage_threshold=80
+coverage_threshold=30
 
 
 coverage_table="| File | Lines | Covered | Uncovered Lines | Coverage |

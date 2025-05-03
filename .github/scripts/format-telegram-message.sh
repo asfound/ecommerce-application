@@ -3,10 +3,10 @@ set -e
 
 if [ "$BUILD_RESULT" = "success" ]; then
   MSG="✅ Deploy succeed [link](${DEPLOY_URL})
-  message: ${PR_TITLE}"
+  [View PR](${PR_URL})"
 else
   MSG="❌ Deploy failed
-  [PR **${PR_TITLE}**](${PR_URL})
+  [View PR](${PR_URL})
   [View logs](${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID})"
 fi
 
