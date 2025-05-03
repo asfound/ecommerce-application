@@ -8,19 +8,7 @@ BUILD_ICON=$( [ "$BUILD_RESULT" = "success" ] && echo "✅" || echo "❌" )
 
 DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
 
-COVERAGE_PERCENT=$(echo "$TEST_COVERAGE" | grep -o '[0-9]\+')
-
-TEST_LINE=$(
-  if [ "$TEST_RESULT" = "success" ]; then
-    if [ "$COVERAGE_PERCENT" -lt 30 ]; then
-      echo -e "${TEST_COVERAGE}\n${COVERAGE_TABLE}"
-    else
-      echo "$TEST_COVERAGE"
-    fi
-  else
-    echo ""
-  fi
-)
+TEST_LINE=$([ "$TEST_RESULT" = "success" ] && echo "$TEST_COVERAGE" || echo "")
 
 
 SUMMARY="### CI/CD Status

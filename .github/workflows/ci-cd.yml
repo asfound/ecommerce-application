@@ -38,7 +38,6 @@ jobs:
     outputs:
       result: ${{ job.status }}
       coverage: ${{ steps.test-coverage.outputs.coverage }}
-      coverageTable: ${{ steps.test-coverage.outputs.coverage_table }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node-modules
@@ -46,12 +45,6 @@ jobs:
       - name: Run tests and generate coverage
         id: test-job-result
         run: npm run test:coverage
-
-      - name: Read coverage and post comment
-        id: test-coverage
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-        run: .github/scripts/process-coverage.sh
 
   build:
     needs: [lint, format, test]
@@ -93,7 +86,6 @@ jobs:
       test: ${{ needs.test.outputs.result }}
       build: ${{ needs.build.outputs.result }}
       coverage: ${{ needs.test.outputs.coverage }}
-      coverageTable: ${{ needs.test.outputs.coverage_table }}
       deployUrl: ${{ needs.build.outputs.deploy-url }}
       prTitle: ${{ github.event.pull_request.title }}
       refName: ${{ github.ref_name }}
