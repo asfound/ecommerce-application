@@ -13,7 +13,7 @@ TEST_LINE=$(
     || echo ""
 )
 
-SUMMARY="## CI/CD Status
+SUMMARY="### CI/CD Status
 - ${LINT_ICON} Linter
 - ${FORMAT_ICON} Formatter
 - ${TEST_ICON} Tests

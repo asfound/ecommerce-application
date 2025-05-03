@@ -12,8 +12,8 @@ jobs:
       github_login: ${{ github.event.requested_reviewer.login }}
       text_template: |
         🔔 Review *requested*
-        Title: ${{ github.event.pull_request.title }}
-        👉 [View PR](${{ github.event.pull_request.html_url }})
+        Branch: ${{ github.head_ref }}
+        👉 ${{ github.event.pull_request.html_url }}
     secrets:
       REVIEWERS_MAP: ${{ secrets.REVIEWERS_MAP }}
       TG_CHAT_ID: ${{ secrets.TG_PR_CHAT_ID }}

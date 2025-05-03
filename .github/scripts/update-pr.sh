@@ -6,7 +6,7 @@ CURRENT_BODY=$(curl -s \
  -H "Accept: application/vnd.github.v3+json" \
  "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
  | jq -r '.body // ""' \
- | sed '/## CI\/CD Status/,$d' \
+ | sed '/### CI\/CD Status/,$d' \
  | sed -z 's/\n*$//')
 
 curl -s -X PATCH \
