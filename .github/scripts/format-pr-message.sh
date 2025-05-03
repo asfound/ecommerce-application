@@ -7,11 +7,21 @@ TEST_ICON=$( [ "$TEST_RESULT" = "success" ] && echo "✅" || echo "❌" )
 BUILD_ICON=$( [ "$BUILD_RESULT" = "success" ] && echo "✅" || echo "❌" )
 
 DEPLOY_LINE=$([ "$BUILD_RESULT" = "success" ] && echo "🚀 [Deploy preview](${DEPLOY_URL})" || echo "")
+
+COVERAGE_PERCENT=$(echo "$TEST_COVERAGE" | grep -o '[0-9]\+')
+
 TEST_LINE=$(
-  [ "$TEST_RESULT" = "success" ] \
-    && echo -e "${TEST_COVERAGE}\n${COVERAGE_TABLE}" \
-    || echo ""
+  if [ "$TEST_RESULT" = "success" ]; then
+    if [ "$COVERAGE_PERCENT" -lt 30 ]; then
+      echo -e "${TEST_COVERAGE}\n${COVERAGE_TABLE}"
+    else
+      echo "$TEST_COVERAGE"
+    fi
+  else
+    echo ""
+  fi
 )
+
 
 SUMMARY="### CI/CD Status
 - ${LINT_ICON} Linter
@@ -20,7 +30,6 @@ SUMMARY="### CI/CD Status
 - ${BUILD_ICON} Build
 
 ${DEPLOY_LINE}
-${TEST_COVERAGE}
 ${TEST_LINE}
 "
 
