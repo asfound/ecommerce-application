@@ -1,21 +1,22 @@
 #!/bin/bash
 set -e
 
-escape_md2() {
-    local text="$1"
-    local chars=( \\ _ "*" "[" "]" "(" ")" "~" "\`" ">" "<" "&" "#" "+" "-" "=" "|" "{" "}" "." "!" )
+#escape_md2() {
+#    local text="$1"
+#    local chars=( \\ _ "*" "[" "]" "(" ")" "~" "\`" ">" "<" "&" "#" "+" "-" "=" "|" "{" "}" "." "!" )
+#
+#    for char in "${chars[@]}"; do
+#        text=${text//"$char"/\\$char}
+#    done
+#
+#    echo "$text"
+#}
 
-    for char in "${chars[@]}"; do
-        text=${text//"$char"/\\$char}
-    done
+echo "${MESSAGE}"
 
-    echo "$text"
-}
-
-
-SAFE_MESSAGE=$(escape_md2 "${MESSAGE}")
+#SAFE_MESSAGE=$(escape_md2 "${MESSAGE}")
 
 curl -s -X POST https://api.telegram.org/bot"${TG_BOT_TOKEN}"/sendMessage \
   -d chat_id="${TG_CHAT_ID}" \
-  -d text="${SAFE_MESSAGE}" \
+  -d text="${MESSAGE}" \
   -d parse_mode="MarkdownV2"
