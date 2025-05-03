@@ -28,22 +28,10 @@ jobs:
 
       - name: Extract Telegram by GitHub login
         id: extract
-        run: |
-          GITHUB_REVIEWERS_MAP="${{ secrets.REVIEWERS_MAP }}"
-          LOGIN_INPUT="${{ inputs.github_login }}"
-          readonly PAIR_SEPARATOR='='
-
-          decoded_json=$(echo "$GITHUB_REVIEWERS_MAP" | base64 --decode)
-          telegram_username=''
-
-          while IFS="${PAIR_SEPARATOR}" read -r github_username telegram; do
-            if [[ "${LOGIN_INPUT}" == "${github_username}" ]]; then
-              telegram_username="${telegram}"
-              break
-            fi
-          done < <(echo "${decoded_json}" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
-
-          echo "telegram_username=${telegram_handle}" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_REVIEWERS_MAP: ${{ secrets.REVIEWERS_MAP }}
+          LOGIN_INPUT: ${{ inputs.github_login }}
+        run: .github/scripts/notify-review.sh
 
   notify:
     needs: extract-telegram

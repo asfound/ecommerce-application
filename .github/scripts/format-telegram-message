@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+if [ "$BUILD_RESULT" = "success" ]; then
+  SUCCESS_MSG="✅ Deploy succeed [link](${DEPLOY_URL})
+  message: ${PR_TITLE}"
+
+  echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+  echo "$SUCCESS_MSG" >> $GITHUB_OUTPUT
+  echo "EOF" >> $GITHUB_OUTPUT
+else
+  FAILURE_MSG="❌ Deploy failed
+  [PR **${PR_TITLE}**](${PR_URL})
+  [View logs](${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID})"
+
+  echo "textMessage<<EOF" >> $GITHUB_OUTPUT
+  echo "$FAILURE_MSG" >> $GITHUB_OUTPUT
+  echo "EOF" >> $GITHUB_OUTPUT
+fi
