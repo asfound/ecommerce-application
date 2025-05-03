@@ -9,9 +9,9 @@ jobs:
     with:
       github_login: ${{ github.event.pull_request.user.login }}
       text_template: |
-        📝Review **submitted**
+        📝Review *submitted*
         Your PR: [${{ github.event.pull_request.title }}]
-        Change state to **${{github.event.review.state}}**
+        Change state to *${{github.event.review.state}}*
         👉 [View PR](${{ github.event.pull_request.html_url }})
     secrets:
       REVIEWERS_MAP: ${{ secrets.REVIEWERS_MAP }}

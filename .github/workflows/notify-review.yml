@@ -40,7 +40,7 @@ jobs:
     uses: ./.github/workflows/notify-telegram.yml
     with:
       textMessage: |
-        ${{ inputs.body_template }}
+        ${{ inputs.text_template }}
         ${{ needs.extract-telegram.outputs.telegram_username }}
     secrets:
       TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
