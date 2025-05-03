@@ -1,0 +1,47 @@
+name: Notify on Review
+
+on:
+  workflow_call:
+    inputs:
+      github_login:
+        required: true
+        type: string
+      text_template:
+        required: true
+        type: string
+    secrets:
+      REVIEWERS_MAP:
+        required: true
+      TG_CHAT_ID:
+        required: true
+      TG_BOT_TOKEN:
+        required: true
+
+jobs:
+  extract-telegram:
+    runs-on: ubuntu-latest
+    outputs:
+      telegram_username: ${{ steps.extract.outputs.telegram_username }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Extract Telegram by GitHub login
+        id: extract
+        env:
+          GITHUB_REVIEWERS_MAP: ${{ secrets.REVIEWERS_MAP }}
+          LOGIN_INPUT: ${{ inputs.github_login }}
+        run: .github/scripts/notify-review.sh
+
+  notify:
+    needs: extract-telegram
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: |
+        ${{ inputs.text_template }}
+        ${{ needs.extract-telegram.outputs.telegram_username }}
+    secrets:
+      TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}

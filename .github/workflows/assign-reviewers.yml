@@ -1,0 +1,33 @@
+name: Assign Reviewers
+on:
+  pull_request:
+    types: [opened]
+jobs:
+  assign-reviewers:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+
+    outputs:
+      telegram_reviewers: ${{ steps.prepare.outputs.telegram_reviewers }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Prepare reviewers
+        env:
+          GITHUB_REVIEWERS_MAP: ${{ secrets.REVIEWERS_MAP }}
+          GITHUB_ACTOR: ${{ github.event.pull_request.user.login }}
+        id: prepare
+        run: .github/scripts/assign-reviewers.sh
+
+      - name: Assign Reviewers
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers
+          token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: ${{ steps.prepare.outputs.github_reviewers }}
