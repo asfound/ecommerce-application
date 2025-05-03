@@ -92,6 +92,7 @@ jobs:
       test: ${{ needs.test.outputs.result }}
       build: ${{ needs.build.outputs.result }}
       coverage: ${{ needs.test.outputs.coverage }}
+      coverageTable: ${{ github.coverage_table }}
       deployUrl: ${{ needs.build.outputs.deploy-url }}
       prTitle: ${{ github.event.pull_request.title }}
       refName: ${{ github.ref_name }}

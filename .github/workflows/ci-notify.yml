@@ -18,6 +18,9 @@ on:
       coverage:
         required: false
         type: string
+      coverageTable:
+        required: false
+        type: string
       deployUrl:
         required: false
         type: string
@@ -71,6 +74,7 @@ jobs:
           TEST_RESULT: ${{ inputs.test }}
           BUILD_RESULT: ${{ inputs.build }}
           TEST_COVERAGE: ${{ inputs.coverage }}
+          COVERAGE_TABLE: ${{ inputs.coverageTable }}
           DEPLOY_URL: ${{ inputs.deployUrl }}
         id: pr-message
         run: .github/scripts/format-pr-message.sh
