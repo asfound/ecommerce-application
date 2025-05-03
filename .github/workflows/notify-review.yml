@@ -23,6 +23,8 @@ jobs:
     outputs:
       telegram_username: ${{ steps.extract.outputs.telegram_username }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
