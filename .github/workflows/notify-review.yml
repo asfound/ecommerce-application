@@ -1,0 +1,57 @@
+name: Notify on Review
+
+on:
+  workflow_call:
+    inputs:
+      github_login:
+        required: true
+        type: string
+      text_template:
+        required: true
+        type: string
+    secrets:
+      REVIEWERS_MAP:
+        required: true
+      TG_CHAT_ID:
+        required: true
+      TG_BOT_TOKEN:
+        required: true
+
+jobs:
+  extract-telegram:
+    runs-on: ubuntu-latest
+    outputs:
+      telegram_username: ${{ steps.extract.outputs.telegram_username }}
+    steps:
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Extract Telegram by GitHub login
+        id: extract
+        run: |
+          GITHUB_REVIEWERS_MAP="${{ secrets.REVIEWERS_MAP }}"
+          LOGIN_INPUT="${{ inputs.github_login }}"
+          readonly PAIR_SEPARATOR='='
+
+          decoded_json=$(echo "$GITHUB_REVIEWERS_MAP" | base64 --decode)
+          telegram_username=''
+
+          while IFS="${PAIR_SEPARATOR}" read -r github_username telegram; do
+            if [[ "${LOGIN_INPUT}" == "${github_username}" ]]; then
+              telegram_username="${telegram}"
+              break
+            fi
+          done < <(echo "${decoded_json}" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+
+          echo "telegram_username=${telegram_handle}" >> "$GITHUB_OUTPUT"
+
+  notify:
+    needs: extract-telegram
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: |
+        ${{ inputs.body_template }}
+        ${{ needs.extract-telegram.outputs.telegram_username }}
+    secrets:
+      TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}

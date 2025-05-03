@@ -1,0 +1,19 @@
+name: Notify on Review Submitted
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  notify-reviewer:
+    uses: ./.github/workflows/notify-review.yml
+    with:
+      github_login: ${{ github.event.pull_request.user.login }}
+      text_template: |
+        📝Review **submitted**
+        Your PR: [${{ github.event.pull_request.title }}]
+        Change state to **${{github.event.review.state}}**
+        👉 [View PR](${{ github.event.pull_request.html_url }})
+    secrets:
+      REVIEWERS_MAP: ${{ secrets.REVIEWERS_MAP }}
+      TG_CHAT_ID: ${{ secrets.TG_PR_CHAT_ID }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
