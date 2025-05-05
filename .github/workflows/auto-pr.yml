@@ -1,7 +1,7 @@
 name: issue-automation
 on:
-  pull_request:
-    types: [opened]
+  pull_request
+
 jobs:
   move-issue:
     runs-on: ubuntu-latest
