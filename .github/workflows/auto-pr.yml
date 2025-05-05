@@ -1,0 +1,100 @@
+name: issue-automation
+on:
+  pull_request:
+    types: [opened]
+jobs:
+  move-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Change Issue Status
+        id: issue
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          BRANCH_NAME: ${{ github.head_ref }}
+          REPO: ${{ github.repository }}
+          GH_PAT_PROJECT: ${{ secrets.GH_PAT_PROJECT }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          STATUS_FIELD_ID: ${{ secrets.STATUS_FIELD_ID }}
+          STATUS_ID_IN_REVIEW: ${{ secrets.STATUS_ID_IN_REVIEW }}
+        run: |
+          ISSUE_ID=$(echo "$BRANCH_NAME" | cut -d/ -f2 | grep -oE 'RSS-ECOMM-[0-9_]+')
+
+          echo "Looking for issue with ID: $ISSUE_ID"
+
+          ISSUE_NUMBER=$(gh issue list --search "$ISSUE_ID" --repo "$REPO" --json number,title -q '.[0].number')
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "Issue not found for ID: $ISSUE_ID"
+            exit 1
+          fi
+
+          echo "Found issue number: $ISSUE_NUMBER"
+
+          echo "issueNumber=ISSUE_NUMBER" >> $GITHUB_OUTPUT
+
+
+          ISSUE_ITEM_ID=$(curl -s -H "Authorization: Bearer $GH_PAT_PROJECT" \
+               -H "Content-Type: application/json" \
+               -X POST https://api.github.com/graphql \
+               -d '{
+            "query": "query { repository(owner: \"asfound\", name: \"ecommerce-application\") { issue(number: $ISSUE_NUMBER) { title projectItems(first: 10) { nodes { id project { id title } } } } } }"
+          }' | jq -r '.data.repository.issue.projectItems.nodes[0].id')
+
+          curl -H "Authorization: Bearer $GH_PAT_PROJECT" \
+               -H "Content-Type: application/json" \
+               -X POST https://api.github.com/graphql \
+               -d '{
+            "query": "mutation {
+              updateProjectV2ItemFieldValue(
+                input: {
+                  projectId: \"<PROJECT_ID>\",
+                  itemId: \"<ISSUE_ITEM_ID>\",
+                  fieldId: \"<STATUS_FIELD_ID>\",
+                  value: { singleSelectOptionId: \"<STATUS_ID_IN_REVIEW>\" }
+                }
+              ) { projectV2Item { id } }
+            }"
+          }'
+
+  rename-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rename PR title from branch name
+        env:
+            GH_TOKEN: ${{ secrets.GH_PAT }}
+            BRANCH_NAME: ${{ github.head_ref }}
+            PR_NUMBER: ${{ github.event.pull_request.number }}
+            REPO: ${{ github.repository }}
+        run: |
+          echo "Branch name: $BRANCH_NAME"
+          TYPE=$(echo "$BRANCH_NAME" | cut -d/ -f1)
+          ISSUE_ID=$(echo "$BRANCH_NAME" | cut -d/ -f2)
+          RAW_MESSAGE=$(echo "$BRANCH_NAME" | cut -d/ -f3- | tr '-' ' ')
+          NEW_TITLE="${TYPE}(${ISSUE_ID}): ${MESSAGE}"
+          echo "New PR Title: $NEW_TITLE"
+          gh pr edit "$PR_NUMBER" --repo "$REPO" --title "$NEW_TITLE"
+
+  update-pr:
+    needs: move-issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update PR description
+        id: fetch-body
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          PR_NUMBER: ${{ inputs.prNumber }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ needs.move-issue.outputs.issueNumber }}
+        run: |
+                    CURRENT_BODY=$(curl -s \
+           -H "Authorization: token ${GH_TOKEN}" \
+           -H "Accept: application/vnd.github.v3+json" \
+           "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
+           | jq -r '.body // ""' \)
+           echo "CURRENT_BODY: $CURRENT_BODY"
+
+          curl -s -X PATCH \
+           -H "Authorization: token ${GH_TOKEN}" \
+           -H "Accept: application/vnd.github.v3+json" \
+           "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
+           -d "$(jq -n --arg body "- Closes #${ISSUE_NUMBER}"$'\n\n'"${CURRENT_BODY}" '{body: $body}')"
