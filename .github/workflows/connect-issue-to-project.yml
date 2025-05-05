@@ -1,0 +1,30 @@
+name: Connect issue to project
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  connect-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          ISSUE_ID: ${{ github.event.issue.node_id }}
+          GH_PAT: ${{ secrets.GH_PAT_PROJECT }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+        run: |
+          curl -s -H "Authorization: Bearer $GH_PAT" \
+               -H "Content-Type: application/json" \
+               -X POST https://api.github.com/graphql \
+               -d '{
+            "query": "mutation {
+              addProjectV2ItemById(input: {
+                projectId: \"'"$PROJECT_ID"'\",
+                contentId: \"'"$ISSUE_ID"'\"
+              }) {
+                item {
+                  id
+                }
+              }
+            }"
+          }'
+
