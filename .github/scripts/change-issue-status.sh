@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 ISSUE_ID=$(echo "$BRANCH_NAME" | cut -d/ -f2 | grep -oE 'RSS-ECOMM-[0-9_]+')
 
 echo "Looking for issue with ID: $ISSUE_ID"
