@@ -1,6 +1,7 @@
 name: issue-automation
 on:
-  pull_request
+  pull_request:
+    types: [opened]
 
 jobs:
   move-issue:
@@ -27,17 +28,15 @@ jobs:
     steps:
       - name: Rename PR title from branch name
         env:
-            GH_TOKEN: ${{ secrets.GH_PAT }}
-            BRANCH_NAME: ${{ github.head_ref }}
-            PR_NUMBER: ${{ github.event.pull_request.number }}
-            REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          BRANCH_NAME: ${{ github.head_ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
         run: |
-          echo "Branch name: $BRANCH_NAME"
           TYPE=$(echo "$BRANCH_NAME" | cut -d/ -f1)
           ISSUE_ID=$(echo "$BRANCH_NAME" | cut -d/ -f2)
           RAW_MESSAGE=$(echo "$BRANCH_NAME" | cut -d/ -f3- | tr '-' ' ')
           NEW_TITLE="${TYPE}(${ISSUE_ID}): ${RAW_MESSAGE}"
-          echo "New PR Title: $NEW_TITLE"
           gh pr edit "$PR_NUMBER" --repo "$REPO" --title "$NEW_TITLE"
 
   update-pr:
@@ -52,16 +51,14 @@ jobs:
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ needs.move-issue.outputs.issueNumber }}
         run: |
-         echo "ISSUE_NUMBER: $ISSUE_NUMBER"
+          CURRENT_BODY=$(curl -s \
+            -H "Authorization: token ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
+            | jq -r '.body // ""')
 
-         CURRENT_BODY=$(curl -s \
-           -H "Authorization: token ${GH_TOKEN}" \
-           -H "Accept: application/vnd.github.v3+json" \
-           "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
-           | jq -r '.body // ""')
-
-          curl -s -X PATCH \
-           -H "Authorization: token ${GH_TOKEN}" \
-           -H "Accept: application/vnd.github.v3+json" \
-           "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
-           -d "$(jq -n --arg body "- Closes #${ISSUE_NUMBER}"$'\n\n'"${CURRENT_BODY}" '{body: $body}')"
+           curl -s -X PATCH \
+            -H "Authorization: token ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
+            -d "$(jq -n --arg body "- Closes #${ISSUE_NUMBER}"$'\n\n'"${CURRENT_BODY}" '{body: $body}')"

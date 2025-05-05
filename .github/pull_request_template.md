@@ -20,11 +20,6 @@
 
 _Explain the context behind the changes if needed_
 
-#### Related issue(s)
-
-- Closes #123
-- ...
-
 ## Self-check 👌
 
 Before requesting a review, please confirm the following:
