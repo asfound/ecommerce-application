@@ -1,4 +1,4 @@
-name: issue-automation
+name: Issue processed
 on:
   pull_request:
     types: [opened]
