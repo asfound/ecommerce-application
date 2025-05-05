@@ -15,16 +15,17 @@ jobs:
           curl -s -H "Authorization: Bearer $GH_PAT" \
                -H "Content-Type: application/json" \
                -X POST https://api.github.com/graphql \
-               -d '{
+               -d @- << EOF
+          {
             "query": "mutation {
               addProjectV2ItemById(input: {
-                projectId: \"'"$PROJECT_ID"'\",
-                contentId: \"'"$ISSUE_ID"'\"
+                projectId: \"$PROJECT_ID\",
+                contentId: \"$ISSUE_ID\"
               }) {
                 item {
                   id
                 }
               }
             }"
-          }'
-
+          }
+          EOF
