@@ -5,6 +5,8 @@ on:
 jobs:
   move-issue:
     runs-on: ubuntu-latest
+    outputs:
+      issueNumber: ${{ steps.issue.outputs.issueNumber }}
     steps:
       - uses: actions/checkout@v4
 
@@ -50,6 +52,8 @@ jobs:
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ needs.move-issue.outputs.issueNumber }}
         run: |
+          echo "ISSUE_NUMBER: $ISSUE_NUMBER"
+
          CURRENT_BODY=$(curl -s \
            -H "Authorization: token ${GH_TOKEN}" \
            -H "Accept: application/vnd.github.v3+json" \

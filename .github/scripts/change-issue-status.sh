@@ -28,15 +28,17 @@ echo "Found issue item ID: $ISSUE_ITEM_ID"
 curl -H "Authorization: Bearer $GH_PAT_PROJECT" \
      -H "Content-Type: application/json" \
      -X POST https://api.github.com/graphql \
-     -d "{
-  \"query\": \"mutation {
+     -d @- <<EOF
+{
+  "query": "mutation {
     updateProjectV2ItemFieldValue(
       input: {
-        projectId: \\\"${PROJECT_ID}\\\",
-        itemId: \\\"${ISSUE_ITEM_ID}\\\",
-        fieldId: \\\"${STATUS_FIELD_ID}\\\",
-        value: { singleSelectOptionId: \\\"${STATUS_ID_IN_REVIEW}\\\" }
+        projectId: \"${PROJECT_ID}\",
+        itemId: \"${ISSUE_ITEM_ID}\",
+        fieldId: \"${STATUS_FIELD_ID}\",
+        value: { singleSelectOptionId: \"${STATUS_ID_IN_REVIEW}\" }
       }
     ) { projectV2Item { id } }
-  }\"
-}"
+  }"
+}
+EOF
