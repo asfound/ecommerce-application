@@ -18,7 +18,7 @@ export class Store<TState extends object> {
   }
 
   public getState(): Readonly<TState> {
-    return this.currentState;
+    return structuredClone(this.currentState);
   }
 
   public reset(): void {
