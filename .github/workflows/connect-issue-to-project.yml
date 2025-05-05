@@ -18,8 +18,8 @@ jobs:
                -d '{
             "query": "mutation {
               addProjectV2ItemById(input: {
-                projectId: \"PROJECT_ID\",
-                contentId: \"ISSUE_ID\"
+                projectId: \"'"$PROJECT_ID"'\",
+                contentId: \"'"$ISSUE_ID"'\"
               }) {
                 item {
                   id

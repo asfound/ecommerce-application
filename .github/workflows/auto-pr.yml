@@ -6,6 +6,8 @@ jobs:
   move-issue:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Change Issue Status
         id: issue
         env:
@@ -30,7 +32,7 @@ jobs:
 
           echo "Found issue number: $ISSUE_NUMBER"
 
-          echo "issueNumber=ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          echo "issueNumber=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
 
 
           ISSUE_ITEM_ID=$(curl -s -H "Authorization: Bearer $GH_PAT_PROJECT" \
@@ -70,7 +72,7 @@ jobs:
           TYPE=$(echo "$BRANCH_NAME" | cut -d/ -f1)
           ISSUE_ID=$(echo "$BRANCH_NAME" | cut -d/ -f2)
           RAW_MESSAGE=$(echo "$BRANCH_NAME" | cut -d/ -f3- | tr '-' ' ')
-          NEW_TITLE="${TYPE}(${ISSUE_ID}): ${MESSAGE}"
+          NEW_TITLE="${TYPE}(${ISSUE_ID}): ${RAW_MESSAGE}"
           echo "New PR Title: $NEW_TITLE"
           gh pr edit "$PR_NUMBER" --repo "$REPO" --title "$NEW_TITLE"
 
@@ -82,16 +84,17 @@ jobs:
         id: fetch-body
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
-          PR_NUMBER: ${{ inputs.prNumber }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ needs.move-issue.outputs.issueNumber }}
         run: |
-                    CURRENT_BODY=$(curl -s \
+         CURRENT_BODY=$(curl -s \
            -H "Authorization: token ${GH_TOKEN}" \
            -H "Accept: application/vnd.github.v3+json" \
            "https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER}" \
-           | jq -r '.body // ""' \)
-           echo "CURRENT_BODY: $CURRENT_BODY"
+           | jq -r '.body // ""')
+
+          echo "CURRENT_BODY: $CURRENT_BODY"
 
           curl -s -X PATCH \
            -H "Authorization: token ${GH_TOKEN}" \
