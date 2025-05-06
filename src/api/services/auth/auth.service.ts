@@ -8,6 +8,7 @@ import type { ApiRootGetter } from '~/api/types/types';
 
 import { ApiBuilder } from '~/api/client/api-builder';
 import { ClientTokenCache } from '~/api/client/token-cache';
+import { ACTIVE_CART_SIGNIN_MODE } from '~/api/constants/constants';
 import { isSuccessResponse } from '~/api/helpers/helpers';
 
 import type { LoginPayload, SignupPayload } from './types';
@@ -37,7 +38,7 @@ export class AuthService {
 
   public async login(payload: LoginPayload): Promise<ClientResponse<CustomerSignInResult>> {
     const body: MyCustomerSignin = {
-      activeCartSignInMode: 'MergeWithExistingCustomerCart',
+      activeCartSignInMode: ACTIVE_CART_SIGNIN_MODE.MERGE_WITH_EXISTING,
       email: payload.email,
       password: payload.password,
     };
