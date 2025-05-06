@@ -13,7 +13,7 @@ import { isSuccessResponse } from '~/api/helpers/helpers';
 
 import type { LoginPayload, SignupPayload } from './types';
 
-import { createCustomerDraft } from './helpers/helpers';
+import { createCustomerDraft, handleSuccessResponse } from './helpers/helpers';
 
 export class AuthService {
   private static _instance: AuthService | null = null;
@@ -46,12 +46,7 @@ export class AuthService {
     const response = await this.apiRoot().me().login().post({ body }).execute();
 
     if (isSuccessResponse(response)) {
-      ClientTokenCache.clearAnonymousCache();
-
-      ApiBuilder.instance.usePasswordBuilder({
-        password: payload.password,
-        username: payload.email,
-      });
+      handleSuccessResponse(payload);
     }
 
     return response;
@@ -69,12 +64,7 @@ export class AuthService {
     const response = await this.apiRoot().me().signup().post({ body }).execute();
 
     if (isSuccessResponse(response)) {
-      ClientTokenCache.clearAnonymousCache();
-
-      ApiBuilder.instance.usePasswordBuilder({
-        password: payload.password,
-        username: payload.email,
-      });
+      handleSuccessResponse(payload);
     }
 
     return response;
