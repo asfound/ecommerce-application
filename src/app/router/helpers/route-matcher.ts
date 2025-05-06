@@ -1,5 +1,7 @@
 import type { Route, RouteMatcher } from '../types';
 
+import { WILDCARD_ROUTE } from '../constants';
+
 export const createRouteMatcher = (route: Route): RouteMatcher => {
   return route.path.includes(':')
     ? createMatcherWithParameters(route)
@@ -43,8 +45,6 @@ const createMatcherWithoutParameters = (route: Route): RouteMatcher => {
 };
 
 const createRouteWithoutParametersRegex = (route: Route): RegExp => {
-  const WILDCARD_ROUTE = '*';
-
   if (route.path === WILDCARD_ROUTE) {
     return new RegExp('^.*$');
   }

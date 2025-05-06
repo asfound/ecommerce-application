@@ -2,6 +2,7 @@ import type { BaseComponent } from '~/components/base-component/base-component.t
 
 import type { Route } from './types';
 
+import { WILDCARD_ROUTE } from './constants.ts';
 import { ROUTE_PATH } from './route-path.ts';
 
 export const ROUTES: Route[] = [
@@ -36,6 +37,6 @@ export const FALLBACK_ROUTE: Route = {
     const { NotFoundPage } = await import('../../pages/not-found.ts');
     return new NotFoundPage();
   },
-  path: '*',
+  path: WILDCARD_ROUTE,
   title: '404',
 };

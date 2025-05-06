@@ -2,12 +2,13 @@ import { BaseComponent } from '~/components/base-component/base-component';
 
 import type { Route, RouteMatcher } from './types';
 
+import { ROUTER_ERROR } from './constants';
 import { createRouteMatcher } from './helpers/route-matcher';
 
 export class Router {
   public static get instance(): Router {
     if (!Router._instance) {
-      throw new Error('Router is not initialized');
+      throw new Error(ROUTER_ERROR.NOT_INITIALIZED);
     }
 
     return Router._instance;
@@ -32,6 +33,7 @@ export class Router {
 
     this.fallbackRoute = fallbackRoute;
 
+    // TODO: if we don't use the router state, then we can add these handlers in the loop
     globalThis.addEventListener('popstate', () => {
       this.handleRouteChange({ path: globalThis.location.href, pushState: false }).catch(
         console.error,
@@ -47,7 +49,7 @@ export class Router {
 
   public static initialize(routes: Route[], fallbackRoute: Route): void {
     if (Router._instance) {
-      throw new Error('Router is already initialized');
+      throw new Error(ROUTER_ERROR.ALREADY_INITIALIZED);
     }
 
     Router._instance = new Router(routes, fallbackRoute);
