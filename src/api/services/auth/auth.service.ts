@@ -53,6 +53,8 @@ export class AuthService {
   }
 
   public logout(): void {
+    localStorage.removeItem('loggedIn'); // TODO: replace by local storage service
+
     ClientTokenCache.clearCustomerCache();
 
     ApiBuilder.instance.useAnonymousBuilder();
