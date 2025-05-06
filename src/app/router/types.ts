@@ -15,8 +15,10 @@ export interface Route {
 export interface RouteMatcher {
   checkMatch(path: string): boolean;
   extractParameters(path: string): Record<string, string>;
-  extractSearchParameters(path: string): Record<string, string>;
+  extractSearchParameters(path: string): SearchParameters;
   route: Route;
 }
 
 export type RoutePath = (typeof ROUTE_PATH)[keyof typeof ROUTE_PATH];
+
+export type SearchParameters = Record<string, string>;

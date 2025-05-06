@@ -1,4 +1,4 @@
-import type { Route, RouteMatcher } from '../types';
+import type { Route, RouteMatcher, SearchParameters } from '../types';
 
 import { WILDCARD_ROUTE } from '../constants';
 
@@ -61,7 +61,7 @@ const createRouteWithParametersRegex = (route: Route): RegExp => {
   return new RegExp(`^${regex}$`);
 };
 
-const extractSearchParameters = (path: string): Record<string, string> => {
+const extractSearchParameters = (path: string): SearchParameters => {
   const queryIndex = path.indexOf('?');
 
   if (queryIndex === -1) {

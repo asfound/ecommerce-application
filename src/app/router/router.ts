@@ -1,6 +1,6 @@
 import { BaseComponent } from '~/components/base-component/base-component';
 
-import type { Route, RouteMatcher } from './types';
+import type { Route, RouteMatcher, SearchParameters } from './types';
 
 import { ROUTER_ERROR } from './constants';
 import { createRouteMatcher } from './helpers/route-matcher';
@@ -26,7 +26,7 @@ export class Router {
 
   private readonly routerOutlet = new BaseComponent({ className: 'router-outlet', tagName: 'div' });
 
-  private searchParameters: Record<string, string> = {};
+  private searchParameters: SearchParameters = {};
 
   private constructor(routes: Route[], fallbackRoute: Route) {
     this.routeMatchers = routes.map((route) => createRouteMatcher(route));
@@ -63,11 +63,11 @@ export class Router {
     globalThis.history.forward();
   }
 
-  public getSearchParameters(): Record<string, string> {
+  public getSearchParameters(): SearchParameters {
     return this.searchParameters;
   }
 
-  public async navigate(path: string, searchParameters?: Record<string, string>): Promise<void> {
+  public async navigate(path: string, searchParameters?: SearchParameters): Promise<void> {
     const { pathname } = new URL(globalThis.location.href);
 
     if (path === pathname) {
@@ -77,7 +77,7 @@ export class Router {
     await this.handleRouteChange({ path, pushState: true, searchParameters });
   }
 
-  public setSearchParameters(searchParameters: Record<string, string>): void {
+  public setSearchParameters(searchParameters: SearchParameters): void {
     Object.assign(this.searchParameters, searchParameters);
 
     const query = new URLSearchParams(this.searchParameters).toString();
@@ -88,7 +88,7 @@ export class Router {
   private async handleRouteChange(payload: {
     path: string;
     pushState: boolean;
-    searchParameters?: Record<string, string>;
+    searchParameters?: SearchParameters;
   }): Promise<void> {
     const path = this.parseURL({ path: payload.path, searchParameters: payload.searchParameters });
 
@@ -115,7 +115,7 @@ export class Router {
     await this.updatePage({ route: matcher.route });
   }
 
-  private parseURL(payload: { path: string; searchParameters?: Record<string, string> }): string {
+  private parseURL(payload: { path: string; searchParameters?: SearchParameters }): string {
     const { pathname, search } = new URL(payload.path, globalThis.location.origin);
 
     const searchParameters = payload.searchParameters
