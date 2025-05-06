@@ -15,8 +15,8 @@ export class Router {
 
   private static _instance: null | Router = null;
 
-  public get outlet(): HTMLElement {
-    return this.routerOutlet.element;
+  public get outlet(): BaseComponent {
+    return this.routerOutlet;
   }
 
   private readonly fallbackRoute: Route;
