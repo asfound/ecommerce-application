@@ -91,8 +91,8 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     this._element.removeAttribute(name);
   }
 
-  public removeClassName(className: string): void {
-    this._element.classList.remove(className);
+  public removeClassNames(...classNames: string[]): void {
+    this._element.classList.remove(...classNames);
   }
 
   public replaceChildren(...children: BaseComponent<HTMLElement>[]): void {
