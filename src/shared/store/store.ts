@@ -1,4 +1,4 @@
-import type { SelectorFunction, Subscriber } from './types/types';
+import type { SelectorFunction, Subscriber } from './types';
 
 export class Store<TState extends object> {
   private currentState: TState;

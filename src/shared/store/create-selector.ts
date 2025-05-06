@@ -1,4 +1,4 @@
-import type { SelectorFunction } from './types/types';
+import type { SelectorFunction } from './types';
 
 /**
  * Wraps a selector function. Currently, it just returns the same function.
