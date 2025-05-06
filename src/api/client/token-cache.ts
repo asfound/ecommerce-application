@@ -2,7 +2,7 @@ import type { TokenCache, TokenStore } from '@commercetools/ts-client';
 
 import type { ClientTokenStoreType } from './types';
 
-import { isTokenStore } from '../helpers/helpers';
+import { isTokenStore } from '../helpers/type-predicates';
 import { CLIENT_TOKEN_STORE_TYPE } from './constants';
 
 const DEFAULT_TOKEN_STORE = {
