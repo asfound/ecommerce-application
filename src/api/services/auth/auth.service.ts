@@ -16,7 +16,7 @@ import type { LoginPayload, SignupPayload } from './types';
 import { createCustomerDraft, handleSuccessResponse } from './helpers/helpers';
 
 export class AuthService {
-  private static _instance: AuthService | null = null;
+  private static instance: AuthService | null = null;
 
   private readonly apiRoot;
 
@@ -25,9 +25,9 @@ export class AuthService {
   }
 
   public static getInstance(apiRoot: ApiRootGetter): AuthService {
-    AuthService._instance ??= new AuthService(apiRoot);
+    AuthService.instance ??= new AuthService(apiRoot);
 
-    return AuthService._instance;
+    return AuthService.instance;
   }
 
   public isLoggedIn(): boolean {
