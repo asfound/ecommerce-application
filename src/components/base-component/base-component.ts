@@ -1,4 +1,4 @@
-import type { ElementAttributes, Properties } from './types';
+import type { Properties } from './types';
 
 export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
   public get element(): TElementType {
@@ -100,7 +100,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     this._element.setAttribute(name, value);
   }
 
-  public setAttributes(attributes: ElementAttributes<TElementType>): void {
+  public setAttributes(attributes: Partial<TElementType>): void {
     for (const [name, value] of Object.entries(attributes)) {
       this.setAttribute(name, String(value));
     }
