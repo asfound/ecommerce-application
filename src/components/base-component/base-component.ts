@@ -95,14 +95,9 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     this.append(...children);
   }
 
-  // Можно удалить если что
-  public setAttribute(name: string, value: string): void {
-    this._element.setAttribute(name, value);
-  }
-
   public setAttributes(attributes: Partial<TElementType>): void {
     for (const [name, value] of Object.entries(attributes)) {
-      this.setAttribute(name, String(value));
+      this._element.setAttribute(name, String(value));
     }
   }
 
