@@ -34,11 +34,11 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     }
   }
 
-  protected addClassNames(...classNames: string[]): void {
+  public addClassNames(...classNames: string[]): void {
     this._element.classList.add(...classNames);
   }
 
-  protected addListener(
+  public addListener(
     type: keyof GlobalEventHandlersEventMap,
     listener: EventListener,
     options?: AddEventListenerOptions,
@@ -49,7 +49,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     });
   }
 
-  protected append(...children: BaseComponent<HTMLElement>[]): void {
+  public append(...children: BaseComponent<HTMLElement>[]): void {
     for (const child of children) {
       if (!(child instanceof BaseComponent)) {
         throw new TypeError('Child must be a Component instance');
@@ -61,7 +61,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     }
   }
 
-  protected destroy(): void {
+  public destroy(): void {
     this.destroyChildren();
 
     this.abortController.abort();
@@ -69,7 +69,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     this._element.remove();
   }
 
-  protected destroyChildren(): void {
+  public destroyChildren(): void {
     for (const child of this.children) {
       child.destroy();
     }
@@ -77,36 +77,36 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     this.children.clear();
   }
 
-  protected hasAttribute(name: string): boolean {
+  public hasAttribute(name: string): boolean {
     return this._element.hasAttribute(name);
   }
 
-  protected removeAttribute(name: string): void {
+  public removeAttribute(name: string): void {
     this._element.removeAttribute(name);
   }
 
-  protected removeClassName(className: string): void {
+  public removeClassName(className: string): void {
     this._element.classList.remove(className);
   }
 
-  protected replaceChildren(...children: BaseComponent<HTMLElement>[]): void {
+  public replaceChildren(...children: BaseComponent<HTMLElement>[]): void {
     this.destroyChildren();
 
     this.append(...children);
   }
 
   // Можно удалить если что
-  protected setAttribute(name: string, value: string): void {
+  public setAttribute(name: string, value: string): void {
     this._element.setAttribute(name, value);
   }
 
-  protected setAttributes(attributes: ElementAttributes<TElementType>): void {
+  public setAttributes(attributes: ElementAttributes<TElementType>): void {
     for (const [name, value] of Object.entries(attributes)) {
       this.setAttribute(name, String(value));
     }
   }
 
-  protected setClassName(className: string | string[]): void {
+  public setClassName(className: string | string[]): void {
     if (Array.isArray(className)) {
       this._element.classList.add(...className);
     } else {
@@ -114,11 +114,11 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     }
   }
 
-  protected setTextContent(textContent: string): void {
+  public setTextContent(textContent: string): void {
     this._element.textContent = textContent;
   }
 
-  protected toggleClassName(className: string, force?: boolean): boolean {
+  public toggleClassName(className: string, force?: boolean): boolean {
     return this._element.classList.toggle(className, force);
   }
 }
