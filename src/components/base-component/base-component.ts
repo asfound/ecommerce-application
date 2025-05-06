@@ -81,6 +81,8 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     }
 
     this.children.clear();
+
+    this._element.replaceChildren();
   }
 
   public hasAttribute(name: string): boolean {
