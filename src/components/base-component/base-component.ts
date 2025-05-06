@@ -1,3 +1,5 @@
+import { isArray, isString } from '~/shared/type-predicates/type-predicates';
+
 import type { Properties } from './types';
 
 export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
@@ -17,8 +19,12 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
   ) {
     this._element = document.createElement(properties.tagName) as TElementType;
 
-    if (properties.className) {
+    if (properties.className && isString(properties.className)) {
       this.setClassName(properties.className);
+    }
+
+    if (properties.className && isArray(properties.className)) {
+      this.addClassNames(...properties.className);
     }
 
     if (properties.textContent) {
@@ -101,12 +107,8 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     }
   }
 
-  public setClassName(className: string | string[]): void {
-    if (Array.isArray(className)) {
-      this._element.classList.add(...className);
-    } else {
-      this._element.className = className;
-    }
+  public setClassName(className: string): void {
+    this._element.className = className;
   }
 
   public setTextContent(textContent: string): void {
