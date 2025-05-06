@@ -2,6 +2,8 @@ import { isArray, isString } from '~/shared/type-predicates/type-predicates';
 
 import type { Properties } from './types';
 
+import { BASE_COMPONENT_ERROR } from './constants';
+
 export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
   public get element(): TElementType {
     return this._element;
@@ -58,7 +60,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
   public append(...children: BaseComponent<HTMLElement>[]): void {
     for (const child of children) {
       if (!(child instanceof BaseComponent)) {
-        throw new TypeError('Child must be a Component instance');
+        throw new TypeError(BASE_COMPONENT_ERROR.INCORRECT_CHILD_TYPE);
       }
 
       this.children.add(child);
