@@ -1,5 +1,7 @@
 import type { BaseComponent } from '~/components/base-component/base-component';
 
+import type { Router } from './router';
+
 export type Interceptor = (router: Router) => boolean;
 
 export interface Route {
@@ -17,11 +19,6 @@ export interface RouteMatcher {
 }
 
 export type RoutePath = (typeof ROUTE_PATH)[keyof typeof ROUTE_PATH];
-
-// TODO: temporary for ESLint
-interface Router {
-  navigate(): void;
-}
 
 // TODO: temporary for ESLint
 const ROUTE_PATH = {

@@ -100,9 +100,9 @@ export class Router {
       return;
     }
 
-    // if (matcher.route.canActivate?.some((interceptor) => !interceptor(this))) {
-    //   return;
-    // }
+    if (matcher.route.canActivate?.some((interceptor) => !interceptor(this))) {
+      return;
+    }
 
     this.searchParameters = matcher.extractSearchParameters(path);
 
