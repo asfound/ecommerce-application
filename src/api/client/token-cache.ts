@@ -25,13 +25,21 @@ export class ClientTokenCache implements TokenCache {
 
     this.tokenStore = { ...DEFAULT_TOKEN_STORE };
 
-    const cachedStore = localStorage.getItem(this.storeType); // TODO: replace by service
+    const cachedStore = localStorage.getItem(this.storeType);
 
     if (cachedStore) {
-      const parsed: unknown = JSON.parse(cachedStore);
+      const parsedStore: unknown = JSON.parse(cachedStore);
 
-      if (isTokenStore(parsed)) {
-        this.tokenStore = parsed;
+      if (isTokenStore(parsedStore)) {
+        const refreshToken =
+          storeType === CLIENT_TOKEN_STORE_TYPE.CUSTOMER
+            ? (localStorage.getItem('refreshToken') ?? undefined)
+            : parsedStore.refreshToken;
+
+        this.tokenStore = {
+          ...parsedStore,
+          refreshToken,
+        };
       }
     }
   }
@@ -85,6 +93,14 @@ export class ClientTokenCache implements TokenCache {
 
   public set(cache: TokenStore): void {
     Object.assign(this.tokenStore, cache);
+
+    const { expirationTime, refreshToken, token } = this.tokenStore;
+
+    if (this.storeType === CLIENT_TOKEN_STORE_TYPE.CUSTOMER) {
+      localStorage.setItem('refreshToken', refreshToken ?? '');
+      localStorage.setItem(this.storeType, JSON.stringify({ expirationTime, token }));
+      return;
+    }
 
     localStorage.setItem(this.storeType, JSON.stringify(this.tokenStore)); // TODO: replace by service
   }
