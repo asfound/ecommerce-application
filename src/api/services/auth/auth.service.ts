@@ -77,10 +77,6 @@ export class AuthService {
 
     const response = await this.apiRoot().me().signup().post({ body }).execute();
 
-    if (isSuccessResponse(response)) {
-      handleSuccessResponse(payload);
-    }
-
     return response;
   }
 }
