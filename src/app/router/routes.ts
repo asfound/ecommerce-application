@@ -9,7 +9,7 @@ import { ROUTE_PATH } from './route-path.ts';
 export const ROUTES: Route[] = [
   {
     async component(): Promise<BaseComponent> {
-      const { MainPage } = await import('../../pages/main.ts');
+      const { MainPage } = await import('../../pages/main-page.ts');
       return new MainPage();
     },
     path: ROUTE_PATH.MAIN,
@@ -17,7 +17,7 @@ export const ROUTES: Route[] = [
   },
   {
     async component(): Promise<BaseComponent> {
-      const { LoginPage } = await import('../../pages/login.ts');
+      const { LoginPage } = await import('../../pages/login-page.ts');
       return new LoginPage();
     },
     path: ROUTE_PATH.LOGIN,
@@ -25,17 +25,25 @@ export const ROUTES: Route[] = [
   },
   {
     async component(): Promise<BaseComponent> {
-      const { RegistrationPage } = await import('../../pages/registration.ts');
+      const { RegistrationPage } = await import('../../pages/registration-page.ts');
       return new RegistrationPage();
     },
     path: ROUTE_PATH.REGISTRATION,
     title: 'HUH Coffee | Registration',
   },
+  {
+    async component(): Promise<BaseComponent> {
+      const { CatalogPage } = await import('../../pages/catalog-page.ts');
+      return new CatalogPage();
+    },
+    path: ROUTE_PATH.CATALOG,
+    title: 'HUH Coffee | Catalog',
+  },
 ];
 
 export const FALLBACK_ROUTE: Route = {
   async component(): Promise<BaseComponent> {
-    const { NotFoundPage } = await import('../../pages/not-found.ts');
+    const { NotFoundPage } = await import('../../pages/not-found-page.ts');
     return new NotFoundPage();
   },
   path: WILDCARD_ROUTE,

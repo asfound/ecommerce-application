@@ -6,4 +6,5 @@ export const ROUTER_LINKS: RouterLinkProperties[] = [
   { path: ROUTE_PATH.LOGIN, textContent: 'Login' },
   { path: ROUTE_PATH.REGISTRATION, textContent: 'Registration' },
   { path: ROUTE_PATH.MAIN, textContent: 'Main' },
+  { path: ROUTE_PATH.CATALOG, textContent: 'Catalog' },
 ];

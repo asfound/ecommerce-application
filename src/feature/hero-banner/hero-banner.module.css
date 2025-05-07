@@ -1,0 +1,55 @@
+.banner {
+  background-color: var(--color-dark);
+  background-image: url('../../assets/img/banner-background.png');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 1920px auto;
+}
+
+.container {
+  max-width: 35.125rem;
+  padding: 5.3rem 1.45rem 7.5rem;
+}
+
+.heading {
+  margin: 0;
+  margin-bottom: 1.25rem;
+
+  font-size: 2.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.description {
+  margin: 0;
+  margin-bottom: 3.375rem;
+  font-size: 1.5rem;
+}
+
+.cta {
+  display: inline-block;
+
+  min-width: 14rem;
+  padding: 0.625rem;
+  border-radius: var(--border-radius);
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+
+  background-color: var(--color-accent);
+
+  transition:
+    background-color var(--transition-duration),
+    transform var(--transition-duration);
+}
+
+.cta:hover {
+  color: inherit;
+  background-color: var(--color-dark);
+}
+
+.cta:active {
+  transform: scale(0.96);
+}
