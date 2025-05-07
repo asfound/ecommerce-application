@@ -24,14 +24,25 @@ export class ApiBuilder {
   }
 
   public initialize(): void {
-    const tokenCache = ClientTokenCache.getCustomerCache();
-    const refreshToken = tokenCache.get().refreshToken;
+    const customerLoggedIn = localStorage.getItem('loggedIn');
+    const customerRefreshToken = localStorage.getItem('refreshToken');
 
-    this.createWithExistingTokenBuilder('Bearer');
+    const customerCache = ClientTokenCache.getCustomerCache();
+    const customerTokenStore = customerCache.get();
+    const customerToken = customerTokenStore.token;
+    const customerHasValidToken = customerCache.hasValidToken();
 
-    this._apiRoot = refreshToken
-      ? this.createWithRefreshTokenBuilder(refreshToken)
-      : this.createAnonymousBuilder();
+    if (customerLoggedIn && customerHasValidToken && customerToken) {
+      this._apiRoot = this.createWithExistingTokenBuilder(`Bearer ${customerToken}`);
+      return;
+    }
+
+    if (customerLoggedIn && !customerHasValidToken && customerRefreshToken) {
+      this._apiRoot = this.createWithRefreshTokenBuilder(customerRefreshToken);
+      return;
+    }
+
+    this._apiRoot = this.createAnonymousBuilder();
   }
 
   public useAnonymousBuilder(): void {
