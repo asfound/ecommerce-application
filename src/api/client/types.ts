@@ -2,7 +2,11 @@ import type { TokenCache, UserAuthOptions } from '@commercetools/ts-client';
 
 import type { AUTH_FLOW_TYPE, CLIENT_TOKEN_STORE_TYPE } from './constants';
 
-export type ApiBuilderPayload = AnonymousFlowPayload | PasswordFlowPayload | RefreshFlowPayload;
+export type ApiBuilderPayload =
+  | AnonymousFlowPayload
+  | ExistingFlowPayload
+  | PasswordFlowPayload
+  | RefreshFlowPayload;
 
 export type ClientTokenStoreType =
   (typeof CLIENT_TOKEN_STORE_TYPE)[keyof typeof CLIENT_TOKEN_STORE_TYPE];
@@ -14,6 +18,11 @@ interface AnonymousFlowPayload extends BaseApiBuilderPayload {
 interface BaseApiBuilderPayload {
   tokenCache: TokenCache;
   type: (typeof AUTH_FLOW_TYPE)[keyof typeof AUTH_FLOW_TYPE];
+}
+
+interface ExistingFlowPayload {
+  authorization: string;
+  type: typeof AUTH_FLOW_TYPE.EXISTING;
 }
 
 interface PasswordFlowPayload extends BaseApiBuilderPayload {

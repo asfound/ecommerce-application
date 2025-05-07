@@ -28,6 +28,7 @@ export const HTTP_MIDDLEWARE_OPTIONS: HttpMiddlewareOptions = {
 
 export const AUTH_FLOW_TYPE = {
   ANONYMOUS: 'anonymous',
+  EXISTING: 'existing',
   PASSWORD: 'password',
   REFRESH: 'refresh',
 } as const;

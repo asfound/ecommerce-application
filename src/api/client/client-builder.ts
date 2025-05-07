@@ -32,6 +32,11 @@ export const createApiBuilder = (payload: ApiBuilderPayload): ByProjectKeyReques
       break;
     }
 
+    case AUTH_FLOW_TYPE.EXISTING: {
+      builder.withExistingTokenFlow(payload.authorization, { force: true });
+      break;
+    }
+
     case AUTH_FLOW_TYPE.PASSWORD: {
       builder.withPasswordFlow({
         ...COMMON_AUTH_OPTIONS,

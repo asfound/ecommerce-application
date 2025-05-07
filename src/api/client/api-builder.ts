@@ -27,6 +27,8 @@ export class ApiBuilder {
     const tokenCache = ClientTokenCache.getCustomerCache();
     const refreshToken = tokenCache.get().refreshToken;
 
+    this.createWithExistingTokenBuilder('Bearer');
+
     this._apiRoot = refreshToken
       ? this.createWithRefreshTokenBuilder(refreshToken)
       : this.createAnonymousBuilder();
@@ -43,6 +45,10 @@ export class ApiBuilder {
   private createAnonymousBuilder(): ByProjectKeyRequestBuilder {
     const tokenCache = ClientTokenCache.getAnonymousCache();
     return createApiBuilder({ tokenCache, type: AUTH_FLOW_TYPE.ANONYMOUS });
+  }
+
+  private createWithExistingTokenBuilder(authorization: string): ByProjectKeyRequestBuilder {
+    return createApiBuilder({ authorization, type: AUTH_FLOW_TYPE.EXISTING });
   }
 
   private createWithPasswordBuilder(payload: UserAuthOptions): ByProjectKeyRequestBuilder {
