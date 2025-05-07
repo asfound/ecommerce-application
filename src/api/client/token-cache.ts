@@ -66,6 +66,23 @@ export class ClientTokenCache implements TokenCache {
     return this.tokenStore;
   }
 
+  public hasValidToken(): boolean {
+    const MINUTES_BEFORE_EXPIRATION = 5;
+    const MILLISECONDS_IN_SECOND = 1000;
+    const SECONDS_IN_MINUTE = 60;
+
+    const expirationTime = this.tokenStore.expirationTime;
+
+    if (!expirationTime) {
+      return false;
+    }
+
+    return (
+      expirationTime - Date.now() >
+      MINUTES_BEFORE_EXPIRATION * SECONDS_IN_MINUTE * MILLISECONDS_IN_SECOND
+    );
+  }
+
   public set(cache: TokenStore): void {
     Object.assign(this.tokenStore, cache);
 
