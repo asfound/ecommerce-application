@@ -7,7 +7,6 @@ export const isTokenStore = (value: unknown): value is TokenStore => {
     value != null &&
     isObject(value) &&
     Reflect.has(value, 'token') &&
-    Reflect.has(value, 'expirationTime') &&
-    Reflect.has(value, 'refreshToken')
+    Reflect.has(value, 'expirationTime')
   );
 };
