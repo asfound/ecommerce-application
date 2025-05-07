@@ -2,5 +2,9 @@
   font-size: 1rem;
   color: inherit;
   text-decoration: none;
-  text-transform: uppercase;
+  transition: color var(--transition-duration);
+}
+
+.link:hover {
+  color: var(--color-accent);
 }

@@ -7,7 +7,7 @@ import styles from './router-link.module.css';
 
 export interface RouterLinkProperties {
   path: RoutePath;
-  textContent: string;
+  textContent?: string;
 }
 
 export class RouterLink extends BaseComponent<HTMLAnchorElement> {
