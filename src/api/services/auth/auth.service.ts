@@ -13,7 +13,7 @@ import { isSuccessResponse } from '~/api/helpers/helpers';
 
 import type { LoginPayload, SignupPayload } from './types';
 
-import { createCustomerDraft, handleSuccessResponse } from './helpers/helpers';
+import { createCustomerDraft } from './helpers/helpers';
 
 export class AuthService {
   private static instance: AuthService | null = null;
@@ -54,9 +54,16 @@ export class AuthService {
     if (isSuccessResponse(response)) {
       this.loggedIn = true;
 
-      localStorage.setItem('loggedIn', JSON.stringify(this.loggedIn));
+      localStorage.setItem('loggedIn', JSON.stringify(this.loggedIn)); // TODO: replace by local storage service
 
-      handleSuccessResponse(payload);
+      ClientTokenCache.clearAnonymousCache();
+
+      ApiBuilder.instance.usePasswordBuilder({
+        password: payload.password,
+        username: payload.email,
+      });
+
+      await this.apiRoot().me().get().execute();
     }
 
     return response;
