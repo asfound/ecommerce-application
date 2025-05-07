@@ -17,11 +17,7 @@ export class ApiBuilder {
     return this._apiRoot;
   }
 
-  private _apiRoot: ByProjectKeyRequestBuilder;
-
-  private constructor() {
-    this._apiRoot = this.createAnonymousBuilder();
-  }
+  private _apiRoot!: ByProjectKeyRequestBuilder;
 
   public initialize(): void {
     const customerLoggedIn = localStorage.getItem('loggedIn');
