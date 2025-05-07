@@ -5,6 +5,7 @@ import type { Route } from './types';
 import { WILDCARD_ROUTE } from './constants.ts';
 import { ROUTE_PATH } from './route-path.ts';
 
+// TODO combine page title form project title + page title
 export const ROUTES: Route[] = [
   {
     async component(): Promise<BaseComponent> {
@@ -12,7 +13,7 @@ export const ROUTES: Route[] = [
       return new MainPage();
     },
     path: ROUTE_PATH.MAIN,
-    title: 'Main',
+    title: 'HUH Coffee | Main',
   },
   {
     async component(): Promise<BaseComponent> {
@@ -20,7 +21,7 @@ export const ROUTES: Route[] = [
       return new LoginPage();
     },
     path: ROUTE_PATH.LOGIN,
-    title: 'Login',
+    title: 'HUH Coffee | Login',
   },
   {
     async component(): Promise<BaseComponent> {
@@ -28,7 +29,7 @@ export const ROUTES: Route[] = [
       return new RegistrationPage();
     },
     path: ROUTE_PATH.REGISTRATION,
-    title: 'Registration',
+    title: 'HUH Coffee | Registration',
   },
 ];
 
