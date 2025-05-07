@@ -20,8 +20,16 @@ export class AuthService {
 
   private readonly apiRoot;
 
+  private loggedIn = false;
+
   private constructor(apiRoot: ApiRootGetter) {
     this.apiRoot = apiRoot;
+
+    const loggedIn = localStorage.getItem('loggedIn');
+
+    if (loggedIn) {
+      this.loggedIn = true;
+    }
   }
 
   public static getInstance(apiRoot: ApiRootGetter): AuthService {
@@ -31,9 +39,7 @@ export class AuthService {
   }
 
   public isLoggedIn(): boolean {
-    const loggedIn = localStorage.getItem('loggedIn'); // TODO: replace by local storage service
-
-    return loggedIn ? true : false;
+    return this.loggedIn;
   }
 
   public async login(payload: LoginPayload): Promise<ClientResponse<CustomerSignInResult>> {
@@ -46,6 +52,10 @@ export class AuthService {
     const response = await this.apiRoot().me().login().post({ body }).execute();
 
     if (isSuccessResponse(response)) {
+      this.loggedIn = true;
+
+      localStorage.setItem('loggedIn', JSON.stringify(this.loggedIn));
+
       handleSuccessResponse(payload);
     }
 
@@ -53,6 +63,8 @@ export class AuthService {
   }
 
   public logout(): void {
+    this.loggedIn = false;
+
     localStorage.removeItem('loggedIn'); // TODO: replace by local storage service
 
     ClientTokenCache.clearCustomerCache();
