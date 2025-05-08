@@ -1,6 +1,10 @@
 import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import type { UserAuthOptions } from '@commercetools/ts-client';
 
+import { localStorageService } from '~/services/browser-storage/browser-storage.service';
+import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
+
+import { refreshTokenSchema } from '../schemas/schemas';
 import { createApiBuilder } from './client-builder';
 import { AUTH_FLOW_TYPE } from './constants';
 import { ClientTokenCache } from './token-cache';
@@ -20,8 +24,8 @@ export class ApiBuilder {
   private _apiRoot!: ByProjectKeyRequestBuilder;
 
   public initialize(): void {
-    const customerLoggedIn = localStorage.getItem('loggedIn');
-    const customerRefreshToken = localStorage.getItem('refreshToken');
+    const customerLoggedIn = localStorageService.getItem(LOCAL_STORAGE_KEY.LOGGED_IN);
+    const customerRefreshToken = localStorageService.getItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
 
     const customerCache = ClientTokenCache.getCustomerCache();
     const customerTokenStore = customerCache.get();
@@ -34,7 +38,8 @@ export class ApiBuilder {
     }
 
     if (customerLoggedIn && !customerHasValidToken && customerRefreshToken) {
-      this._apiRoot = this.createWithRefreshTokenBuilder(customerRefreshToken);
+      const refreshToken = refreshTokenSchema.parse(customerRefreshToken);
+      this._apiRoot = this.createWithRefreshTokenBuilder(refreshToken);
       return;
     }
 

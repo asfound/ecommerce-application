@@ -1,8 +1,11 @@
 import type { TokenCache, TokenStore } from '@commercetools/ts-client';
 
+import { localStorageService } from '~/services/browser-storage/browser-storage.service';
+import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
+
 import type { ClientTokenStoreType } from './types';
 
-import { isTokenStore } from '../helpers/type-predicates';
+import { refreshTokenSchema, tokenStoreSchema } from '../schemas/schemas';
 import { CLIENT_TOKEN_STORE_TYPE } from './constants';
 
 const DEFAULT_TOKEN_STORE = {
@@ -25,22 +28,23 @@ export class ClientTokenCache implements TokenCache {
 
     this.tokenStore = { ...DEFAULT_TOKEN_STORE };
 
-    const cachedStore = localStorage.getItem(this.storeType);
+    const cachedStoreRaw = localStorageService.getItem(storeType);
+    const cachedRefreshTokenRaw = localStorageService.getItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
 
-    if (cachedStore) {
-      const parsedStore: unknown = JSON.parse(cachedStore);
+    if (cachedStoreRaw) {
+      const parsedStore = tokenStoreSchema.parse(cachedStoreRaw);
 
-      if (isTokenStore(parsedStore)) {
-        const refreshToken =
-          storeType === CLIENT_TOKEN_STORE_TYPE.CUSTOMER
-            ? (localStorage.getItem('refreshToken') ?? undefined)
-            : parsedStore.refreshToken;
+      let refreshToken = parsedStore.refreshToken;
 
-        this.tokenStore = {
-          ...parsedStore,
-          refreshToken,
-        };
+      if (storeType === CLIENT_TOKEN_STORE_TYPE.CUSTOMER && cachedRefreshTokenRaw) {
+        const parsedRefreshToken = refreshTokenSchema.parse(cachedRefreshTokenRaw);
+        refreshToken = parsedRefreshToken;
       }
+
+      this.tokenStore = {
+        ...parsedStore,
+        refreshToken,
+      };
     }
   }
 
@@ -67,7 +71,7 @@ export class ClientTokenCache implements TokenCache {
   public clear(): void {
     this.tokenStore = { ...DEFAULT_TOKEN_STORE };
 
-    localStorage.removeItem(this.storeType); // TODO: replace by service
+    localStorageService.removeItem(this.storeType);
   }
 
   public get(): TokenStore {
@@ -97,11 +101,10 @@ export class ClientTokenCache implements TokenCache {
     const { expirationTime, refreshToken, token } = this.tokenStore;
 
     if (this.storeType === CLIENT_TOKEN_STORE_TYPE.CUSTOMER) {
-      localStorage.setItem('refreshToken', refreshToken ?? '');
-      localStorage.setItem(this.storeType, JSON.stringify({ expirationTime, token }));
-      return;
+      localStorageService.setItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN, refreshToken ?? '');
+      localStorageService.setItem(LOCAL_STORAGE_KEY.CUSTOMER, { expirationTime, token });
+    } else {
+      localStorageService.setItem(LOCAL_STORAGE_KEY.ANONYMOUS, this.tokenStore);
     }
-
-    localStorage.setItem(this.storeType, JSON.stringify(this.tokenStore)); // TODO: replace by service
   }
 }
