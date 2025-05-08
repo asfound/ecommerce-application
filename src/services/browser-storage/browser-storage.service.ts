@@ -1,4 +1,4 @@
-import type { StorageType } from './types';
+import type { LocalStorageData, StorageType } from './types';
 
 export class BrowserStorageService<TData> {
   private readonly keyPrefix: string;
@@ -40,7 +40,7 @@ export class BrowserStorageService<TData> {
   }
 }
 
-export const localStorageService = new BrowserStorageService({
+export const localStorageService = new BrowserStorageService<LocalStorageData>({
   keyPrefix: 'TEST', // TODO: replace by UUID
   storageType: 'local',
 });
