@@ -1,8 +1,10 @@
 import type { TokenCache, TokenStore } from '@commercetools/ts-client';
 
+import { localStorageService } from '~/services';
+
 import type { ClientTokenStoreType } from './types';
 
-import { isTokenStore } from '../helpers/helpers';
+import { tokenStoreSchema } from '../schemas/schemas';
 import { CLIENT_TOKEN_STORE_TYPE } from './constants';
 
 const DEFAULT_TOKEN_STORE = {
@@ -23,16 +25,13 @@ export class ClientTokenCache implements TokenCache {
   public constructor(storeType: ClientTokenStoreType) {
     this.storeType = storeType;
 
-    this.tokenStore = { ...DEFAULT_TOKEN_STORE };
+    const cachedStoreRaw = localStorageService.getItem(storeType);
 
-    const cachedStore = localStorage.getItem(this.storeType); // TODO: replace by service
-
-    if (cachedStore) {
-      const parsed: unknown = JSON.parse(cachedStore);
-
-      if (isTokenStore(parsed)) {
-        this.tokenStore = parsed;
-      }
+    if (cachedStoreRaw) {
+      const parsedStore = tokenStoreSchema.parse(cachedStoreRaw);
+      this.tokenStore = parsedStore;
+    } else {
+      this.tokenStore = { ...DEFAULT_TOKEN_STORE };
     }
   }
 
@@ -59,16 +58,33 @@ export class ClientTokenCache implements TokenCache {
   public clear(): void {
     this.tokenStore = { ...DEFAULT_TOKEN_STORE };
 
-    localStorage.removeItem(this.storeType); // TODO: replace by service
+    localStorageService.removeItem(this.storeType);
   }
 
   public get(): TokenStore {
     return this.tokenStore;
   }
 
+  public hasValidToken(): boolean {
+    const MINUTES_BEFORE_EXPIRATION = 5;
+    const MILLISECONDS_IN_SECOND = 1000;
+    const SECONDS_IN_MINUTE = 60;
+
+    const expirationTime = this.tokenStore.expirationTime;
+
+    if (!expirationTime) {
+      return false;
+    }
+
+    return (
+      expirationTime - Date.now() >
+      MINUTES_BEFORE_EXPIRATION * SECONDS_IN_MINUTE * MILLISECONDS_IN_SECOND
+    );
+  }
+
   public set(cache: TokenStore): void {
     Object.assign(this.tokenStore, cache);
 
-    localStorage.setItem(this.storeType, JSON.stringify(this.tokenStore)); // TODO: replace by service
+    localStorageService.setItem(this.storeType, this.tokenStore);
   }
 }

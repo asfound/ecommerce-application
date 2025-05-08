@@ -32,6 +32,11 @@ export const createApiBuilder = (payload: ApiBuilderPayload): ByProjectKeyReques
       break;
     }
 
+    case AUTH_FLOW_TYPE.EXISTING: {
+      builder.withExistingTokenFlow(payload.authorization, { force: true });
+      break;
+    }
+
     case AUTH_FLOW_TYPE.PASSWORD: {
       builder.withPasswordFlow({
         ...COMMON_AUTH_OPTIONS,
@@ -39,16 +44,6 @@ export const createApiBuilder = (payload: ApiBuilderPayload): ByProjectKeyReques
           ...COMMON_CLIENT_CREDENTIALS,
           user: payload.user,
         },
-        tokenCache: payload.tokenCache,
-      });
-      break;
-    }
-
-    case AUTH_FLOW_TYPE.REFRESH: {
-      builder.withRefreshTokenFlow({
-        ...COMMON_AUTH_OPTIONS,
-        credentials: COMMON_CLIENT_CREDENTIALS,
-        refreshToken: payload.refreshToken,
         tokenCache: payload.tokenCache,
       });
       break;

@@ -1,15 +1,16 @@
-import type { TokenStore } from '@commercetools/ts-client';
+import type { ByProjectKeyRequestBuilder, ClientResponse } from '@commercetools/platform-sdk';
 
-export const isObject = (value: unknown): value is object => {
-  return typeof value === 'object';
+import { ApiBuilder } from '../client/api-builder';
+import { RESPONSE_STATUS_CODE } from '../constants/constants';
+
+export const getApiRoot = (): ByProjectKeyRequestBuilder => {
+  return ApiBuilder.instance.apiRoot;
 };
 
-export const isTokenStore = (value: unknown): value is TokenStore => {
+export const isSuccessResponse = <T>(response: ClientResponse<T>): boolean => {
   return (
-    value != null &&
-    isObject(value) &&
-    Reflect.has(value, 'token') &&
-    Reflect.has(value, 'expirationTime') &&
-    Reflect.has(value, 'refreshToken')
+    response.statusCode != null &&
+    response.statusCode >= RESPONSE_STATUS_CODE.OK_MIN &&
+    response.statusCode < RESPONSE_STATUS_CODE.OK_MAX
   );
 };

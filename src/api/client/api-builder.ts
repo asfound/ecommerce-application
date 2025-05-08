@@ -1,6 +1,9 @@
 import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import type { UserAuthOptions } from '@commercetools/ts-client';
 
+import { localStorageService } from '~/services';
+import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
+
 import { createApiBuilder } from './client-builder';
 import { AUTH_FLOW_TYPE } from './constants';
 import { ClientTokenCache } from './token-cache';
@@ -17,19 +20,23 @@ export class ApiBuilder {
     return this._apiRoot;
   }
 
-  private _apiRoot: ByProjectKeyRequestBuilder;
-
-  private constructor() {
-    this._apiRoot = this.createAnonymousBuilder();
-  }
+  private _apiRoot!: ByProjectKeyRequestBuilder;
 
   public initialize(): void {
-    const tokenCache = ClientTokenCache.getCustomerCache();
-    const refreshToken = tokenCache.get().refreshToken;
+    const customerLoggedIn = localStorageService.getItem(LOCAL_STORAGE_KEY.LOGGED_IN);
 
-    this._apiRoot = refreshToken
-      ? this.createWithRefreshTokenBuilder(refreshToken)
-      : this.createAnonymousBuilder();
+    const customerCache = ClientTokenCache.getCustomerCache();
+    const customerTokenStore = customerCache.get();
+    const customerToken = customerTokenStore.token;
+    const customerHasValidToken = customerCache.hasValidToken();
+
+    if (customerLoggedIn && customerHasValidToken && customerToken) {
+      this._apiRoot = this.createWithExistingTokenBuilder(`Bearer ${customerToken}`);
+    } else {
+      customerCache.clear();
+      localStorageService.removeItem(LOCAL_STORAGE_KEY.LOGGED_IN);
+      this._apiRoot = this.createAnonymousBuilder();
+    }
   }
 
   public useAnonymousBuilder(): void {
@@ -45,13 +52,12 @@ export class ApiBuilder {
     return createApiBuilder({ tokenCache, type: AUTH_FLOW_TYPE.ANONYMOUS });
   }
 
+  private createWithExistingTokenBuilder(authorization: string): ByProjectKeyRequestBuilder {
+    return createApiBuilder({ authorization, type: AUTH_FLOW_TYPE.EXISTING });
+  }
+
   private createWithPasswordBuilder(payload: UserAuthOptions): ByProjectKeyRequestBuilder {
     const tokenCache = ClientTokenCache.getCustomerCache();
     return createApiBuilder({ tokenCache, type: AUTH_FLOW_TYPE.PASSWORD, user: payload });
-  }
-
-  private createWithRefreshTokenBuilder(refreshToken: string): ByProjectKeyRequestBuilder {
-    const tokenCache = ClientTokenCache.getCustomerCache();
-    return createApiBuilder({ refreshToken, tokenCache, type: AUTH_FLOW_TYPE.REFRESH });
   }
 }
