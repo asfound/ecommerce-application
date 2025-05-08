@@ -25,14 +25,13 @@ export class ClientTokenCache implements TokenCache {
   public constructor(storeType: ClientTokenStoreType) {
     this.storeType = storeType;
 
-    this.tokenStore = { ...DEFAULT_TOKEN_STORE };
-
     const cachedStoreRaw = localStorageService.getItem(storeType);
 
     if (cachedStoreRaw) {
       const parsedStore = tokenStoreSchema.parse(cachedStoreRaw);
-
       this.tokenStore = parsedStore;
+    } else {
+      this.tokenStore = { ...DEFAULT_TOKEN_STORE };
     }
   }
 
