@@ -2,6 +2,8 @@ import type { Route, RouteMatcher, SearchParameters } from '../types';
 
 import { WILDCARD_ROUTE } from '../constants';
 
+const QUERY_INDEX_SHIFT = 1;
+
 export const createRouteMatcher = (route: Route): RouteMatcher => {
   return route.path.includes(':')
     ? createMatcherWithParameters(route)
@@ -67,8 +69,6 @@ const extractSearchParameters = (path: string): SearchParameters => {
   if (queryIndex === -1) {
     return {};
   }
-
-  const QUERY_INDEX_SHIFT = 1;
 
   const queryString = path.slice(queryIndex + QUERY_INDEX_SHIFT);
 
