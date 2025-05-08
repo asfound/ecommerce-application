@@ -1,3 +1,5 @@
+import type { TokenStore } from '@commercetools/ts-client';
+
 export interface LocalStorageData {
   anonymousTokenStore: TokenStore;
   customerTokenStore: TokenStore;
@@ -6,10 +8,3 @@ export interface LocalStorageData {
 }
 
 export type StorageType = 'local' | 'session';
-
-// TODO: replace by SDK type
-interface TokenStore {
-  expirationTime: number;
-  refreshToken?: string;
-  token: string;
-}
