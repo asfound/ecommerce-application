@@ -53,7 +53,7 @@ export class Store<TState extends object> {
     callback: (payload: TSlice) => void,
     options?: {
       equalityFunction?(a: TSlice, b: TSlice): boolean;
-      immediate?: boolean;
+      isImmediate?: boolean;
     },
   ): VoidFunction {
     const subscriber: Subscriber<TState, TSlice> = {
@@ -62,7 +62,7 @@ export class Store<TState extends object> {
       selector,
     };
 
-    if (options?.immediate ?? true) {
+    if (options?.isImmediate ?? true) {
       callback(selector(this.currentState));
     }
 
