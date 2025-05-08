@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const tokenStoreSchema = z.object({
-  expirationTime: z.string(),
+  expirationTime: z.number(),
   refreshToken: z.string().optional(),
-  token: z.number(),
+  token: z.string(),
 });
 
 export const refreshTokenSchema = z.string();
