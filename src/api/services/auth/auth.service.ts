@@ -5,11 +5,14 @@ import type {
 } from '@commercetools/platform-sdk';
 
 import type { ApiRootGetter } from '~/api/types/types';
+import type { BrowserStorageService } from '~/services/browser-storage/browser-storage.service';
+import type { LocalStorageData } from '~/services/browser-storage/types';
 
 import { ApiBuilder } from '~/api/client/api-builder';
 import { ClientTokenCache } from '~/api/client/token-cache';
 import { ACTIVE_CART_SIGNIN_MODE } from '~/api/constants/constants';
 import { isSuccessResponse } from '~/api/helpers/helpers';
+import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
 
 import type { LoginPayload, SignupPayload } from './types';
 
@@ -20,20 +23,30 @@ export class AuthService {
 
   private readonly apiRoot;
 
+  private readonly localStorageService: BrowserStorageService<LocalStorageData>;
+
   private loggedIn = false;
 
-  private constructor(apiRoot: ApiRootGetter) {
+  private constructor(
+    apiRoot: ApiRootGetter,
+    localStorageService: BrowserStorageService<LocalStorageData>,
+  ) {
     this.apiRoot = apiRoot;
 
-    const loggedIn = localStorage.getItem('loggedIn');
+    this.localStorageService = localStorageService;
+
+    const loggedIn = localStorageService.getItem(LOCAL_STORAGE_KEY.LOGGED_IN);
 
     if (loggedIn) {
       this.loggedIn = true;
     }
   }
 
-  public static getInstance(apiRoot: ApiRootGetter): AuthService {
-    AuthService.instance ??= new AuthService(apiRoot);
+  public static getInstance(
+    apiRoot: ApiRootGetter,
+    localStorageService: BrowserStorageService<LocalStorageData>,
+  ): AuthService {
+    AuthService.instance ??= new AuthService(apiRoot, localStorageService);
 
     return AuthService.instance;
   }
@@ -54,7 +67,7 @@ export class AuthService {
     if (isSuccessResponse(response)) {
       this.loggedIn = true;
 
-      localStorage.setItem('loggedIn', JSON.stringify(this.loggedIn)); // TODO: replace by local storage service
+      this.localStorageService.setItem(LOCAL_STORAGE_KEY.LOGGED_IN, this.loggedIn);
 
       ClientTokenCache.clearAnonymousCache();
 
@@ -72,9 +85,7 @@ export class AuthService {
   public logout(): void {
     this.loggedIn = false;
 
-    localStorage.removeItem('loggedIn'); // TODO: replace by local storage service
-
-    ClientTokenCache.clearCustomerCache();
+    this.localStorageService.removeItem(LOCAL_STORAGE_KEY.LOGGED_IN);
 
     ApiBuilder.instance.useAnonymousBuilder();
   }
