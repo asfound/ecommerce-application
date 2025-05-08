@@ -1,8 +1,8 @@
 import type { TokenStore } from '@commercetools/ts-client';
 
 export interface LocalStorageData {
-  anonymousTokenStore: TokenStore;
-  customerTokenStore: TokenStore;
+  anonymous: TokenStore;
+  customer: TokenStore;
   loggedIn: boolean;
   refreshToken: string;
 }
