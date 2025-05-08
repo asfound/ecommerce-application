@@ -48,16 +48,6 @@ export const createApiBuilder = (payload: ApiBuilderPayload): ByProjectKeyReques
       });
       break;
     }
-
-    case AUTH_FLOW_TYPE.REFRESH: {
-      builder.withRefreshTokenFlow({
-        ...COMMON_AUTH_OPTIONS,
-        credentials: COMMON_CLIENT_CREDENTIALS,
-        refreshToken: payload.refreshToken,
-        tokenCache: payload.tokenCache,
-      });
-      break;
-    }
   }
 
   const client = builder.build();

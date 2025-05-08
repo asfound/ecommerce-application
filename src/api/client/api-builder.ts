@@ -4,7 +4,6 @@ import type { UserAuthOptions } from '@commercetools/ts-client';
 import { localStorageService } from '~/services/browser-storage/browser-storage.service';
 import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
 
-import { refreshTokenSchema } from '../schemas/schemas';
 import { createApiBuilder } from './client-builder';
 import { AUTH_FLOW_TYPE } from './constants';
 import { ClientTokenCache } from './token-cache';
@@ -25,7 +24,6 @@ export class ApiBuilder {
 
   public initialize(): void {
     const customerLoggedIn = localStorageService.getItem(LOCAL_STORAGE_KEY.LOGGED_IN);
-    const customerRefreshToken = localStorageService.getItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
 
     const customerCache = ClientTokenCache.getCustomerCache();
     const customerTokenStore = customerCache.get();
@@ -34,12 +32,6 @@ export class ApiBuilder {
 
     if (customerLoggedIn && customerHasValidToken && customerToken) {
       this._apiRoot = this.createWithExistingTokenBuilder(`Bearer ${customerToken}`);
-      return;
-    }
-
-    if (customerLoggedIn && !customerHasValidToken && customerRefreshToken) {
-      const refreshToken = refreshTokenSchema.parse(customerRefreshToken);
-      this._apiRoot = this.createWithRefreshTokenBuilder(refreshToken);
       return;
     }
 
@@ -66,10 +58,5 @@ export class ApiBuilder {
   private createWithPasswordBuilder(payload: UserAuthOptions): ByProjectKeyRequestBuilder {
     const tokenCache = ClientTokenCache.getCustomerCache();
     return createApiBuilder({ tokenCache, type: AUTH_FLOW_TYPE.PASSWORD, user: payload });
-  }
-
-  private createWithRefreshTokenBuilder(refreshToken: string): ByProjectKeyRequestBuilder {
-    const tokenCache = ClientTokenCache.getCustomerCache();
-    return createApiBuilder({ refreshToken, tokenCache, type: AUTH_FLOW_TYPE.REFRESH });
   }
 }
