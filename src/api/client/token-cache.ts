@@ -1,11 +1,10 @@
 import type { TokenCache, TokenStore } from '@commercetools/ts-client';
 
 import { localStorageService } from '~/services/browser-storage/browser-storage.service';
-import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
 
 import type { ClientTokenStoreType } from './types';
 
-import { refreshTokenSchema, tokenStoreSchema } from '../schemas/schemas';
+import { tokenStoreSchema } from '../schemas/schemas';
 import { CLIENT_TOKEN_STORE_TYPE } from './constants';
 
 const DEFAULT_TOKEN_STORE = {
@@ -29,22 +28,11 @@ export class ClientTokenCache implements TokenCache {
     this.tokenStore = { ...DEFAULT_TOKEN_STORE };
 
     const cachedStoreRaw = localStorageService.getItem(storeType);
-    const cachedRefreshTokenRaw = localStorageService.getItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN);
 
     if (cachedStoreRaw) {
       const parsedStore = tokenStoreSchema.parse(cachedStoreRaw);
 
-      let refreshToken = parsedStore.refreshToken;
-
-      if (storeType === CLIENT_TOKEN_STORE_TYPE.CUSTOMER && cachedRefreshTokenRaw) {
-        const parsedRefreshToken = refreshTokenSchema.parse(cachedRefreshTokenRaw);
-        refreshToken = parsedRefreshToken;
-      }
-
-      this.tokenStore = {
-        ...parsedStore,
-        refreshToken,
-      };
+      this.tokenStore = parsedStore;
     }
   }
 
@@ -98,13 +86,6 @@ export class ClientTokenCache implements TokenCache {
   public set(cache: TokenStore): void {
     Object.assign(this.tokenStore, cache);
 
-    const { expirationTime, refreshToken, token } = this.tokenStore;
-
-    if (this.storeType === CLIENT_TOKEN_STORE_TYPE.CUSTOMER) {
-      localStorageService.setItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN, refreshToken ?? '');
-      localStorageService.setItem(LOCAL_STORAGE_KEY.CUSTOMER, { expirationTime, token });
-    } else {
-      localStorageService.setItem(LOCAL_STORAGE_KEY.ANONYMOUS, this.tokenStore);
-    }
+    localStorageService.setItem(this.storeType, this.tokenStore);
   }
 }
