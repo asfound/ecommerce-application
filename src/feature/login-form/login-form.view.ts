@@ -5,6 +5,7 @@ import { button, div, h2 } from '~/shared/create-element/tags';
 
 import { Input } from './input';
 import styles from './login-form.module.css';
+import { required, validateEmailFormat, validateNoSpaces } from './validators';
 
 export class LoginFormView extends BaseComponent<HTMLFormElement> implements Component {
   public constructor() {
@@ -23,7 +24,8 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
     const inputEmail = new Input({
       name: 'email',
       placeholder: 'Email',
-      type: 'email',
+      type: 'text',
+      validators: [required, validateNoSpaces, validateEmailFormat],
     });
 
     const inputPassword = new Input({
