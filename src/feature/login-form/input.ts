@@ -103,9 +103,11 @@ export class Input extends BaseComponent {
         if (inputType === INPUT_TYPE.PASSWORD) {
           this.inputComponent.element.type = INPUT_TYPE.TEXT;
           this.passwordToggleIcon.src = iconEyeVisible;
+          this.inputComponent.element.focus();
         } else {
           this.inputComponent.element.type = INPUT_TYPE.PASSWORD;
           this.passwordToggleIcon.src = iconEyeHidden;
+          this.inputComponent.element.focus();
         }
       },
       {
