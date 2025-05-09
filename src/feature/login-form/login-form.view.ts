@@ -95,6 +95,8 @@ export class LoginFormView extends BaseComponent implements Component {
     }
 
     this.inputComponents.length = 0;
+
+    super.destroy();
   }
 
   private addInput(input: Input): void {
