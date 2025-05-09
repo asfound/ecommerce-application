@@ -89,6 +89,14 @@ export class LoginFormView extends BaseComponent implements Component {
     this.append(this.formElement);
   }
 
+  public override destroy(): void {
+    for (const input of this.inputComponents) {
+      input.destroy();
+    }
+
+    this.inputComponents.length = 0;
+  }
+
   private addInput(input: Input): void {
     this.inputComponents.push(input);
 
