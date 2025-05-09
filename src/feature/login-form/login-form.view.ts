@@ -3,9 +3,6 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
 import { button, div, h2 } from '~/shared/create-element/tags';
-
-import { Input } from './input';
-import styles from './login-form.module.css';
 import {
   validateEmailFormat,
   validateHasDigit,
@@ -15,7 +12,10 @@ import {
   validateNoSpaces,
   validateOnlyEnglishLetters,
   validateRequired,
-} from './validators';
+} from '~/shared/form-validators/form-validators';
+
+import { Input } from './input';
+import styles from './login-form.module.css';
 
 export class LoginFormView extends BaseComponent<HTMLFormElement> implements Component {
   private readonly buttonSubmit = button(

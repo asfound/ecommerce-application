@@ -1,3 +1,5 @@
+import type { ValidatorFunction } from '~/shared/form-validators/types';
+
 import { BaseComponent } from '~/components/base-component/base-component';
 import { img } from '~/shared/create-element/tags';
 
@@ -12,8 +14,6 @@ export interface InputProperties {
   type?: string;
   validators?: ValidatorFunction[];
 }
-
-export type ValidatorFunction = (value: string) => null | string;
 
 export class Input extends BaseComponent {
   public get value(): string {

@@ -1,6 +1,6 @@
-import { EMAIL_VALIDATION_ERROR, VALIDATION_ERROR } from '~/shared/constants/constants';
+import type { ValidatorFunction } from './types';
 
-import type { ValidatorFunction } from './input';
+import { EMAIL_VALIDATION_ERROR, VALIDATION_ERROR } from '../constants/constants';
 
 export const validateEmailFormat: ValidatorFunction = (value) => {
   const emailRegex = /^[^@]+@[^@]+\.[^@.]{2,}$/;
