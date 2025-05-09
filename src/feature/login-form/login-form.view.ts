@@ -45,11 +45,11 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
       validators: [
         validateRequired,
         validateNoSpaces,
+        validateOnlyEnglishLetters,
         validateMinLength(REQUIRED_PASSWORD_LENGTH),
         validateHasUppercase,
         validateHasLowercase,
         validateHasDigit,
-        validateOnlyEnglishLetters,
       ],
     });
 
