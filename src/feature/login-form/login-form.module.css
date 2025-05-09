@@ -1,9 +1,9 @@
 .container {
-  max-width: 598px;
-  margin-top: 40px;
+  max-width: 59.8rem;
+  margin-top: 4rem;
   margin-inline: auto;
-  padding-block: 40px;
-  border-radius: 6px;
+  padding-block: 4rem;
+  border-radius: var(--border-radius);
 
   background-color: var(--color-dark);
 }
@@ -11,9 +11,9 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 2rem;
 
-  max-width: 398px;
+  max-width: 39.8rem;
   margin-inline: auto;
 }
 
@@ -22,5 +22,5 @@
 }
 
 .formTitle {
-  font-size: 26px;
+  font-size: 2.6rem;
 }
