@@ -1,5 +1,7 @@
 import { BaseComponent } from '~/components/base-component/base-component';
 
+import styles from './button.module.css';
+
 export interface ButtonProperties {
   onClick(): void;
   textContent: string;
@@ -12,6 +14,7 @@ export class Button extends BaseComponent<HTMLButtonElement> {
   public constructor(properties: ButtonProperties) {
     super({
       attributes: { type: properties.type },
+      className: styles.button,
       tagName: 'button',
       textContent: properties.textContent,
     });

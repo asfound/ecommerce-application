@@ -1,8 +1,9 @@
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { Button } from '~/components/common/button/button';
 import { REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
-import { button, div, h2 } from '~/shared/create-element/tags';
+import { div, h2 } from '~/shared/create-element/tags';
 import {
   validateEmailFormat,
   validateHasDigit,
@@ -18,10 +19,13 @@ import { Input } from './input';
 import styles from './login-form.module.css';
 
 export class LoginFormView extends BaseComponent<HTMLFormElement> implements Component {
-  private readonly buttonSubmit = button(
-    { className: styles.button, disabled: true, type: 'submit' },
-    'Log in',
-  );
+  private readonly buttonSubmit = new Button({
+    onClick: (): void => {
+      console.warn('submitted');
+    },
+    textContent: 'Log in',
+    type: 'submit',
+  });
 
   private readonly inputComponents: Input[] = [];
 
@@ -34,7 +38,11 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
   public checkValidity(): void {
     const formValid = this.inputComponents.every((input) => input.validate());
 
-    this.buttonSubmit.disabled = !formValid;
+    if (formValid) {
+      this.buttonSubmit.enable();
+    } else {
+      this.buttonSubmit.disable();
+    }
   }
 
   public createHTML(): void {
@@ -66,6 +74,8 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
         validateHasDigit,
       ],
     });
+
+    this.buttonSubmit.disable();
 
     this.addInput(inputEmail);
     this.addInput(inputPassword);

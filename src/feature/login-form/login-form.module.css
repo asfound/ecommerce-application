@@ -10,28 +10,3 @@
 .formHeader {
   text-align: center;
 }
-
-/* TODO: move to common button styles or component */
-.button {
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-
-  color: inherit;
-
-  background-color: var(--color-accent);
-
-  transition: background-color var(--transition-duration);
-}
-
-.button:disabled {
-  pointer-events: none;
-  background-color: var(--color-dark);
-}
-
-@media (hover: hover) {
-  .button:hover {
-    cursor: pointer;
-    background-color: #1d45f8; /* TODO: replace by var */
-  }
-}
