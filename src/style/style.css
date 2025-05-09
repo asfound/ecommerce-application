@@ -6,7 +6,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
+  color: var(--color-white);
   text-rendering: optimizelegibility;
 
+  background-color: var(--color-black);
+
   font-synthesis: none;
+}
+
+body {
+  margin: 0;
 }
