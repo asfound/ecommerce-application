@@ -1,12 +1,12 @@
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
 import { button, div, h2 } from '~/shared/create-element/tags';
 
 import { Input } from './input';
 import styles from './login-form.module.css';
 import {
-  PASSWORD_LENGTH,
   validateEmailFormat,
   validateHasDigit,
   validateHasLowercase,
@@ -45,7 +45,7 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
       validators: [
         validateRequired,
         validateNoSpaces,
-        validateMinLength(PASSWORD_LENGTH),
+        validateMinLength(REQUIRED_PASSWORD_LENGTH),
         validateHasUppercase,
         validateHasLowercase,
         validateHasDigit,
