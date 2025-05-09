@@ -1,4 +1,5 @@
 .container {
+  position: relative;
   background-color: transparent;
 }
 
@@ -26,4 +27,19 @@
 
 .errorMessage {
   color: var(--color-crimson);
+}
+
+.passwordToggleIcon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  width: 30px;
+  height: 30px;
+}
+
+@media (hover: hover) {
+  .passwordToggleIcon:hover {
+    cursor: pointer;
+  }
 }

@@ -52,6 +52,7 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
     });
 
     const inputPassword = new Input({
+      enablePasswordToggle: true,
       name: 'password',
       placeholder: 'Password',
       type: 'password',

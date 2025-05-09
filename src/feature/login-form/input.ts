@@ -1,8 +1,12 @@
 import { BaseComponent } from '~/components/base-component/base-component';
+import { img } from '~/shared/create-element/tags';
 
+import iconEyeHidden from '../../assets/icons/eye-hidden.svg';
+import iconEyeVisible from '../../assets/icons/eye-visible.svg';
 import styles from './input.module.css';
 
 export interface InputProperties {
+  enablePasswordToggle?: true;
   name?: string;
   placeholder?: string;
   type?: string;
@@ -26,6 +30,8 @@ export class Input extends BaseComponent {
     tagName: 'input',
   });
 
+  private readonly passwordToggleIcon = img({ className: styles.passwordToggleIcon });
+
   private readonly properties;
 
   private readonly validators: ValidatorFunction[] = [];
@@ -41,11 +47,15 @@ export class Input extends BaseComponent {
 
     this.validators = properties.validators ?? [];
 
-    this.inputComponent.addListener('input', () => {
-      this.validate();
-    });
+    if (properties.enablePasswordToggle) {
+      this.passwordToggleIcon.src = iconEyeHidden;
+
+      this.append(this.passwordToggleIcon);
+    }
 
     this.append(this.inputComponent, this.errorMessageComponent);
+
+    this.setupListeners();
   }
 
   public clearErrorMessage(): void {
@@ -76,5 +86,29 @@ export class Input extends BaseComponent {
 
     this.clearErrorMessage();
     return true;
+  }
+
+  private setupListeners(): void {
+    this.inputComponent.addListener('input', () => {
+      this.validate();
+    });
+
+    this.passwordToggleIcon.addEventListener(
+      'click',
+      () => {
+        const inputType = this.inputComponent.element.type;
+
+        if (inputType === 'password') {
+          this.inputComponent.element.type = 'text';
+          this.passwordToggleIcon.src = iconEyeVisible;
+        } else {
+          this.inputComponent.element.type = 'password';
+          this.passwordToggleIcon.src = iconEyeHidden;
+        }
+      },
+      {
+        signal: this.abortController.signal,
+      },
+    );
   }
 }
