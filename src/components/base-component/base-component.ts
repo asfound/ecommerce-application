@@ -2,8 +2,6 @@ import { isArray, isString } from '~/shared/type-predicates/type-predicates';
 
 import type { Properties } from './types';
 
-import { BASE_COMPONENT_ERROR } from './constants';
-
 export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
   public get element(): TElementType {
     return this._element;
@@ -57,15 +55,16 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     });
   }
 
-  public append(...children: BaseComponent<HTMLElement>[]): void {
+  public append(...children: (BaseComponent<HTMLElement> | HTMLElement)[]): void {
     for (const child of children) {
-      if (!(child instanceof BaseComponent)) {
-        throw new TypeError(BASE_COMPONENT_ERROR.INCORRECT_CHILD_TYPE);
+      if (child instanceof BaseComponent) {
+        this.children.add(child);
+        this._element.append(child.element);
       }
 
-      this.children.add(child);
-
-      this._element.append(child.element);
+      if (child instanceof HTMLElement) {
+        this._element.append(child);
+      }
     }
   }
 
@@ -99,7 +98,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     this._element.classList.remove(...classNames);
   }
 
-  public replaceChildren(...children: BaseComponent<HTMLElement>[]): void {
+  public replaceChildren(...children: (BaseComponent<HTMLElement> | HTMLElement)[]): void {
     this.destroyChildren();
 
     this.append(...children);
