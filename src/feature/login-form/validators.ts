@@ -10,7 +10,7 @@ export const validateEmailFormat: ValidatorFunction = (value) => {
 export const validateNoSpaces: ValidatorFunction = (value) => {
   const hasLeadingOrTrailingSpaces = value !== value.trim();
   const hasSpaces = value.includes(' ');
-  return hasLeadingOrTrailingSpaces || hasSpaces ? EMAIL_VALIDATION_ERROR.WHITESPACES : null;
+  return hasLeadingOrTrailingSpaces || hasSpaces ? VALIDATION_ERROR.WHITESPACES : null;
 };
 
 export const validateRequired: ValidatorFunction = (value) => {
