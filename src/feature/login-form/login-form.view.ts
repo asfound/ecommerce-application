@@ -18,10 +18,23 @@ import {
 } from './validators';
 
 export class LoginFormView extends BaseComponent<HTMLFormElement> implements Component {
+  private readonly buttonSubmit = button(
+    { className: styles.button, disabled: true, type: 'submit' },
+    'Log in',
+  );
+
+  private readonly inputComponents: Input[] = [];
+
   public constructor() {
     super({ className: styles.form, tagName: 'form' });
 
     this.createHTML();
+  }
+
+  public checkValidity(): void {
+    const formValid = this.inputComponents.every((input) => input.validate());
+
+    this.buttonSubmit.disabled = !formValid;
   }
 
   public createHTML(): void {
@@ -53,8 +66,17 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
       ],
     });
 
-    const buttonSubmit = button({ className: styles.button, type: 'submit' }, 'Log in');
+    this.addInput(inputEmail);
+    this.addInput(inputPassword);
 
-    this.append(formHeader, inputEmail, inputPassword, buttonSubmit);
+    this.append(formHeader, inputEmail, inputPassword, this.buttonSubmit);
+  }
+
+  private addInput(input: Input): void {
+    this.inputComponents.push(input);
+
+    input.addListener('input', () => {
+      this.checkValidity();
+    });
   }
 }

@@ -24,6 +24,11 @@
   transition: background-color var(--transition-duration);
 }
 
+.button:disabled {
+  pointer-events: none;
+  background-color: var(--color-dark);
+}
+
 @media (hover: hover) {
   .button:hover {
     cursor: pointer;
