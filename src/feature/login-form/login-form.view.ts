@@ -5,7 +5,17 @@ import { button, div, h2 } from '~/shared/create-element/tags';
 
 import { Input } from './input';
 import styles from './login-form.module.css';
-import { required, validateEmailFormat, validateNoSpaces } from './validators';
+import {
+  PASSWORD_LENGTH,
+  validateEmailFormat,
+  validateHasDigit,
+  validateHasLowercase,
+  validateHasUppercase,
+  validateMinLength,
+  validateNoSpaces,
+  validateOnlyEnglishLetters,
+  validateRequired,
+} from './validators';
 
 export class LoginFormView extends BaseComponent<HTMLFormElement> implements Component {
   public constructor() {
@@ -25,13 +35,22 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
       name: 'email',
       placeholder: 'Email',
       type: 'text',
-      validators: [required, validateNoSpaces, validateEmailFormat],
+      validators: [validateRequired, validateNoSpaces, validateEmailFormat],
     });
 
     const inputPassword = new Input({
       name: 'password',
       placeholder: 'Password',
       type: 'password',
+      validators: [
+        validateRequired,
+        validateNoSpaces,
+        validateMinLength(PASSWORD_LENGTH),
+        validateHasUppercase,
+        validateHasLowercase,
+        validateHasDigit,
+        validateOnlyEnglishLetters,
+      ],
     });
 
     const buttonSubmit = button({ className: styles.button, type: 'submit' }, 'Log in');
