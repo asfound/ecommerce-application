@@ -38,6 +38,10 @@
   height: 30px;
 }
 
+.paddingRight {
+  padding-right: 40px;
+}
+
 @media (hover: hover) {
   .passwordToggleIcon:hover {
     cursor: pointer;

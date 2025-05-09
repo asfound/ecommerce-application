@@ -50,7 +50,7 @@ export class Input extends BaseComponent {
 
     if (properties.enablePasswordToggle) {
       this.passwordToggleIcon.src = iconEyeHidden;
-
+      this.inputComponent.addClassNames(styles.paddingRight);
       this.append(this.passwordToggleIcon);
     }
 
