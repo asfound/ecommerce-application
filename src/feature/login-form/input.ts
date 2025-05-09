@@ -1,6 +1,7 @@
 import type { ValidatorFunction } from '~/shared/form-validators/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { INPUT_TYPE } from '~/shared/constants/constants';
 import { img } from '~/shared/create-element/tags';
 
 import iconEyeHidden from '../../assets/icons/eye-hidden.svg';
@@ -98,11 +99,11 @@ export class Input extends BaseComponent {
       () => {
         const inputType = this.inputComponent.element.type;
 
-        if (inputType === 'password') {
-          this.inputComponent.element.type = 'text';
+        if (inputType === INPUT_TYPE.PASSWORD) {
+          this.inputComponent.element.type = INPUT_TYPE.TEXT;
           this.passwordToggleIcon.src = iconEyeVisible;
         } else {
-          this.inputComponent.element.type = 'password';
+          this.inputComponent.element.type = INPUT_TYPE.PASSWORD;
           this.passwordToggleIcon.src = iconEyeHidden;
         }
       },

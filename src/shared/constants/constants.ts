@@ -14,3 +14,15 @@ export const VALIDATION_ERROR = {
 } as const;
 
 export const REQUIRED_PASSWORD_LENGTH = 8;
+
+export const INPUT_TYPE = {
+  CHECKBOX: 'checkbox',
+  COLOR: 'color',
+  DATE: 'date',
+  NUMBER: 'number',
+  PASSWORD: 'password',
+  RADIO: 'radio',
+  RESET: 'reset',
+  SEARCH: 'search',
+  TEXT: 'text',
+} as const;

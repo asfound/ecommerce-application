@@ -2,7 +2,7 @@ import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
-import { REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
+import { INPUT_TYPE, REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
 import { div, h2 } from '~/shared/create-element/tags';
 import {
   validateEmailFormat,
@@ -55,7 +55,7 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
     const inputEmail = new Input({
       name: 'email',
       placeholder: 'Email',
-      type: 'text',
+      type: INPUT_TYPE.TEXT,
       validators: [validateRequired, validateNoSpaces, validateEmailFormat],
     });
 
@@ -63,7 +63,7 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
       enablePasswordToggle: true,
       name: 'password',
       placeholder: 'Password',
-      type: 'password',
+      type: INPUT_TYPE.PASSWORD,
       validators: [
         validateRequired,
         validateNoSpaces,
