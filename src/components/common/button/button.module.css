@@ -12,7 +12,7 @@
 
 .button:disabled {
   pointer-events: none;
-  background-color: var(--color-dark);
+  background-color: var(--color-accent-light);
 }
 
 @media (hover: hover) {
