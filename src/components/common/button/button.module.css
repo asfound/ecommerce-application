@@ -18,6 +18,6 @@
 @media (hover: hover) {
   .button:hover {
     cursor: pointer;
-    background-color: #1d45f8; /* TODO: replace by var */
+    background-color: var(--color-accent-dark);
   }
 }
