@@ -2,7 +2,7 @@ import { isArray, isString } from '~/shared/type-predicates/type-predicates';
 
 import type { Properties } from './types';
 
-export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
+export class BaseComponent<TElementType extends HTMLElement = HTMLElement> {
   public get element(): TElementType {
     return this._element;
   }
@@ -11,12 +11,9 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
 
   private readonly _element: TElementType;
 
-  private readonly children = new Set<BaseComponent<HTMLElement>>();
+  private readonly children = new Set<BaseComponent>();
 
-  public constructor(
-    properties: Properties<TElementType>,
-    ...children: BaseComponent<HTMLElement>[]
-  ) {
+  public constructor(properties: Properties<TElementType>, ...children: BaseComponent[]) {
     this._element = document.createElement(properties.tagName) as TElementType;
 
     if (properties.className && isString(properties.className)) {
@@ -55,7 +52,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     });
   }
 
-  public append(...children: (BaseComponent<HTMLElement> | HTMLElement)[]): void {
+  public append(...children: (BaseComponent | HTMLElement)[]): void {
     for (const child of children) {
       if (child instanceof BaseComponent) {
         this.children.add(child);
@@ -98,7 +95,7 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLDivElement> {
     this._element.classList.remove(...classNames);
   }
 
-  public replaceChildren(...children: (BaseComponent<HTMLElement> | HTMLElement)[]): void {
+  public replaceChildren(...children: (BaseComponent | HTMLElement)[]): void {
     this.destroyChildren();
 
     this.append(...children);
