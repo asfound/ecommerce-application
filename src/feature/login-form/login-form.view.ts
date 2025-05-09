@@ -1,3 +1,9 @@
 import { BaseComponent } from '~/components/base-component/base-component';
 
-export class LoginFormView extends BaseComponent {}
+import styles from './login-form.module.css';
+
+export class LoginFormView extends BaseComponent<HTMLFormElement> {
+  public constructor() {
+    super({ className: styles.form, tagName: 'form' });
+  }
+}
