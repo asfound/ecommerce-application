@@ -20,9 +20,6 @@ import styles from './login-form.module.css';
 
 export class LoginFormView extends BaseComponent<HTMLFormElement> implements Component {
   private readonly buttonSubmit = new Button({
-    onClick: (): void => {
-      console.warn('submitted');
-    },
     textContent: 'Log in',
     type: 'submit',
   });
