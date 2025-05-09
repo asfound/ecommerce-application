@@ -47,7 +47,7 @@ export class LoginFormView extends BaseComponent implements Component {
   public createHTML(): void {
     const formHeader = div(
       { className: styles.formHeader },
-      h2(null, 'Log In'),
+      h2({ className: styles.formTitle }, 'Log In'),
       div(null, 'Please enter your e-mail and password:'),
     );
 
