@@ -1,3 +1,13 @@
+.container {
+  max-width: 598px;
+  margin-top: 40px;
+  margin-inline: auto;
+  padding-block: 40px;
+  border-radius: 6px;
+
+  background-color: var(--color-dark);
+}
+
 .form {
   display: flex;
   flex-direction: column;

@@ -3,7 +3,7 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { INPUT_TYPE, REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
-import { div, h2 } from '~/shared/create-element/tags';
+import { div, form, h2 } from '~/shared/create-element/tags';
 import {
   validateEmailFormat,
   validateHasDigit,
@@ -18,16 +18,18 @@ import {
 import { Input } from './input';
 import styles from './login-form.module.css';
 
-export class LoginFormView extends BaseComponent<HTMLFormElement> implements Component {
+export class LoginFormView extends BaseComponent implements Component {
   private readonly buttonSubmit = new Button({
     textContent: 'Log in',
     type: 'submit',
   });
 
+  private readonly formElement = form({ className: styles.form });
+
   private readonly inputComponents: Input[] = [];
 
   public constructor() {
-    super({ className: styles.form, tagName: 'form' });
+    super({ className: styles.container, tagName: 'div' });
 
     this.createHTML();
   }
@@ -77,7 +79,14 @@ export class LoginFormView extends BaseComponent<HTMLFormElement> implements Com
     this.addInput(inputEmail);
     this.addInput(inputPassword);
 
-    this.append(formHeader, inputEmail, inputPassword, this.buttonSubmit);
+    this.formElement.append(
+      formHeader,
+      inputEmail.element,
+      inputPassword.element,
+      this.buttonSubmit.element,
+    );
+
+    this.append(this.formElement);
   }
 
   private addInput(input: Input): void {
