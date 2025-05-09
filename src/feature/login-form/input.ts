@@ -27,6 +27,7 @@ export class Input extends BaseComponent {
   });
 
   private readonly inputComponent = new BaseComponent<HTMLInputElement>({
+    attributes: { autocomplete: 'off' },
     className: styles.input,
     tagName: 'input',
   });
