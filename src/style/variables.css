@@ -1,9 +1,12 @@
 :root {
   --color-white: #fcfcfc;
   --color-accent: #3d5ff9;
+  --color-accent-dark: #1d45f8;
   --color-accent-light: #a6a9c0;
   --color-dark: #2c2c2d;
   --color-black: #141414;
+  --color-red: #e77373;
+  --color-green: #7fccc6;
   --transition-duration: 0.2s;
   --padding-card: 0.625rem 1.25rem 1.25rem;
   --border-radius: 4px;

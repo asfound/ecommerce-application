@@ -15,3 +15,9 @@ export const main = createElementFactory('main');
 export const p = createElementFactory('p');
 
 export const section = createElementFactory('section');
+
+export const h2 = createElementFactory('h2');
+
+export const img = createElementFactory('img');
+
+export const form = createElementFactory('form');

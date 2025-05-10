@@ -1,0 +1,26 @@
+.container {
+  max-width: 59.8rem;
+  margin-top: 4rem;
+  margin-inline: auto;
+  padding-block: 4rem;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-dark);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  max-width: 39.8rem;
+  margin-inline: auto;
+}
+
+.formHeader {
+  text-align: center;
+}
+
+.formTitle {
+  font-size: 2.6rem;
+}

@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+  background-color: transparent;
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  border: 0.1rem solid var(--color-accent-light);
+  border-radius: var(--border-radius);
+
+  color: var(--color-white);
+
+  background-color: var(--color-dark);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.invalid {
+  border-color: var(--color-red);
+}
+
+.valid {
+  border-color: var(--color-green);
+}
+
+.errorMessage {
+  color: var(--color-red);
+}
+
+.passwordToggleIcon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+
+  width: 3rem;
+  height: 3rem;
+}
+
+.paddingRight {
+  padding-right: 4rem;
+}
+
+@media (hover: hover) {
+  .passwordToggleIcon:hover {
+    cursor: pointer;
+  }
+}
