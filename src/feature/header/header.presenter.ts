@@ -2,6 +2,7 @@ import type { AuthService } from '~/api/services/auth/auth.service';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
+import { rootAction } from '~/app/store/actions';
 import { rootSelector } from '~/app/store/selectors';
 import { rootStore } from '~/app/store/store';
 import { Presenter } from '~/shared/presenter/presenter';
@@ -18,7 +19,7 @@ export class HeaderPresenter extends Presenter<HeaderView> {
 
     this.bindViewHandlers();
 
-    this.view.setLogoutIconVisible(rootStore.select(rootSelector.selectLoggedIn));
+    this.setupSubscriptions();
   }
 
   private bindViewHandlers(): void {
@@ -29,5 +30,19 @@ export class HeaderPresenter extends Presenter<HeaderView> {
     this.authService.logout();
 
     Router.instance.navigate(ROUTE_PATH.MAIN);
+
+    rootAction.setLoggedIn(false);
   };
+
+  private setupSubscriptions(): void {
+    this.subscribeLoggedIn();
+  }
+
+  private subscribeLoggedIn(): void {
+    const unsubscribe = rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
+      this.view.setLogoutIconVisible(loggedIn);
+    });
+
+    this.storeSubscription.add(unsubscribe);
+  }
 }
