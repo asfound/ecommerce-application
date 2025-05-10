@@ -1,5 +1,7 @@
 import type { BaseComponent } from '~/components/base-component/base-component.ts';
 
+import { TITLE } from '~/shared/constants/constants.ts';
+
 import type { Route } from './types';
 
 import { WILDCARD_ROUTE } from './constants.ts';
@@ -13,7 +15,7 @@ export const ROUTES: Route[] = [
       return new MainPage();
     },
     path: ROUTE_PATH.MAIN,
-    title: 'HUH Coffee | Main',
+    title: `${TITLE} | Main`,
   },
   {
     async component(): Promise<BaseComponent> {
@@ -21,7 +23,7 @@ export const ROUTES: Route[] = [
       return new LoginPage();
     },
     path: ROUTE_PATH.LOGIN,
-    title: 'HUH Coffee | Login',
+    title: `${TITLE} | Login`,
   },
   {
     async component(): Promise<BaseComponent> {
@@ -29,7 +31,7 @@ export const ROUTES: Route[] = [
       return new RegistrationPage();
     },
     path: ROUTE_PATH.REGISTRATION,
-    title: 'HUH Coffee | Registration',
+    title: `${TITLE} | Registration`,
   },
   {
     async component(): Promise<BaseComponent> {
@@ -37,7 +39,7 @@ export const ROUTES: Route[] = [
       return new CatalogPage();
     },
     path: ROUTE_PATH.CATALOG,
-    title: 'HUH Coffee | Catalog',
+    title: `${TITLE} | Catalog`,
   },
 ];
 
@@ -47,5 +49,5 @@ export const FALLBACK_ROUTE: Route = {
     return new NotFoundPage();
   },
   path: WILDCARD_ROUTE,
-  title: '404',
+  title: `${TITLE} | 404`,
 };
