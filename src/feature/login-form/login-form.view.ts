@@ -28,6 +28,29 @@ export class LoginFormView extends BaseComponent implements Component {
 
   private readonly inputComponents: Input[] = [];
 
+  private readonly inputEmail = new Input({
+    name: 'email',
+    placeholder: 'Email',
+    type: INPUT_TYPE.TEXT,
+    validators: [validateRequired, validateNoSpaces, validateEmailFormat],
+  });
+
+  private readonly inputPassword = new Input({
+    enablePasswordToggle: true,
+    name: 'password',
+    placeholder: 'Password',
+    type: INPUT_TYPE.PASSWORD,
+    validators: [
+      validateRequired,
+      validateNoSpaces,
+      validateOnlyEnglishLetters,
+      validateMinLength(REQUIRED_PASSWORD_LENGTH),
+      validateHasUppercase,
+      validateHasLowercase,
+      validateHasDigit,
+    ],
+  });
+
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
 
@@ -51,38 +74,15 @@ export class LoginFormView extends BaseComponent implements Component {
       div(null, 'Please enter your e-mail and password:'),
     );
 
-    const inputEmail = new Input({
-      name: 'email',
-      placeholder: 'Email',
-      type: INPUT_TYPE.TEXT,
-      validators: [validateRequired, validateNoSpaces, validateEmailFormat],
-    });
-
-    const inputPassword = new Input({
-      enablePasswordToggle: true,
-      name: 'password',
-      placeholder: 'Password',
-      type: INPUT_TYPE.PASSWORD,
-      validators: [
-        validateRequired,
-        validateNoSpaces,
-        validateOnlyEnglishLetters,
-        validateMinLength(REQUIRED_PASSWORD_LENGTH),
-        validateHasUppercase,
-        validateHasLowercase,
-        validateHasDigit,
-      ],
-    });
-
     this.buttonSubmit.disable();
 
-    this.addInput(inputEmail);
-    this.addInput(inputPassword);
+    this.addInput(this.inputEmail);
+    this.addInput(this.inputPassword);
 
     this.formElement.append(
       formHeader,
-      inputEmail.element,
-      inputPassword.element,
+      this.inputEmail.element,
+      this.inputPassword.element,
       this.buttonSubmit.element,
     );
 
