@@ -1,3 +1,4 @@
+import { ApiBuilder } from '~/api/client/api-builder';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Header } from '~/feature/header/header';
 
@@ -10,6 +11,7 @@ export class App {
 
   public constructor() {
     Router.initialize(ROUTES, FALLBACK_ROUTE);
+    ApiBuilder.instance.initialize();
 
     const header = new Header();
 
