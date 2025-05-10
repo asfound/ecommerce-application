@@ -7,33 +7,33 @@
 }
 
 .container {
-  max-width: 35.125rem;
-  padding: 5.3rem 1.45rem 7.5rem;
+  max-width: 56.2rem;
+  padding: 8.48rem 2.32rem 12rem;
 }
 
 .heading {
   margin: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: 2rem;
 
-  font-size: 2.25rem;
+  font-size: 3.6rem;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .description {
   margin: 0;
-  margin-bottom: 3.375rem;
-  font-size: 1.5rem;
+  margin-bottom: 5.4rem;
+  font-size: 2.4rem;
 }
 
 .cta {
   display: inline-block;
 
-  min-width: 14rem;
-  padding: 0.625rem;
+  min-width: 24.4rem;
+  padding: 1rem;
   border-radius: var(--border-radius);
 
-  font-size: 0.875rem;
+  font-size: 1.4rem;
   font-weight: 600;
   text-align: center;
   text-transform: capitalize;

@@ -3,12 +3,12 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 1.45rem;
+  padding: 2.32rem;
 
   background-color: var(--color-dark);
 }
 
 .container {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
 }

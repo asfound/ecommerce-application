@@ -1,6 +1,6 @@
 .app {
   display: flex;
   flex-direction: column;
-  max-width: 128rem;
+  max-width: 192rem;
   height: 100dvh;
 }
