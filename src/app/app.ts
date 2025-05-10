@@ -1,4 +1,5 @@
 import { ApiBuilder } from '~/api/client/api-builder';
+import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { HeaderPresenter } from '~/feature/header/header.presenter';
 import { HeaderView } from '~/feature/header/header.view';
@@ -14,7 +15,7 @@ export class App {
     Router.initialize(ROUTES, FALLBACK_ROUTE);
     ApiBuilder.instance.initialize();
 
-    const headerPresenter = new HeaderPresenter(new HeaderView());
+    const headerPresenter = new HeaderPresenter(new HeaderView(), SERVICE_HUB.provideAuthService());
 
     this.root.append(headerPresenter.getView(), Router.instance.outlet);
   }
