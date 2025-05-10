@@ -21,6 +21,8 @@ export class LoginFormPresenter extends Presenter<LoginFormView> {
 
   private bindViewHandlers(): void {
     this.view.bindSubmitHandler(this.handleLogin);
+
+    this.view.bindRegistrationLinkHandler(this.handleRegistrationLinkClick);
   }
 
   private handleLogin = (payload: LoginPayload): void => {
@@ -36,5 +38,9 @@ export class LoginFormPresenter extends Presenter<LoginFormView> {
           this.view.showError(error.message);
         }
       });
+  };
+
+  private handleRegistrationLinkClick = (): void => {
+    Router.instance.navigate(ROUTE_PATH.REGISTRATION);
   };
 }
