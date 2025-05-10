@@ -4,15 +4,11 @@
   gap: 3rem;
   align-items: center;
 
-  max-width: 50rem;
   margin: 0 auto;
   margin-top: 2rem;
   padding: 3rem 2rem;
-  border-radius: var(--border-radius);
 
   text-align: center;
-
-  background-color: var(--color-dark);
 }
 
 .illustration {
@@ -55,7 +51,7 @@ and use same styles as common button */
 
 .cta:hover {
   color: inherit;
-  background-color: var(--color-accent-dark);
+  background-color: var(--color-dark);
 }
 
 .cta:active {
