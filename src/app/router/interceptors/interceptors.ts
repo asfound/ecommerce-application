@@ -8,7 +8,7 @@ export const isNotLoggedIn = (router: Router): boolean => {
   const loggedIn = SERVICE_HUB.provideAuthService().isLoggedIn();
 
   if (loggedIn) {
-    router.navigate(ROUTE_PATH.MAIN).catch(console.error);
+    router.navigate(ROUTE_PATH.MAIN);
     return false;
   }
 

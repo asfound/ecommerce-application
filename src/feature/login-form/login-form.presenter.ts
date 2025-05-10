@@ -29,7 +29,7 @@ export class LoginFormPresenter extends Presenter<LoginFormView> {
       .then(() => {
         this.view.hideError();
 
-        Router.instance.navigate(ROUTE_PATH.MAIN).catch(console.warn);
+        Router.instance.navigate(ROUTE_PATH.MAIN);
       })
       .catch((error: unknown) => {
         if (isError(error)) {

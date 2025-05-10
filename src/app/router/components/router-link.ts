@@ -22,7 +22,7 @@ export class RouterLink extends BaseComponent<HTMLAnchorElement> {
     this.addListener('click', (event) => {
       event.preventDefault();
 
-      Router.instance.navigate(properties.path).catch(console.error);
+      Router.instance.navigate(properties.path);
     });
   }
 }
