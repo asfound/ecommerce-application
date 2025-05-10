@@ -24,3 +24,14 @@
 .formTitle {
   font-size: 2.6rem;
 }
+
+.registrationLinkContainer {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  text-align: center;
+}
+
+.registrationLinkContainer a {
+  color: var(--color-accent);
+}

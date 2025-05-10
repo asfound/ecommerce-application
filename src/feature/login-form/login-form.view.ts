@@ -1,11 +1,13 @@
 import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
 
+import { ROUTE_PATH } from '~/app/router/route-path';
+import { Router } from '~/app/router/router';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { INPUT_TYPE, REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
-import { div, form, h2 } from '~/shared/create-element/tags';
+import { a, div, form, h2 } from '~/shared/create-element/tags';
 import {
   validateEmailFormat,
   validateHasDigit,
@@ -93,6 +95,21 @@ export class LoginFormView extends BaseComponent implements Component {
       div(null, 'Please enter your e-mail and password:'),
     );
 
+    const registrationLinkContainer = div(
+      { className: styles.registrationLinkContainer },
+      'New to HUH-Coffee?',
+      a(
+        {
+          href: ROUTE_PATH.REGISTRATION,
+          onClick: (event) => {
+            event.preventDefault();
+            Router.instance.navigate(ROUTE_PATH.REGISTRATION);
+          },
+        },
+        'Create an account',
+      ),
+    );
+
     this.buttonSubmit.disable();
 
     this.addInput(this.inputEmail);
@@ -104,6 +121,7 @@ export class LoginFormView extends BaseComponent implements Component {
       this.inputEmail.element,
       this.inputPassword.element,
       this.buttonSubmit.element,
+      registrationLinkContainer,
     );
 
     this.append(this.formElement);
