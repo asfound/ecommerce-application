@@ -16,7 +16,7 @@
 }
 
 .illustration {
-  border: 1rem solid white;
+  border: 1rem solid var(--color-accent-light);
   border-radius: var(--border-radius);
 }
 
@@ -28,6 +28,7 @@
 
 .description {
   font-size: 1.6rem;
+  color: var(--color-accent-light);
   white-space: pre-wrap;
 }
 
