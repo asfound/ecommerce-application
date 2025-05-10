@@ -2,7 +2,6 @@ import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
-import { Router } from '~/app/router/router';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
@@ -57,10 +56,27 @@ export class LoginFormView extends BaseComponent implements Component {
     ],
   });
 
+  private readonly registrationLinkElement = a(
+    { href: ROUTE_PATH.REGISTRATION },
+    'Create an account',
+  );
+
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
 
     this.createHTML();
+  }
+
+  public bindRegistrationLinkHandler(handler: () => void): void {
+    this.registrationLinkElement.addEventListener(
+      'click',
+      (event) => {
+        event.preventDefault();
+
+        handler();
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public bindSubmitHandler(handler: (payload: LoginPayload) => void): void {
@@ -98,17 +114,7 @@ export class LoginFormView extends BaseComponent implements Component {
     const registrationLinkContainer = div(
       { className: styles.registrationLinkContainer },
       'New to HUH-Coffee?',
-      a(
-        {
-          href: ROUTE_PATH.REGISTRATION,
-          onClick: (event) => {
-            event.preventDefault();
-            Router.instance.navigate(ROUTE_PATH.REGISTRATION);
-          },
-          signal: this.abortController.signal,
-        },
-        'Create an account',
-      ),
+      this.registrationLinkElement,
     );
 
     this.buttonSubmit.disable();
