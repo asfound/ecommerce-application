@@ -1,32 +1,39 @@
-.banner {
-  background-color: var(--color-dark);
-  background-image: url('../../assets/img/banner-background.png');
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 1920px auto;
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+
+  margin: 0 auto;
+  margin-top: 2rem;
+  padding: 3rem 2rem;
+
+  text-align: center;
 }
 
-.container {
-  max-width: 56.2rem;
-  padding: 8.48rem 0 12rem;
+.illustration {
+  border: 1rem solid var(--color-accent-light);
+  border-radius: var(--border-radius);
 }
 
 .heading {
-  margin-bottom: 2rem;
-  font-size: 3.6rem;
+  font-size: 2.4rem;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .description {
-  margin-bottom: 5.4rem;
-  font-size: 2.4rem;
+  font-size: 1.6rem;
+  color: var(--color-accent-light);
+  white-space: pre-wrap;
 }
 
+/* same as cta link should be refactored as shared style or 'action link' component maybe
+and use same styles as common button */
 .cta {
   display: inline-block;
 
-  min-width: 24.4rem;
+  min-width: 22.2rem;
   padding: 1rem;
   border-radius: var(--border-radius);
 

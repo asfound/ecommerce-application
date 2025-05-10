@@ -1,11 +1,12 @@
 import { BaseComponent } from '~/components/base-component/base-component';
+import { NotFoundWidget } from '~/feature/not-found-widget/not-found-widget';
 
 export class NotFoundPage extends BaseComponent {
   public constructor() {
     super({ tagName: 'div' });
 
-    const heading = new BaseComponent({ tagName: 'h1', textContent: 'Not found page' });
+    const content = new NotFoundWidget();
 
-    this.append(heading);
+    this.append(content);
   }
 }
