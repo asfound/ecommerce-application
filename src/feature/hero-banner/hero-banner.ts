@@ -7,6 +7,13 @@ import { div, h1, p } from '~/shared/create-element/tags';
 
 import styles from './hero-banner.module.css';
 
+// should be moved to constants?
+const CTA_TEXT = {
+  CTA: 'Shop now',
+  DESCRIPTION: 'Great gift for yourself and loved ones',
+  HEADING: 'From bean to brew — find your flavour',
+};
+
 export class HeroBanner extends BaseComponent implements Component {
   public constructor() {
     super({ className: styles.banner, tagName: 'div' });
@@ -15,28 +22,13 @@ export class HeroBanner extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const container = div({
-      className: styles.container,
-    });
+    const heading = h1({ className: styles.heading }, CTA_TEXT.HEADING);
+    const description = p({ className: styles.description }, CTA_TEXT.DESCRIPTION);
 
-    const heading = h1(
-      {
-        className: styles.heading,
-      },
-      'From bean to brew — find your flavour',
-    );
-
-    const description = p(
-      {
-        className: styles.description,
-      },
-      'Great gift for yourself and loved ones',
-    );
-
-    const CTALink = new RouterLink({ path: ROUTE_PATH.CATALOG, textContent: 'Shop now' });
+    const CTALink = new RouterLink({ path: ROUTE_PATH.CATALOG, textContent: CTA_TEXT.CTA });
     CTALink.addClassNames(styles.cta);
 
-    container.append(heading, description, CTALink.element);
+    const container = div({ className: styles.container }, heading, description, CTALink.element);
 
     this.append(container);
   }
