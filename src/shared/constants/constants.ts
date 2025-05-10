@@ -26,3 +26,10 @@ export const INPUT_TYPE = {
   SEARCH: 'search',
   TEXT: 'text',
 } as const;
+
+export const PROJECT_NAME = {
+  PROJECT: 'Coffee',
+  TEAM: 'HUH?',
+} as const;
+
+export const TITLE = PROJECT_NAME.TEAM + PROJECT_NAME.PROJECT;

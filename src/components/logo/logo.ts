@@ -1,3 +1,6 @@
+import { PROJECT_NAME } from '~/shared/constants/constants';
+import { span } from '~/shared/create-element/tags';
+
 import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
@@ -11,13 +14,8 @@ export class Logo extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const teamName = new BaseComponent({
-      className: styles.team,
-      tagName: 'span',
-      textContent: 'HUH?',
-    });
-
-    const projectTheme = new BaseComponent({ tagName: 'span', textContent: 'Coffee' });
+    const teamName = span({ className: styles.team }, PROJECT_NAME.TEAM);
+    const projectTheme = span({}, PROJECT_NAME.PROJECT);
 
     this.append(teamName, projectTheme);
   }
