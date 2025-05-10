@@ -19,7 +19,7 @@
 }
 
 .invalid {
-  border-color: var(--color-crimson);
+  border-color: var(--color-red);
 }
 
 .valid {
@@ -27,7 +27,7 @@
 }
 
 .errorMessage {
-  color: var(--color-crimson);
+  color: var(--color-red);
 }
 
 .passwordToggleIcon {
