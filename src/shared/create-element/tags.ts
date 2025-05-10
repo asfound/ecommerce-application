@@ -21,3 +21,5 @@ export const h2 = createElementFactory('h2');
 export const img = createElementFactory('img');
 
 export const form = createElementFactory('form');
+
+export const span = createElementFactory('span');

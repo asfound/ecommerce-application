@@ -6,6 +6,7 @@ import { ROUTER_LINKS } from '~/app/router/router-links';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Logo } from '~/components/logo/logo';
 import { Navigation } from '~/components/navigation/navigation';
+import { div } from '~/shared/create-element/tags';
 
 import styles from './header.module.css';
 
@@ -17,21 +18,17 @@ export class Header extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const logo = this.createLinkedLogo();
+    const logoLink = new RouterLink({ path: ROUTE_PATH.MAIN });
+    const logoElement = new Logo();
+    logoLink.append(logoElement);
+
     const navigation = new Navigation(ROUTER_LINKS);
 
-    // TODO: change to icon
-    const cart = new BaseComponent({ tagName: 'div', textContent: 'Cart' });
+    // TODO: change to icons
+    const cart = div({}, 'Cart');
+    const logout = div({}, 'Logout');
+    const container = div({ className: styles.container }, cart, logout);
 
-    this.append(logo, navigation, cart);
-  }
-
-  private createLinkedLogo(): RouterLink {
-    const link = new RouterLink({ path: ROUTE_PATH.MAIN });
-    const logo = new Logo();
-
-    link.element.append(logo.element);
-
-    return link;
+    this.append(logoLink, navigation, container);
   }
 }

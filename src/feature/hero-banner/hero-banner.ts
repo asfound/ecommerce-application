@@ -3,6 +3,7 @@ import type { Component } from '~/components/base-component/types';
 import { RouterLink } from '~/app/router/components/router-link';
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
+import { div, h1, p } from '~/shared/create-element/tags';
 
 import styles from './hero-banner.module.css';
 
@@ -14,34 +15,29 @@ export class HeroBanner extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const container = new BaseComponent({
+    const container = div({
       className: styles.container,
-      tagName: 'div',
     });
 
-    const heading = new BaseComponent({
-      className: styles.heading,
-      tagName: 'h1',
-      textContent: 'From bean to brew — find your flavour',
-    });
+    const heading = h1(
+      {
+        className: styles.heading,
+      },
+      'From bean to brew — find your flavour',
+    );
 
-    const description = new BaseComponent({
-      className: styles.description,
-      tagName: 'p',
-      textContent: 'Great gift for yourself and loved ones',
-    });
+    const description = p(
+      {
+        className: styles.description,
+      },
+      'Great gift for yourself and loved ones',
+    );
 
-    const CTALink = this.createCTALink();
+    const CTALink = new RouterLink({ path: ROUTE_PATH.CATALOG, textContent: 'Shop now' });
+    CTALink.addClassNames(styles.cta);
 
-    container.append(heading, description, CTALink);
+    container.append(heading, description, CTALink.element);
 
     this.append(container);
-  }
-
-  private createCTALink(): RouterLink {
-    const link = new RouterLink({ path: ROUTE_PATH.CATALOG, textContent: 'Shop now' });
-    link.element.classList.add(styles.cta);
-
-    return link;
   }
 }

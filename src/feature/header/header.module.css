@@ -7,3 +7,8 @@
 
   background-color: var(--color-dark);
 }
+
+.container {
+  display: flex;
+  gap: 0.5rem;
+}
