@@ -1,11 +1,11 @@
 import type { ValidatorFunction } from '~/shared/form-validators/types';
 
+import iconEyeHidden from '~/assets/icons/eye-hidden.svg';
+import iconEyeVisible from '~/assets/icons/eye-visible.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { INPUT_TYPE } from '~/shared/constants/constants';
 import { img } from '~/shared/create-element/tags';
 
-import iconEyeHidden from '../../assets/icons/eye-hidden.svg';
-import iconEyeVisible from '../../assets/icons/eye-visible.svg';
 import styles from './input.module.css';
 
 export interface InputProperties {

@@ -5,6 +5,7 @@ import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
+import { Input } from '~/components/common/input/input';
 import { INPUT_TYPE, REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
 import { a, div, form, h2 } from '~/shared/create-element/tags';
 import {
@@ -18,7 +19,6 @@ import {
   validateRequired,
 } from '~/shared/form-validators/form-validators';
 
-import { Input } from './input';
 import styles from './login-form.module.css';
 
 export class LoginFormView extends BaseComponent implements Component {
