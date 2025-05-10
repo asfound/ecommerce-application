@@ -4,12 +4,10 @@ import { Presenter } from '~/shared/presenter/presenter';
 
 import type { LoginFormView } from './login-form.view';
 
-export class LoginFormPresenter<
-  T extends LoginFormView = LoginFormView,
-> extends Presenter<LoginFormView> {
+export class LoginFormPresenter extends Presenter<LoginFormView> {
   private readonly authService: AuthService;
 
-  public constructor(view: T, authService: AuthService) {
+  public constructor(view: LoginFormView, authService: AuthService) {
     super(view);
 
     this.authService = authService;
