@@ -5,6 +5,7 @@ import { TITLE } from '~/shared/constants/constants.ts';
 import type { Route } from './types';
 
 import { WILDCARD_ROUTE } from './constants.ts';
+import { isNotLoggedIn } from './interceptors/interceptors.ts';
 import { ROUTE_PATH } from './route-path.ts';
 
 // TODO combine page title form project title + page title
@@ -18,6 +19,7 @@ export const ROUTES: Route[] = [
     title: `${TITLE} | Main`,
   },
   {
+    canActivate: [isNotLoggedIn],
     async component(): Promise<BaseComponent> {
       const { LoginPage } = await import('../../pages/login-page.ts');
       return new LoginPage();
