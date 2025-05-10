@@ -1,3 +1,4 @@
+import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -58,6 +59,21 @@ export class LoginFormView extends BaseComponent implements Component {
     super({ className: styles.container, tagName: 'div' });
 
     this.createHTML();
+  }
+
+  public bindSubmitHandler(handler: (payload: LoginPayload) => void): void {
+    this.formElement.addEventListener(
+      'submit',
+      (event) => {
+        event.preventDefault();
+
+        handler({
+          email: this.inputEmail.value.trim(),
+          password: this.inputPassword.value.trim(),
+        });
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public checkValidity(): void {
