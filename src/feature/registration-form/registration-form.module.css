@@ -1,20 +1,11 @@
 .container {
-  max-width: 59.8rem;
+  max-width: 100%;
   margin-top: 4rem;
   margin-inline: auto;
   padding-block: 4rem;
   border-radius: var(--border-radius);
 
   background-color: var(--color-dark);
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-
-  max-width: 39.8rem;
-  margin-inline: auto;
 }
 
 .formHeader {
@@ -28,15 +19,4 @@
 
 .formSubtitle {
   color: var(--color-accent-light);
-}
-
-.registrationLinkContainer {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  text-align: center;
-}
-
-.registrationLinkContainer a {
-  color: var(--color-accent);
 }
