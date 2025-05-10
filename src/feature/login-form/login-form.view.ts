@@ -1,7 +1,9 @@
+import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
+import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { INPUT_TYPE, REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
 import { div, form, h2 } from '~/shared/create-element/tags';
 import {
@@ -23,6 +25,8 @@ export class LoginFormView extends BaseComponent implements Component {
     textContent: 'Log in',
     type: 'submit',
   });
+
+  private readonly errorMessageComponent = new ErrorMessage();
 
   private readonly formElement = form({ className: styles.form });
 
@@ -57,6 +61,21 @@ export class LoginFormView extends BaseComponent implements Component {
     this.createHTML();
   }
 
+  public bindSubmitHandler(handler: (payload: LoginPayload) => void): void {
+    this.formElement.addEventListener(
+      'submit',
+      (event) => {
+        event.preventDefault();
+
+        handler({
+          email: this.inputEmail.value.trim(),
+          password: this.inputPassword.value.trim(),
+        });
+      },
+      { signal: this.abortController.signal },
+    );
+  }
+
   public checkValidity(): void {
     const formValid = this.inputComponents.every((input) => input.validate());
 
@@ -81,6 +100,7 @@ export class LoginFormView extends BaseComponent implements Component {
 
     this.formElement.append(
       formHeader,
+      this.errorMessageComponent.element,
       this.inputEmail.element,
       this.inputPassword.element,
       this.buttonSubmit.element,
@@ -97,6 +117,14 @@ export class LoginFormView extends BaseComponent implements Component {
     this.inputComponents.length = 0;
 
     super.destroy();
+  }
+
+  public hideError(): void {
+    this.errorMessageComponent.hide();
+  }
+
+  public showError(errorMessage: string): void {
+    this.errorMessageComponent.show(errorMessage);
   }
 
   private addInput(input: Input): void {

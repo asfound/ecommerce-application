@@ -1,0 +1,15 @@
+.container {
+  display: none;
+
+  padding: 1rem;
+
+  font-size: 1.4rem;
+  color: var(--color-red);
+  text-align: center;
+
+  background-color: color-mix(in srgb, var(--color-red) 10%, transparent);
+}
+
+.visible {
+  display: block;
+}

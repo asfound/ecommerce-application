@@ -25,3 +25,7 @@ export const isObject = (value: unknown): value is object => {
 export const isString = (value: unknown): value is string => {
   return typeof value === 'string';
 };
+
+export const isError = (value: unknown): value is Error => {
+  return value instanceof Error;
+};
