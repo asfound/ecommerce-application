@@ -1,6 +1,8 @@
 import type { AuthService } from '~/api/services/auth/auth.service';
 import type { LoginPayload } from '~/api/services/auth/types';
 
+import { ROUTE_PATH } from '~/app/router/route-path';
+import { Router } from '~/app/router/router';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 
@@ -24,9 +26,10 @@ export class LoginFormPresenter extends Presenter<LoginFormView> {
   private handleLogin = (payload: LoginPayload): void => {
     this.authService
       .login(payload)
-      .then(({ body }) => {
+      .then(() => {
         this.view.hideError();
-        console.warn('login success:', body);
+
+        Router.instance.navigate(ROUTE_PATH.MAIN).catch(console.warn);
       })
       .catch((error: unknown) => {
         if (isError(error)) {
