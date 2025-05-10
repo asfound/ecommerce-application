@@ -105,6 +105,7 @@ export class LoginFormView extends BaseComponent implements Component {
             event.preventDefault();
             Router.instance.navigate(ROUTE_PATH.REGISTRATION);
           },
+          signal: this.abortController.signal,
         },
         'Create an account',
       ),
