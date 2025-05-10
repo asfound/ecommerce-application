@@ -113,7 +113,7 @@ export class LoginFormView extends BaseComponent implements Component {
 
     const registrationLinkContainer = div(
       { className: styles.registrationLinkContainer },
-      'New to HUH-Coffee?',
+      'New to HUH Coffee?',
       this.registrationLinkElement,
     );
 
