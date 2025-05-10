@@ -44,4 +44,8 @@ export class HeaderView extends BaseComponent implements Component {
 
     this.append(logoLink, navigation, container);
   }
+
+  public setLogoutIconVisible(visible: boolean): void {
+    this.logoutIcon.hidden = !visible;
+  }
 }
