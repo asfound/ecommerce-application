@@ -35,15 +35,11 @@ export class Router {
 
     // TODO: if we don't use the router state, then we can add these handlers in the loop
     globalThis.addEventListener('popstate', () => {
-      this.handleRouteChange({ path: globalThis.location.href, pushState: false }).catch(
-        console.error,
-      );
+      this.handleRouteChange({ path: globalThis.location.href, pushState: false });
     });
 
     globalThis.addEventListener('DOMContentLoaded', () => {
-      this.handleRouteChange({ path: globalThis.location.href, pushState: false }).catch(
-        console.error,
-      );
+      this.handleRouteChange({ path: globalThis.location.href, pushState: false });
     });
   }
 
@@ -67,14 +63,14 @@ export class Router {
     return this.searchParameters;
   }
 
-  public async navigate(path: string, searchParameters?: SearchParameters): Promise<void> {
+  public navigate(path: string, searchParameters?: SearchParameters): void {
     const { pathname } = new URL(globalThis.location.href);
 
     if (path === pathname) {
       return;
     }
 
-    await this.handleRouteChange({ path, pushState: true, searchParameters });
+    this.handleRouteChange({ path, pushState: true, searchParameters });
   }
 
   public setSearchParameters(searchParameters: SearchParameters): void {
@@ -85,11 +81,11 @@ export class Router {
     globalThis.history.replaceState({}, '', `${location.pathname}?${query}`);
   }
 
-  private async handleRouteChange(payload: {
+  private handleRouteChange(payload: {
     path: string;
     pushState: boolean;
     searchParameters?: SearchParameters;
-  }): Promise<void> {
+  }): void {
     const path = this.parseURL({ path: payload.path, searchParameters: payload.searchParameters });
 
     const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(path));
@@ -97,7 +93,7 @@ export class Router {
     if (!matcher) {
       this.searchParameters = {};
 
-      await this.updatePage({ route: this.fallbackRoute });
+      this.updatePage({ route: this.fallbackRoute });
 
       return;
     }
@@ -112,7 +108,7 @@ export class Router {
       globalThis.history.pushState({}, '', path);
     }
 
-    await this.updatePage({ route: matcher.route });
+    this.updatePage({ route: matcher.route });
   }
 
   private parseURL(payload: { path: string; searchParameters?: SearchParameters }): string {
@@ -125,11 +121,13 @@ export class Router {
     return `${pathname}${searchParameters.size > 0 ? `?${searchParameters}` : ''}`;
   }
 
-  private async updatePage(payload: { route: Route }): Promise<void> {
-    document.title = payload.route.title;
-
-    const page = await payload.route.component();
-
-    this.routerOutlet.replaceChildren(page);
+  private updatePage(payload: { route: Route }): void {
+    payload.route
+      .component()
+      .then((page) => {
+        document.title = payload.route.title;
+        this.routerOutlet.replaceChildren(page);
+      })
+      .catch(console.warn);
   }
 }
