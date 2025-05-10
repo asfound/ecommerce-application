@@ -10,7 +10,7 @@ import { div } from '~/shared/create-element/tags';
 
 import styles from './header.module.css';
 
-export class Header extends BaseComponent implements Component {
+export class HeaderView extends BaseComponent implements Component {
   public constructor() {
     super({ className: styles.header, tagName: 'header' });
 

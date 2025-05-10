@@ -1,6 +1,6 @@
 import { ApiBuilder } from '~/api/client/api-builder';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { Header } from '~/feature/header/header';
+import { HeaderView } from '~/feature/header/header.view';
 
 import styles from './app.module.css';
 import { Router } from './router/router';
@@ -13,9 +13,9 @@ export class App {
     Router.initialize(ROUTES, FALLBACK_ROUTE);
     ApiBuilder.instance.initialize();
 
-    const header = new Header();
+    const headerView = new HeaderView();
 
-    this.root.append(header, Router.instance.outlet);
+    this.root.append(headerView, Router.instance.outlet);
   }
 
   public mount(parent: HTMLElement): void {
