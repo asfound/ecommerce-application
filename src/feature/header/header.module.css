@@ -12,3 +12,14 @@
   display: flex;
   gap: 1rem;
 }
+
+.icon {
+  /* TODO: temporary */
+  color: var(--color-accent);
+}
+
+@media (hover: hover) {
+  .icon:hover {
+    cursor: pointer;
+  }
+}

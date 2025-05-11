@@ -1,10 +1,13 @@
 import { ApiBuilder } from '~/api/client/api-builder';
+import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { Header } from '~/feature/header/header';
+import { HeaderPresenter } from '~/feature/header/header.presenter';
+import { HeaderView } from '~/feature/header/header.view';
 
 import styles from './app.module.css';
 import { Router } from './router/router';
 import { FALLBACK_ROUTE, ROUTES } from './router/routes';
+import { rootAction } from './store/actions';
 
 export class App {
   private readonly root = new BaseComponent({ className: styles.app, tagName: 'div' });
@@ -13,9 +16,13 @@ export class App {
     Router.initialize(ROUTES, FALLBACK_ROUTE);
     ApiBuilder.instance.initialize();
 
-    const header = new Header();
+    const authService = SERVICE_HUB.provideAuthService();
 
-    this.root.append(header, Router.instance.outlet);
+    rootAction.setLoggedIn(authService.isLoggedIn());
+
+    const headerPresenter = new HeaderPresenter(new HeaderView(), authService);
+
+    this.root.append(headerPresenter.getView(), Router.instance.outlet);
   }
 
   public mount(parent: HTMLElement): void {
