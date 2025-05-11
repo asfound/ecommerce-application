@@ -50,6 +50,7 @@ export class Router {
     }
 
     Router._instance = new Router(routes, fallbackRoute);
+    routerAction.initialize(Router._instance);
   }
 
   public back(): void {
@@ -106,7 +107,7 @@ export class Router {
     const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
 
     if (!matcher) {
-      routerAction.setSearchParameters(this, {});
+      routerAction.setSearchParameters({});
 
       this.updatePage({ route: this.fallbackRoute });
 
@@ -122,7 +123,7 @@ export class Router {
     this.updatePage({ route: matcher.route });
 
     routerAction.setPathname(pathname);
-    routerAction.setSearchParameters(this, searchParameters);
+    routerAction.setSearchParameters(searchParameters);
   }
 
   private parseURL(payload: { path: string; searchParameters?: SearchParameters }): {
