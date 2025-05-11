@@ -1,4 +1,5 @@
 import { BaseComponent } from '~/components/base-component/base-component';
+import { createStore } from '~/shared/store/create-store';
 
 import type { Route, RouteMatcher, SearchParameters } from './types';
 
@@ -27,6 +28,8 @@ export class Router {
   private readonly routerOutlet = new BaseComponent({ className: 'router-outlet', tagName: 'div' });
 
   private searchParameters: SearchParameters = {};
+
+  private readonly store = createStore({ path: '', searchParameters: {} });
 
   private constructor(routes: Route[], fallbackRoute: Route) {
     this.routeMatchers = routes.map((route) => createRouteMatcher(route));
@@ -81,6 +84,10 @@ export class Router {
     globalThis.history.replaceState({}, '', `${location.pathname}?${query}`);
   }
 
+  public subscribePath(listener: (path: string) => void): void {
+    this.store.subscribe((state) => state.path, listener);
+  }
+
   private handleRouteChange(payload: {
     path: string;
     pushState: boolean;
@@ -122,6 +129,8 @@ export class Router {
   }
 
   private updatePage(payload: { route: Route }): void {
+    this.store.setState({ path: payload.route.path });
+
     payload.route
       .component()
       .then((page) => {

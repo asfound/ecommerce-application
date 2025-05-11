@@ -11,6 +11,8 @@ export interface RouterLinkProperties {
 }
 
 export class RouterLink extends BaseComponent<HTMLAnchorElement> {
+  private readonly properties: RouterLinkProperties;
+
   public constructor(properties: RouterLinkProperties) {
     super({
       attributes: { href: properties.path },
@@ -19,10 +21,24 @@ export class RouterLink extends BaseComponent<HTMLAnchorElement> {
       textContent: properties.textContent,
     });
 
+    this.properties = properties;
+
+    this.setupListeners();
+  }
+
+  private setupListeners(): void {
     this.addListener('click', (event) => {
       event.preventDefault();
 
-      Router.instance.navigate(properties.path);
+      Router.instance.navigate(this.properties.path);
+    });
+
+    Router.instance.subscribePath((path) => {
+      if (this.properties.path === path) {
+        this.addClassNames(styles.active);
+      } else {
+        this.removeClassNames(styles.active);
+      }
     });
   }
 }
