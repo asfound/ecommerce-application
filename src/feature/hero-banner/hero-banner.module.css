@@ -32,7 +32,9 @@
 
   font-size: 1.4rem;
   font-weight: 600;
+  color: inherit;
   text-align: center;
+  text-decoration: none;
   text-transform: capitalize;
 
   background-color: var(--color-accent);
