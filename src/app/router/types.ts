@@ -15,7 +15,6 @@ export interface Route {
 export interface RouteMatcher {
   checkMatch(path: string): boolean;
   extractParameters(path: string): Record<string, string>;
-  extractSearchParameters(path: string): SearchParameters;
   route: Route;
 }
 

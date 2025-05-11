@@ -33,6 +33,11 @@ p {
   margin: 0;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .wrapper {
   max-width: 128rem;
   margin-inline: auto;
