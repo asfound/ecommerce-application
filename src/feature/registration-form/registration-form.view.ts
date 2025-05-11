@@ -10,6 +10,7 @@ import {
   REQUIRED_MIN_AGE,
   REQUIRED_NAME_LENGTH,
   REQUIRED_PASSWORD_LENGTH,
+  REQUIRED_STREET_AND_CITY_LENGTH,
 } from '~/shared/constants/constants';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import {
@@ -90,8 +91,28 @@ export const COUNTRY_PROPS: InputProperties = {
   validators: [validateRequired, validateDatalist(countryNamesList)],
 };
 
+export const CITY_PROPS: InputProperties = {
+  name: 'city',
+  placeholder: 'City',
+  type: INPUT_TYPE.TEXT,
+  validators: [
+    validateRequired,
+    validateOnlyEnglishLetters,
+    validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH),
+  ],
+};
+
+export const STREET_PROPS: InputProperties = {
+  name: 'street',
+  placeholder: 'Street',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired, validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH)],
+};
+
 export class RegistrationFormView extends BaseComponent implements Component {
   private readonly formElement = form({});
+
+  private readonly inputCity = new Input(CITY_PROPS);
 
   private readonly inputComponents: Input[] = [];
 
@@ -106,6 +127,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
   private readonly inputLastName = new Input(LAST_NAME_PROPS);
 
   private readonly inputPassword = new Input(PASSWORD_PROPS);
+
+  private readonly inputStreet = new Input(STREET_PROPS);
 
   private readonly submitButton = new Button({
     textContent: 'Register',
@@ -140,6 +163,9 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
+    // shouldn't we do this in constructor?
+    this.addInputs();
+
     const formHeader = div(
       { className: styles.formHeader },
       h1({ className: styles.formTitle }, 'Register'),
@@ -147,13 +173,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
 
     this.submitButton.disable();
-
-    this.addInput(this.inputEmail);
-    this.addInput(this.inputPassword);
-    this.addInput(this.inputFirstName);
-    this.addInput(this.inputLastName);
-    this.addInput(this.inputDate);
-    this.addInput(this.inputCountry);
 
     const accountDetailsLegend = legend({}, 'Account details');
     const accountDetailsFieldset = fieldset(
@@ -172,6 +191,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
       {},
       shippingAddressLegend,
       this.inputCountry.element,
+      this.inputCity.element,
+      this.inputStreet.element,
       countriesDatalist,
     );
 
@@ -201,6 +222,17 @@ export class RegistrationFormView extends BaseComponent implements Component {
     input.addListener('input', () => {
       this.checkValidity();
     });
+  }
+
+  private addInputs(): void {
+    this.addInput(this.inputEmail);
+    this.addInput(this.inputPassword);
+    this.addInput(this.inputFirstName);
+    this.addInput(this.inputLastName);
+    this.addInput(this.inputDate);
+    this.addInput(this.inputCountry);
+    this.addInput(this.inputCity);
+    this.addInput(this.inputStreet);
   }
 
   private createDataList(listId: string, listItems: string[]): HTMLDataListElement {

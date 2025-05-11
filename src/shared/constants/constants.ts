@@ -19,6 +19,8 @@ export const REQUIRED_PASSWORD_LENGTH = 8;
 
 export const REQUIRED_NAME_LENGTH = 1;
 
+export const REQUIRED_STREET_AND_CITY_LENGTH = 1;
+
 export const REQUIRED_MIN_AGE = 18;
 
 export const INPUT_TYPE = {
