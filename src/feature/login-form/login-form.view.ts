@@ -6,18 +6,8 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
-import { INPUT_TYPE, REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
+import { EMAIL_PROPS, PASSWORD_PROPS } from '~/shared/constants/input-properties';
 import { a, div, form, h2 } from '~/shared/create-element/tags';
-import {
-  validateEmailFormat,
-  validateHasDigit,
-  validateHasLowercase,
-  validateHasUppercase,
-  validateMinLength,
-  validateNoSpaces,
-  validateOnlyEnglishLetters,
-  validateRequired,
-} from '~/shared/form-validators/form-validators';
 
 import styles from './login-form.module.css';
 
@@ -33,28 +23,9 @@ export class LoginFormView extends BaseComponent implements Component {
 
   private readonly inputComponents: Input[] = [];
 
-  private readonly inputEmail = new Input({
-    name: 'email',
-    placeholder: 'Email',
-    type: INPUT_TYPE.TEXT,
-    validators: [validateRequired, validateNoSpaces, validateEmailFormat],
-  });
+  private readonly inputEmail = new Input(EMAIL_PROPS);
 
-  private readonly inputPassword = new Input({
-    enablePasswordToggle: true,
-    name: 'password',
-    placeholder: 'Password',
-    type: INPUT_TYPE.PASSWORD,
-    validators: [
-      validateRequired,
-      validateNoSpaces,
-      validateOnlyEnglishLetters,
-      validateMinLength(REQUIRED_PASSWORD_LENGTH),
-      validateHasUppercase,
-      validateHasLowercase,
-      validateHasDigit,
-    ],
-  });
+  private readonly inputPassword = new Input(PASSWORD_PROPS);
 
   private readonly registrationLinkElement = a(
     { href: ROUTE_PATH.REGISTRATION },

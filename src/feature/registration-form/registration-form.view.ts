@@ -1,126 +1,27 @@
 import type { SignupPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
-import type { InputProperties } from '~/components/common/input/input';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { Input } from '~/components/common/input/input';
-import {
-  INPUT_TYPE,
-  REQUIRED_MIN_AGE,
-  REQUIRED_NAME_LENGTH,
-  REQUIRED_PASSWORD_LENGTH,
-  REQUIRED_STREET_AND_CITY_LENGTH,
-} from '~/shared/constants/constants';
 import { countryNamesList } from '~/shared/constants/country-codes';
-import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import {
-  validateDatalistValue,
-  validateEmailFormat,
-  validateHasDigit,
-  validateHasLowercase,
-  validateHasUppercase,
-  validateMinAge,
-  validateMinLength,
-  validateNoSpaces,
-  validateOnlyEnglishLetters,
-  validatePostalCode,
-  validateRequired,
-} from '~/shared/form-validators/form-validators';
+  CITY_PROPS,
+  COUNTRY_LIST_ID,
+  COUNTRY_PROPS,
+  DATE_OF_BIRTH_PROPS,
+  DEFAULT_CHECKBOX_PROPS,
+  EMAIL_PROPS,
+  FIRST_NAME_PROPS,
+  LAST_NAME_PROPS,
+  PASSWORD_PROPS,
+  POSTAL_CODE_PROPS,
+  STREET_PROPS,
+} from '~/shared/constants/input-properties';
+import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
+import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
 import styles from './registration-form.module.css';
-
-const COUNTRY_LIST_ID = 'country-list';
-// input consts, reuse in login
-export const EMAIL_PROPS: InputProperties = {
-  name: 'email',
-  placeholder: 'Email',
-  type: INPUT_TYPE.TEXT,
-  validators: [validateRequired, validateNoSpaces, validateEmailFormat],
-};
-
-export const PASSWORD_PROPS: InputProperties = {
-  enablePasswordToggle: true,
-  name: 'password',
-  placeholder: 'Password',
-  type: INPUT_TYPE.PASSWORD,
-  validators: [
-    validateRequired,
-    validateNoSpaces,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_PASSWORD_LENGTH),
-    validateHasUppercase,
-    validateHasLowercase,
-    validateHasDigit,
-  ],
-};
-
-export const FIRST_NAME_PROPS: InputProperties = {
-  name: 'first name',
-  placeholder: 'First Name',
-  type: INPUT_TYPE.TEXT,
-  validators: [
-    validateRequired,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_NAME_LENGTH),
-  ],
-};
-
-export const LAST_NAME_PROPS: InputProperties = {
-  name: 'last name',
-  placeholder: 'Last Name',
-  type: INPUT_TYPE.TEXT,
-  validators: [
-    validateRequired,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_NAME_LENGTH),
-  ],
-};
-
-export const DATE_OF_BIRTH_PROPS: InputProperties = {
-  name: 'date of birth',
-  placeholder: 'Date of birth',
-  type: INPUT_TYPE.DATE,
-  validators: [validateRequired, validateMinAge(REQUIRED_MIN_AGE)],
-};
-
-export const COUNTRY_PROPS: InputProperties = {
-  listId: COUNTRY_LIST_ID,
-  name: 'country',
-  placeholder: 'Start typing a country...',
-  type: INPUT_TYPE.TEXT,
-  validators: [validateRequired, validateDatalistValue(countryNamesList)],
-};
-
-export const CITY_PROPS: InputProperties = {
-  name: 'city',
-  placeholder: 'City',
-  type: INPUT_TYPE.TEXT,
-  validators: [
-    validateRequired,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH),
-  ],
-};
-
-export const STREET_PROPS: InputProperties = {
-  name: 'street',
-  placeholder: 'Street',
-  type: INPUT_TYPE.TEXT,
-  validators: [validateRequired, validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH)],
-};
-
-export const POSTAL_CODE_PROPS: InputProperties = {
-  name: 'postal code',
-  placeholder: 'Postal Code',
-  type: INPUT_TYPE.TEXT,
-  validators: [validateRequired],
-};
-
-export const DEFAULT_CHECKBOX_PROPS: InputProperties = {
-  name: 'default checkbox',
-  type: INPUT_TYPE.CHECKBOX,
-};
 
 export class RegistrationFormView extends BaseComponent implements Component {
   private readonly formElement = form({});

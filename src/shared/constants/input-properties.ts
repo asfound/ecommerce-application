@@ -1,0 +1,114 @@
+import type { InputProperties } from '~/components/common/input/input';
+
+import {
+  validateDatalistValue,
+  validateEmailFormat,
+  validateHasDigit,
+  validateHasLowercase,
+  validateHasUppercase,
+  validateMinAge,
+  validateMinLength,
+  validateNoSpaces,
+  validateOnlyEnglishLetters,
+  validateRequired,
+} from '../form-validators/form-validators';
+import {
+  INPUT_TYPE,
+  REQUIRED_MIN_AGE,
+  REQUIRED_NAME_LENGTH,
+  REQUIRED_PASSWORD_LENGTH,
+  REQUIRED_STREET_AND_CITY_LENGTH,
+} from './constants';
+import { countryNamesList } from './country-codes';
+
+export const COUNTRY_LIST_ID = 'country-list';
+
+export const EMAIL_PROPS: InputProperties = {
+  name: 'email',
+  placeholder: 'Email',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired, validateNoSpaces, validateEmailFormat],
+} as const;
+
+export const PASSWORD_PROPS: InputProperties = {
+  enablePasswordToggle: true,
+  name: 'password',
+  placeholder: 'Password',
+  type: INPUT_TYPE.PASSWORD,
+  validators: [
+    validateRequired,
+    validateNoSpaces,
+    validateOnlyEnglishLetters,
+    validateMinLength(REQUIRED_PASSWORD_LENGTH),
+    validateHasUppercase,
+    validateHasLowercase,
+    validateHasDigit,
+  ],
+} as const;
+
+export const FIRST_NAME_PROPS: InputProperties = {
+  name: 'first name',
+  placeholder: 'First Name',
+  type: INPUT_TYPE.TEXT,
+  validators: [
+    validateRequired,
+    validateOnlyEnglishLetters,
+    validateMinLength(REQUIRED_NAME_LENGTH),
+  ],
+} as const;
+
+export const LAST_NAME_PROPS: InputProperties = {
+  name: 'last name',
+  placeholder: 'Last Name',
+  type: INPUT_TYPE.TEXT,
+  validators: [
+    validateRequired,
+    validateOnlyEnglishLetters,
+    validateMinLength(REQUIRED_NAME_LENGTH),
+  ],
+} as const;
+
+export const DATE_OF_BIRTH_PROPS: InputProperties = {
+  name: 'date of birth',
+  placeholder: 'Date of birth',
+  type: INPUT_TYPE.DATE,
+  validators: [validateRequired, validateMinAge(REQUIRED_MIN_AGE)],
+} as const;
+
+export const COUNTRY_PROPS: InputProperties = {
+  listId: COUNTRY_LIST_ID,
+  name: 'country',
+  placeholder: 'Start typing a country...',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired, validateDatalistValue(countryNamesList)],
+} as const;
+
+export const CITY_PROPS: InputProperties = {
+  name: 'city',
+  placeholder: 'City',
+  type: INPUT_TYPE.TEXT,
+  validators: [
+    validateRequired,
+    validateOnlyEnglishLetters,
+    validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH),
+  ],
+} as const;
+
+export const STREET_PROPS: InputProperties = {
+  name: 'street',
+  placeholder: 'Street',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired, validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH)],
+} as const;
+
+export const POSTAL_CODE_PROPS: InputProperties = {
+  name: 'postal code',
+  placeholder: 'Postal Code',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired],
+} as const;
+
+export const DEFAULT_CHECKBOX_PROPS: InputProperties = {
+  name: 'default checkbox',
+  type: INPUT_TYPE.CHECKBOX,
+} as const;
