@@ -46,7 +46,6 @@ export class Input extends BaseComponent {
 
     this.inputComponent.element.name = this.properties.name ?? '';
 
-    // very lame need to discuss
     if (this.properties.type === 'date') {
       this.inputComponent.element.type = 'text';
       this.inputComponent.element.addEventListener('focus', function () {

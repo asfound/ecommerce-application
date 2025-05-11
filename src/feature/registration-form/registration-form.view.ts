@@ -109,6 +109,13 @@ export const STREET_PROPS: InputProperties = {
   validators: [validateRequired, validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH)],
 };
 
+export const POSTAL_CODE_PROPS: InputProperties = {
+  name: 'postal code',
+  placeholder: 'Postal Code',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired],
+};
+
 export class RegistrationFormView extends BaseComponent implements Component {
   private readonly formElement = form({});
 
@@ -127,6 +134,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
   private readonly inputLastName = new Input(LAST_NAME_PROPS);
 
   private readonly inputPassword = new Input(PASSWORD_PROPS);
+
+  private readonly inputPostalCode = new Input(POSTAL_CODE_PROPS);
 
   private readonly inputStreet = new Input(STREET_PROPS);
 
@@ -164,7 +173,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   public createHTML(): void {
     // shouldn't we do this in constructor?
-    this.addInputs();
+    this.storeInputs();
 
     const formHeader = div(
       { className: styles.formHeader },
@@ -193,6 +202,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       this.inputCountry.element,
       this.inputCity.element,
       this.inputStreet.element,
+      this.inputPostalCode.element,
       countriesDatalist,
     );
 
@@ -224,17 +234,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
     });
   }
 
-  private addInputs(): void {
-    this.addInput(this.inputEmail);
-    this.addInput(this.inputPassword);
-    this.addInput(this.inputFirstName);
-    this.addInput(this.inputLastName);
-    this.addInput(this.inputDate);
-    this.addInput(this.inputCountry);
-    this.addInput(this.inputCity);
-    this.addInput(this.inputStreet);
-  }
-
   private createDataList(listId: string, listItems: string[]): HTMLDataListElement {
     const datalistElement = datalist({ id: listId });
 
@@ -244,5 +243,17 @@ export class RegistrationFormView extends BaseComponent implements Component {
     }
 
     return datalistElement;
+  }
+
+  private storeInputs(): void {
+    this.addInput(this.inputEmail);
+    this.addInput(this.inputPassword);
+    this.addInput(this.inputFirstName);
+    this.addInput(this.inputLastName);
+    this.addInput(this.inputDate);
+    this.addInput(this.inputCountry);
+    this.addInput(this.inputCity);
+    this.addInput(this.inputStreet);
+    this.addInput(this.inputPostalCode);
   }
 }
