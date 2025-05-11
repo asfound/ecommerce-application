@@ -79,9 +79,11 @@ export class Router {
   public setSearchParameters(searchParameters: SearchParameters): void {
     Object.assign(this.searchParameters, searchParameters);
 
-    const query = new URLSearchParams(this.searchParameters).toString();
-
-    globalThis.history.replaceState({}, '', `${location.pathname}?${query}`);
+    this.updateHistory({
+      pathname: globalThis.location.pathname,
+      pushState: false,
+      searchParameters: this.searchParameters,
+    });
   }
 
   public subscribePath(listener: (path: string) => void): void {
