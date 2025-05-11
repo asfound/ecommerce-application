@@ -134,8 +134,6 @@ export class Router {
   }
 
   private updatePage(payload: { route: Route }): void {
-    routerAction.setPathname(payload.route.path);
-
     payload.route
       .component()
       .then((page) => {
