@@ -32,10 +32,11 @@ export class ApiBuilder {
 
     if (customerLoggedIn && customerHasValidToken && customerToken) {
       this._apiRoot = this.createWithExistingTokenBuilder(`Bearer ${customerToken}`);
-      return;
+    } else {
+      ClientTokenCache.clearCustomerCache();
+      localStorageService.removeItem(LOCAL_STORAGE_KEY.LOGGED_IN);
+      this._apiRoot = this.createAnonymousBuilder();
     }
-
-    this._apiRoot = this.createAnonymousBuilder();
   }
 
   public useAnonymousBuilder(): void {
