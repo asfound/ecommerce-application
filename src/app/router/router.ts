@@ -115,6 +115,8 @@ export class Router {
       globalThis.history.pushState({}, '', path);
     }
 
+    this.updateHistory({ pathname: 'q', pushState: true, searchParameters: {} });
+
     this.updatePage({ route: matcher.route });
   }
 
@@ -126,6 +128,25 @@ export class Router {
       : new URLSearchParams(search);
 
     return `${pathname}${searchParameters.size > 0 ? `?${searchParameters}` : ''}`;
+  }
+
+  private updateHistory(payload: {
+    pathname: string;
+    pushState: boolean;
+    searchParameters: SearchParameters;
+  }): void {
+    const searchParameters = new URLSearchParams(payload.searchParameters);
+
+    const url =
+      searchParameters.size > 0
+        ? `${payload.pathname}?${searchParameters.toString()}`
+        : payload.pathname;
+
+    if (payload.pushState) {
+      globalThis.history.pushState({}, url);
+    } else {
+      globalThis.history.replaceState({}, url);
+    }
   }
 
   private updatePage(payload: { route: Route }): void {
