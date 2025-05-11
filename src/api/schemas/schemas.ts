@@ -5,5 +5,3 @@ export const tokenStoreSchema = z.object({
   refreshToken: z.string().optional(),
   token: z.string(),
 });
-
-export const refreshTokenSchema = z.string();
