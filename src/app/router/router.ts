@@ -93,9 +93,12 @@ export class Router {
     pushState: boolean;
     searchParameters?: SearchParameters;
   }): void {
-    const path = this.parseURL({ path: payload.path, searchParameters: payload.searchParameters });
+    const { pathname, searchParameters } = this.parseURL({
+      path: payload.path,
+      searchParameters: payload.searchParameters,
+    });
 
-    const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(path));
+    const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
 
     if (!matcher) {
       this.searchParameters = {};
@@ -109,25 +112,22 @@ export class Router {
       return;
     }
 
-    this.searchParameters = matcher.extractSearchParameters(path);
-
-    if (payload.pushState) {
-      globalThis.history.pushState({}, '', path);
-    }
-
-    this.updateHistory({ pathname: 'q', pushState: true, searchParameters: {} });
+    this.updateHistory({ pathname, pushState: payload.pushState, searchParameters });
 
     this.updatePage({ route: matcher.route });
   }
 
-  private parseURL(payload: { path: string; searchParameters?: SearchParameters }): string {
-    const { pathname, search } = new URL(payload.path, globalThis.location.origin);
+  private parseURL(payload: { path: string; searchParameters?: SearchParameters }): {
+    pathname: string;
+    searchParameters: SearchParameters;
+  } {
+    const { pathname, searchParams } = new URL(payload.path, globalThis.location.origin);
 
     const searchParameters = payload.searchParameters
       ? new URLSearchParams(payload.searchParameters)
-      : new URLSearchParams(search);
+      : searchParams;
 
-    return `${pathname}${searchParameters.size > 0 ? `?${searchParameters}` : ''}`;
+    return { pathname, searchParameters: Object.fromEntries(searchParameters) };
   }
 
   private updateHistory(payload: {
@@ -143,9 +143,9 @@ export class Router {
         : payload.pathname;
 
     if (payload.pushState) {
-      globalThis.history.pushState({}, url);
+      globalThis.history.pushState({}, '', url);
     } else {
-      globalThis.history.replaceState({}, url);
+      globalThis.history.replaceState({}, '', url);
     }
   }
 
