@@ -35,7 +35,7 @@ export class RouterLink extends BaseComponent<HTMLAnchorElement> {
       Router.instance.navigate(this.properties.path);
     });
 
-    Router.instance.subscribePath((path) => {
+    Router.instance.subscribePathname((path) => {
       if (this.properties.path === path) {
         this.addClassNames(styles.active);
       } else {

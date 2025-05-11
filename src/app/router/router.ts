@@ -1,10 +1,12 @@
 import { BaseComponent } from '~/components/base-component/base-component';
-import { createStore } from '~/shared/store/create-store';
 
 import type { Route, RouteMatcher, SearchParameters } from './types';
 
 import { ROUTER_ERROR } from './constants';
 import { createRouteMatcher } from './helpers/route-matcher';
+import { routerAction } from './store/actions';
+import { routerSelector } from './store/selectors';
+import { routerStore } from './store/store';
 
 export class Router {
   public static get instance(): Router {
@@ -28,8 +30,6 @@ export class Router {
   private readonly routerOutlet = new BaseComponent({ className: 'router-outlet', tagName: 'div' });
 
   private searchParameters: SearchParameters = {};
-
-  private readonly store = createStore({ path: '', searchParameters: {} });
 
   private constructor(routes: Route[], fallbackRoute: Route) {
     this.routeMatchers = routes.map((route) => createRouteMatcher(route));
@@ -86,8 +86,8 @@ export class Router {
     });
   }
 
-  public subscribePath(listener: (path: string) => void): void {
-    this.store.subscribe((state) => state.path, listener);
+  public subscribePathname(listener: (pathname: string) => void): void {
+    routerStore.subscribe(routerSelector.selectPathname, listener);
   }
 
   private handleRouteChange(payload: {
@@ -152,7 +152,7 @@ export class Router {
   }
 
   private updatePage(payload: { route: Route }): void {
-    this.store.setState({ path: payload.route.path });
+    routerAction.setPathname(payload.route.path);
 
     payload.route
       .component()
