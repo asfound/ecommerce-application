@@ -5,6 +5,8 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import type { RoutePath } from '../types';
 
 import { Router } from '../router';
+import { routerSelector } from '../store/selectors';
+import { routerStore } from '../store/store';
 import styles from './router-link.module.css';
 
 export interface RouterLinkProperties {
@@ -35,8 +37,8 @@ export class RouterLink extends BaseComponent<HTMLAnchorElement> {
       Router.instance.navigate(this.properties.path);
     });
 
-    Router.instance.subscribePathname((path) => {
-      if (this.properties.path === path) {
+    routerStore.subscribe(routerSelector.selectPathname, (pathname) => {
+      if (this.properties.path === pathname) {
         this.addClassNames(styles.active);
       } else {
         this.removeClassNames(styles.active);

@@ -5,8 +5,6 @@ import type { Route, RouteMatcher, SearchParameters } from './types';
 import { ROUTER_ERROR } from './constants';
 import { createRouteMatcher } from './helpers/route-matcher';
 import { routerAction } from './store/actions';
-import { routerSelector } from './store/selectors';
-import { routerStore } from './store/store';
 
 export class Router {
   public static get instance(): Router {
@@ -69,10 +67,6 @@ export class Router {
     }
 
     this.handleRouteChange({ path, pushState: true, searchParameters });
-  }
-
-  public subscribePathname(listener: (pathname: string) => void): void {
-    routerStore.subscribe(routerSelector.selectPathname, listener);
   }
 
   public updateHistory(payload: {
