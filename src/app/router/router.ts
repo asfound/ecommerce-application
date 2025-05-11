@@ -29,8 +29,6 @@ export class Router {
 
   private readonly routerOutlet = new BaseComponent({ className: 'router-outlet', tagName: 'div' });
 
-  private searchParameters: SearchParameters = {};
-
   private constructor(routes: Route[], fallbackRoute: Route) {
     this.routeMatchers = routes.map((route) => createRouteMatcher(route));
 
@@ -62,10 +60,6 @@ export class Router {
     globalThis.history.forward();
   }
 
-  public getSearchParameters(): SearchParameters {
-    return this.searchParameters;
-  }
-
   public navigate(path: string, searchParameters?: SearchParameters): void {
     const { pathname } = new URL(globalThis.location.href);
 
@@ -76,66 +70,11 @@ export class Router {
     this.handleRouteChange({ path, pushState: true, searchParameters });
   }
 
-  public setSearchParameters(searchParameters: SearchParameters): void {
-    Object.assign(this.searchParameters, searchParameters);
-
-    this.updateHistory({
-      pathname: globalThis.location.pathname,
-      pushState: false,
-      searchParameters: this.searchParameters,
-    });
-  }
-
   public subscribePathname(listener: (pathname: string) => void): void {
     routerStore.subscribe(routerSelector.selectPathname, listener);
   }
 
-  private handleRouteChange(payload: {
-    path: string;
-    pushState: boolean;
-    searchParameters?: SearchParameters;
-  }): void {
-    const { pathname, searchParameters } = this.parseURL({
-      path: payload.path,
-      searchParameters: payload.searchParameters,
-    });
-
-    const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
-
-    if (!matcher) {
-      routerAction.setSearchParameters({});
-
-      this.updatePage({ route: this.fallbackRoute });
-
-      return;
-    }
-
-    if (matcher.route.canActivate?.some((interceptor) => !interceptor(this))) {
-      return;
-    }
-
-    this.updateHistory({ pathname, pushState: payload.pushState, searchParameters });
-
-    this.updatePage({ route: matcher.route });
-
-    routerAction.setPathname(pathname);
-    routerAction.setSearchParameters(searchParameters);
-  }
-
-  private parseURL(payload: { path: string; searchParameters?: SearchParameters }): {
-    pathname: string;
-    searchParameters: SearchParameters;
-  } {
-    const { pathname, searchParams } = new URL(payload.path, globalThis.location.origin);
-
-    const searchParameters = payload.searchParameters
-      ? new URLSearchParams(payload.searchParameters)
-      : searchParams;
-
-    return { pathname, searchParameters: Object.fromEntries(searchParameters) };
-  }
-
-  private updateHistory(payload: {
+  public updateHistory(payload: {
     pathname: string;
     pushState: boolean;
     searchParameters: SearchParameters;
@@ -152,6 +91,51 @@ export class Router {
     } else {
       globalThis.history.replaceState({}, '', url);
     }
+  }
+
+  private handleRouteChange(payload: {
+    path: string;
+    pushState: boolean;
+    searchParameters?: SearchParameters;
+  }): void {
+    const { pathname, searchParameters } = this.parseURL({
+      path: payload.path,
+      searchParameters: payload.searchParameters,
+    });
+
+    const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
+
+    if (!matcher) {
+      routerAction.setSearchParameters(this, {});
+
+      this.updatePage({ route: this.fallbackRoute });
+
+      return;
+    }
+
+    if (matcher.route.canActivate?.some((interceptor) => !interceptor(this))) {
+      return;
+    }
+
+    this.updateHistory({ pathname, pushState: payload.pushState, searchParameters });
+
+    this.updatePage({ route: matcher.route });
+
+    routerAction.setPathname(pathname);
+    routerAction.setSearchParameters(this, searchParameters);
+  }
+
+  private parseURL(payload: { path: string; searchParameters?: SearchParameters }): {
+    pathname: string;
+    searchParameters: SearchParameters;
+  } {
+    const { pathname, searchParams } = new URL(payload.path, globalThis.location.origin);
+
+    const searchParameters = payload.searchParameters
+      ? new URLSearchParams(payload.searchParameters)
+      : searchParams;
+
+    return { pathname, searchParameters: Object.fromEntries(searchParameters) };
   }
 
   private updatePage(payload: { route: Route }): void {
