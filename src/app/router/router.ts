@@ -103,7 +103,7 @@ export class Router {
     const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
 
     if (!matcher) {
-      this.searchParameters = {};
+      routerAction.setSearchParameters({});
 
       this.updatePage({ route: this.fallbackRoute });
 
@@ -117,6 +117,9 @@ export class Router {
     this.updateHistory({ pathname, pushState: payload.pushState, searchParameters });
 
     this.updatePage({ route: matcher.route });
+
+    routerAction.setPathname(pathname);
+    routerAction.setSearchParameters(searchParameters);
   }
 
   private parseURL(payload: { path: string; searchParameters?: SearchParameters }): {
