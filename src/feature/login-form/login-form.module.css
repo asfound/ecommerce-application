@@ -17,6 +17,7 @@
   margin-inline: auto;
 }
 
+/* introduce form header component or somewhow else avoid repetition */
 .formHeader {
   text-align: center;
 }

@@ -29,7 +29,7 @@ export const INPUT_TYPE = {
 
 export const PROJECT_NAME = {
   PROJECT: 'Coffee',
-  TEAM: 'HUH?',
+  TEAM: 'HUH ',
 } as const;
 
 export const TITLE = PROJECT_NAME.TEAM + PROJECT_NAME.PROJECT;
