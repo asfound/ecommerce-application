@@ -3,6 +3,7 @@ import type { Component } from '~/components/base-component/types';
 import { RouterLink } from '~/app/router/components/router-link';
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
+import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { div, h1, p } from '~/shared/create-element/tags';
 
 import styles from './hero-banner.module.css';
@@ -30,6 +31,8 @@ export class HeroBanner extends BaseComponent implements Component {
 
     const container = div({ className: styles.container }, heading, description, CTALink.element);
 
-    this.append(container);
+    const wrapperElement = div({ className: CSS_CLASS_NAME.WRAPPER }, container);
+
+    this.append(wrapperElement);
   }
 }
