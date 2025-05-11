@@ -1,4 +1,4 @@
-import type { SignupPayload } from '~/api/services/auth/types';
+import type { CustomerAddress, SignupPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -26,13 +26,13 @@ import styles from './registration-form.module.css';
 export class RegistrationFormView extends BaseComponent implements Component {
   private readonly formElement = form({});
 
+  private readonly inputBirthDate = new Input(DATE_OF_BIRTH_PROPS);
+
   private readonly inputCity = new Input(CITY_PROPS);
 
   private readonly inputComponents: Input[] = [];
 
   private readonly inputCountry = new Input(COUNTRY_PROPS);
-
-  private readonly inputDate = new Input(DATE_OF_BIRTH_PROPS);
 
   private readonly inputDefaultShipping = new Input(DEFAULT_CHECKBOX_PROPS);
 
@@ -64,7 +64,9 @@ export class RegistrationFormView extends BaseComponent implements Component {
       'submit',
       (event) => {
         event.preventDefault();
-        console.warn(handler);
+
+        const signupPayload = this.getPayload();
+        handler(signupPayload);
       },
       { signal: this.abortController.signal },
     );
@@ -98,11 +100,12 @@ export class RegistrationFormView extends BaseComponent implements Component {
       accountDetailsLegend,
       this.inputFirstName.element,
       this.inputLastName.element,
-      this.inputDate.element,
+      this.inputBirthDate.element,
       this.inputEmail.element,
       this.inputPassword.element,
     );
 
+    // add address fieldset component or add more inputs for billing?
     const shippingAddressFieldset = this.createShippingAddressFieldset('Shipping address');
 
     this.formElement.append(
@@ -163,12 +166,34 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
   }
 
+  private getPayload(): SignupPayload {
+    const address: CustomerAddress = {
+      city: this.inputCity.value.trim(),
+      country: this.inputCountry.value.trim(),
+      default: true, // un-hardcode
+      postalCode: this.inputPostalCode.value.trim(),
+      streetName: this.inputStreet.value.trim(),
+    };
+
+    return {
+      addresses: {
+        shippingAddress: address,
+        shippingAsBilling: true, // un-hardcode
+      },
+      dateOfBirth: this.inputBirthDate.value.trim(),
+      email: this.inputEmail.value.trim(),
+      firstName: this.inputFirstName.value.trim(),
+      lastName: this.inputLastName.value.trim(),
+      password: this.inputPassword.value.trim(),
+    };
+  }
+
   private storeInputs(): void {
     this.addInput(this.inputEmail);
     this.addInput(this.inputPassword);
     this.addInput(this.inputFirstName);
     this.addInput(this.inputLastName);
-    this.addInput(this.inputDate);
+    this.addInput(this.inputBirthDate);
     this.addInput(this.inputCountry);
     this.addInput(this.inputCity);
     this.addInput(this.inputStreet);
