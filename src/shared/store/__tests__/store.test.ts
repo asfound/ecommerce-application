@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { createSelector } from '../create-selector';
 import { Store } from '../store';
 
@@ -20,6 +22,13 @@ test('store should be defined', () => {
 });
 
 test('getInitialState should return initialState', () => {
+  const newState: typeof initialState = {
+    counter: 1,
+    user: { age: '22', name: 'Elsa' },
+  };
+
+  store.setState(newState);
+
   expect(store.getInitialState()).toEqual(initialState);
 });
 
@@ -91,4 +100,18 @@ test('callbacks should be called with proper arguments', () => {
 
   expect(counterCallback).toBeCalledWith(initialState.counter);
   expect(userCallback).toBeCalledWith(initialState.user);
+});
+
+test('should not trigger callback when same state passed', () => {
+  const mockCallback = vi.fn();
+
+  store.subscribe(selectCounter, mockCallback, { equalityFunction: isEqual });
+
+  store.setState(initialState);
+  store.setState(initialState);
+  store.setState(initialState);
+
+  const expectedTimes = 1;
+
+  expect(mockCallback).toHaveBeenCalledTimes(expectedTimes);
 });
