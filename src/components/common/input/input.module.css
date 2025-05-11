@@ -18,7 +18,11 @@
   outline: none;
 }
 
-input:focus::placeholder {
+.input::placeholder {
+  color: var(--color-accent-light);
+}
+
+.input:focus::placeholder {
   color: transparent;
 }
 
@@ -51,4 +55,19 @@ input:focus::placeholder {
   .passwordToggleIcon:hover {
     cursor: pointer;
   }
+}
+
+.input[type='date']::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.input[type='date']::-webkit-datetime-edit {
+  color: var(--color-white);
+}
+
+.input[type='date']::-webkit-datetime-edit-day-field:focus,
+.input[type='date']::-webkit-datetime-edit-month-field:focus,
+.input[type='date']::-webkit-datetime-edit-year-field:focus {
+  color: var(--color-white);
+  background-color: var(--color-accent-light);
 }

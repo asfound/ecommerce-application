@@ -5,13 +5,19 @@ import type { InputProperties } from '~/components/common/input/input';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { Input } from '~/components/common/input/input';
-import { INPUT_TYPE, REQUIRED_PASSWORD_LENGTH } from '~/shared/constants/constants';
+import {
+  INPUT_TYPE,
+  REQUIRED_MIN_AGE,
+  REQUIRED_NAME_LENGTH,
+  REQUIRED_PASSWORD_LENGTH,
+} from '~/shared/constants/constants';
 import { div, form, h1 } from '~/shared/create-element/tags';
 import {
   validateEmailFormat,
   validateHasDigit,
   validateHasLowercase,
   validateHasUppercase,
+  validateMinAge,
   validateMinLength,
   validateNoSpaces,
   validateOnlyEnglishLetters,
@@ -21,14 +27,14 @@ import {
 import styles from './registration-form.module.css';
 
 // input consts, reuse in login
-export const EMAIL: InputProperties = {
+export const EMAIL_PROPS: InputProperties = {
   name: 'email',
   placeholder: 'Email',
   type: INPUT_TYPE.TEXT,
   validators: [validateRequired, validateNoSpaces, validateEmailFormat],
 };
 
-export const PASSWORD: InputProperties = {
+export const PASSWORD_PROPS: InputProperties = {
   enablePasswordToggle: true,
   name: 'password',
   placeholder: 'Password',
@@ -44,14 +50,49 @@ export const PASSWORD: InputProperties = {
   ],
 };
 
+export const FIRST_NAME_PROPS: InputProperties = {
+  name: 'first name',
+  placeholder: 'First Name',
+  type: INPUT_TYPE.TEXT,
+  validators: [
+    validateRequired,
+    validateOnlyEnglishLetters,
+    validateMinLength(REQUIRED_NAME_LENGTH),
+  ],
+};
+
+export const LAST_NAME_PROPS: InputProperties = {
+  name: 'last name',
+  placeholder: 'Last Name',
+  type: INPUT_TYPE.TEXT,
+  validators: [
+    validateRequired,
+    validateOnlyEnglishLetters,
+    validateMinLength(REQUIRED_NAME_LENGTH),
+  ],
+};
+
+export const DATE_OF_BIRTH_PROPS: InputProperties = {
+  name: 'date of birth',
+  placeholder: 'dd.mm.yy',
+  type: INPUT_TYPE.DATE,
+  validators: [validateRequired, validateMinAge(REQUIRED_MIN_AGE)],
+};
+
 export class RegistrationFormView extends BaseComponent implements Component {
   private readonly formElement = form({});
 
   private readonly inputComponents: Input[] = [];
 
-  private readonly inputEmail = new Input(EMAIL);
+  private readonly inputDate = new Input(DATE_OF_BIRTH_PROPS);
 
-  private readonly inputPassword = new Input(PASSWORD);
+  private readonly inputEmail = new Input(EMAIL_PROPS);
+
+  private readonly inputFirstName = new Input(FIRST_NAME_PROPS);
+
+  private readonly inputLastName = new Input(LAST_NAME_PROPS);
+
+  private readonly inputPassword = new Input(PASSWORD_PROPS);
 
   private readonly submitButton = new Button({
     textContent: 'Register',
@@ -96,11 +137,17 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
     this.addInput(this.inputEmail);
     this.addInput(this.inputPassword);
+    this.addInput(this.inputFirstName);
+    this.addInput(this.inputLastName);
+    this.addInput(this.inputDate);
 
     this.formElement.append(
       formHeader,
       this.inputEmail.element,
       this.inputPassword.element,
+      this.inputFirstName.element,
+      this.inputLastName.element,
+      this.inputDate.element,
       this.submitButton.element,
     );
 

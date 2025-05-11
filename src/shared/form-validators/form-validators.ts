@@ -39,3 +39,14 @@ export const validateHasDigit: ValidatorFunction = (value) => {
 export const validateOnlyEnglishLetters: ValidatorFunction = (value) => {
   return /^[a-zA-Z0-9]+$/.test(value) ? null : VALIDATION_ERROR.ONLY_ENGLISH_LETTERS;
 };
+
+export const validateMinAge = (ageInYears: number) => {
+  return (value: string): null | string => {
+    const birthDate = new Date(value);
+    const today = new Date();
+
+    const age = today.getFullYear() - birthDate.getFullYear();
+
+    return age < ageInYears ? VALIDATION_ERROR.MIN_AGE : null;
+  };
+};
