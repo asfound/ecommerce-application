@@ -5,6 +5,7 @@ import { ROUTER_LINKS } from '~/app/router/router-links';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Logo } from '~/components/logo/logo';
 import { Navigation } from '~/components/navigation/navigation';
+import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div } from '~/shared/create-element/tags';
 
 import styles from './header.module.css';
@@ -54,7 +55,14 @@ export class HeaderView extends BaseComponent implements Component {
 
     const container = div({ className: styles.container }, cart, this.logoutIcon);
 
-    this.append(this.logoLink, navigation, container);
+    const wrapperElement = div(
+      { className: [CSS_CLASS_NAME.WRAPPER, styles.wrapper] },
+      this.logoLink,
+      navigation.element,
+      container,
+    );
+
+    this.append(wrapperElement);
   }
 
   public setLogoutIconVisible(visible: boolean): void {

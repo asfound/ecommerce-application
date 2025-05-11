@@ -1,11 +1,12 @@
 .header {
+  padding: 2.32rem 0;
+  background-color: var(--color-dark);
+}
+
+.wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 2.32rem 0;
-
-  background-color: var(--color-dark);
 }
 
 .container {
