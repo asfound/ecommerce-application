@@ -1,4 +1,4 @@
-import { localStorageService } from '~/services/browser-storage/browser-storage.service';
+import { localStorageService } from '~/services';
 
 import { getApiRoot } from '../helpers/helpers';
 import { AuthService } from './auth/auth.service';

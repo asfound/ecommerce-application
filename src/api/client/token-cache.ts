@@ -1,6 +1,6 @@
 import type { TokenCache, TokenStore } from '@commercetools/ts-client';
 
-import { localStorageService } from '~/services/browser-storage/browser-storage.service';
+import { localStorageService } from '~/services';
 
 import type { ClientTokenStoreType } from './types';
 

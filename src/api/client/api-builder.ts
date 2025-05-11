@@ -1,7 +1,7 @@
 import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import type { UserAuthOptions } from '@commercetools/ts-client';
 
-import { localStorageService } from '~/services/browser-storage/browser-storage.service';
+import { localStorageService } from '~/services';
 import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
 
 import { createApiBuilder } from './client-builder';
