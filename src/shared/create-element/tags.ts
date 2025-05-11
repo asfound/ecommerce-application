@@ -6,6 +6,8 @@ export const button = createElementFactory('button');
 
 export const div = createElementFactory('div');
 
+export const datalist = createElementFactory('datalist');
+
 export const h1 = createElementFactory('h1');
 
 export const h2 = createElementFactory('h2');
@@ -15,6 +17,8 @@ export const header = createElementFactory('header');
 export const main = createElementFactory('main');
 
 export const p = createElementFactory('p');
+
+export const option = createElementFactory('option');
 
 export const section = createElementFactory('section');
 

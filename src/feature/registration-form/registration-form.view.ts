@@ -11,7 +11,7 @@ import {
   REQUIRED_NAME_LENGTH,
   REQUIRED_PASSWORD_LENGTH,
 } from '~/shared/constants/constants';
-import { div, fieldset, form, h1, legend } from '~/shared/create-element/tags';
+import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import {
   validateEmailFormat,
   validateHasDigit,
@@ -23,9 +23,11 @@ import {
   validateOnlyEnglishLetters,
   validateRequired,
 } from '~/shared/form-validators/form-validators';
+import { countryNamesList } from '~/shared/utils/country-codes';
 
 import styles from './registration-form.module.css';
 
+const COUNTRY_LIST_ID = 'country-list';
 // input consts, reuse in login
 export const EMAIL_PROPS: InputProperties = {
   name: 'email',
@@ -74,15 +76,25 @@ export const LAST_NAME_PROPS: InputProperties = {
 
 export const DATE_OF_BIRTH_PROPS: InputProperties = {
   name: 'date of birth',
-  placeholder: 'dd.mm.yy',
+  placeholder: 'Date of birth',
   type: INPUT_TYPE.DATE,
   validators: [validateRequired, validateMinAge(REQUIRED_MIN_AGE)],
+};
+
+export const COUNTRY_PROPS: InputProperties = {
+  listId: COUNTRY_LIST_ID,
+  name: 'country',
+  placeholder: 'Start typing a country...',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired],
 };
 
 export class RegistrationFormView extends BaseComponent implements Component {
   private readonly formElement = form({});
 
   private readonly inputComponents: Input[] = [];
+
+  private readonly inputCountry = new Input(COUNTRY_PROPS);
 
   private readonly inputDate = new Input(DATE_OF_BIRTH_PROPS);
 
@@ -140,19 +152,34 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.addInput(this.inputFirstName);
     this.addInput(this.inputLastName);
     this.addInput(this.inputDate);
+    this.addInput(this.inputCountry);
 
-    const accountDetailsLegend = legend({}, 'Create account');
+    const accountDetailsLegend = legend({}, 'Account details');
     const accountDetailsFieldset = fieldset(
       {},
       accountDetailsLegend,
-      this.inputEmail.element,
-      this.inputPassword.element,
       this.inputFirstName.element,
       this.inputLastName.element,
       this.inputDate.element,
+      this.inputEmail.element,
+      this.inputPassword.element,
     );
 
-    this.formElement.append(formHeader, accountDetailsFieldset, this.submitButton.element);
+    const shippingAddressLegend = legend({}, 'Shipping address');
+    const countriesDatalist = this.createDataList(COUNTRY_LIST_ID, countryNamesList);
+    const shippingAddressFieldset = fieldset(
+      {},
+      shippingAddressLegend,
+      this.inputCountry.element,
+      countriesDatalist,
+    );
+
+    this.formElement.append(
+      formHeader,
+      accountDetailsFieldset,
+      shippingAddressFieldset,
+      this.submitButton.element,
+    );
 
     this.append(this.formElement);
   }
@@ -173,5 +200,16 @@ export class RegistrationFormView extends BaseComponent implements Component {
     input.addListener('input', () => {
       this.checkValidity();
     });
+  }
+
+  private createDataList(listId: string, listItems: string[]): HTMLDataListElement {
+    const datalistElement = datalist({ id: listId });
+
+    for (const item of listItems) {
+      const optionElement = option({ value: item });
+      datalistElement.append(optionElement);
+    }
+
+    return datalistElement;
   }
 }

@@ -10,6 +10,7 @@ import styles from './input.module.css';
 
 export interface InputProperties {
   enablePasswordToggle?: true;
+  listId?: string;
   name?: string;
   placeholder?: string;
   type?: string;
@@ -63,6 +64,11 @@ export class Input extends BaseComponent {
       this.passwordToggleIcon.src = iconEyeHidden;
       this.inputComponent.addClassNames(styles.paddingRight);
       this.append(this.passwordToggleIcon);
+    }
+
+    //TODO: find why this.inputComponent.element.list doesn't work
+    if (properties.listId) {
+      this.inputComponent.element.setAttribute('list', properties.listId);
     }
 
     this.append(this.inputComponent, this.errorMessageComponent);
