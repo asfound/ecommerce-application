@@ -8,7 +8,6 @@ import { Navigation } from '~/components/navigation/navigation';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div } from '~/shared/create-element/tags';
 
-
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
@@ -58,7 +57,7 @@ export class HeaderView extends BaseComponent implements Component {
 
     const wrapperElement = div(
       { className: [CSS_CLASS_NAME.WRAPPER, styles.wrapper] },
-      logoLink.element,
+      this.logoLink,
       navigation.element,
       container,
     );

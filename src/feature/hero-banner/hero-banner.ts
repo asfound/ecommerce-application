@@ -6,7 +6,6 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div, h1, p } from '~/shared/create-element/tags';
 
-
 import styles from './hero-banner.module.css';
 
 // should be moved to constants?
