@@ -11,7 +11,7 @@ import {
   REQUIRED_NAME_LENGTH,
   REQUIRED_PASSWORD_LENGTH,
 } from '~/shared/constants/constants';
-import { div, form, h1 } from '~/shared/create-element/tags';
+import { div, fieldset, form, h1, legend } from '~/shared/create-element/tags';
 import {
   validateEmailFormat,
   validateHasDigit,
@@ -141,15 +141,18 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.addInput(this.inputLastName);
     this.addInput(this.inputDate);
 
-    this.formElement.append(
-      formHeader,
+    const accountDetailsLegend = legend({}, 'Create account');
+    const accountDetailsFieldset = fieldset(
+      {},
+      accountDetailsLegend,
       this.inputEmail.element,
       this.inputPassword.element,
       this.inputFirstName.element,
       this.inputLastName.element,
       this.inputDate.element,
-      this.submitButton.element,
     );
+
+    this.formElement.append(formHeader, accountDetailsFieldset, this.submitButton.element);
 
     this.append(this.formElement);
   }

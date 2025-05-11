@@ -8,6 +8,8 @@ export const div = createElementFactory('div');
 
 export const h1 = createElementFactory('h1');
 
+export const h2 = createElementFactory('h2');
+
 export const header = createElementFactory('header');
 
 export const main = createElementFactory('main');
@@ -16,10 +18,14 @@ export const p = createElementFactory('p');
 
 export const section = createElementFactory('section');
 
-export const h2 = createElementFactory('h2');
-
 export const img = createElementFactory('img');
 
 export const form = createElementFactory('form');
 
 export const span = createElementFactory('span');
+
+export const fieldset = createElementFactory('fieldset');
+
+export const legend = createElementFactory('legend');
+
+export const label = createElementFactory('label');
