@@ -24,7 +24,7 @@ import { validatePostalCode } from '~/shared/form-validators/form-validators';
 import styles from './registration-form.module.css';
 
 export class RegistrationFormView extends BaseComponent implements Component {
-  private readonly formElement = form({});
+  private readonly formElement = form({ className: styles.form });
 
   private readonly inputBirthDate = new Input(DATE_OF_BIRTH_PROPS);
 
@@ -89,14 +89,14 @@ export class RegistrationFormView extends BaseComponent implements Component {
     const formHeader = div(
       { className: styles.formHeader },
       h1({ className: styles.formTitle }, 'Register'),
-      div({ className: styles.formSubtitle }, 'Please fill in the fields below:'),
+      div({ className: styles.formSubtitle }, 'Please fill in the fields below'),
     );
 
     this.submitButton.disable();
 
-    const accountDetailsLegend = legend({}, 'Account details');
+    const accountDetailsLegend = legend({ className: styles.legend }, 'Account details:');
     const accountDetailsFieldset = fieldset(
-      {},
+      { className: styles.fieldset },
       accountDetailsLegend,
       this.inputFirstName.element,
       this.inputLastName.element,
@@ -106,7 +106,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
 
     // add address fieldset component or add more inputs for billing?
-    const shippingAddressFieldset = this.createShippingAddressFieldset('Shipping address');
+    const shippingAddressFieldset = this.createShippingAddressFieldset('Shipping address:');
 
     this.formElement.append(
       formHeader,
@@ -148,14 +148,14 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   private createShippingAddressFieldset(legendValue: string): HTMLFieldSetElement {
-    const legendElement = legend({}, legendValue);
+    const legendElement = legend({ className: styles.legend }, legendValue);
     const countriesDatalist = this.createDataList(COUNTRY_LIST_ID, countryNamesList);
 
     //TODO: reset if country changes
     this.inputPostalCode.addValidator(validatePostalCode(() => this.inputCountry.value));
 
     return fieldset(
-      {},
+      { className: styles.fieldset },
       legendElement,
       this.inputCountry.element,
       this.inputCity.element,
