@@ -24,7 +24,13 @@ export class HeaderPresenter extends Presenter<HeaderView> {
 
   private bindViewHandlers(): void {
     this.view.bindLogoutHandler(this.handleLogout);
+
+    this.view.bindLogoClickHandler(this.handleLogoClick);
   }
+
+  private handleLogoClick = (): void => {
+    Router.instance.navigate(ROUTE_PATH.MAIN);
+  };
 
   private handleLogout = (): void => {
     this.authService.logout();

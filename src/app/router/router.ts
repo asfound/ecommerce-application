@@ -4,6 +4,7 @@ import type { Route, RouteMatcher, SearchParameters } from './types';
 
 import { ROUTER_ERROR } from './constants';
 import { createRouteMatcher } from './helpers/route-matcher';
+import { routerAction } from './store/actions';
 
 export class Router {
   public static get instance(): Router {
@@ -26,8 +27,6 @@ export class Router {
 
   private readonly routerOutlet = new BaseComponent({ className: 'router-outlet', tagName: 'div' });
 
-  private searchParameters: SearchParameters = {};
-
   private constructor(routes: Route[], fallbackRoute: Route) {
     this.routeMatchers = routes.map((route) => createRouteMatcher(route));
 
@@ -49,6 +48,7 @@ export class Router {
     }
 
     Router._instance = new Router(routes, fallbackRoute);
+    routerAction.initialize(Router._instance);
   }
 
   public back(): void {
@@ -57,10 +57,6 @@ export class Router {
 
   public forward(): void {
     globalThis.history.forward();
-  }
-
-  public getSearchParameters(): SearchParameters {
-    return this.searchParameters;
   }
 
   public navigate(path: string, searchParameters?: SearchParameters): void {
@@ -73,12 +69,23 @@ export class Router {
     this.handleRouteChange({ path, pushState: true, searchParameters });
   }
 
-  public setSearchParameters(searchParameters: SearchParameters): void {
-    Object.assign(this.searchParameters, searchParameters);
+  public updateHistory(payload: {
+    pathname: string;
+    pushState: boolean;
+    searchParameters: SearchParameters;
+  }): void {
+    const searchParameters = new URLSearchParams(payload.searchParameters);
 
-    const query = new URLSearchParams(this.searchParameters).toString();
+    const url =
+      searchParameters.size > 0
+        ? `${payload.pathname}?${searchParameters.toString()}`
+        : payload.pathname;
 
-    globalThis.history.replaceState({}, '', `${location.pathname}?${query}`);
+    if (payload.pushState) {
+      globalThis.history.pushState({}, '', url);
+    } else {
+      globalThis.history.replaceState({}, '', url);
+    }
   }
 
   private handleRouteChange(payload: {
@@ -86,12 +93,15 @@ export class Router {
     pushState: boolean;
     searchParameters?: SearchParameters;
   }): void {
-    const path = this.parseURL({ path: payload.path, searchParameters: payload.searchParameters });
+    const { pathname, searchParameters } = this.parseURL({
+      path: payload.path,
+      searchParameters: payload.searchParameters,
+    });
 
-    const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(path));
+    const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
 
     if (!matcher) {
-      this.searchParameters = {};
+      routerAction.setSearchParameters({});
 
       this.updatePage({ route: this.fallbackRoute });
 
@@ -102,23 +112,25 @@ export class Router {
       return;
     }
 
-    this.searchParameters = matcher.extractSearchParameters(path);
-
-    if (payload.pushState) {
-      globalThis.history.pushState({}, '', path);
-    }
+    this.updateHistory({ pathname, pushState: payload.pushState, searchParameters });
 
     this.updatePage({ route: matcher.route });
+
+    routerAction.setPathname(pathname);
+    routerAction.setSearchParameters(searchParameters);
   }
 
-  private parseURL(payload: { path: string; searchParameters?: SearchParameters }): string {
-    const { pathname, search } = new URL(payload.path, globalThis.location.origin);
+  private parseURL(payload: { path: string; searchParameters?: SearchParameters }): {
+    pathname: string;
+    searchParameters: SearchParameters;
+  } {
+    const { pathname, searchParams } = new URL(payload.path, globalThis.location.origin);
 
     const searchParameters = payload.searchParameters
       ? new URLSearchParams(payload.searchParameters)
-      : new URLSearchParams(search);
+      : searchParams;
 
-    return `${pathname}${searchParameters.size > 0 ? `?${searchParameters}` : ''}`;
+    return { pathname, searchParameters: Object.fromEntries(searchParameters) };
   }
 
   private updatePage(payload: { route: Route }): void {

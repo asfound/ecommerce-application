@@ -1,8 +1,6 @@
-import type { Route, RouteMatcher, SearchParameters } from '../types';
+import type { Route, RouteMatcher } from '../types';
 
 import { WILDCARD_ROUTE } from '../constants';
-
-const QUERY_INDEX_SHIFT = 1;
 
 export const createRouteMatcher = (route: Route): RouteMatcher => {
   return route.path.includes(':')
@@ -26,7 +24,6 @@ const createMatcherWithParameters = (route: Route): RouteMatcher => {
 
       return execArray.groups;
     },
-    extractSearchParameters,
     route,
   };
 };
@@ -41,7 +38,6 @@ const createMatcherWithoutParameters = (route: Route): RouteMatcher => {
     extractParameters(): Record<string, string> {
       return {};
     },
-    extractSearchParameters,
     route,
   };
 };
@@ -61,18 +57,4 @@ const createRouteWithParametersRegex = (route: Route): RegExp => {
   );
 
   return new RegExp(`^${regex}$`);
-};
-
-const extractSearchParameters = (path: string): SearchParameters => {
-  const queryIndex = path.indexOf('?');
-
-  if (queryIndex === -1) {
-    return {};
-  }
-
-  const queryString = path.slice(queryIndex + QUERY_INDEX_SHIFT);
-
-  const searchParameters = new URLSearchParams(queryString);
-
-  return Object.fromEntries(searchParameters.entries());
 };
