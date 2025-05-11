@@ -33,3 +33,7 @@ export const PROJECT_NAME = {
 } as const;
 
 export const TITLE = PROJECT_NAME.TEAM + PROJECT_NAME.PROJECT;
+
+export const CSS_CLASS_NAME = {
+  WRAPPER: 'wrapper',
+} as const;
