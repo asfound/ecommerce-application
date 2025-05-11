@@ -6,6 +6,7 @@ export const VALIDATION_ERROR = {
   HAS_DIGIT: 'Must contain at least one digit (0–9).',
   HAS_LOWERCASE: 'Must contain at least one lowercase letter (a–z).',
   HAS_UPPERCASE: 'Must contain at least one uppercase letter (A–Z).',
+  INVALID_LIST_VALUE: 'Enter existing country or select from the list',
   MIN_AGE: 'Must be at least 18 years old.',
   MIN_LENGTH: (required: number, current: number) =>
     `Minimum required length is ${required.toString()} characters. You entered ${current.toString()}.`,

@@ -50,3 +50,9 @@ export const validateMinAge = (ageInYears: number) => {
     return age < ageInYears ? VALIDATION_ERROR.MIN_AGE : null;
   };
 };
+
+export const validateDatalist = (list: string[]) => {
+  return (value: string): null | string => {
+    return list.includes(value) ? null : VALIDATION_ERROR.INVALID_LIST_VALUE;
+  };
+};

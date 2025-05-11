@@ -13,6 +13,7 @@ import {
 } from '~/shared/constants/constants';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import {
+  validateDatalist,
   validateEmailFormat,
   validateHasDigit,
   validateHasLowercase,
@@ -86,7 +87,7 @@ export const COUNTRY_PROPS: InputProperties = {
   name: 'country',
   placeholder: 'Start typing a country...',
   type: INPUT_TYPE.TEXT,
-  validators: [validateRequired],
+  validators: [validateRequired, validateDatalist(countryNamesList)],
 };
 
 export class RegistrationFormView extends BaseComponent implements Component {
