@@ -12,9 +12,10 @@ import {
   REQUIRED_PASSWORD_LENGTH,
   REQUIRED_STREET_AND_CITY_LENGTH,
 } from '~/shared/constants/constants';
+import { countryNamesList } from '~/shared/constants/country-codes';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import {
-  validateDatalist,
+  validateDatalistValue,
   validateEmailFormat,
   validateHasDigit,
   validateHasLowercase,
@@ -23,9 +24,9 @@ import {
   validateMinLength,
   validateNoSpaces,
   validateOnlyEnglishLetters,
+  validatePostalCode,
   validateRequired,
 } from '~/shared/form-validators/form-validators';
-import { countryNamesList } from '~/shared/utils/country-codes';
 
 import styles from './registration-form.module.css';
 
@@ -88,7 +89,7 @@ export const COUNTRY_PROPS: InputProperties = {
   name: 'country',
   placeholder: 'Start typing a country...',
   type: INPUT_TYPE.TEXT,
-  validators: [validateRequired, validateDatalist(countryNamesList)],
+  validators: [validateRequired, validateDatalistValue(countryNamesList)],
 };
 
 export const CITY_PROPS: InputProperties = {
@@ -116,6 +117,11 @@ export const POSTAL_CODE_PROPS: InputProperties = {
   validators: [validateRequired],
 };
 
+export const DEFAULT_CHECKBOX_PROPS: InputProperties = {
+  name: 'default checkbox',
+  type: INPUT_TYPE.CHECKBOX,
+};
+
 export class RegistrationFormView extends BaseComponent implements Component {
   private readonly formElement = form({});
 
@@ -126,6 +132,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
   private readonly inputCountry = new Input(COUNTRY_PROPS);
 
   private readonly inputDate = new Input(DATE_OF_BIRTH_PROPS);
+
+  private readonly inputDefaultShipping = new Input(DEFAULT_CHECKBOX_PROPS);
 
   private readonly inputEmail = new Input(EMAIL_PROPS);
 
@@ -194,17 +202,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       this.inputPassword.element,
     );
 
-    const shippingAddressLegend = legend({}, 'Shipping address');
-    const countriesDatalist = this.createDataList(COUNTRY_LIST_ID, countryNamesList);
-    const shippingAddressFieldset = fieldset(
-      {},
-      shippingAddressLegend,
-      this.inputCountry.element,
-      this.inputCity.element,
-      this.inputStreet.element,
-      this.inputPostalCode.element,
-      countriesDatalist,
-    );
+    const shippingAddressFieldset = this.createShippingAddressFieldset('Shipping address');
 
     this.formElement.append(
       formHeader,
@@ -245,6 +243,25 @@ export class RegistrationFormView extends BaseComponent implements Component {
     return datalistElement;
   }
 
+  private createShippingAddressFieldset(legendValue: string): HTMLFieldSetElement {
+    const legendElement = legend({}, legendValue);
+    const countriesDatalist = this.createDataList(COUNTRY_LIST_ID, countryNamesList);
+
+    //TODO: reset if country changes
+    this.inputPostalCode.addValidator(validatePostalCode(() => this.inputCountry.value));
+
+    return fieldset(
+      {},
+      legendElement,
+      this.inputCountry.element,
+      this.inputCity.element,
+      this.inputStreet.element,
+      this.inputPostalCode.element,
+      this.inputDefaultShipping.element,
+      countriesDatalist,
+    );
+  }
+
   private storeInputs(): void {
     this.addInput(this.inputEmail);
     this.addInput(this.inputPassword);
@@ -255,5 +272,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.addInput(this.inputCity);
     this.addInput(this.inputStreet);
     this.addInput(this.inputPostalCode);
+    this.addInput(this.inputDefaultShipping);
   }
 }

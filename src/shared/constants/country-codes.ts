@@ -1,4 +1,4 @@
-export const countryCodesObject: Record<string, string> = {
+export const countryCodes: Record<string, string> = {
   Argentina: 'AR',
   Australia: 'AU',
   Brazil: 'BR',
@@ -20,4 +20,4 @@ export const countryCodesObject: Record<string, string> = {
   Uzbekistan: 'UZ',
 };
 
-export const countryNamesList = Object.keys(countryCodesObject);
+export const countryNamesList = Object.keys(countryCodes);

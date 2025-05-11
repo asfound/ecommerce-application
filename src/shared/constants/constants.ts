@@ -6,11 +6,12 @@ export const VALIDATION_ERROR = {
   HAS_DIGIT: 'Must contain at least one digit (0–9).',
   HAS_LOWERCASE: 'Must contain at least one lowercase letter (a–z).',
   HAS_UPPERCASE: 'Must contain at least one uppercase letter (A–Z).',
-  INVALID_LIST_VALUE: 'Enter existing country or select from the list',
+  LIST_VALUE: 'Enter valid name or select from the list',
   MIN_AGE: 'Must be at least 18 years old.',
   MIN_LENGTH: (required: number, current: number) =>
     `Minimum required length is ${required.toString()} characters. You entered ${current.toString()}.`,
   ONLY_ENGLISH_LETTERS: 'Only English letters (A–Z, a–z) are allowed.',
+  POSTAL_CODE: 'The postal code does not match the selected country.',
   REQUIRED: 'Field is required.',
   WHITESPACES: 'Value must not contain white spaces.',
 } as const;

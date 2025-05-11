@@ -75,6 +75,10 @@ export class Input extends BaseComponent {
     this.setupListeners();
   }
 
+  public addValidator(validator: ValidatorFunction): void {
+    this.validators.push(validator);
+  }
+
   public clearErrorMessage(): void {
     this.errorMessageComponent.setTextContent('');
 

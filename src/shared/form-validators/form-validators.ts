@@ -1,6 +1,9 @@
+import { postcodeValidator } from 'postcode-validator';
+
 import type { ValidatorFunction } from './types';
 
 import { EMAIL_VALIDATION_ERROR, VALIDATION_ERROR } from '../constants/constants';
+import { countryCodes } from '../constants/country-codes';
 
 export const validateEmailFormat: ValidatorFunction = (value) => {
   const emailRegex = /^[^@]+@[^@]+\.[^@.]{2,}$/;
@@ -51,8 +54,17 @@ export const validateMinAge = (ageInYears: number) => {
   };
 };
 
-export const validateDatalist = (list: string[]) => {
+export const validateDatalistValue = (valuesList: string[]) => {
   return (value: string): null | string => {
-    return list.includes(value) ? null : VALIDATION_ERROR.INVALID_LIST_VALUE;
+    return valuesList.includes(value) ? null : VALIDATION_ERROR.LIST_VALUE;
+  };
+};
+
+export const validatePostalCode = (getCountryName: () => string) => {
+  return (value: string): null | string => {
+    const countryName = getCountryName();
+    console.warn('country:', countryName);
+    const countryCode = countryCodes[countryName];
+    return postcodeValidator(value, countryCode) ? null : VALIDATION_ERROR.POSTAL_CODE;
   };
 };
