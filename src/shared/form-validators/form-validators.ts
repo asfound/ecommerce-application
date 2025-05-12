@@ -63,8 +63,6 @@ export const validateDatalistValue = (valuesList: string[]) => {
 export const validatePostalCode = (getCountryName: () => string) => {
   return (value: string): null | string => {
     const countryName = getCountryName();
-    console.warn('contry:', countryName);
-    console.warn('value:', value);
 
     if (countryName) {
       const countryCode = COUNTRY_CODES[countryName];

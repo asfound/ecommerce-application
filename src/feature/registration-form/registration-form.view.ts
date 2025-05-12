@@ -7,6 +7,7 @@ import { Input } from '~/components/common/input/input';
 import { COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   BILLING_COUNTRY_PROPS,
+  BILLING_POSTAL_CODE_PROPS,
   CITY_PROPS,
   COUNTRY_LIST_ID,
   DATE_OF_BIRTH_PROPS,
@@ -14,8 +15,8 @@ import {
   FIRST_NAME_PROPS,
   LAST_NAME_PROPS,
   PASSWORD_PROPS,
-  POSTAL_CODE_PROPS,
   SHIPPING_COUNTRY_PROPS,
+  SHIPPING_POSTAL_CODE_PROPS,
   STREET_PROPS,
 } from '~/shared/constants/input-properties';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
@@ -28,7 +29,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputBillingCountry = new Input(BILLING_COUNTRY_PROPS);
 
-  private readonly inputBillingPostcode = new Input(POSTAL_CODE_PROPS);
+  private readonly inputBillingPostcode = new Input(BILLING_POSTAL_CODE_PROPS);
 
   private readonly inputBillingStreet = new Input(STREET_PROPS);
 
@@ -57,7 +58,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputShippingCountry = new Input(SHIPPING_COUNTRY_PROPS);
 
-  private readonly inputShippingPostcode = new Input(POSTAL_CODE_PROPS);
+  private readonly inputShippingPostcode = new Input(SHIPPING_POSTAL_CODE_PROPS);
 
   private readonly inputShippingStreet = new Input(STREET_PROPS);
 

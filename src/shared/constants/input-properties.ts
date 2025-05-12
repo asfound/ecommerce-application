@@ -112,8 +112,15 @@ export const STREET_PROPS: InputProperties = {
   validators: [validateRequired, validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH)],
 } as const;
 
-export const POSTAL_CODE_PROPS: InputProperties = {
-  name: 'postal-code',
+export const SHIPPING_POSTAL_CODE_PROPS: InputProperties = {
+  name: 'shipping-postal-code',
+  placeholder: 'Postal Code',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateRequired],
+} as const;
+
+export const BILLING_POSTAL_CODE_PROPS: InputProperties = {
+  name: 'billing-postal-code',
   placeholder: 'Postal Code',
   type: INPUT_TYPE.TEXT,
   validators: [validateRequired],
