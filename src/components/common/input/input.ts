@@ -19,6 +19,13 @@ export interface InputProperties {
 }
 
 export class Input extends BaseComponent {
+  // TODO: use child classes for different types of inputs?
+  public get checked(): boolean {
+    return this.inputComponent.element.type === 'checkbox'
+      ? this.inputComponent.element.checked
+      : false;
+  }
+
   public get value(): string {
     return this.inputComponent.element.value;
   }

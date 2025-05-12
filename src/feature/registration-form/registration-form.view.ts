@@ -27,6 +27,8 @@ import { validatePostalCode } from '~/shared/form-validators/form-validators';
 import styles from './registration-form.module.css';
 
 export class RegistrationFormView extends BaseComponent implements Component {
+  private billingAddressFieldset: HTMLElement | null = null;
+
   private readonly inputBillingCity = new Input(CITY_PROPS);
 
   private readonly inputBillingCountry = new Input(BILLING_COUNTRY_PROPS);
@@ -59,6 +61,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputPassword = new Input(PASSWORD_PROPS);
 
+  private readonly inputShippingAsBilling = new Input(USE_FOR_BILLING_PROPS);
+
   private readonly inputShippingCity = new Input(CITY_PROPS);
 
   private readonly inputShippingCountry = new Input(SHIPPING_COUNTRY_PROPS);
@@ -69,15 +73,13 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputShippingStreet = new Input(STREET_PROPS);
 
-  private readonly inputUseForBilling = new Input(USE_FOR_BILLING_PROPS);
-
   private readonly shippingInputs = [
     this.inputShippingCountry.element,
     this.inputShippingCity.element,
     this.inputShippingStreet.element,
     this.inputShippingPostcode.element,
     this.inputShippingSetDefault.element,
-    this.inputUseForBilling.element,
+    this.inputShippingAsBilling.element,
   ];
 
   private readonly submitButton = new Button({
@@ -138,7 +140,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       validatePostalCode(() => this.inputShippingCountry.value),
     );
 
-    const billingAddressFieldset = this.createAddressFieldset(
+    this.billingAddressFieldset = this.createAddressFieldset(
       'Billing address:',
       this.billingInputs,
       COUNTRY_LIST_ID.BILLING,
@@ -152,7 +154,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       formHeader,
       accountDetailsFieldset,
       shippingAddressFieldset,
-      billingAddressFieldset,
+      this.billingAddressFieldset,
       this.submitButton.element,
     );
 
@@ -180,6 +182,13 @@ export class RegistrationFormView extends BaseComponent implements Component {
       if (this.inputBillingPostcode.value) {
         this.inputBillingPostcode.validate();
       }
+    });
+
+    this.inputShippingAsBilling.addListener('change', () => {
+      this.billingAddressFieldset?.classList.toggle(
+        styles.hidden,
+        this.inputShippingAsBilling.checked,
+      );
     });
   }
 
