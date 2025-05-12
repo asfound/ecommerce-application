@@ -4,12 +4,13 @@ import iconEyeHidden from '~/assets/icons/eye-hidden.svg';
 import iconEyeVisible from '~/assets/icons/eye-visible.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { INPUT_TYPE } from '~/shared/constants/constants';
-import { img } from '~/shared/create-element/tags';
+import { img, label } from '~/shared/create-element/tags';
 
 import styles from './input.module.css';
 
 export interface InputProperties {
   enablePasswordToggle?: true;
+  label?: string;
   listId?: string;
   name?: string;
   placeholder?: string;
@@ -70,7 +71,13 @@ export class Input extends BaseComponent {
       this.inputComponent.element.setAttribute('list', properties.listId);
     }
 
-    this.append(this.inputComponent, this.errorMessageComponent);
+    if (properties.label) {
+      this.append(this.inputComponent, label({ className: styles.label }, properties.label));
+      this.addClassNames(styles.checkboxContainer);
+      this.inputComponent.addClassNames(styles.checkbox);
+    } else {
+      this.append(this.inputComponent, this.errorMessageComponent);
+    }
 
     this.setupListeners();
   }

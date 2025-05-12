@@ -4,6 +4,12 @@
   background-color: transparent;
 }
 
+.checkboxContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 .input {
   width: 100%;
   padding: 1rem;
@@ -13,6 +19,14 @@
   color: var(--color-white);
 
   background-color: var(--color-dark);
+}
+
+.checkbox {
+  width: auto;
+}
+
+.label {
+  color: var(--color-accent-light);
 }
 
 .input:focus {

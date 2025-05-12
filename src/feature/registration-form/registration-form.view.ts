@@ -11,6 +11,7 @@ import {
   CITY_PROPS,
   COUNTRY_LIST_ID,
   DATE_OF_BIRTH_PROPS,
+  DEFAULT_CHECKBOX_PROPS,
   EMAIL_PROPS,
   FIRST_NAME_PROPS,
   LAST_NAME_PROPS,
@@ -18,6 +19,7 @@ import {
   SHIPPING_COUNTRY_PROPS,
   SHIPPING_POSTAL_CODE_PROPS,
   STREET_PROPS,
+  USE_FOR_BILLING_PROPS,
 } from '~/shared/constants/input-properties';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
@@ -31,6 +33,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputBillingPostcode = new Input(BILLING_POSTAL_CODE_PROPS);
 
+  private readonly inputBillingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+
   private readonly inputBillingStreet = new Input(STREET_PROPS);
 
   private readonly billingInputs = [
@@ -38,6 +42,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.inputBillingCity.element,
     this.inputBillingStreet.element,
     this.inputBillingPostcode.element,
+    this.inputBillingSetDefault.element,
   ];
 
   private readonly formElement = form({ className: styles.form });
@@ -60,13 +65,19 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputShippingPostcode = new Input(SHIPPING_POSTAL_CODE_PROPS);
 
+  private readonly inputShippingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+
   private readonly inputShippingStreet = new Input(STREET_PROPS);
+
+  private readonly inputUseForBilling = new Input(USE_FOR_BILLING_PROPS);
 
   private readonly shippingInputs = [
     this.inputShippingCountry.element,
     this.inputShippingCity.element,
     this.inputShippingStreet.element,
     this.inputShippingPostcode.element,
+    this.inputShippingSetDefault.element,
+    this.inputUseForBilling.element,
   ];
 
   private readonly submitButton = new Button({
