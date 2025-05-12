@@ -1,15 +1,16 @@
 import type { ValidatorFunction } from '~/shared/form-validators/types';
 
+import iconEyeHidden from '~/assets/icons/eye-hidden.svg';
+import iconEyeVisible from '~/assets/icons/eye-visible.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { INPUT_TYPE } from '~/shared/constants/constants';
 import { img } from '~/shared/create-element/tags';
 
-import iconEyeHidden from '../../assets/icons/eye-hidden.svg';
-import iconEyeVisible from '../../assets/icons/eye-visible.svg';
 import styles from './input.module.css';
 
 export interface InputProperties {
   enablePasswordToggle?: true;
+  listId?: string;
   name?: string;
   placeholder?: string;
   type?: string;
@@ -44,7 +45,16 @@ export class Input extends BaseComponent {
     this.properties = properties;
 
     this.inputComponent.element.name = this.properties.name ?? '';
-    this.inputComponent.element.type = this.properties.type ?? 'text';
+
+    if (this.properties.type === 'date') {
+      this.inputComponent.element.type = 'text';
+      this.inputComponent.element.addEventListener('focus', () => {
+        this.inputComponent.element.type = 'date';
+      });
+    } else {
+      this.inputComponent.element.type = this.properties.type ?? 'text';
+    }
+
     this.inputComponent.element.placeholder = this.properties.placeholder ?? '';
 
     this.validators = properties.validators ?? [];
@@ -55,9 +65,18 @@ export class Input extends BaseComponent {
       this.append(this.passwordToggleIcon);
     }
 
+    //TODO: find out why `this.inputComponent.element.list` doesn't work
+    if (properties.listId) {
+      this.inputComponent.element.setAttribute('list', properties.listId);
+    }
+
     this.append(this.inputComponent, this.errorMessageComponent);
 
     this.setupListeners();
+  }
+
+  public addValidator(validator: ValidatorFunction): void {
+    this.validators.push(validator);
   }
 
   public clearErrorMessage(): void {

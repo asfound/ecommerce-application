@@ -1,12 +1,13 @@
 .container {
   position: relative;
+  max-width: 40rem;
   background-color: transparent;
 }
 
 .input {
   width: 100%;
   padding: 1rem;
-  border: 0.1rem solid var(--color-accent-light);
+  border: 0.1rem solid var(--color-light-grey);
   border-radius: var(--border-radius);
 
   color: var(--color-white);
@@ -16,6 +17,14 @@
 
 .input:focus {
   outline: none;
+}
+
+.input::placeholder {
+  color: var(--color-accent-light);
+}
+
+.input:focus::placeholder {
+  color: transparent;
 }
 
 .invalid {
@@ -47,4 +56,19 @@
   .passwordToggleIcon:hover {
     cursor: pointer;
   }
+}
+
+.input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.9);
+}
+
+.input[type='date']::-webkit-datetime-edit {
+  color: var(--color-white);
+}
+
+.input[type='date']::-webkit-datetime-edit-day-field:focus,
+.input[type='date']::-webkit-datetime-edit-month-field:focus,
+.input[type='date']::-webkit-datetime-edit-year-field:focus {
+  color: var(--color-white);
+  background-color: var(--color-accent-light);
 }

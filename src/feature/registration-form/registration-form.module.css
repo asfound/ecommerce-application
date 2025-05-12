@@ -17,7 +17,6 @@
   margin-inline: auto;
 }
 
-/* introduce form header component or somewhow else avoid repetition */
 .formHeader {
   text-align: center;
 }
@@ -31,13 +30,16 @@
   color: var(--color-accent-light);
 }
 
-.registrationLinkContainer {
+.fieldset {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-  text-align: center;
+  flex-direction: column;
+  gap: 2rem;
+
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
-.registrationLinkContainer a {
-  color: var(--color-accent);
+.legend {
+  margin-bottom: 1rem;
 }
