@@ -21,8 +21,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
     coverage: {
-      reporter: ['text', 'html', 'json', "json-summary"],
+      reporter: ['text', 'html', 'json', 'json-summary'],
       include: ['src/**/*.ts'],
       exclude: [
         '**/main.ts',
@@ -33,6 +34,5 @@ export default defineConfig({
         '**/constants.ts',
       ],
     },
-
-  }
+  },
 });
