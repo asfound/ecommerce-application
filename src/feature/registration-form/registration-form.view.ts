@@ -237,18 +237,31 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   private getPayload(): SignupPayload {
-    const address: CustomerAddress = {
+    const shippingAddress: CustomerAddress = {
       city: this.inputShippingCity.value.trim(),
       country: this.inputShippingCountry.value.trim(),
-      default: true, // un-hardcode
+      default: this.inputShippingSetDefault.checked,
       postalCode: this.inputShippingPostcode.value.trim(),
       streetName: this.inputShippingStreet.value.trim(),
     };
 
+    const shippingAsBilling = this.inputShippingAsBilling.checked;
+
+    const billingAddress: CustomerAddress | undefined = shippingAsBilling
+      ? undefined
+      : {
+          city: this.inputBillingCity.value.trim(),
+          country: this.inputBillingCountry.value.trim(),
+          default: this.inputBillingSetDefault.checked,
+          postalCode: this.inputBillingPostcode.value.trim(),
+          streetName: this.inputBillingStreet.value.trim(),
+        };
+
     return {
       addresses: {
-        shippingAddress: address,
-        shippingAsBilling: true, // un-hardcode
+        billingAddress,
+        shippingAddress,
+        shippingAsBilling,
       },
       dateOfBirth: this.inputBirthDate.value.trim(),
       email: this.inputEmail.value.trim(),
