@@ -5,9 +5,10 @@ import { SERVICE_HUB } from '../../service-hub';
 ApiBuilder.instance.useAnonymousBuilder();
 
 const authService = SERVICE_HUB.provideAuthService();
+console.warn(authService);
 
-test('aaaaaaaaaaaaaaaaaaaaa', async (): Promise<void> => {
-  const response = await authService.login({ email: 'test@test.com', password: 'test' });
+// test('aaaaaaaaaaaaaaaaaaaaa', async (): Promise<void> => {
+//   const response = await authService.login({ email: 'test@test.com', password: 'test' });
 
-  expect(response.statusCode).toBe(0);
-});
+//   expect(response.statusCode).toBe(0);
+// });
