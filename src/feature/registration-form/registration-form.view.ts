@@ -4,7 +4,7 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { Input } from '~/components/common/input/input';
-import { COUNTRY_NAMES } from '~/shared/constants/country-codes';
+import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   BILLING_COUNTRY_PROPS,
   BILLING_POSTAL_CODE_PROPS,
@@ -23,6 +23,7 @@ import {
 } from '~/shared/constants/input-properties';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
+import { showToast } from '~/shared/utils/show-toast';
 
 import styles from './registration-form.module.css';
 
@@ -185,6 +186,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     });
 
     this.inputShippingAsBilling.addListener('change', () => {
+      showToast('Account successfully created!');
       this.billingAddressFieldset?.classList.toggle(
         styles.hidden,
         this.inputShippingAsBilling.checked,
@@ -239,7 +241,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
   private getPayload(): SignupPayload {
     const shippingAddress: CustomerAddress = {
       city: this.inputShippingCity.value.trim(),
-      country: this.inputShippingCountry.value.trim(),
+      country: COUNTRY_CODES[this.inputShippingCountry.value.trim()],
       default: this.inputShippingSetDefault.checked,
       postalCode: this.inputShippingPostcode.value.trim(),
       streetName: this.inputShippingStreet.value.trim(),
@@ -251,7 +253,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       ? undefined
       : {
           city: this.inputBillingCity.value.trim(),
-          country: this.inputBillingCountry.value.trim(),
+          country: COUNTRY_CODES[this.inputBillingCountry.value.trim()],
           default: this.inputBillingSetDefault.checked,
           postalCode: this.inputBillingPostcode.value.trim(),
           streetName: this.inputBillingStreet.value.trim(),
