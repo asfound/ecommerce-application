@@ -4,12 +4,6 @@
   background-color: transparent;
 }
 
-.checkboxContainer {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
 .input {
   width: 100%;
   padding: 1rem;
@@ -26,7 +20,14 @@
 }
 
 .label {
+  display: flex;
+  gap: 1rem;
   color: var(--color-accent-light);
+  transition: color var(--transition-duration);
+}
+
+.label:hover {
+  color: var(--color-accent);
 }
 
 .input:focus {
