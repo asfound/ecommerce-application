@@ -4,17 +4,18 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { Input } from '~/components/common/input/input';
-import { countryNamesList } from '~/shared/constants/country-codes';
+import { COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
+  BILLING_COUNTRY_PROPS,
   CITY_PROPS,
   COUNTRY_LIST_ID,
-  COUNTRY_PROPS,
   DATE_OF_BIRTH_PROPS,
   EMAIL_PROPS,
   FIRST_NAME_PROPS,
   LAST_NAME_PROPS,
   PASSWORD_PROPS,
   POSTAL_CODE_PROPS,
+  SHIPPING_COUNTRY_PROPS,
   STREET_PROPS,
 } from '~/shared/constants/input-properties';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
@@ -23,15 +24,26 @@ import { validatePostalCode } from '~/shared/form-validators/form-validators';
 import styles from './registration-form.module.css';
 
 export class RegistrationFormView extends BaseComponent implements Component {
+  private readonly inputBillingCity = new Input(CITY_PROPS);
+
+  private readonly inputBillingCountry = new Input(BILLING_COUNTRY_PROPS);
+
+  private readonly inputBillingPostcode = new Input(POSTAL_CODE_PROPS);
+
+  private readonly inputBillingStreet = new Input(STREET_PROPS);
+
+  private readonly billingInputs = [
+    this.inputBillingCountry.element,
+    this.inputBillingCity.element,
+    this.inputBillingStreet.element,
+    this.inputBillingPostcode.element,
+  ];
+
   private readonly formElement = form({ className: styles.form });
 
   private readonly inputBirthDate = new Input(DATE_OF_BIRTH_PROPS);
 
-  private readonly inputCity = new Input(CITY_PROPS);
-
   private readonly inputComponents: Input[] = [];
-
-  private readonly inputCountry = new Input(COUNTRY_PROPS);
 
   private readonly inputEmail = new Input(EMAIL_PROPS);
 
@@ -41,9 +53,20 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputPassword = new Input(PASSWORD_PROPS);
 
-  private readonly inputPostalCode = new Input(POSTAL_CODE_PROPS);
+  private readonly inputShippingCity = new Input(CITY_PROPS);
 
-  private readonly inputStreet = new Input(STREET_PROPS);
+  private readonly inputShippingCountry = new Input(SHIPPING_COUNTRY_PROPS);
+
+  private readonly inputShippingPostcode = new Input(POSTAL_CODE_PROPS);
+
+  private readonly inputShippingStreet = new Input(STREET_PROPS);
+
+  private readonly shippingInputs = [
+    this.inputShippingCountry.element,
+    this.inputShippingCity.element,
+    this.inputShippingStreet.element,
+    this.inputShippingPostcode.element,
+  ];
 
   private readonly submitButton = new Button({
     textContent: 'Register',
@@ -54,6 +77,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
     super({ className: styles.container, tagName: 'div' });
 
     this.createHTML();
+
+    this.setupListeners();
   }
 
   public bindSubmitHandler(handler: (payload: SignupPayload) => void): void {
@@ -80,7 +105,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    // shouldn't we do this in constructor?
     this.storeInputs();
 
     const formHeader = div(
@@ -91,24 +115,33 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
     this.submitButton.disable();
 
-    const accountDetailsLegend = legend({ className: styles.legend }, 'Account details:');
-    const accountDetailsFieldset = fieldset(
-      { className: styles.fieldset },
-      accountDetailsLegend,
-      this.inputFirstName.element,
-      this.inputLastName.element,
-      this.inputBirthDate.element,
-      this.inputEmail.element,
-      this.inputPassword.element,
+    const accountDetailsFieldset = this.createAccountDetailsFieldset();
+
+    const shippingAddressFieldset = this.createAddressFieldset(
+      'Shipping address:',
+      this.shippingInputs,
+      COUNTRY_LIST_ID.SHIPPING,
     );
 
-    // add address fieldset component or add more inputs for billing?
-    const shippingAddressFieldset = this.createShippingAddressFieldset('Shipping address:');
+    this.inputShippingPostcode.addValidator(
+      validatePostalCode(() => this.inputShippingCountry.value),
+    );
+
+    const billingAddressFieldset = this.createAddressFieldset(
+      'Billing address:',
+      this.billingInputs,
+      COUNTRY_LIST_ID.BILLING,
+    );
+
+    this.inputBillingPostcode.addValidator(
+      validatePostalCode(() => this.inputBillingCountry.value),
+    );
 
     this.formElement.append(
       formHeader,
       accountDetailsFieldset,
       shippingAddressFieldset,
+      billingAddressFieldset,
       this.submitButton.element,
     );
 
@@ -125,12 +158,51 @@ export class RegistrationFormView extends BaseComponent implements Component {
     super.destroy();
   }
 
+  public setupListeners(): void {
+    this.inputShippingCountry.addListener('change', () => {
+      if (this.inputShippingPostcode.value) {
+        this.inputShippingPostcode.validate();
+      }
+    });
+
+    this.inputBillingCountry.addListener('change', () => {
+      if (this.inputBillingPostcode.value) {
+        this.inputBillingPostcode.validate();
+      }
+    });
+  }
+
   private addInput(input: Input): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {
       this.checkValidity();
     });
+  }
+
+  private createAccountDetailsFieldset(): HTMLFieldSetElement {
+    const accountDetailsLegend = legend({ className: styles.legend }, 'Account details:');
+
+    return fieldset(
+      { className: styles.fieldset },
+      accountDetailsLegend,
+      this.inputFirstName.element,
+      this.inputLastName.element,
+      this.inputBirthDate.element,
+      this.inputEmail.element,
+      this.inputPassword.element,
+    );
+  }
+
+  private createAddressFieldset(
+    legendValue: string,
+    inputs: HTMLElement[],
+    listId: string,
+  ): HTMLFieldSetElement {
+    const legendElement = legend({ className: styles.legend }, legendValue);
+    const countriesDatalist = this.createDataList(listId, COUNTRY_NAMES);
+
+    return fieldset({ className: styles.fieldset }, legendElement, ...inputs, countriesDatalist);
   }
 
   private createDataList(listId: string, listItems: string[]): HTMLDataListElement {
@@ -144,31 +216,13 @@ export class RegistrationFormView extends BaseComponent implements Component {
     return datalistElement;
   }
 
-  private createShippingAddressFieldset(legendValue: string): HTMLFieldSetElement {
-    const legendElement = legend({ className: styles.legend }, legendValue);
-    const countriesDatalist = this.createDataList(COUNTRY_LIST_ID, countryNamesList);
-
-    //TODO: reset if country changes
-    this.inputPostalCode.addValidator(validatePostalCode(() => this.inputCountry.value));
-
-    return fieldset(
-      { className: styles.fieldset },
-      legendElement,
-      this.inputCountry.element,
-      this.inputCity.element,
-      this.inputStreet.element,
-      this.inputPostalCode.element,
-      countriesDatalist,
-    );
-  }
-
   private getPayload(): SignupPayload {
     const address: CustomerAddress = {
-      city: this.inputCity.value.trim(),
-      country: this.inputCountry.value.trim(),
+      city: this.inputShippingCity.value.trim(),
+      country: this.inputShippingCountry.value.trim(),
       default: true, // un-hardcode
-      postalCode: this.inputPostalCode.value.trim(),
-      streetName: this.inputStreet.value.trim(),
+      postalCode: this.inputShippingPostcode.value.trim(),
+      streetName: this.inputShippingStreet.value.trim(),
     };
 
     return {
@@ -185,14 +239,20 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   private storeInputs(): void {
-    this.addInput(this.inputEmail);
-    this.addInput(this.inputPassword);
     this.addInput(this.inputFirstName);
     this.addInput(this.inputLastName);
     this.addInput(this.inputBirthDate);
-    this.addInput(this.inputCountry);
-    this.addInput(this.inputCity);
-    this.addInput(this.inputStreet);
-    this.addInput(this.inputPostalCode);
+    this.addInput(this.inputEmail);
+    this.addInput(this.inputPassword);
+
+    this.addInput(this.inputShippingCountry);
+    this.addInput(this.inputShippingCity);
+    this.addInput(this.inputShippingStreet);
+    this.addInput(this.inputShippingPostcode);
+
+    this.addInput(this.inputBillingCountry);
+    this.addInput(this.inputBillingCity);
+    this.addInput(this.inputBillingStreet);
+    this.addInput(this.inputBillingPostcode);
   }
 }

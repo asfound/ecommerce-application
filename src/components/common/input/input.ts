@@ -48,8 +48,8 @@ export class Input extends BaseComponent {
 
     if (this.properties.type === 'date') {
       this.inputComponent.element.type = 'text';
-      this.inputComponent.element.addEventListener('focus', function () {
-        this.type = 'date';
+      this.inputComponent.element.addEventListener('focus', () => {
+        this.inputComponent.element.type = 'date';
       });
     } else {
       this.inputComponent.element.type = this.properties.type ?? 'text';
@@ -65,7 +65,7 @@ export class Input extends BaseComponent {
       this.append(this.passwordToggleIcon);
     }
 
-    //TODO: find why this.inputComponent.element.list doesn't work
+    //TODO: find out why `this.inputComponent.element.list` doesn't work
     if (properties.listId) {
       this.inputComponent.element.setAttribute('list', properties.listId);
     }
