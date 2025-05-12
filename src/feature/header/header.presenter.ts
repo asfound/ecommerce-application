@@ -35,7 +35,7 @@ export class HeaderPresenter extends Presenter<HeaderView> {
   private handleLogout = (): void => {
     this.authService.logout();
 
-    Router.instance.navigate(ROUTE_PATH.MAIN);
+    Router.instance.navigate(ROUTE_PATH.LOGIN);
 
     rootAction.setLoggedIn(false);
   };
