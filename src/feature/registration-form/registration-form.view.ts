@@ -88,8 +88,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       (event) => {
         event.preventDefault();
 
-        const signupPayload = this.getPayload();
-        handler(signupPayload);
+        handler(this.getPayload());
       },
       { signal: this.abortController.signal },
     );
