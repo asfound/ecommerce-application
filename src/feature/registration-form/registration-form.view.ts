@@ -23,7 +23,6 @@ import {
 } from '~/shared/constants/input-properties';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
-import { showToast } from '~/shared/utils/show-toast';
 
 import styles from './registration-form.module.css';
 
@@ -41,18 +40,18 @@ export class RegistrationFormView extends BaseComponent implements Component {
   private readonly inputBillingStreet = new Input(STREET_PROPS);
 
   private readonly billingInputs = [
-    this.inputBillingCountry.element,
-    this.inputBillingCity.element,
-    this.inputBillingStreet.element,
-    this.inputBillingPostcode.element,
-    this.inputBillingSetDefault.element,
+    this.inputBillingCountry,
+    this.inputBillingCity,
+    this.inputBillingStreet,
+    this.inputBillingPostcode,
+    this.inputBillingSetDefault,
   ];
 
   private readonly formElement = form({ className: styles.form });
 
   private readonly inputBirthDate = new Input(DATE_OF_BIRTH_PROPS);
 
-  private readonly inputComponents: Input[] = [];
+  private inputComponents: Input[] = [];
 
   private readonly inputEmail = new Input(EMAIL_PROPS);
 
@@ -75,12 +74,12 @@ export class RegistrationFormView extends BaseComponent implements Component {
   private readonly inputShippingStreet = new Input(STREET_PROPS);
 
   private readonly shippingInputs = [
-    this.inputShippingCountry.element,
-    this.inputShippingCity.element,
-    this.inputShippingStreet.element,
-    this.inputShippingPostcode.element,
-    this.inputShippingSetDefault.element,
-    this.inputShippingAsBilling.element,
+    this.inputShippingCountry,
+    this.inputShippingCity,
+    this.inputShippingStreet,
+    this.inputShippingPostcode,
+    this.inputShippingSetDefault,
+    this.inputShippingAsBilling,
   ];
 
   private readonly submitButton = new Button({
@@ -133,7 +132,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
     const shippingAddressFieldset = this.createAddressFieldset(
       'Shipping address:',
-      this.shippingInputs,
+      this.shippingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.SHIPPING,
     );
 
@@ -143,7 +142,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
     this.billingAddressFieldset = this.createAddressFieldset(
       'Billing address:',
-      this.billingInputs,
+      this.billingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.BILLING,
     );
 
@@ -186,11 +185,23 @@ export class RegistrationFormView extends BaseComponent implements Component {
     });
 
     this.inputShippingAsBilling.addListener('change', () => {
-      showToast('Account successfully created!');
-      this.billingAddressFieldset?.classList.toggle(
-        styles.hidden,
-        this.inputShippingAsBilling.checked,
-      );
+      const isBillingHidden = this.inputShippingAsBilling.checked;
+
+      this.billingAddressFieldset?.classList.toggle(styles.hidden, isBillingHidden);
+
+      if (isBillingHidden) {
+        for (const input of this.billingInputs) {
+          this.removeInput(input);
+        }
+      } else {
+        for (const input of this.billingInputs) {
+          if (input !== this.inputBillingSetDefault) {
+            this.addInput(input);
+          }
+        }
+      }
+
+      this.checkValidity();
     });
   }
 
@@ -271,6 +282,10 @@ export class RegistrationFormView extends BaseComponent implements Component {
       lastName: this.inputLastName.value.trim(),
       password: this.inputPassword.value.trim(),
     };
+  }
+
+  private removeInput(input: Input): void {
+    this.inputComponents = this.inputComponents.filter((component) => component !== input);
   }
 
   private storeInputs(): void {
