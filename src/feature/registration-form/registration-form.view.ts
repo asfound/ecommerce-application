@@ -190,22 +190,16 @@ export class RegistrationFormView extends BaseComponent implements Component {
       this.billingAddressFieldset?.classList.toggle(styles.hidden, isBillingHidden);
 
       if (isBillingHidden) {
-        for (const input of this.billingInputs) {
-          this.removeInput(input);
-        }
+        this.removeBillingAddressInputs();
       } else {
-        for (const input of this.billingInputs) {
-          if (input !== this.inputBillingSetDefault) {
-            this.addInput(input);
-          }
-        }
+        this.recoverBillingAddressInputs();
       }
 
       this.checkValidity();
     });
   }
 
-  private addInput(input: Input): void {
+  private addInputComponent(input: Input): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {
@@ -284,25 +278,35 @@ export class RegistrationFormView extends BaseComponent implements Component {
     };
   }
 
-  private removeInput(input: Input): void {
-    this.inputComponents = this.inputComponents.filter((component) => component !== input);
+  private recoverBillingAddressInputs(): void {
+    for (const input of this.billingInputs) {
+      if (input !== this.inputBillingSetDefault && !this.inputComponents.includes(input)) {
+        this.inputComponents.push(input);
+      }
+    }
+  }
+
+  private removeBillingAddressInputs(): void {
+    this.inputComponents = this.inputComponents.filter(
+      (component) => !this.billingInputs.includes(component),
+    );
   }
 
   private storeInputs(): void {
-    this.addInput(this.inputFirstName);
-    this.addInput(this.inputLastName);
-    this.addInput(this.inputBirthDate);
-    this.addInput(this.inputEmail);
-    this.addInput(this.inputPassword);
+    this.addInputComponent(this.inputFirstName);
+    this.addInputComponent(this.inputLastName);
+    this.addInputComponent(this.inputBirthDate);
+    this.addInputComponent(this.inputEmail);
+    this.addInputComponent(this.inputPassword);
 
-    this.addInput(this.inputShippingCountry);
-    this.addInput(this.inputShippingCity);
-    this.addInput(this.inputShippingStreet);
-    this.addInput(this.inputShippingPostcode);
+    this.addInputComponent(this.inputShippingCountry);
+    this.addInputComponent(this.inputShippingCity);
+    this.addInputComponent(this.inputShippingStreet);
+    this.addInputComponent(this.inputShippingPostcode);
 
-    this.addInput(this.inputBillingCountry);
-    this.addInput(this.inputBillingCity);
-    this.addInput(this.inputBillingStreet);
-    this.addInput(this.inputBillingPostcode);
+    this.addInputComponent(this.inputBillingCountry);
+    this.addInputComponent(this.inputBillingCity);
+    this.addInputComponent(this.inputBillingStreet);
+    this.addInputComponent(this.inputBillingPostcode);
   }
 }
