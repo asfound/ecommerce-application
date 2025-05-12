@@ -31,13 +31,15 @@
 }
 
 .fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
   margin: 0;
   padding: 0;
   border: none;
 }
 
 .legend {
-  margin: 0;
-  padding: 0;
-  line-height: 1;
+  margin-bottom: 1rem;
 }

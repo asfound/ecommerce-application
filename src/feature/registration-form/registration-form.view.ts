@@ -10,7 +10,6 @@ import {
   COUNTRY_LIST_ID,
   COUNTRY_PROPS,
   DATE_OF_BIRTH_PROPS,
-  DEFAULT_CHECKBOX_PROPS,
   EMAIL_PROPS,
   FIRST_NAME_PROPS,
   LAST_NAME_PROPS,
@@ -33,8 +32,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
   private readonly inputComponents: Input[] = [];
 
   private readonly inputCountry = new Input(COUNTRY_PROPS);
-
-  private readonly inputDefaultShipping = new Input(DEFAULT_CHECKBOX_PROPS);
 
   private readonly inputEmail = new Input(EMAIL_PROPS);
 
@@ -161,7 +158,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
       this.inputCity.element,
       this.inputStreet.element,
       this.inputPostalCode.element,
-      this.inputDefaultShipping.element,
       countriesDatalist,
     );
   }
@@ -198,6 +194,5 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.addInput(this.inputCity);
     this.addInput(this.inputStreet);
     this.addInput(this.inputPostalCode);
-    this.addInput(this.inputDefaultShipping);
   }
 }
