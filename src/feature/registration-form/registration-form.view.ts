@@ -3,6 +3,7 @@ import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
+import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
@@ -46,6 +47,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.inputBillingPostcode,
     this.inputBillingSetDefault,
   ];
+
+  private readonly errorMessageComponent = new ErrorMessage();
 
   private readonly formElement = form({ className: styles.form });
 
@@ -152,6 +155,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
     this.formElement.append(
       formHeader,
+      this.errorMessageComponent.element,
       accountDetailsFieldset,
       shippingAddressFieldset,
       this.billingAddressFieldset,
@@ -169,6 +173,10 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.inputComponents.length = 0;
 
     super.destroy();
+  }
+
+  public hideError(): void {
+    this.errorMessageComponent.hide();
   }
 
   public setupListeners(): void {
@@ -197,6 +205,10 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
       this.checkValidity();
     });
+  }
+
+  public showError(errorMessage: string): void {
+    this.errorMessageComponent.show(errorMessage);
   }
 
   private addInputComponent(input: Input): void {
