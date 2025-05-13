@@ -23,7 +23,7 @@ export const COMMON_CLIENT_CREDENTIALS = {
 
 export const HTTP_MIDDLEWARE_OPTIONS: HttpMiddlewareOptions = {
   host: API_URL,
-  httpClient: fetch,
+  httpClient: globalThis.fetch,
 };
 
 export const AUTH_FLOW_TYPE = {
