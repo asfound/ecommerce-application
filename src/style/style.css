@@ -1,7 +1,7 @@
 @import url('./variables.css');
 
 :root {
-  font-family: Poppins, system-ui, Helvetica, Arial, sans-serif;
+  font-family: var(--font-poppins);
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,6 +37,17 @@ p {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .wrapper {

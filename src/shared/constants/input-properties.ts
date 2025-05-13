@@ -137,3 +137,10 @@ export const USE_FOR_BILLING_PROPS: InputProperties = {
   name: 'billing-as-shipping-checkbox',
   type: INPUT_TYPE.CHECKBOX,
 } as const;
+
+export const SUBSCRIPTION_EMAIL_PROPS: InputProperties = {
+  name: 'email',
+  placeholder: 'Email',
+  type: INPUT_TYPE.TEXT,
+  validators: [validateEmailFormat],
+} as const;
