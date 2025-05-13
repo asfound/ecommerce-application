@@ -87,6 +87,8 @@ export class AuthService {
 
     this.localStorageService.removeItem(LOCAL_STORAGE_KEY.LOGGED_IN);
 
+    ClientTokenCache.clearCustomerCache();
+
     ApiBuilder.instance.useAnonymousBuilder();
   }
 
