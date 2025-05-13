@@ -27,9 +27,6 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
   private readonly handleSignUp = (payload: SignupPayload): void => {
     this.authService
       .signup(payload)
-      .catch((error: unknown) => {
-        console.warn(error);
-      })
       .then(() => {
         return { email: payload.email, password: payload.password };
       })
