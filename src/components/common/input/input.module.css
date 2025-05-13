@@ -20,9 +20,15 @@
 }
 
 .label {
+  cursor: pointer;
+
   display: flex;
   gap: 1rem;
+
+  width: max-content;
+
   color: var(--color-accent-light);
+
   transition: color var(--transition-duration);
 }
 
