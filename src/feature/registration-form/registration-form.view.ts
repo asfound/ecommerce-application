@@ -1,6 +1,7 @@
 import type { CustomerAddress, SignupPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
 
+import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
@@ -22,7 +23,7 @@ import {
   STREET_PROPS,
   USE_FOR_BILLING_PROPS,
 } from '~/shared/constants/input-properties';
-import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
+import { a, datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
 import styles from './registration-form.module.css';
@@ -76,6 +77,8 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputShippingStreet = new Input(STREET_PROPS);
 
+  private readonly loginLinkElement = a({ href: ROUTE_PATH.REGISTRATION }, 'Log in');
+
   private readonly shippingInputs = [
     this.inputShippingCountry,
     this.inputShippingCity,
@@ -96,6 +99,18 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.createHTML();
 
     this.setupListeners();
+  }
+
+  public bindRegistrationLinkHandler(handler: () => void): void {
+    this.loginLinkElement.addEventListener(
+      'click',
+      (event) => {
+        event.preventDefault();
+
+        handler();
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public bindSubmitHandler(handler: (payload: SignupPayload) => void): void {
@@ -123,10 +138,12 @@ export class RegistrationFormView extends BaseComponent implements Component {
   public createHTML(): void {
     this.storeInputs();
 
-    const formHeader = div(
-      { className: styles.formHeader },
-      h1({ className: styles.formTitle }, 'Register'),
-      div({ className: styles.formSubtitle }, 'Please fill in the fields below'),
+    const formHeader = this.createHeader();
+
+    const loginLinkContainer = div(
+      { className: styles.linkContainer },
+      'Already have an account?',
+      this.loginLinkElement,
     );
 
     this.submitButton.disable();
@@ -160,6 +177,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       shippingAddressFieldset,
       this.billingAddressFieldset,
       this.submitButton.element,
+      loginLinkContainer,
     );
 
     this.append(this.formElement);
@@ -253,6 +271,14 @@ export class RegistrationFormView extends BaseComponent implements Component {
     }
 
     return datalistElement;
+  }
+
+  private createHeader(): HTMLDivElement {
+    return div(
+      { className: styles.formHeader },
+      h1({ className: styles.formTitle }, 'Register'),
+      div({ className: styles.formSubtitle }, 'Please fill in the fields below'),
+    );
   }
 
   private getPayload(): SignupPayload {
