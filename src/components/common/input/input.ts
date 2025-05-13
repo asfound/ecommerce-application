@@ -1,15 +1,17 @@
 import type { ValidatorFunction } from '~/shared/form-validators/types';
 
+import iconEyeHidden from '~/assets/icons/eye-hidden.svg';
+import iconEyeVisible from '~/assets/icons/eye-visible.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { INPUT_TYPE } from '~/shared/constants/constants';
-import { img } from '~/shared/create-element/tags';
+import { img, label, span } from '~/shared/create-element/tags';
 
-import iconEyeHidden from '../../assets/icons/eye-hidden.svg';
-import iconEyeVisible from '../../assets/icons/eye-visible.svg';
 import styles from './input.module.css';
 
 export interface InputProperties {
   enablePasswordToggle?: true;
+  label?: string;
+  listId?: string;
   name?: string;
   placeholder?: string;
   type?: string;
@@ -17,6 +19,13 @@ export interface InputProperties {
 }
 
 export class Input extends BaseComponent {
+  // TODO: use child classes for different types of inputs?
+  public get checked(): boolean {
+    return this.inputComponent.element.type === 'checkbox'
+      ? this.inputComponent.element.checked
+      : false;
+  }
+
   public get value(): string {
     return this.inputComponent.element.value;
   }
@@ -44,7 +53,20 @@ export class Input extends BaseComponent {
     this.properties = properties;
 
     this.inputComponent.element.name = this.properties.name ?? '';
-    this.inputComponent.element.type = this.properties.type ?? 'text';
+
+    if (this.properties.type === 'date') {
+      this.inputComponent.element.type = 'text';
+      this.inputComponent.element.addEventListener(
+        'focus',
+        () => {
+          this.inputComponent.element.type = 'date';
+        },
+        { signal: this.abortController.signal },
+      );
+    } else {
+      this.inputComponent.element.type = this.properties.type ?? 'text';
+    }
+
     this.inputComponent.element.placeholder = this.properties.placeholder ?? '';
 
     this.validators = properties.validators ?? [];
@@ -55,9 +77,32 @@ export class Input extends BaseComponent {
       this.append(this.passwordToggleIcon);
     }
 
-    this.append(this.inputComponent, this.errorMessageComponent);
+    //TODO: find out why `this.inputComponent.element.list` doesn't work
+    if (properties.listId) {
+      this.inputComponent.element.setAttribute('list', properties.listId);
+    }
+
+    if (properties.label) {
+      this.append(
+        label({ className: styles.label }, this.inputComponent.element, span({}, properties.label)),
+      );
+      this.inputComponent.addClassNames(styles.checkbox);
+    } else {
+      this.append(this.inputComponent, this.errorMessageComponent);
+    }
 
     this.setupListeners();
+  }
+
+  public override addListener(
+    type: keyof GlobalEventHandlersEventMap,
+    listener: EventListener,
+  ): void {
+    this.inputComponent.addListener(type, listener);
+  }
+
+  public addValidator(validator: ValidatorFunction): void {
+    this.validators.push(validator);
   }
 
   public clearErrorMessage(): void {

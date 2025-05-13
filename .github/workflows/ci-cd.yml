@@ -38,6 +38,13 @@ jobs:
     outputs:
       result: ${{ job.status }}
       coverage: ${{ steps.test-coverage.outputs.coverage }}
+    env:
+      VITE_CTP_API_URL: ${{ secrets.VITE_CTP_API_URL }},
+      VITE_CTP_AUTH_URL: ${{ secrets.VITE_CTP_AUTH_URL }},
+      VITE_CTP_CLIENT_ID: ${{ secrets.VITE_CTP_CLIENT_ID }},
+      VITE_CTP_CLIENT_SECRET: ${{ secrets.VITE_CTP_CLIENT_SECRET }},
+      VITE_CTP_PROJECT_KEY: ${{ secrets.VITE_CTP_PROJECT_KEY }},
+      VITE_CTP_SCOPES: ${{ secrets.VITE_CTP_SCOPES }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node-modules
@@ -59,6 +66,13 @@ jobs:
       - uses: ./.github/actions/setup-node-modules
 
       - name: Build
+        env:
+          VITE_CTP_API_URL: ${{ secrets.VITE_CTP_API_URL }},
+          VITE_CTP_AUTH_URL: ${{ secrets.VITE_CTP_AUTH_URL }},
+          VITE_CTP_CLIENT_ID: ${{ secrets.VITE_CTP_CLIENT_ID }},
+          VITE_CTP_CLIENT_SECRET: ${{ secrets.VITE_CTP_CLIENT_SECRET }},
+          VITE_CTP_PROJECT_KEY: ${{ secrets.VITE_CTP_PROJECT_KEY }},
+          VITE_CTP_SCOPES: ${{ secrets.VITE_CTP_SCOPES }}
         run: npm run build
 
       - name: Deploy to Netlify (Preview)

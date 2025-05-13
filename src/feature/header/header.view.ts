@@ -11,7 +11,11 @@ import { a, div } from '~/shared/create-element/tags';
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
-  private readonly logoLink = a({ className: styles.logoLink, href: ROUTE_PATH.MAIN });
+  private readonly logoLink = a({
+    className: styles.logoLink,
+    href: ROUTE_PATH.MAIN,
+    id: 'header',
+  });
 
   // TODO: change to icon
   private readonly logoutIcon = div({ className: styles.icon }, 'Logout');

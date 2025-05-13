@@ -1,0 +1,95 @@
+.container {
+  position: relative;
+  max-width: 40rem;
+  background-color: transparent;
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  border: 0.1rem solid var(--color-light-grey);
+  border-radius: var(--border-radius);
+
+  color: var(--color-white);
+
+  background-color: var(--color-dark);
+}
+
+.checkbox {
+  width: auto;
+}
+
+.label {
+  cursor: pointer;
+
+  display: flex;
+  gap: 1rem;
+
+  width: max-content;
+
+  color: var(--color-accent-light);
+
+  transition: color var(--transition-duration);
+}
+
+.label:hover {
+  color: var(--color-accent);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--color-accent-light);
+}
+
+.input:focus::placeholder {
+  color: transparent;
+}
+
+.invalid {
+  border-color: var(--color-red);
+}
+
+.valid {
+  border-color: var(--color-green);
+}
+
+.errorMessage {
+  color: var(--color-red);
+}
+
+.passwordToggleIcon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+
+  width: 3rem;
+  height: 3rem;
+}
+
+.paddingRight {
+  padding-right: 4rem;
+}
+
+@media (hover: hover) {
+  .passwordToggleIcon:hover {
+    cursor: pointer;
+  }
+}
+
+.input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.9);
+}
+
+.input[type='date']::-webkit-datetime-edit {
+  color: var(--color-white);
+}
+
+.input[type='date']::-webkit-datetime-edit-day-field:focus,
+.input[type='date']::-webkit-datetime-edit-month-field:focus,
+.input[type='date']::-webkit-datetime-edit-year-field:focus {
+  color: var(--color-white);
+  background-color: var(--color-accent-light);
+}

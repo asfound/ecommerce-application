@@ -2,6 +2,7 @@
   display: none;
 
   padding: 1rem;
+  border-radius: var(--border-radius);
 
   font-size: 1.4rem;
   color: var(--color-red);

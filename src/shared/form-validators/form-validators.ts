@@ -1,6 +1,9 @@
+import { postcodeValidator, postcodeValidatorExistsForCountry } from 'postcode-validator';
+
 import type { ValidatorFunction } from './types';
 
 import { EMAIL_VALIDATION_ERROR, VALIDATION_ERROR } from '../constants/constants';
+import { COUNTRY_CODES } from '../constants/country-codes';
 
 export const validateEmailFormat: ValidatorFunction = (value) => {
   const emailRegex = /^[^@]+@[^@]+\.[^@.]{2,}$/;
@@ -38,4 +41,36 @@ export const validateHasDigit: ValidatorFunction = (value) => {
 
 export const validateOnlyEnglishLetters: ValidatorFunction = (value) => {
   return /^[a-zA-Z0-9]+$/.test(value) ? null : VALIDATION_ERROR.ONLY_ENGLISH_LETTERS;
+};
+
+export const validateMinAge = (ageInYears: number) => {
+  return (value: string): null | string => {
+    const birthDate = new Date(value);
+    const today = new Date();
+
+    const age = today.getFullYear() - birthDate.getFullYear();
+
+    return age < ageInYears ? VALIDATION_ERROR.MIN_AGE : null;
+  };
+};
+
+export const validateDatalistValue = (valuesList: string[]) => {
+  return (value: string): null | string => {
+    return valuesList.includes(value) ? null : VALIDATION_ERROR.LIST_VALUE;
+  };
+};
+
+export const validatePostalCode = (getCountryName: () => string) => {
+  return (value: string): null | string => {
+    const countryName = getCountryName();
+
+    if (countryName) {
+      const countryCode = COUNTRY_CODES[countryName];
+      return postcodeValidatorExistsForCountry(countryCode) && postcodeValidator(value, countryCode)
+        ? null
+        : VALIDATION_ERROR.POSTAL_CODE;
+    } else {
+      return null;
+    }
+  };
 };
