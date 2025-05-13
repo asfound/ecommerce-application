@@ -76,6 +76,7 @@ export class LoginFormView extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
+    // Header and link could be components to share with registration
     const formHeader = div(
       { className: styles.formHeader },
       h2({ className: styles.formTitle }, 'Log In'),
@@ -83,7 +84,7 @@ export class LoginFormView extends BaseComponent implements Component {
     );
 
     const registrationLinkContainer = div(
-      { className: styles.registrationLinkContainer },
+      { className: styles.linkContainer },
       'New to HUH Coffee?',
       this.registrationLinkElement,
     );

@@ -47,3 +47,22 @@
 .hidden {
   display: none;
 }
+
+.linkContainer {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+
+  font-size: 1.4rem;
+  color: var(--color-accent-light);
+  text-align: center;
+}
+
+.linkContainer a {
+  text-decoration: underline;
+  transition: color var(--transition-duration);
+}
+
+.linkContainer a:hover {
+  color: var(--color-accent);
+}

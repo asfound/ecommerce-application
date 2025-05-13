@@ -23,7 +23,12 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
 
   private bindViewHandlers(): void {
     this.view.bindSubmitHandler(this.handleSignUp);
+    this.view.bindRegistrationLinkHandler(this.handleLoginLinkClick);
   }
+
+  private handleLoginLinkClick = (): void => {
+    Router.instance.navigate(ROUTE_PATH.LOGIN);
+  };
 
   private readonly handleSignUp = (payload: SignupPayload): void => {
     this.authService
