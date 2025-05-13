@@ -4,13 +4,14 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { Input } from '~/components/common/input/input';
-import { COUNTRY_NAMES } from '~/shared/constants/country-codes';
+import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   BILLING_COUNTRY_PROPS,
   BILLING_POSTAL_CODE_PROPS,
   CITY_PROPS,
   COUNTRY_LIST_ID,
   DATE_OF_BIRTH_PROPS,
+  DEFAULT_CHECKBOX_PROPS,
   EMAIL_PROPS,
   FIRST_NAME_PROPS,
   LAST_NAME_PROPS,
@@ -18,6 +19,7 @@ import {
   SHIPPING_COUNTRY_PROPS,
   SHIPPING_POSTAL_CODE_PROPS,
   STREET_PROPS,
+  USE_FOR_BILLING_PROPS,
 } from '~/shared/constants/input-properties';
 import { datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
@@ -25,26 +27,31 @@ import { validatePostalCode } from '~/shared/form-validators/form-validators';
 import styles from './registration-form.module.css';
 
 export class RegistrationFormView extends BaseComponent implements Component {
+  private billingAddressFieldset: HTMLElement | null = null;
+
   private readonly inputBillingCity = new Input(CITY_PROPS);
 
   private readonly inputBillingCountry = new Input(BILLING_COUNTRY_PROPS);
 
   private readonly inputBillingPostcode = new Input(BILLING_POSTAL_CODE_PROPS);
 
+  private readonly inputBillingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+
   private readonly inputBillingStreet = new Input(STREET_PROPS);
 
   private readonly billingInputs = [
-    this.inputBillingCountry.element,
-    this.inputBillingCity.element,
-    this.inputBillingStreet.element,
-    this.inputBillingPostcode.element,
+    this.inputBillingCountry,
+    this.inputBillingCity,
+    this.inputBillingStreet,
+    this.inputBillingPostcode,
+    this.inputBillingSetDefault,
   ];
 
   private readonly formElement = form({ className: styles.form });
 
   private readonly inputBirthDate = new Input(DATE_OF_BIRTH_PROPS);
 
-  private readonly inputComponents: Input[] = [];
+  private inputComponents: Input[] = [];
 
   private readonly inputEmail = new Input(EMAIL_PROPS);
 
@@ -54,19 +61,25 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputPassword = new Input(PASSWORD_PROPS);
 
+  private readonly inputShippingAsBilling = new Input(USE_FOR_BILLING_PROPS);
+
   private readonly inputShippingCity = new Input(CITY_PROPS);
 
   private readonly inputShippingCountry = new Input(SHIPPING_COUNTRY_PROPS);
 
   private readonly inputShippingPostcode = new Input(SHIPPING_POSTAL_CODE_PROPS);
 
+  private readonly inputShippingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+
   private readonly inputShippingStreet = new Input(STREET_PROPS);
 
   private readonly shippingInputs = [
-    this.inputShippingCountry.element,
-    this.inputShippingCity.element,
-    this.inputShippingStreet.element,
-    this.inputShippingPostcode.element,
+    this.inputShippingCountry,
+    this.inputShippingCity,
+    this.inputShippingStreet,
+    this.inputShippingPostcode,
+    this.inputShippingSetDefault,
+    this.inputShippingAsBilling,
   ];
 
   private readonly submitButton = new Button({
@@ -119,7 +132,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
     const shippingAddressFieldset = this.createAddressFieldset(
       'Shipping address:',
-      this.shippingInputs,
+      this.shippingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.SHIPPING,
     );
 
@@ -127,9 +140,9 @@ export class RegistrationFormView extends BaseComponent implements Component {
       validatePostalCode(() => this.inputShippingCountry.value),
     );
 
-    const billingAddressFieldset = this.createAddressFieldset(
+    this.billingAddressFieldset = this.createAddressFieldset(
       'Billing address:',
-      this.billingInputs,
+      this.billingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.BILLING,
     );
 
@@ -141,7 +154,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
       formHeader,
       accountDetailsFieldset,
       shippingAddressFieldset,
-      billingAddressFieldset,
+      this.billingAddressFieldset,
       this.submitButton.element,
     );
 
@@ -170,9 +183,23 @@ export class RegistrationFormView extends BaseComponent implements Component {
         this.inputBillingPostcode.validate();
       }
     });
+
+    this.inputShippingAsBilling.addListener('change', () => {
+      const isBillingHidden = this.inputShippingAsBilling.checked;
+
+      this.billingAddressFieldset?.classList.toggle(styles.hidden, isBillingHidden);
+
+      if (isBillingHidden) {
+        this.removeBillingAddressInputs();
+      } else {
+        this.recoverBillingAddressInputs();
+      }
+
+      this.checkValidity();
+    });
   }
 
-  private addInput(input: Input): void {
+  private addInputComponent(input: Input): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {
@@ -217,18 +244,31 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   private getPayload(): SignupPayload {
-    const address: CustomerAddress = {
+    const shippingAddress: CustomerAddress = {
       city: this.inputShippingCity.value.trim(),
-      country: this.inputShippingCountry.value.trim(),
-      default: true, // un-hardcode
+      country: COUNTRY_CODES[this.inputShippingCountry.value.trim()],
+      default: this.inputShippingSetDefault.checked,
       postalCode: this.inputShippingPostcode.value.trim(),
       streetName: this.inputShippingStreet.value.trim(),
     };
 
+    const shippingAsBilling = this.inputShippingAsBilling.checked;
+
+    const billingAddress: CustomerAddress | undefined = shippingAsBilling
+      ? undefined
+      : {
+          city: this.inputBillingCity.value.trim(),
+          country: COUNTRY_CODES[this.inputBillingCountry.value.trim()],
+          default: this.inputBillingSetDefault.checked,
+          postalCode: this.inputBillingPostcode.value.trim(),
+          streetName: this.inputBillingStreet.value.trim(),
+        };
+
     return {
       addresses: {
-        shippingAddress: address,
-        shippingAsBilling: true, // un-hardcode
+        billingAddress,
+        shippingAddress,
+        shippingAsBilling,
       },
       dateOfBirth: this.inputBirthDate.value.trim(),
       email: this.inputEmail.value.trim(),
@@ -238,21 +278,35 @@ export class RegistrationFormView extends BaseComponent implements Component {
     };
   }
 
+  private recoverBillingAddressInputs(): void {
+    for (const input of this.billingInputs) {
+      if (input !== this.inputBillingSetDefault && !this.inputComponents.includes(input)) {
+        this.inputComponents.push(input);
+      }
+    }
+  }
+
+  private removeBillingAddressInputs(): void {
+    this.inputComponents = this.inputComponents.filter(
+      (component) => !this.billingInputs.includes(component),
+    );
+  }
+
   private storeInputs(): void {
-    this.addInput(this.inputFirstName);
-    this.addInput(this.inputLastName);
-    this.addInput(this.inputBirthDate);
-    this.addInput(this.inputEmail);
-    this.addInput(this.inputPassword);
+    this.addInputComponent(this.inputFirstName);
+    this.addInputComponent(this.inputLastName);
+    this.addInputComponent(this.inputBirthDate);
+    this.addInputComponent(this.inputEmail);
+    this.addInputComponent(this.inputPassword);
 
-    this.addInput(this.inputShippingCountry);
-    this.addInput(this.inputShippingCity);
-    this.addInput(this.inputShippingStreet);
-    this.addInput(this.inputShippingPostcode);
+    this.addInputComponent(this.inputShippingCountry);
+    this.addInputComponent(this.inputShippingCity);
+    this.addInputComponent(this.inputShippingStreet);
+    this.addInputComponent(this.inputShippingPostcode);
 
-    this.addInput(this.inputBillingCountry);
-    this.addInput(this.inputBillingCity);
-    this.addInput(this.inputBillingStreet);
-    this.addInput(this.inputBillingPostcode);
+    this.addInputComponent(this.inputBillingCountry);
+    this.addInputComponent(this.inputBillingCity);
+    this.addInputComponent(this.inputBillingStreet);
+    this.addInputComponent(this.inputBillingPostcode);
   }
 }

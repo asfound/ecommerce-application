@@ -15,6 +15,21 @@
   background-color: var(--color-dark);
 }
 
+.checkbox {
+  width: auto;
+}
+
+.label {
+  display: flex;
+  gap: 1rem;
+  color: var(--color-accent-light);
+  transition: color var(--transition-duration);
+}
+
+.label:hover {
+  color: var(--color-accent);
+}
+
 .input:focus {
   outline: none;
 }

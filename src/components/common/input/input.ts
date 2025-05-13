@@ -4,12 +4,13 @@ import iconEyeHidden from '~/assets/icons/eye-hidden.svg';
 import iconEyeVisible from '~/assets/icons/eye-visible.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { INPUT_TYPE } from '~/shared/constants/constants';
-import { img } from '~/shared/create-element/tags';
+import { img, label, span } from '~/shared/create-element/tags';
 
 import styles from './input.module.css';
 
 export interface InputProperties {
   enablePasswordToggle?: true;
+  label?: string;
   listId?: string;
   name?: string;
   placeholder?: string;
@@ -18,6 +19,13 @@ export interface InputProperties {
 }
 
 export class Input extends BaseComponent {
+  // TODO: use child classes for different types of inputs?
+  public get checked(): boolean {
+    return this.inputComponent.element.type === 'checkbox'
+      ? this.inputComponent.element.checked
+      : false;
+  }
+
   public get value(): string {
     return this.inputComponent.element.value;
   }
@@ -48,9 +56,13 @@ export class Input extends BaseComponent {
 
     if (this.properties.type === 'date') {
       this.inputComponent.element.type = 'text';
-      this.inputComponent.element.addEventListener('focus', () => {
-        this.inputComponent.element.type = 'date';
-      });
+      this.inputComponent.element.addEventListener(
+        'focus',
+        () => {
+          this.inputComponent.element.type = 'date';
+        },
+        { signal: this.abortController.signal },
+      );
     } else {
       this.inputComponent.element.type = this.properties.type ?? 'text';
     }
@@ -70,9 +82,23 @@ export class Input extends BaseComponent {
       this.inputComponent.element.setAttribute('list', properties.listId);
     }
 
-    this.append(this.inputComponent, this.errorMessageComponent);
+    if (properties.label) {
+      this.append(
+        label({ className: styles.label }, this.inputComponent.element, span({}, properties.label)),
+      );
+      this.inputComponent.addClassNames(styles.checkbox);
+    } else {
+      this.append(this.inputComponent, this.errorMessageComponent);
+    }
 
     this.setupListeners();
+  }
+
+  public override addListener(
+    type: keyof GlobalEventHandlersEventMap,
+    listener: EventListener,
+  ): void {
+    this.inputComponent.addListener(type, listener);
   }
 
   public addValidator(validator: ValidatorFunction): void {

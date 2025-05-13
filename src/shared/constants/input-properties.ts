@@ -127,6 +127,13 @@ export const BILLING_POSTAL_CODE_PROPS: InputProperties = {
 } as const;
 
 export const DEFAULT_CHECKBOX_PROPS: InputProperties = {
+  label: 'Set as default',
   name: 'default-checkbox',
+  type: INPUT_TYPE.CHECKBOX,
+} as const;
+
+export const USE_FOR_BILLING_PROPS: InputProperties = {
+  label: 'Use for billing',
+  name: 'billing-as-shipping-checkbox',
   type: INPUT_TYPE.CHECKBOX,
 } as const;
