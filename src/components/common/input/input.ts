@@ -113,6 +113,10 @@ export class Input extends BaseComponent {
     this.inputComponent.addClassNames(styles.valid);
   }
 
+  public clearInput(): void {
+    this.inputComponent.element.value = '';
+  }
+
   public setErrorMessage(errorMessage: string): void {
     this.errorMessageComponent.setTextContent(errorMessage);
 

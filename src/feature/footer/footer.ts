@@ -6,6 +6,7 @@ import { Logo } from '~/components/logo/logo';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { SUBSCRIPTION_EMAIL_PROPS } from '~/shared/constants/input-properties';
 import { div, li, p, span, ul } from '~/shared/create-element/tags';
+import { showToast } from '~/shared/utils/show-toast';
 
 import styles from './footer.module.css';
 
@@ -49,6 +50,8 @@ const CARE_LINKS_TEXT = {
   ABOUT: 'About us',
   BLOG: 'Blog',
 };
+
+const SUBSCRIPTION_SUCCESS = 'You’ve been successfully subscribed!';
 
 export class Footer extends BaseComponent implements Component {
   public constructor() {
@@ -147,7 +150,26 @@ export class Footer extends BaseComponent implements Component {
       FOOTER_INFO.SUBSCRIPTION.DESCRIPTION,
     );
     const emailInput = new Input(SUBSCRIPTION_EMAIL_PROPS);
-    const cta = p({}, FOOTER_INFO.SUBSCRIPTION.CTA);
+    emailInput.addClassNames(styles.input);
+    const cta = p({ className: styles.cta }, FOOTER_INFO.SUBSCRIPTION.CTA);
+
+    emailInput.addListener('input', () => {
+      if (emailInput.validate()) {
+        cta.classList.add(styles.visible);
+      } else {
+        cta.classList.remove(styles.visible);
+      }
+    });
+
+    cta.addEventListener(
+      'click',
+      () => {
+        emailInput.clearInput();
+        showToast(SUBSCRIPTION_SUCCESS);
+        cta.classList.remove(styles.visible);
+      },
+      { signal: this.abortController.signal },
+    );
 
     return div(
       { className: [styles.subscription, styles.list] },

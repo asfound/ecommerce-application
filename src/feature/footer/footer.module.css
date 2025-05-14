@@ -68,3 +68,17 @@
 .subscriptionTitle {
   text-transform: uppercase;
 }
+
+.input input {
+  color: var(--color-accent-light);
+  background-color: var(--color-white);
+}
+
+.cta {
+  cursor: pointer;
+  display: none;
+}
+
+.visible {
+  display: block;
+}
