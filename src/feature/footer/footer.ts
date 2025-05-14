@@ -35,6 +35,7 @@ export class Footer extends BaseComponent implements Component {
     const copyrightInfo = div({}, FOOTER_INFO.COPYRIGHT.CREDITS);
     const policy = div({}, FOOTER_INFO.COPYRIGHT.POLICY);
     const terms = div({}, FOOTER_INFO.COPYRIGHT.TERMS);
+
     const copyrightBlock = div({ className: styles.copyright }, copyrightInfo, policy, terms);
 
     const wrapperElement = div(
@@ -90,26 +91,9 @@ export class Footer extends BaseComponent implements Component {
   private createInformationBlock(): HTMLDivElement {
     const credentialsSection = this.createCredentialsSection();
 
-    const helpTitle = p({ className: styles.listTitle }, FOOTER_INFO.LISTS.HELP);
-    const helpList = ul({ className: styles.list }, helpTitle);
-    for (const text of Object.values(HELP_LINKS_TEXT)) {
-      const liElement = li({ className: styles.listItem }, text);
-      helpList.append(liElement);
-    }
-
-    const accountTitle = p({ className: styles.listTitle }, FOOTER_INFO.LISTS.ACCOUNT);
-    const accountList = ul({ className: styles.list }, accountTitle);
-    for (const text of Object.values(ACCOUNT_LINKS_TEXT)) {
-      const liElement = li({ className: styles.listItem }, text);
-      accountList.append(liElement);
-    }
-
-    const careTitle = p({ className: styles.listTitle }, FOOTER_INFO.LISTS.CARE);
-    const caretList = ul({ className: styles.list }, careTitle);
-    for (const text of Object.values(CARE_LINKS_TEXT)) {
-      const liElement = li({ className: styles.listItem }, text);
-      caretList.append(liElement);
-    }
+    const helpList = this.createList(FOOTER_INFO.LISTS.HELP, HELP_LINKS_TEXT);
+    const accountList = this.createList(FOOTER_INFO.LISTS.ACCOUNT, ACCOUNT_LINKS_TEXT);
+    const careList = this.createList(FOOTER_INFO.LISTS.CARE, CARE_LINKS_TEXT);
 
     const subscriptionSection = this.createSubscriptionSection();
 
@@ -118,9 +102,20 @@ export class Footer extends BaseComponent implements Component {
       credentialsSection,
       helpList,
       accountList,
-      caretList,
+      careList,
       subscriptionSection,
     );
+  }
+
+  private createList(title: string, items: Record<string, string>): HTMLUListElement {
+    const listTitle = p({ className: styles.listTitle }, title);
+    const list = ul({ className: styles.list }, listTitle);
+
+    for (const text of Object.values(items)) {
+      list.append(li({ className: styles.listItem }, text));
+    }
+
+    return list;
   }
 
   private createSubscriptionSection(): HTMLDivElement {
@@ -132,8 +127,10 @@ export class Footer extends BaseComponent implements Component {
       { className: styles.description },
       FOOTER_INFO.SUBSCRIPTION.DESCRIPTION,
     );
+
     const emailInput = new Input(SUBSCRIPTION_EMAIL_PROPS);
     emailInput.addClassNames(styles.input);
+
     const cta = p({ className: styles.cta }, FOOTER_INFO.SUBSCRIPTION.CTA);
 
     emailInput.addListener('input', () => {
