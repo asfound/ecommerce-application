@@ -6,14 +6,8 @@ import huhGif from '~/assets/img/huh-cat.gif';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { a, h1, img, p } from '~/shared/create-element/tags';
 
+import { NOT_FOUND_TEXT } from './constants';
 import styles from './not-found-widget.module.css';
-
-// should be moved to constants?
-const NOT_FOUND_TEXT = {
-  CODE: '404 — Page Not Found',
-  DESCRIPTION: "Huh? \n The page you're looking for doesn't exist.",
-  LINK: 'To main page',
-};
 
 export class NotFoundWidget extends BaseComponent implements Component {
   public constructor() {
