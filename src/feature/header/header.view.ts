@@ -13,9 +13,9 @@ import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
+import { HEADER_ICON_TEXT, HEADER_LAYOUT_CHANGE_BREAKPOINT } from './constants';
 import styles from './header.module.css';
 
-const HEADER_LAYOUT_CHANGE_BREAKPOINT = 1000;
 export class HeaderView extends BaseComponent implements Component {
   private isBurgerMenuOpen = false;
 
@@ -28,7 +28,7 @@ export class HeaderView extends BaseComponent implements Component {
   private readonly logoutIcon = div(
     { className: styles.iconContainer },
     createSvgIcon(logoutSvg, styles.icon),
-    span({ className: styles.iconText }, 'Logout'),
+    span({ className: styles.iconText }, HEADER_ICON_TEXT.LOGOUT),
   );
 
   private readonly menuIcon = div({ className: styles.burger });
@@ -77,12 +77,12 @@ export class HeaderView extends BaseComponent implements Component {
     const cartIcon = div(
       { className: styles.iconContainer },
       createSvgIcon(cartSvg, styles.icon),
-      span({ className: styles.iconText }, 'Cart'),
+      span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
     );
     const accountIcon = div(
       { className: styles.iconContainer },
       createSvgIcon(accountSvg, styles.icon),
-      span({ className: styles.iconText }, 'Account'),
+      span({ className: styles.iconText }, HEADER_ICON_TEXT.ACCOUNT),
     );
 
     const iconsContainer = div(
