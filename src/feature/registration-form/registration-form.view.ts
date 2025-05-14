@@ -6,6 +6,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
+import { FormHeader } from '~/components/form-header/form-header';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   BILLING_COUNTRY_PROPS,
@@ -23,7 +24,7 @@ import {
   STREET_PROPS,
   USE_FOR_BILLING_PROPS,
 } from '~/shared/constants/input-properties';
-import { a, datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
+import { a, datalist, div, fieldset, form, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
 import styles from './registration-form.module.css';
@@ -138,7 +139,10 @@ export class RegistrationFormView extends BaseComponent implements Component {
   public createHTML(): void {
     this.storeInputs();
 
-    const formHeader = this.createHeader();
+    const formHeader = new FormHeader({
+      subtitle: 'Please fill in the fields below',
+      title: 'Register',
+    });
 
     const loginLinkContainer = div(
       { className: styles.linkContainer },
@@ -171,7 +175,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
 
     this.formElement.append(
-      formHeader,
+      formHeader.element,
       this.errorMessageComponent.element,
       accountDetailsFieldset,
       shippingAddressFieldset,
@@ -271,14 +275,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
     }
 
     return datalistElement;
-  }
-
-  private createHeader(): HTMLDivElement {
-    return div(
-      { className: styles.formHeader },
-      h1({ className: styles.formTitle }, 'Register'),
-      div({ className: styles.formSubtitle }, 'Please fill in the fields below'),
-    );
   }
 
   private getPayload(): SignupPayload {

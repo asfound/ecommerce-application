@@ -17,20 +17,6 @@
   margin-inline: auto;
 }
 
-/* introduce form header component or somewhow else avoid repetition */
-.formHeader {
-  text-align: center;
-}
-
-.formTitle {
-  font-size: 2.6rem;
-  font-weight: 500;
-}
-
-.formSubtitle {
-  color: var(--color-accent-light);
-}
-
 .linkContainer {
   display: flex;
   gap: 0.8rem;

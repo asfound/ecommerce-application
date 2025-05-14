@@ -6,8 +6,9 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
+import { FormHeader } from '~/components/form-header/form-header';
 import { EMAIL_PROPS, PASSWORD_PROPS } from '~/shared/constants/input-properties';
-import { a, div, form, h2 } from '~/shared/create-element/tags';
+import { a, div, form } from '~/shared/create-element/tags';
 
 import styles from './login-form.module.css';
 
@@ -76,12 +77,10 @@ export class LoginFormView extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    // Header and link could be components to share with registration
-    const formHeader = div(
-      { className: styles.formHeader },
-      h2({ className: styles.formTitle }, 'Log In'),
-      div({ className: styles.formSubtitle }, 'Please enter your e-mail and password:'),
-    );
+    const formHeader = new FormHeader({
+      subtitle: 'Please enter your e-mail and password:',
+      title: 'Log In',
+    });
 
     const registrationLinkContainer = div(
       { className: styles.linkContainer },
@@ -95,7 +94,7 @@ export class LoginFormView extends BaseComponent implements Component {
     this.addInput(this.inputPassword);
 
     this.formElement.append(
-      formHeader,
+      formHeader.element,
       this.errorMessageComponent.element,
       this.inputEmail.element,
       this.inputPassword.element,
