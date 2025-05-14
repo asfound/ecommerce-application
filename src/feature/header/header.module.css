@@ -116,3 +116,8 @@
     display: none;
   }
 }
+
+/* use global style? */
+.hidden {
+  display: none;
+}
