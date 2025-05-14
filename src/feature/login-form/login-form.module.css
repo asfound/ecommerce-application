@@ -3,6 +3,7 @@
   margin-top: 4rem;
   margin-inline: auto;
   padding-block: 4rem;
+  padding-inline: 1rem;
   border-radius: var(--border-radius);
 
   background-color: var(--color-dark);
