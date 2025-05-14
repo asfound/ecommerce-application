@@ -1,11 +1,13 @@
 import type { CustomerAddress, SignupPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
+import type { BaseInput } from '~/components/common/input/base-input';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
+import { InputPassword } from '~/components/common/input/input-password/input-password';
 import { FormHeader } from '~/components/form-header/form-header';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
@@ -43,7 +45,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputBillingStreet = new Input(STREET_PROPS);
 
-  private readonly billingInputs = [
+  private readonly billingInputs: (BaseInput | Input)[] = [
     this.inputBillingCountry,
     this.inputBillingCity,
     this.inputBillingStreet,
@@ -57,7 +59,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputBirthDate = new Input(DATE_OF_BIRTH_PROPS);
 
-  private inputComponents: Input[] = [];
+  private inputComponents: (BaseInput | Input)[] = [];
 
   private readonly inputEmail = new Input(EMAIL_PROPS);
 
@@ -65,7 +67,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputLastName = new Input(LAST_NAME_PROPS);
 
-  private readonly inputPassword = new Input(PASSWORD_PROPS);
+  private readonly inputPassword = new InputPassword(PASSWORD_PROPS);
 
   private readonly inputShippingAsBilling = new Input(USE_FOR_BILLING_PROPS);
 
@@ -234,7 +236,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.errorMessageComponent.show(errorMessage);
   }
 
-  private addInputComponent(input: Input): void {
+  private addInputComponent(input: BaseInput | Input): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {

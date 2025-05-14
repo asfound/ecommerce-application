@@ -10,12 +10,12 @@ export interface BaseInputProperties {
   validators?: ValidatorFunction[];
 }
 export abstract class BaseInput extends BaseComponent {
-  private readonly errorMessageComponent = new BaseComponent({
+  protected readonly errorMessageComponent = new BaseComponent({
     className: styles.errorMessage,
     tagName: 'div',
   });
 
-  private readonly inputComponent = new BaseComponent<HTMLInputElement>({
+  protected readonly inputComponent = new BaseComponent<HTMLInputElement>({
     attributes: { autocomplete: 'off' },
     className: styles.input,
     tagName: 'input',
@@ -83,7 +83,7 @@ export abstract class BaseInput extends BaseComponent {
     return true;
   }
 
-  private setupListeners(): void {
+  protected setupListeners(): void {
     this.inputComponent.addListener('input', () => {
       this.validate();
     });

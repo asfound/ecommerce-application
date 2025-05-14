@@ -34,10 +34,8 @@ export const EMAIL_PROPS: InputProperties = {
 } as const;
 
 export const PASSWORD_PROPS: InputProperties = {
-  enablePasswordToggle: true,
   name: 'password',
   placeholder: 'Password',
-  type: INPUT_TYPE.PASSWORD,
   validators: [
     validateRequired,
     validateNoSpaces,
