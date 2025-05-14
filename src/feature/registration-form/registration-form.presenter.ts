@@ -10,6 +10,8 @@ import { showToast } from '~/shared/utils/show-toast';
 
 import type { RegistrationFormView } from './registration-form.view';
 
+import { REGISTRATION_FORM_TEXT } from './constants';
+
 export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
   private readonly authService: AuthService;
 
@@ -46,7 +48,7 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
 
         rootAction.setLoggedIn(true);
 
-        showToast('Account successfully created!');
+        showToast(REGISTRATION_FORM_TEXT.ACCOUNT_CREATED);
       })
       .catch((error: unknown) => {
         window.scrollTo({ top: 0 });
