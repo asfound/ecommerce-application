@@ -13,7 +13,6 @@ import {
   validateRequired,
 } from '../form-validators/form-validators';
 import {
-  INPUT_TYPE,
   REQUIRED_MIN_AGE,
   REQUIRED_NAME_LENGTH,
   REQUIRED_PASSWORD_LENGTH,
@@ -69,7 +68,6 @@ export const LAST_NAME_PROPS: InputProperties = {
 export const DATE_OF_BIRTH_PROPS: InputProperties = {
   name: 'date-of-birth',
   placeholder: 'Date of birth',
-  type: INPUT_TYPE.DATE,
   validators: [validateRequired, validateMinAge(REQUIRED_MIN_AGE)],
 } as const;
 
