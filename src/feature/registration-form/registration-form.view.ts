@@ -7,6 +7,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
+import { InputCheckbox } from '~/components/common/input/input-checkbox/input-checkbox';
 import { InputPassword } from '~/components/common/input/input-password/input-password';
 import { InputText } from '~/components/common/input/input-text/input-text';
 import { FormHeader } from '~/components/form-header/form-header';
@@ -42,7 +43,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputBillingPostcode = new InputText(BILLING_POSTAL_CODE_PROPS);
 
-  private readonly inputBillingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+  private readonly inputBillingSetDefault = new InputCheckbox(DEFAULT_CHECKBOX_PROPS);
 
   private readonly inputBillingStreet = new InputText(STREET_PROPS);
 
@@ -70,7 +71,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputPassword = new InputPassword(PASSWORD_PROPS);
 
-  private readonly inputShippingAsBilling = new Input(USE_FOR_BILLING_PROPS);
+  private readonly inputShippingAsBilling = new InputCheckbox(USE_FOR_BILLING_PROPS);
 
   private readonly inputShippingCity = new InputText(CITY_PROPS);
 
@@ -78,7 +79,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputShippingPostcode = new InputText(SHIPPING_POSTAL_CODE_PROPS);
 
-  private readonly inputShippingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+  private readonly inputShippingSetDefault = new InputCheckbox(DEFAULT_CHECKBOX_PROPS);
 
   private readonly inputShippingStreet = new InputText(STREET_PROPS);
 
