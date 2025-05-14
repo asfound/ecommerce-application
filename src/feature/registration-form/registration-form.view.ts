@@ -8,6 +8,7 @@ import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
 import { InputPassword } from '~/components/common/input/input-password/input-password';
+import { InputText } from '~/components/common/input/input-text/input-text';
 import { FormHeader } from '~/components/form-header/form-header';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
@@ -35,15 +36,15 @@ import styles from './registration-form.module.css';
 export class RegistrationFormView extends BaseComponent implements Component {
   private billingAddressFieldset: HTMLElement | null = null;
 
-  private readonly inputBillingCity = new Input(CITY_PROPS);
+  private readonly inputBillingCity = new InputText(CITY_PROPS);
 
-  private readonly inputBillingCountry = new Input(BILLING_COUNTRY_PROPS);
+  private readonly inputBillingCountry = new InputText(BILLING_COUNTRY_PROPS);
 
-  private readonly inputBillingPostcode = new Input(BILLING_POSTAL_CODE_PROPS);
+  private readonly inputBillingPostcode = new InputText(BILLING_POSTAL_CODE_PROPS);
 
   private readonly inputBillingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
 
-  private readonly inputBillingStreet = new Input(STREET_PROPS);
+  private readonly inputBillingStreet = new InputText(STREET_PROPS);
 
   private readonly billingInputs: (BaseInput | Input)[] = [
     this.inputBillingCountry,
@@ -61,25 +62,25 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private inputComponents: (BaseInput | Input)[] = [];
 
-  private readonly inputEmail = new Input(EMAIL_PROPS);
+  private readonly inputEmail = new InputText(EMAIL_PROPS);
 
-  private readonly inputFirstName = new Input(FIRST_NAME_PROPS);
+  private readonly inputFirstName = new InputText(FIRST_NAME_PROPS);
 
-  private readonly inputLastName = new Input(LAST_NAME_PROPS);
+  private readonly inputLastName = new InputText(LAST_NAME_PROPS);
 
   private readonly inputPassword = new InputPassword(PASSWORD_PROPS);
 
   private readonly inputShippingAsBilling = new Input(USE_FOR_BILLING_PROPS);
 
-  private readonly inputShippingCity = new Input(CITY_PROPS);
+  private readonly inputShippingCity = new InputText(CITY_PROPS);
 
-  private readonly inputShippingCountry = new Input(SHIPPING_COUNTRY_PROPS);
+  private readonly inputShippingCountry = new InputText(SHIPPING_COUNTRY_PROPS);
 
-  private readonly inputShippingPostcode = new Input(SHIPPING_POSTAL_CODE_PROPS);
+  private readonly inputShippingPostcode = new InputText(SHIPPING_POSTAL_CODE_PROPS);
 
   private readonly inputShippingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
 
-  private readonly inputShippingStreet = new Input(STREET_PROPS);
+  private readonly inputShippingStreet = new InputText(STREET_PROPS);
 
   private readonly loginLinkElement = a({ href: ROUTE_PATH.REGISTRATION }, 'Log in');
 

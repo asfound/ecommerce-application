@@ -1,13 +1,14 @@
 import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
 import type { BaseInput } from '~/components/common/input/base-input';
+import type { Input } from '~/components/common/input/input';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
-import { Input } from '~/components/common/input/input';
 import { InputPassword } from '~/components/common/input/input-password/input-password';
+import { InputText } from '~/components/common/input/input-text/input-text';
 import { FormHeader } from '~/components/form-header/form-header';
 import { EMAIL_PROPS, PASSWORD_PROPS } from '~/shared/constants/input-properties';
 import { a, div, form } from '~/shared/create-element/tags';
@@ -27,7 +28,7 @@ export class LoginFormView extends BaseComponent implements Component {
 
   private readonly inputComponents: (BaseInput | Input)[] = [];
 
-  private readonly inputEmail = new Input(EMAIL_PROPS);
+  private readonly inputEmail = new InputText(EMAIL_PROPS);
 
   private readonly inputPassword = new InputPassword(PASSWORD_PROPS);
 
