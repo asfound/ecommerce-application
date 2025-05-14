@@ -18,14 +18,35 @@
   transition: color var(--transition-duration);
 }
 
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--color-white);
+  text-transform: uppercase;
+
+  transition: color var(--transition-duration);
+}
+
 .icon {
-  /* TODO: temporary */
-  color: var(--color-accent);
+  width: 2.4rem;
+  height: 2.4rem;
+  stroke: var(--color-white);
+  transition: stroke var(--transition-duration);
 }
 
 @media (hover: hover) {
-  .icon:hover {
+  .iconContainer:hover {
     cursor: pointer;
+    color: var(--color-accent);
+  }
+
+  .iconContainer:hover .icon {
+    stroke: var(--color-accent);
   }
 
   .logoLink:hover {

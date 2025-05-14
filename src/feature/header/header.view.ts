@@ -2,11 +2,15 @@ import type { Component } from '~/components/base-component/types';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { ROUTER_LINKS } from '~/app/router/router-links';
+import accountSvg from '~/assets/icons/account.svg';
+import cartSvg from '~/assets/icons/cart.svg';
+import logoutSvg from '~/assets/icons/logout.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Logo } from '~/components/logo/logo';
 import { Navigation } from '~/components/navigation/navigation';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { a, div } from '~/shared/create-element/tags';
+import { a, div, span } from '~/shared/create-element/tags';
+import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import styles from './header.module.css';
 
@@ -17,8 +21,11 @@ export class HeaderView extends BaseComponent implements Component {
     id: 'header',
   });
 
-  // TODO: change to icon
-  private readonly logoutIcon = div({ className: styles.icon }, 'Logout');
+  private readonly logoutIcon = div(
+    { className: styles.iconContainer },
+    createSvgIcon(logoutSvg, styles.icon),
+    span({}, 'Logout'),
+  );
 
   public constructor() {
     super({ className: styles.header, tagName: 'header' });
@@ -54,10 +61,18 @@ export class HeaderView extends BaseComponent implements Component {
 
     const navigation = new Navigation(ROUTER_LINKS);
 
-    // TODO: change to icons
-    const cart = div({}, 'Cart');
+    const cartIcon = div(
+      { className: styles.iconContainer },
+      createSvgIcon(cartSvg, styles.icon),
+      span({}, 'Cart'),
+    );
+    const accountIcon = div(
+      { className: styles.iconContainer },
+      createSvgIcon(accountSvg, styles.icon),
+      span({}, 'Account'),
+    );
 
-    const container = div({ className: styles.container }, cart, this.logoutIcon);
+    const container = div({ className: styles.container }, cartIcon, accountIcon, this.logoutIcon);
 
     const wrapperElement = div(
       { className: [CSS_CLASS_NAME.WRAPPER, styles.wrapper] },
@@ -70,6 +85,7 @@ export class HeaderView extends BaseComponent implements Component {
   }
 
   public setLogoutIconVisible(visible: boolean): void {
+    //fix
     this.logoutIcon.hidden = !visible;
   }
 }
