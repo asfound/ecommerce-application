@@ -1,16 +1,22 @@
 import type { Component } from '~/components/base-component/types';
 
+import facebook from '~/assets/icons/facebook.svg';
+import instagram from '~/assets/icons/instagram.svg';
+import pinterest from '~/assets/icons/pinterest.svg';
+import telegram from '~/assets/icons/telegram.svg';
+import twitter from '~/assets/icons/twitter.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Input } from '~/components/common/input/input';
 import { Logo } from '~/components/logo/logo';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { SUBSCRIPTION_EMAIL_PROPS } from '~/shared/constants/input-properties';
-import { div, li, p, span, ul } from '~/shared/create-element/tags';
+import { a, div, li, p, ul } from '~/shared/create-element/tags';
+import { createSvgIcon } from '~/shared/utils/create-svg';
 import { showToast } from '~/shared/utils/show-toast';
 
 import styles from './footer.module.css';
 
-const FOOTER_INFO = {
+export const FOOTER_INFO = {
   COPYRIGHT: {
     CREDITS: '© 2025 HUH Coffee',
     POLICY: 'Privacy policy',
@@ -34,24 +40,32 @@ const FOOTER_INFO = {
   },
 };
 
-const HELP_LINKS_TEXT = {
+export const HELP_LINKS_TEXT = {
   CONTACT: 'Contact us',
   FAQ: 'FAQ',
   SHIPPING: 'Shipping & Returns',
 };
 
-const ACCOUNT_LINKS_TEXT = {
+export const ACCOUNT_LINKS_TEXT = {
   ADDRESSES: 'Addresses',
   ORDER_STATUS: 'Order Status',
   WISHLIST: 'Wishlist',
 };
 
-const CARE_LINKS_TEXT = {
+export const CARE_LINKS_TEXT = {
   ABOUT: 'About us',
   BLOG: 'Blog',
 };
 
-const SUBSCRIPTION_SUCCESS = 'You’ve been successfully subscribed!';
+export const SOCIAL_LINKS = [
+  { href: 'https://facebook.com', icon: facebook },
+  { href: 'https://pinterest.com', icon: pinterest },
+  { href: 'https://telegram.com', icon: telegram },
+  { href: 'https://instagram.com', icon: instagram },
+  { href: 'https://twitter.com', icon: twitter },
+];
+
+export const SUBSCRIPTION_SUCCESS = "You've been successfully subscribed!";
 
 export class Footer extends BaseComponent implements Component {
   public constructor() {
@@ -61,13 +75,7 @@ export class Footer extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const iconsBlock = div(
-      { className: styles.icons },
-      div({}, 'Fb'),
-      div({}, 'Pn'),
-      div({}, 'Tw'),
-      div({}, 'In'),
-    );
+    const iconsBlock = this.createIconsBlock();
 
     const informationBlock = this.createInformationBlock();
 
@@ -92,7 +100,7 @@ export class Footer extends BaseComponent implements Component {
       FOOTER_INFO.CREDENTIALS.DESCRIPTION,
     );
     //add icons to these ones
-    const mobile = li({ className: styles.listItem }, span({}), FOOTER_INFO.CREDENTIALS.MOBILE);
+    const mobile = li({ className: styles.listItem }, FOOTER_INFO.CREDENTIALS.MOBILE);
     const email = li({ className: styles.listItem }, FOOTER_INFO.CREDENTIALS.EMAIL);
     const location = li({ className: styles.listItem }, FOOTER_INFO.CREDENTIALS.LOCATION);
     const contactsList = ul({ className: styles.list }, mobile, email, location);
@@ -101,6 +109,18 @@ export class Footer extends BaseComponent implements Component {
       new Logo().element,
       credentialsDescription,
       contactsList,
+    );
+  }
+
+  private createIconsBlock(): HTMLDivElement {
+    return div(
+      { className: styles.icons },
+      ...SOCIAL_LINKS.map(({ href, icon }) =>
+        a(
+          { className: styles.link, href, target: '_blank' },
+          createSvgIcon(icon, styles.socialIcon),
+        ),
+      ),
     );
   }
 

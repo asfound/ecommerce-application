@@ -28,7 +28,7 @@
       "~/*": ["src/*"]
     },
 
-    "types": ["vitest/globals"]
+    "types": ["vite-plugin-svg-sprite/typings/vanilla", "vitest/globals"]
   },
   "include": ["src"]
 }

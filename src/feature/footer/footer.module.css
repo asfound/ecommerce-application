@@ -82,3 +82,18 @@
 .visible {
   display: block;
 }
+
+.socialIcon {
+  width: 30px;
+  height: 30px;
+  fill: var(--color-white);
+  transition: fill var(--transition-duration);
+}
+
+.socialIcon:hover {
+  fill: var(--color-accent-light);
+}
+
+.link {
+  line-height: 0;
+}
