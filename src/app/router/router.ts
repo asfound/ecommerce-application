@@ -103,6 +103,8 @@ export class Router {
     if (!matcher) {
       routerAction.setSearchParameters({});
 
+      this.updateHistory({ pathname, pushState: false, searchParameters });
+
       this.updatePage({ route: this.fallbackRoute });
 
       return;
