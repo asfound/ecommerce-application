@@ -6,6 +6,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { Input } from '~/components/common/input/input';
+import { FormHeader } from '~/components/form-header/form-header';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   BILLING_COUNTRY_PROPS,
@@ -23,9 +24,10 @@ import {
   STREET_PROPS,
   USE_FOR_BILLING_PROPS,
 } from '~/shared/constants/input-properties';
-import { a, datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
+import { a, datalist, div, fieldset, form, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
+import { REGISTRATION_FORM_TEXT } from './constants';
 import styles from './registration-form.module.css';
 
 export class RegistrationFormView extends BaseComponent implements Component {
@@ -89,7 +91,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
   ];
 
   private readonly submitButton = new Button({
-    textContent: 'Register',
+    textContent: REGISTRATION_FORM_TEXT.REGISTER,
     type: 'submit',
   });
 
@@ -138,11 +140,14 @@ export class RegistrationFormView extends BaseComponent implements Component {
   public createHTML(): void {
     this.storeInputs();
 
-    const formHeader = this.createHeader();
+    const formHeader = new FormHeader({
+      subtitle: REGISTRATION_FORM_TEXT.SUBTITLE,
+      title: REGISTRATION_FORM_TEXT.TITLE,
+    });
 
     const loginLinkContainer = div(
       { className: styles.linkContainer },
-      'Already have an account?',
+      REGISTRATION_FORM_TEXT.HAVE_ACCOUNT,
       this.loginLinkElement,
     );
 
@@ -151,7 +156,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     const accountDetailsFieldset = this.createAccountDetailsFieldset();
 
     const shippingAddressFieldset = this.createAddressFieldset(
-      'Shipping address:',
+      REGISTRATION_FORM_TEXT.FIELDSET_SHIPPING,
       this.shippingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.SHIPPING,
     );
@@ -161,7 +166,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
 
     this.billingAddressFieldset = this.createAddressFieldset(
-      'Billing address:',
+      REGISTRATION_FORM_TEXT.FIELDSET_BILLING,
       this.billingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.BILLING,
     );
@@ -171,7 +176,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
 
     this.formElement.append(
-      formHeader,
+      formHeader.element,
       this.errorMessageComponent.element,
       accountDetailsFieldset,
       shippingAddressFieldset,
@@ -238,7 +243,10 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   private createAccountDetailsFieldset(): HTMLFieldSetElement {
-    const accountDetailsLegend = legend({ className: styles.legend }, 'Account details:');
+    const accountDetailsLegend = legend(
+      { className: styles.legend },
+      REGISTRATION_FORM_TEXT.ACCOUNT_DETAILS,
+    );
 
     return fieldset(
       { className: styles.fieldset },
@@ -271,14 +279,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
     }
 
     return datalistElement;
-  }
-
-  private createHeader(): HTMLDivElement {
-    return div(
-      { className: styles.formHeader },
-      h1({ className: styles.formTitle }, 'Register'),
-      div({ className: styles.formSubtitle }, 'Please fill in the fields below'),
-    );
   }
 
   private getPayload(): SignupPayload {

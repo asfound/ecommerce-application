@@ -3,6 +3,7 @@
   margin-top: 4rem;
   margin-inline: auto;
   padding-block: 4rem;
+  padding-inline: 1rem;
   border-radius: var(--border-radius);
 
   background-color: var(--color-dark);
@@ -15,19 +16,6 @@
 
   max-width: 39.8rem;
   margin-inline: auto;
-}
-
-.formHeader {
-  text-align: center;
-}
-
-.formTitle {
-  font-size: 2.6rem;
-  font-weight: 500;
-}
-
-.formSubtitle {
-  color: var(--color-accent-light);
 }
 
 .fieldset {

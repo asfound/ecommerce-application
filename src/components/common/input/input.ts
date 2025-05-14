@@ -21,7 +21,7 @@ export interface InputProperties {
 export class Input extends BaseComponent {
   // TODO: use child classes for different types of inputs?
   public get checked(): boolean {
-    return this.inputComponent.element.type === 'checkbox'
+    return this.inputComponent.element.type === INPUT_TYPE.CHECKBOX
       ? this.inputComponent.element.checked
       : false;
   }
@@ -54,17 +54,17 @@ export class Input extends BaseComponent {
 
     this.inputComponent.element.name = this.properties.name ?? '';
 
-    if (this.properties.type === 'date') {
-      this.inputComponent.element.type = 'text';
+    if (this.properties.type === INPUT_TYPE.DATE) {
+      this.inputComponent.element.type = INPUT_TYPE.TEXT;
       this.inputComponent.element.addEventListener(
         'focus',
         () => {
-          this.inputComponent.element.type = 'date';
+          this.inputComponent.element.type = INPUT_TYPE.DATE;
         },
         { signal: this.abortController.signal },
       );
     } else {
-      this.inputComponent.element.type = this.properties.type ?? 'text';
+      this.inputComponent.element.type = this.properties.type ?? INPUT_TYPE.TEXT;
     }
 
     this.inputComponent.element.placeholder = this.properties.placeholder ?? '';
