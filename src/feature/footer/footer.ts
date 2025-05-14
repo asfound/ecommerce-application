@@ -5,13 +5,14 @@ import { Input } from '~/components/common/input/input';
 import { Logo } from '~/components/logo/logo';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { SUBSCRIPTION_EMAIL_PROPS } from '~/shared/constants/input-properties';
-import { a, div, li, p, ul } from '~/shared/create-element/tags';
+import { a, div, li, p, span, ul } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { showToast } from '~/shared/utils/show-toast';
 
 import {
   ACCOUNT_LINKS_TEXT,
   CARE_LINKS_TEXT,
+  CONTACT_LINKS,
   FOOTER_INFO,
   HELP_LINKS_TEXT,
   SOCIAL_LINKS,
@@ -51,11 +52,21 @@ export class Footer extends BaseComponent implements Component {
       { className: styles.description },
       FOOTER_INFO.CREDENTIALS.DESCRIPTION,
     );
-    //add icons to these ones
-    const mobile = li({ className: styles.listItem }, FOOTER_INFO.CREDENTIALS.MOBILE);
-    const email = li({ className: styles.listItem }, FOOTER_INFO.CREDENTIALS.EMAIL);
-    const location = li({ className: styles.listItem }, FOOTER_INFO.CREDENTIALS.LOCATION);
-    const contactsList = ul({ className: styles.list }, mobile, email, location);
+
+    const contactsList = ul(
+      { className: styles.list },
+      ...CONTACT_LINKS.map(({ href, icon, text }) =>
+        li(
+          { className: styles.listItem },
+          a(
+            { className: [styles.link, styles.contact], href, target: '_blank' },
+            createSvgIcon(icon, styles.contactIcon),
+            span({}, text),
+          ),
+        ),
+      ),
+    );
+
     return div(
       { className: [styles.credentials, styles.list] },
       new Logo().element,
