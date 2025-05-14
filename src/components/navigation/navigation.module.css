@@ -3,3 +3,46 @@
   gap: 2.5rem;
   text-transform: uppercase;
 }
+
+@media (width <= 1000px) {
+  .navigation {
+    position: fixed;
+    z-index: 15;
+    top: 0;
+    right: -40rem;
+
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 36rem;
+    height: 100vh;
+    margin-top: 8rem;
+    padding: 2rem;
+
+    visibility: hidden;
+    opacity: 0.97;
+    background-color: var(--color-dark);
+
+    transition:
+      right 0.7s ease,
+      visibility 0.7s ease;
+  }
+
+  .navigation.shown {
+    right: 0;
+    visibility: visible;
+  }
+
+  .navigation::before {
+    content: '';
+
+    position: absolute;
+    top: 2.5px;
+    left: -4px;
+
+    width: 4px;
+    height: 100%;
+
+    background-color: var(--color-accent-light);
+  }
+}

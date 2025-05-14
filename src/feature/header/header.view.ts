@@ -8,12 +8,14 @@ import logoutSvg from '~/assets/icons/logout.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Logo } from '~/components/logo/logo';
 import { Navigation } from '~/components/navigation/navigation';
+import navigationStyles from '~/components/navigation/navigation.module.css';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import styles from './header.module.css';
 
+const HEADER_LAYOUT_CHANGE_BREAKPOINT = 1000;
 export class HeaderView extends BaseComponent implements Component {
   private readonly logoLink = a({
     className: styles.logoLink,
@@ -24,13 +26,19 @@ export class HeaderView extends BaseComponent implements Component {
   private readonly logoutIcon = div(
     { className: styles.iconContainer },
     createSvgIcon(logoutSvg, styles.icon),
-    span({}, 'Logout'),
+    span({ className: styles.iconText }, 'Logout'),
   );
+
+  private readonly menuIcon = div({ className: styles.burger });
+
+  private readonly navigation = new Navigation(ROUTER_LINKS);
 
   public constructor() {
     super({ className: styles.header, tagName: 'header' });
 
     this.createHTML();
+
+    this.setupListeners();
   }
 
   public bindLogoClickHandler(handler: VoidFunction): void {
@@ -59,26 +67,32 @@ export class HeaderView extends BaseComponent implements Component {
     const logoElement = new Logo();
     this.logoLink.append(logoElement.element);
 
-    const navigation = new Navigation(ROUTER_LINKS);
+    this.navigation.addClassNames(styles.navigation);
 
     const cartIcon = div(
       { className: styles.iconContainer },
       createSvgIcon(cartSvg, styles.icon),
-      span({}, 'Cart'),
+      span({ className: styles.iconText }, 'Cart'),
     );
     const accountIcon = div(
       { className: styles.iconContainer },
       createSvgIcon(accountSvg, styles.icon),
-      span({}, 'Account'),
+      span({ className: styles.iconText }, 'Account'),
     );
 
-    const container = div({ className: styles.container }, cartIcon, accountIcon, this.logoutIcon);
+    const iconsContainer = div(
+      { className: styles.iconsContainer },
+      cartIcon,
+      accountIcon,
+      this.logoutIcon,
+      this.menuIcon,
+    );
 
     const wrapperElement = div(
       { className: [CSS_CLASS_NAME.WRAPPER, styles.wrapper] },
       this.logoLink,
-      navigation.element,
-      container,
+      this.navigation.element,
+      iconsContainer,
     );
 
     this.append(wrapperElement);
@@ -87,5 +101,47 @@ export class HeaderView extends BaseComponent implements Component {
   public setLogoutIconVisible(visible: boolean): void {
     //fix
     this.logoutIcon.hidden = !visible;
+  }
+
+  private closeMenu(): void {
+    this.navigation.element.classList.remove(navigationStyles.shown);
+    this.menuIcon.classList.remove(styles.active);
+    document.body.classList.remove(CSS_CLASS_NAME.NO_SCROLL);
+  }
+
+  private setupListeners(): void {
+    this.menuIcon.addEventListener(
+      'click',
+      () => {
+        this.navigation.element.classList.toggle(navigationStyles.shown);
+        this.menuIcon.classList.toggle(styles.active);
+        document.body.classList.toggle(CSS_CLASS_NAME.NO_SCROLL);
+      },
+      { signal: this.abortController.signal },
+    );
+
+    window.addEventListener(
+      'resize',
+      () => {
+        if (window.innerWidth > HEADER_LAYOUT_CHANGE_BREAKPOINT) {
+          this.closeMenu();
+        }
+      },
+      { signal: this.abortController.signal },
+    );
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        if (
+          event.target instanceof Node &&
+          !this.navigation.element.contains(event.target) &&
+          !this.menuIcon.contains(event.target)
+        ) {
+          this.closeMenu();
+        }
+      },
+      { signal: this.abortController.signal },
+    );
   }
 }
