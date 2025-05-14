@@ -1,4 +1,6 @@
-import type { InputProperties } from '~/components/common/input/input';
+import type { BaseInputProperties } from '~/components/common/input/base-input';
+import type { InputCheckboxProperties } from '~/components/common/input/input-checkbox/input-checkbox';
+import type { InputTextProperties } from '~/components/common/input/input-text/input-text';
 
 import {
   validateDatalistValue,
@@ -25,13 +27,13 @@ export const COUNTRY_LIST_ID = {
   SHIPPING: 'shipping-country-list',
 };
 
-export const EMAIL_PROPS: InputProperties = {
+export const EMAIL_PROPS: BaseInputProperties = {
   name: 'email',
   placeholder: 'Email',
   validators: [validateRequired, validateNoSpaces, validateEmailFormat],
 } as const;
 
-export const PASSWORD_PROPS: InputProperties = {
+export const PASSWORD_PROPS: BaseInputProperties = {
   name: 'password',
   placeholder: 'Password',
   validators: [
@@ -45,7 +47,7 @@ export const PASSWORD_PROPS: InputProperties = {
   ],
 } as const;
 
-export const FIRST_NAME_PROPS: InputProperties = {
+export const FIRST_NAME_PROPS: BaseInputProperties = {
   name: 'first-name',
   placeholder: 'First Name',
   validators: [
@@ -55,7 +57,7 @@ export const FIRST_NAME_PROPS: InputProperties = {
   ],
 } as const;
 
-export const LAST_NAME_PROPS: InputProperties = {
+export const LAST_NAME_PROPS: BaseInputProperties = {
   name: 'last-name',
   placeholder: 'Last Name',
   validators: [
@@ -65,27 +67,27 @@ export const LAST_NAME_PROPS: InputProperties = {
   ],
 } as const;
 
-export const DATE_OF_BIRTH_PROPS: InputProperties = {
+export const DATE_OF_BIRTH_PROPS: BaseInputProperties = {
   name: 'date-of-birth',
   placeholder: 'Date of birth',
   validators: [validateRequired, validateMinAge(REQUIRED_MIN_AGE)],
 } as const;
 
-export const SHIPPING_COUNTRY_PROPS: InputProperties = {
+export const SHIPPING_COUNTRY_PROPS: InputTextProperties = {
   listId: COUNTRY_LIST_ID.SHIPPING,
   name: 'shipping-country',
   placeholder: 'Start typing a country...',
   validators: [validateRequired, validateDatalistValue(COUNTRY_NAMES)],
 } as const;
 
-export const BILLING_COUNTRY_PROPS: InputProperties = {
+export const BILLING_COUNTRY_PROPS: InputTextProperties = {
   listId: COUNTRY_LIST_ID.BILLING,
   name: 'billing-country',
   placeholder: 'Start typing a country...',
   validators: [validateRequired, validateDatalistValue(COUNTRY_NAMES)],
 } as const;
 
-export const CITY_PROPS: InputProperties = {
+export const CITY_PROPS: BaseInputProperties = {
   name: 'city',
   placeholder: 'City',
   validators: [
@@ -95,35 +97,35 @@ export const CITY_PROPS: InputProperties = {
   ],
 } as const;
 
-export const STREET_PROPS: InputProperties = {
+export const STREET_PROPS: BaseInputProperties = {
   name: 'street',
   placeholder: 'Street',
   validators: [validateRequired, validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH)],
 } as const;
 
-export const SHIPPING_POSTAL_CODE_PROPS: InputProperties = {
+export const SHIPPING_POSTAL_CODE_PROPS: BaseInputProperties = {
   name: 'shipping-postal-code',
   placeholder: 'Postal Code',
   validators: [validateRequired],
 } as const;
 
-export const BILLING_POSTAL_CODE_PROPS: InputProperties = {
+export const BILLING_POSTAL_CODE_PROPS: BaseInputProperties = {
   name: 'billing-postal-code',
   placeholder: 'Postal Code',
   validators: [validateRequired],
 } as const;
 
-export const DEFAULT_CHECKBOX_PROPS: InputProperties = {
+export const DEFAULT_CHECKBOX_PROPS: InputCheckboxProperties = {
   label: 'Set as default',
   name: 'default-checkbox',
 } as const;
 
-export const USE_FOR_BILLING_PROPS: InputProperties = {
+export const USE_FOR_BILLING_PROPS: InputCheckboxProperties = {
   label: 'Use for billing',
   name: 'billing-as-shipping-checkbox',
 } as const;
 
-export const SUBSCRIPTION_EMAIL_PROPS: InputProperties = {
+export const SUBSCRIPTION_EMAIL_PROPS: BaseInputProperties = {
   name: 'email',
   placeholder: 'Email',
   validators: [validateEmailFormat],
