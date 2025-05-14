@@ -17,6 +17,8 @@ import styles from './header.module.css';
 
 const HEADER_LAYOUT_CHANGE_BREAKPOINT = 1000;
 export class HeaderView extends BaseComponent implements Component {
+  private isBurgerMenuOpen = false;
+
   private readonly logoLink = a({
     className: styles.logoLink,
     href: ROUTE_PATH.MAIN,
@@ -68,6 +70,9 @@ export class HeaderView extends BaseComponent implements Component {
     this.logoLink.append(logoElement.element);
 
     this.navigation.addClassNames(styles.navigation);
+    this.navigation.addLinkClickHandler(() => {
+      this.closeMenu();
+    });
 
     const cartIcon = div(
       { className: styles.iconContainer },
@@ -104,9 +109,12 @@ export class HeaderView extends BaseComponent implements Component {
   }
 
   private closeMenu(): void {
-    this.navigation.element.classList.remove(navigationStyles.shown);
-    this.menuIcon.classList.remove(styles.active);
-    document.body.classList.remove(CSS_CLASS_NAME.NO_SCROLL);
+    if (this.isBurgerMenuOpen) {
+      this.navigation.element.classList.remove(navigationStyles.shown);
+      this.menuIcon.classList.remove(styles.active);
+      document.body.classList.remove(CSS_CLASS_NAME.NO_SCROLL);
+      this.isBurgerMenuOpen = false;
+    }
   }
 
   private setupListeners(): void {
@@ -116,6 +124,7 @@ export class HeaderView extends BaseComponent implements Component {
         this.navigation.element.classList.toggle(navigationStyles.shown);
         this.menuIcon.classList.toggle(styles.active);
         document.body.classList.toggle(CSS_CLASS_NAME.NO_SCROLL);
+        this.isBurgerMenuOpen = !this.isBurgerMenuOpen;
       },
       { signal: this.abortController.signal },
     );
