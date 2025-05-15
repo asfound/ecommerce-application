@@ -30,6 +30,7 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
 
   private handleLoginLinkClick = (): void => {
     Router.instance.navigate(ROUTE_PATH.LOGIN);
+    window.scrollTo({ top: 0 });
   };
 
   private readonly handleSignUp = (payload: SignupPayload): void => {
