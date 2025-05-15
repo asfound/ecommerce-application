@@ -24,8 +24,8 @@
     background-color: var(--color-dark);
 
     transition:
-      right 0.7s ease,
-      visibility 0.7s ease;
+      right var(--burger-transition-duration) ease,
+      visibility var(--burger-transition-duration) ease;
   }
 
   .navigation.shown {

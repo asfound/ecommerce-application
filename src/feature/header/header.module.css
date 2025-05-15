@@ -54,7 +54,7 @@
 
   background: none;
 
-  transition: gap 0.7s ease;
+  transition: gap var(--burger-transition-duration) ease;
 }
 
 .burger::before,
@@ -69,7 +69,7 @@
 
   background-color: var(--color-white);
 
-  transition: transform 0.7s ease;
+  transition: transform var(--burger-transition-duration) ease;
 }
 
 .burger.active {
