@@ -51,6 +51,8 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
         rootAction.setLoggedIn(true);
 
         showToast(REGISTRATION_FORM_TEXT.ACCOUNT_CREATED);
+
+        window.scrollTo({ top: 0 });
       })
       .catch((error: unknown) => {
         window.scrollTo({ top: 0 });
