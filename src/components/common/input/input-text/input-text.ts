@@ -1,14 +1,14 @@
 import { INPUT_TYPE } from '~/shared/constants/constants';
 
-import type { BaseInputProperties } from '../base-input';
+import type { InputBaseProperties } from '../input-base';
 
-import { BaseInput } from '../base-input';
+import { InputBase } from '../input-base';
 
-export interface InputTextProperties extends BaseInputProperties {
+export interface InputTextProperties extends InputBaseProperties {
   listId?: string;
 }
 
-export class InputText extends BaseInput {
+export class InputText extends InputBase {
   public get value(): string {
     return this.inputComponent.element.value;
   }

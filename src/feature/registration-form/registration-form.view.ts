@@ -1,6 +1,6 @@
 import type { CustomerAddress, SignupPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
-import type { BaseInput } from '~/components/common/input/base-input';
+import type { InputBase } from '~/components/common/input/input-base';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -47,7 +47,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputBillingStreet = new InputText(STREET_PROPS);
 
-  private readonly billingInputs: BaseInput[] = [
+  private readonly billingInputs: InputBase[] = [
     this.inputBillingCountry,
     this.inputBillingCity,
     this.inputBillingStreet,
@@ -61,7 +61,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly inputBirthDate = new InputDate(DATE_OF_BIRTH_PROPS);
 
-  private inputComponents: BaseInput[] = [];
+  private inputComponents: InputBase[] = [];
 
   private readonly inputEmail = new InputText(EMAIL_PROPS);
 
@@ -238,7 +238,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.errorMessageComponent.show(errorMessage);
   }
 
-  private addInputComponent(input: BaseInput): void {
+  private addInputComponent(input: InputBase): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {

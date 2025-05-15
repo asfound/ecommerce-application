@@ -4,19 +4,19 @@ import { INPUT_TYPE } from '~/shared/constants/constants';
 import { div } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
-import type { BaseInputProperties } from '../base-input';
+import type { InputBaseProperties } from '../input-base';
 
-import { BaseInput } from '../base-input';
+import { InputBase } from '../input-base';
 import styles from './input-password.module.css';
 
-export class InputPassword extends BaseInput {
+export class InputPassword extends InputBase {
   public get value(): string {
     return this.inputComponent.element.value;
   }
 
   private readonly toggleIconContainer = div(null, createSvgIcon(iconEyeHidden, styles.icon));
 
-  public constructor(properties: BaseInputProperties) {
+  public constructor(properties: InputBaseProperties) {
     super(properties);
 
     this.inputComponent.setAttributes({ type: INPUT_TYPE.PASSWORD });

@@ -1,6 +1,6 @@
 import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
-import type { BaseInput } from '~/components/common/input/base-input';
+import type { InputBase } from '~/components/common/input/input-base';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -25,7 +25,7 @@ export class LoginFormView extends BaseComponent implements Component {
 
   private readonly formElement = form({ className: styles.form });
 
-  private readonly inputComponents: BaseInput[] = [];
+  private readonly inputComponents: InputBase[] = [];
 
   private readonly inputEmail = new InputText(EMAIL_PROPS);
 
@@ -126,7 +126,7 @@ export class LoginFormView extends BaseComponent implements Component {
     this.errorMessageComponent.show(errorMessage);
   }
 
-  private addInput(input: BaseInput): void {
+  private addInput(input: InputBase): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {

@@ -1,16 +1,16 @@
 import { INPUT_TYPE } from '~/shared/constants/constants';
 import { label, span } from '~/shared/create-element/tags';
 
-import type { BaseInputProperties } from '../base-input';
+import type { InputBaseProperties } from '../input-base';
 
-import { BaseInput } from '../base-input';
+import { InputBase } from '../input-base';
 import styles from './input-checkbox.module.css';
 
-export interface InputCheckboxProperties extends BaseInputProperties {
+export interface InputCheckboxProperties extends InputBaseProperties {
   label?: string;
 }
 
-export class InputCheckbox extends BaseInput {
+export class InputCheckbox extends InputBase {
   public get checked(): boolean {
     return this.inputComponent.element.checked;
   }

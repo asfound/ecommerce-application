@@ -4,12 +4,13 @@ import { BaseComponent } from '~/components/base-component/base-component';
 
 import styles from './base-input.module.css';
 
-export interface BaseInputProperties {
+export interface InputBaseProperties {
   name?: string;
   placeholder?: string;
   validators?: ValidatorFunction[];
 }
-export abstract class BaseInput extends BaseComponent {
+
+export abstract class InputBase extends BaseComponent {
   protected readonly errorMessageComponent = new BaseComponent({
     className: styles.errorMessage,
     tagName: 'div',
@@ -21,11 +22,11 @@ export abstract class BaseInput extends BaseComponent {
     tagName: 'input',
   });
 
-  private readonly properties: BaseInputProperties;
+  private readonly properties: InputBaseProperties;
 
   private readonly validators: ValidatorFunction[] = [];
 
-  public constructor(properties: BaseInputProperties) {
+  public constructor(properties: InputBaseProperties) {
     super({ className: styles.container, tagName: 'div' });
 
     this.properties = properties;
