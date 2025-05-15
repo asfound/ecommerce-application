@@ -66,8 +66,6 @@ export class AuthService {
     const response = await this.apiRoot().me().login().post({ body }).execute();
 
     if (isSuccessResponse(response)) {
-      this.logout();
-
       this.loggedIn = true;
 
       this.localStorageService.setItem(LOCAL_STORAGE_KEY.LOGGED_IN, this.loggedIn);

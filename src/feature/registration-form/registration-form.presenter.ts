@@ -30,6 +30,7 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
 
   private handleLoginLinkClick = (): void => {
     Router.instance.navigate(ROUTE_PATH.LOGIN);
+    window.scrollTo({ top: 0 });
   };
 
   private readonly handleSignUp = (payload: SignupPayload): void => {
@@ -39,6 +40,8 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
         return { email: payload.email, password: payload.password };
       })
       .then((credentials) => {
+        this.authService.logout();
+
         return this.authService.login(credentials);
       })
       .then(() => {
@@ -49,6 +52,8 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
         rootAction.setLoggedIn(true);
 
         showToast(REGISTRATION_FORM_TEXT.ACCOUNT_CREATED);
+
+        window.scrollTo({ top: 0 });
       })
       .catch((error: unknown) => {
         window.scrollTo({ top: 0 });

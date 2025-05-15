@@ -24,6 +24,10 @@ body {
   font-size: 1.6rem;
 }
 
+* {
+  scrollbar-width: thin;
+}
+
 h1,
 h2,
 h3,
