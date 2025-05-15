@@ -5,3 +5,5 @@ export const HEADER_ICON_TEXT = {
   CART: 'Cart',
   LOGOUT: 'Logout',
 };
+
+export const BURGER_DEBOUNCE_THRESHOLD = 150;

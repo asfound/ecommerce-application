@@ -12,8 +12,13 @@ import navigationStyles from '~/components/navigation/navigation.module.css';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
+import { debounce } from '~/shared/utils/debounce';
 
-import { HEADER_ICON_TEXT, HEADER_LAYOUT_CHANGE_BREAKPOINT } from './constants';
+import {
+  BURGER_DEBOUNCE_THRESHOLD,
+  HEADER_ICON_TEXT,
+  HEADER_LAYOUT_CHANGE_BREAKPOINT,
+} from './constants';
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
@@ -130,26 +135,21 @@ export class HeaderView extends BaseComponent implements Component {
 
     window.addEventListener(
       'resize',
-      () => {
+      debounce(() => {
         if (window.innerWidth > HEADER_LAYOUT_CHANGE_BREAKPOINT) {
           this.closeMenu();
         }
-      },
-      { signal: this.abortController.signal },
+      }, BURGER_DEBOUNCE_THRESHOLD),
     );
 
-    document.addEventListener(
-      'click',
-      (event) => {
-        if (
-          event.target instanceof Node &&
-          !this.navigation.element.contains(event.target) &&
-          !this.menuIcon.contains(event.target)
-        ) {
-          this.closeMenu();
-        }
-      },
-      { signal: this.abortController.signal },
-    );
+    document.addEventListener('click', (event) => {
+      if (
+        event.target instanceof Node &&
+        !this.navigation.element.contains(event.target) &&
+        !this.menuIcon.contains(event.target)
+      ) {
+        this.closeMenu();
+      }
+    });
   }
 }
