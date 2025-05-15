@@ -41,6 +41,6 @@ export class BrowserStorageService<TData> {
 }
 
 export const localStorageService = new BrowserStorageService<LocalStorageData>({
-  keyPrefix: 'TEST', // TODO: replace by UUID
+  keyPrefix: 'fdbc6ce7-ff70-43ce-83a1-23be984b7f72',
   storageType: 'local',
 });
