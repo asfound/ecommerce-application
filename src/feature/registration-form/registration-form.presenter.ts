@@ -39,6 +39,8 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
         return { email: payload.email, password: payload.password };
       })
       .then((credentials) => {
+        this.authService.logout();
+
         return this.authService.login(credentials);
       })
       .then(() => {
