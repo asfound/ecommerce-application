@@ -5,6 +5,7 @@ export const EMAIL_VALIDATION_ERROR = {
 export const VALIDATION_ERROR = {
   HAS_DIGIT: 'Must contain at least one digit (0–9).',
   HAS_LOWERCASE: 'Must contain at least one lowercase letter (a–z).',
+  HAS_NO_DIGIT: 'Value must not contain numbers.',
   HAS_UPPERCASE: 'Must contain at least one uppercase letter (A–Z).',
   LIST_VALUE: 'Enter valid name or select from the list',
   MIN_AGE: 'Must be at least 18 years old.',

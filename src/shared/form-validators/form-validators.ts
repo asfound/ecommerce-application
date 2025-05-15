@@ -43,6 +43,10 @@ export const validateOnlyEnglishLetters: ValidatorFunction = (value) => {
   return /^[a-zA-Z0-9]+$/.test(value) ? null : VALIDATION_ERROR.ONLY_ENGLISH_LETTERS;
 };
 
+export const validateHasNoDigit: ValidatorFunction = (value) => {
+  return /\d/.test(value) ? VALIDATION_ERROR.HAS_NO_DIGIT : null;
+};
+
 export const validateMinAge = (ageInYears: number) => {
   return (value: string): null | string => {
     const birthDate = new Date(value);

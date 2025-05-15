@@ -6,6 +6,7 @@ import {
   validateEmailFormat,
   validateHasDigit,
   validateHasLowercase,
+  validateHasNoDigit,
   validateHasUppercase,
   validateMinAge,
   validateMinLength,
@@ -53,6 +54,7 @@ export const FIRST_NAME_PROPS: InputTextProperties = {
     validateRequired,
     validateOnlyEnglishLetters,
     validateMinLength(REQUIRED_NAME_LENGTH),
+    validateHasNoDigit,
   ],
 } as const;
 
@@ -63,6 +65,7 @@ export const LAST_NAME_PROPS: InputTextProperties = {
     validateRequired,
     validateOnlyEnglishLetters,
     validateMinLength(REQUIRED_NAME_LENGTH),
+    validateHasNoDigit,
   ],
 } as const;
 
@@ -93,6 +96,7 @@ export const CITY_PROPS: InputTextProperties = {
     validateRequired,
     validateOnlyEnglishLetters,
     validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH),
+    validateHasNoDigit,
   ],
 } as const;
 
