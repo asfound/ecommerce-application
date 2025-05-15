@@ -1,7 +1,7 @@
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
-import { Input } from '~/components/common/input/input';
+import { InputText } from '~/components/common/input/input-text/input-text';
 import { Logo } from '~/components/logo/logo';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { SUBSCRIPTION_EMAIL_PROPS } from '~/shared/constants/input-properties';
@@ -128,7 +128,7 @@ export class Footer extends BaseComponent implements Component {
       FOOTER_INFO.SUBSCRIPTION.DESCRIPTION,
     );
 
-    const emailInput = new Input(SUBSCRIPTION_EMAIL_PROPS);
+    const emailInput = new InputText(SUBSCRIPTION_EMAIL_PROPS);
     emailInput.addClassNames(styles.input);
 
     const cta = p({ className: styles.cta }, FOOTER_INFO.SUBSCRIPTION.CTA);
@@ -144,7 +144,7 @@ export class Footer extends BaseComponent implements Component {
     cta.addEventListener(
       'click',
       () => {
-        emailInput.clearInput();
+        emailInput.clear();
         showToast(SUBSCRIPTION_SUCCESS);
         cta.classList.remove(styles.visible);
       },

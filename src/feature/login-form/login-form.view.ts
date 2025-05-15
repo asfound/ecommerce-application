@@ -1,11 +1,13 @@
 import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
+import type { InputBase } from '~/components/common/input/input-base';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
-import { Input } from '~/components/common/input/input';
+import { InputPassword } from '~/components/common/input/input-password/input-password';
+import { InputText } from '~/components/common/input/input-text/input-text';
 import { FormHeader } from '~/components/form-header/form-header';
 import { EMAIL_PROPS, PASSWORD_PROPS } from '~/shared/constants/input-properties';
 import { a, div, form } from '~/shared/create-element/tags';
@@ -23,11 +25,11 @@ export class LoginFormView extends BaseComponent implements Component {
 
   private readonly formElement = form({ className: styles.form });
 
-  private readonly inputComponents: Input[] = [];
+  private readonly inputComponents: InputBase[] = [];
 
-  private readonly inputEmail = new Input(EMAIL_PROPS);
+  private readonly inputEmail = new InputText(EMAIL_PROPS);
 
-  private readonly inputPassword = new Input(PASSWORD_PROPS);
+  private readonly inputPassword = new InputPassword(PASSWORD_PROPS);
 
   private readonly registrationLinkElement = a(
     { href: ROUTE_PATH.REGISTRATION },
@@ -124,7 +126,7 @@ export class LoginFormView extends BaseComponent implements Component {
     this.errorMessageComponent.show(errorMessage);
   }
 
-  private addInput(input: Input): void {
+  private addInput(input: InputBase): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {

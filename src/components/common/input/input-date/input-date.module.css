@@ -1,0 +1,14 @@
+.input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.9);
+}
+
+.input[type='date']::-webkit-datetime-edit {
+  color: var(--color-white);
+}
+
+.input[type='date']::-webkit-datetime-edit-day-field:focus,
+.input[type='date']::-webkit-datetime-edit-month-field:focus,
+.input[type='date']::-webkit-datetime-edit-year-field:focus {
+  color: var(--color-white);
+  background-color: var(--color-accent-light);
+}
