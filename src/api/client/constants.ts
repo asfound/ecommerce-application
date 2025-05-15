@@ -11,7 +11,6 @@ export const { API_URL, AUTH_URL, CLIENT_ID, CLIENT_SECRET, PROJECT_KEY, SCOPES 
 
 export const COMMON_AUTH_OPTIONS = {
   host: AUTH_URL,
-  // httpClient: fetch,
   projectKey: PROJECT_KEY,
   scopes: SCOPES.split(' '),
 };
@@ -21,16 +20,11 @@ export const COMMON_CLIENT_CREDENTIALS = {
   clientSecret: CLIENT_SECRET,
 };
 
-// export const HTTP_MIDDLEWARE_OPTIONS: HttpMiddlewareOptions = {
-//   host: API_URL,
-//   // httpClient: globalThis.fetch,
-// };
-
 export const HTTP_MIDDLEWARE_OPTIONS: HttpMiddlewareOptions = {
   host: API_URL,
-  // httpClient: (...parameters) => {
-  //   return globalThis.fetch(...parameters);
-  // },
+  httpClient: (input: globalThis.Request | string | URL, init?: RequestInit) => {
+    return globalThis.fetch(input, init);
+  },
 };
 
 export const AUTH_FLOW_TYPE = {

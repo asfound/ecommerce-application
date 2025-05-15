@@ -4,6 +4,23 @@ import { server } from './src/api/msw-mocks/node.ts';
 
 import { vi } from 'vitest';
 
+vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
+  const element = {
+    tagName: tagName.toUpperCase(),
+    setAttribute: vi.fn(),
+    addEventListener: vi.fn(),
+    append: vi.fn(),
+    style: {},
+    classList: {
+      add: vi.fn(),
+      remove: vi.fn(),
+      toggle: vi.fn(),
+      contains: vi.fn(),
+    },
+  };
+  return element;
+});
+
 const store = new Map();
 
 const localStorageMock = {
