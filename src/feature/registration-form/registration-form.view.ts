@@ -1,11 +1,16 @@
 import type { CustomerAddress, SignupPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
+import type { InputBase } from '~/components/common/input/input-base';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
-import { Input } from '~/components/common/input/input';
+import { InputCheckbox } from '~/components/common/input/input-checkbox/input-checkbox';
+import { InputDate } from '~/components/common/input/input-date/input-date';
+import { InputPassword } from '~/components/common/input/input-password/input-password';
+import { InputText } from '~/components/common/input/input-text/input-text';
+import { FormHeader } from '~/components/form-header/form-header';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   BILLING_COUNTRY_PROPS,
@@ -23,25 +28,26 @@ import {
   STREET_PROPS,
   USE_FOR_BILLING_PROPS,
 } from '~/shared/constants/input-properties';
-import { a, datalist, div, fieldset, form, h1, legend, option } from '~/shared/create-element/tags';
+import { a, datalist, div, fieldset, form, legend, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
+import { REGISTRATION_FORM_TEXT } from './constants';
 import styles from './registration-form.module.css';
 
 export class RegistrationFormView extends BaseComponent implements Component {
   private billingAddressFieldset: HTMLElement | null = null;
 
-  private readonly inputBillingCity = new Input(CITY_PROPS);
+  private readonly inputBillingCity = new InputText(CITY_PROPS);
 
-  private readonly inputBillingCountry = new Input(BILLING_COUNTRY_PROPS);
+  private readonly inputBillingCountry = new InputText(BILLING_COUNTRY_PROPS);
 
-  private readonly inputBillingPostcode = new Input(BILLING_POSTAL_CODE_PROPS);
+  private readonly inputBillingPostcode = new InputText(BILLING_POSTAL_CODE_PROPS);
 
-  private readonly inputBillingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+  private readonly inputBillingSetDefault = new InputCheckbox(DEFAULT_CHECKBOX_PROPS);
 
-  private readonly inputBillingStreet = new Input(STREET_PROPS);
+  private readonly inputBillingStreet = new InputText(STREET_PROPS);
 
-  private readonly billingInputs = [
+  private readonly billingInputs: InputBase[] = [
     this.inputBillingCountry,
     this.inputBillingCity,
     this.inputBillingStreet,
@@ -53,29 +59,29 @@ export class RegistrationFormView extends BaseComponent implements Component {
 
   private readonly formElement = form({ className: styles.form });
 
-  private readonly inputBirthDate = new Input(DATE_OF_BIRTH_PROPS);
+  private readonly inputBirthDate = new InputDate(DATE_OF_BIRTH_PROPS);
 
-  private inputComponents: Input[] = [];
+  private inputComponents: InputBase[] = [];
 
-  private readonly inputEmail = new Input(EMAIL_PROPS);
+  private readonly inputEmail = new InputText(EMAIL_PROPS);
 
-  private readonly inputFirstName = new Input(FIRST_NAME_PROPS);
+  private readonly inputFirstName = new InputText(FIRST_NAME_PROPS);
 
-  private readonly inputLastName = new Input(LAST_NAME_PROPS);
+  private readonly inputLastName = new InputText(LAST_NAME_PROPS);
 
-  private readonly inputPassword = new Input(PASSWORD_PROPS);
+  private readonly inputPassword = new InputPassword(PASSWORD_PROPS);
 
-  private readonly inputShippingAsBilling = new Input(USE_FOR_BILLING_PROPS);
+  private readonly inputShippingAsBilling = new InputCheckbox(USE_FOR_BILLING_PROPS);
 
-  private readonly inputShippingCity = new Input(CITY_PROPS);
+  private readonly inputShippingCity = new InputText(CITY_PROPS);
 
-  private readonly inputShippingCountry = new Input(SHIPPING_COUNTRY_PROPS);
+  private readonly inputShippingCountry = new InputText(SHIPPING_COUNTRY_PROPS);
 
-  private readonly inputShippingPostcode = new Input(SHIPPING_POSTAL_CODE_PROPS);
+  private readonly inputShippingPostcode = new InputText(SHIPPING_POSTAL_CODE_PROPS);
 
-  private readonly inputShippingSetDefault = new Input(DEFAULT_CHECKBOX_PROPS);
+  private readonly inputShippingSetDefault = new InputCheckbox(DEFAULT_CHECKBOX_PROPS);
 
-  private readonly inputShippingStreet = new Input(STREET_PROPS);
+  private readonly inputShippingStreet = new InputText(STREET_PROPS);
 
   private readonly loginLinkElement = a({ href: ROUTE_PATH.REGISTRATION }, 'Log in');
 
@@ -89,7 +95,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
   ];
 
   private readonly submitButton = new Button({
-    textContent: 'Register',
+    textContent: REGISTRATION_FORM_TEXT.REGISTER,
     type: 'submit',
   });
 
@@ -138,11 +144,14 @@ export class RegistrationFormView extends BaseComponent implements Component {
   public createHTML(): void {
     this.storeInputs();
 
-    const formHeader = this.createHeader();
+    const formHeader = new FormHeader({
+      subtitle: REGISTRATION_FORM_TEXT.SUBTITLE,
+      title: REGISTRATION_FORM_TEXT.TITLE,
+    });
 
     const loginLinkContainer = div(
       { className: styles.linkContainer },
-      'Already have an account?',
+      REGISTRATION_FORM_TEXT.HAVE_ACCOUNT,
       this.loginLinkElement,
     );
 
@@ -151,7 +160,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     const accountDetailsFieldset = this.createAccountDetailsFieldset();
 
     const shippingAddressFieldset = this.createAddressFieldset(
-      'Shipping address:',
+      REGISTRATION_FORM_TEXT.FIELDSET_SHIPPING,
       this.shippingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.SHIPPING,
     );
@@ -161,7 +170,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
 
     this.billingAddressFieldset = this.createAddressFieldset(
-      'Billing address:',
+      REGISTRATION_FORM_TEXT.FIELDSET_BILLING,
       this.billingInputs.map((input) => input.element),
       COUNTRY_LIST_ID.BILLING,
     );
@@ -171,7 +180,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
 
     this.formElement.append(
-      formHeader,
+      formHeader.element,
       this.errorMessageComponent.element,
       accountDetailsFieldset,
       shippingAddressFieldset,
@@ -229,7 +238,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.errorMessageComponent.show(errorMessage);
   }
 
-  private addInputComponent(input: Input): void {
+  private addInputComponent(input: InputBase): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {
@@ -238,7 +247,10 @@ export class RegistrationFormView extends BaseComponent implements Component {
   }
 
   private createAccountDetailsFieldset(): HTMLFieldSetElement {
-    const accountDetailsLegend = legend({ className: styles.legend }, 'Account details:');
+    const accountDetailsLegend = legend(
+      { className: styles.legend },
+      REGISTRATION_FORM_TEXT.ACCOUNT_DETAILS,
+    );
 
     return fieldset(
       { className: styles.fieldset },
@@ -271,14 +283,6 @@ export class RegistrationFormView extends BaseComponent implements Component {
     }
 
     return datalistElement;
-  }
-
-  private createHeader(): HTMLDivElement {
-    return div(
-      { className: styles.formHeader },
-      h1({ className: styles.formTitle }, 'Register'),
-      div({ className: styles.formSubtitle }, 'Please fill in the fields below'),
-    );
   }
 
   private getPayload(): SignupPayload {

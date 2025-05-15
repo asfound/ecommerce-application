@@ -1,19 +1,23 @@
 import type { LoginPayload } from '~/api/services/auth/types';
 import type { Component } from '~/components/base-component/types';
+import type { InputBase } from '~/components/common/input/input-base';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { ErrorMessage } from '~/components/common/error-message/error-message';
-import { Input } from '~/components/common/input/input';
+import { InputPassword } from '~/components/common/input/input-password/input-password';
+import { InputText } from '~/components/common/input/input-text/input-text';
+import { FormHeader } from '~/components/form-header/form-header';
 import { EMAIL_PROPS, PASSWORD_PROPS } from '~/shared/constants/input-properties';
-import { a, div, form, h2 } from '~/shared/create-element/tags';
+import { a, div, form } from '~/shared/create-element/tags';
 
+import { LOGIN_FORM_TEXT } from './constants';
 import styles from './login-form.module.css';
 
 export class LoginFormView extends BaseComponent implements Component {
   private readonly buttonSubmit = new Button({
-    textContent: 'Log in',
+    textContent: LOGIN_FORM_TEXT.LOG_IN,
     type: 'submit',
   });
 
@@ -21,15 +25,15 @@ export class LoginFormView extends BaseComponent implements Component {
 
   private readonly formElement = form({ className: styles.form });
 
-  private readonly inputComponents: Input[] = [];
+  private readonly inputComponents: InputBase[] = [];
 
-  private readonly inputEmail = new Input(EMAIL_PROPS);
+  private readonly inputEmail = new InputText(EMAIL_PROPS);
 
-  private readonly inputPassword = new Input(PASSWORD_PROPS);
+  private readonly inputPassword = new InputPassword(PASSWORD_PROPS);
 
   private readonly registrationLinkElement = a(
     { href: ROUTE_PATH.REGISTRATION },
-    'Create an account',
+    LOGIN_FORM_TEXT.CREATE_ACCOUNT,
   );
 
   public constructor() {
@@ -76,16 +80,14 @@ export class LoginFormView extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    // Header and link could be components to share with registration
-    const formHeader = div(
-      { className: styles.formHeader },
-      h2({ className: styles.formTitle }, 'Log In'),
-      div({ className: styles.formSubtitle }, 'Please enter your e-mail and password:'),
-    );
+    const formHeader = new FormHeader({
+      subtitle: LOGIN_FORM_TEXT.SUBTITLE,
+      title: LOGIN_FORM_TEXT.TITLE,
+    });
 
     const registrationLinkContainer = div(
       { className: styles.linkContainer },
-      'New to HUH Coffee?',
+      LOGIN_FORM_TEXT.NEW_TO_HUH_COFFEE,
       this.registrationLinkElement,
     );
 
@@ -95,7 +97,7 @@ export class LoginFormView extends BaseComponent implements Component {
     this.addInput(this.inputPassword);
 
     this.formElement.append(
-      formHeader,
+      formHeader.element,
       this.errorMessageComponent.element,
       this.inputEmail.element,
       this.inputPassword.element,
@@ -124,7 +126,7 @@ export class LoginFormView extends BaseComponent implements Component {
     this.errorMessageComponent.show(errorMessage);
   }
 
-  private addInput(input: Input): void {
+  private addInput(input: InputBase): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {

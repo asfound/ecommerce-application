@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.083 0.246 25.034 25.07"
+  xmlns:bx="https://boxy-svg.com" width="25.034px" height="25.07px">
+
+
+  <path style="stroke-width: 1.5; fill: none; stroke-linecap: round;"
+    d="M 8.2 12.055 L 21.424 12.096" id="object-1" />
+  <path style="stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round;"
+    d="M 18.097 8.974 L 22.04 12.095 L 18.262 15.34" id="object-2" />
+  <path style="stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none;"
+    d="M 13.919 6.995 L 13.919 5.131 C 13.919 4.392 13.655 4.047 13.149 3.69 C 12.64 3.47 12.624 3.414 11.757 3.417 C 7.073 3.417 3.558 7.22 3.558 12.287 C 3.558 18.064 7.791 21.332 11.683 21.332 C 12.393 21.302 12.653 21.297 13.124 21.058 C 13.736 20.805 13.844 20.434 13.844 19.766 L 13.844 17.977"
+    id="object-0" />
+
+</svg>

@@ -9,6 +9,9 @@
   --color-red: #e77373;
   --color-green: #7fccc6;
   --transition-duration: 0.2s;
+  --burger-transition-duration: 0.35s;
   --padding-card: 1rem 2rem 2rem;
   --border-radius: 4px;
+  --font-montserrat: 'Montserrat', system-ui, helvetica, arial, sans-serif;
+  --font-poppins: 'Poppins', system-ui, helvetica, arial, sans-serif;
 }

@@ -33,3 +33,7 @@ export const fieldset = createElementFactory('fieldset');
 export const legend = createElementFactory('legend');
 
 export const label = createElementFactory('label');
+
+export const li = createElementFactory('li');
+
+export const ul = createElementFactory('ul');

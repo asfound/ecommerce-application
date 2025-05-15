@@ -1,0 +1,12 @@
+.formHeader {
+  text-align: center;
+}
+
+.formTitle {
+  font-size: 2.6rem;
+  font-weight: 500;
+}
+
+.formSubtitle {
+  color: var(--color-accent-light);
+}

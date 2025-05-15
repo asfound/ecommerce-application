@@ -1,6 +1,7 @@
 import { ApiBuilder } from '~/api/client/api-builder';
 import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
+import { Footer } from '~/feature/footer/footer';
 import { HeaderPresenter } from '~/feature/header/header.presenter';
 import { HeaderView } from '~/feature/header/header.view';
 
@@ -22,7 +23,9 @@ export class App {
 
     const headerPresenter = new HeaderPresenter(new HeaderView(), authService);
 
-    this.root.append(headerPresenter.getView(), Router.instance.outlet);
+    const footer = new Footer();
+
+    this.root.append(headerPresenter.getView(), Router.instance.outlet, footer);
   }
 
   public mount(parent: HTMLElement): void {

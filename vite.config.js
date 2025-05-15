@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
+import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +18,12 @@ export default defineConfig({
       '~': path.resolve(__dirname, './src'),
     },
   },
-
+  plugins: [
+    createSvgSpritePlugin({
+      exportType: 'vanilla',
+      include: '**/icons/*.svg',
+    }),
+  ],
   test: {
     globals: true,
     setupFiles: ['./vitest.setup.js'],
