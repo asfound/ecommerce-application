@@ -2,28 +2,50 @@ import type { Component } from '~/components/base-component/types';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { ROUTER_LINKS } from '~/app/router/router-links';
+import accountSvg from '~/assets/icons/account.svg';
+import cartSvg from '~/assets/icons/cart.svg';
+import logoutSvg from '~/assets/icons/logout.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Logo } from '~/components/logo/logo';
 import { Navigation } from '~/components/navigation/navigation';
+import navigationStyles from '~/components/navigation/navigation.module.css';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { a, div } from '~/shared/create-element/tags';
+import { a, div, span } from '~/shared/create-element/tags';
+import { createSvgIcon } from '~/shared/utils/create-svg';
+import { debounce } from '~/shared/utils/debounce';
 
+import {
+  BURGER_DEBOUNCE_THRESHOLD,
+  HEADER_ICON_TEXT,
+  HEADER_LAYOUT_CHANGE_BREAKPOINT,
+} from './constants';
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
+  private isBurgerMenuOpen = false;
+
   private readonly logoLink = a({
     className: styles.logoLink,
     href: ROUTE_PATH.MAIN,
     id: 'header',
   });
 
-  // TODO: change to icon
-  private readonly logoutIcon = div({ className: styles.icon }, 'Logout');
+  private readonly logoutIcon = div(
+    { className: styles.iconContainer },
+    createSvgIcon(logoutSvg, styles.icon),
+    span({ className: styles.iconText }, HEADER_ICON_TEXT.LOGOUT),
+  );
+
+  private readonly menuIcon = div({ className: styles.burger });
+
+  private readonly navigation = new Navigation(ROUTER_LINKS);
 
   public constructor() {
     super({ className: styles.header, tagName: 'header' });
 
     this.createHTML();
+
+    this.setupListeners();
   }
 
   public bindLogoClickHandler(handler: VoidFunction): void {
@@ -52,24 +74,82 @@ export class HeaderView extends BaseComponent implements Component {
     const logoElement = new Logo();
     this.logoLink.append(logoElement.element);
 
-    const navigation = new Navigation(ROUTER_LINKS);
+    this.navigation.addClassNames(styles.navigation);
+    this.navigation.addLinkClickHandler(() => {
+      this.closeMenu();
+    });
 
-    // TODO: change to icons
-    const cart = div({}, 'Cart');
+    const cartIcon = div(
+      { className: styles.iconContainer },
+      createSvgIcon(cartSvg, styles.icon),
+      span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
+    );
+    const accountIcon = div(
+      { className: styles.iconContainer },
+      createSvgIcon(accountSvg, styles.icon),
+      span({ className: styles.iconText }, HEADER_ICON_TEXT.ACCOUNT),
+    );
 
-    const container = div({ className: styles.container }, cart, this.logoutIcon);
+    const iconsContainer = div(
+      { className: styles.iconsContainer },
+      cartIcon,
+      accountIcon,
+      this.logoutIcon,
+      this.menuIcon,
+    );
 
     const wrapperElement = div(
       { className: [CSS_CLASS_NAME.WRAPPER, styles.wrapper] },
       this.logoLink,
-      navigation.element,
-      container,
+      this.navigation.element,
+      iconsContainer,
     );
 
     this.append(wrapperElement);
   }
 
-  public setLogoutIconVisible(visible: boolean): void {
-    this.logoutIcon.hidden = !visible;
+  public setLogoutIconVisible(isVisible: boolean): void {
+    this.logoutIcon.classList.toggle(styles.hidden, !isVisible);
+  }
+
+  private closeMenu(): void {
+    if (this.isBurgerMenuOpen) {
+      this.navigation.element.classList.remove(navigationStyles.shown);
+      this.menuIcon.classList.remove(styles.active);
+      document.body.classList.remove(CSS_CLASS_NAME.NO_SCROLL);
+      this.isBurgerMenuOpen = false;
+    }
+  }
+
+  private setupListeners(): void {
+    this.menuIcon.addEventListener(
+      'click',
+      () => {
+        this.navigation.element.classList.toggle(navigationStyles.shown);
+        this.menuIcon.classList.toggle(styles.active);
+        document.body.classList.toggle(CSS_CLASS_NAME.NO_SCROLL);
+        this.isBurgerMenuOpen = !this.isBurgerMenuOpen;
+      },
+      { signal: this.abortController.signal },
+    );
+
+    window.addEventListener(
+      'resize',
+      debounce(() => {
+        if (window.innerWidth > HEADER_LAYOUT_CHANGE_BREAKPOINT) {
+          this.closeMenu();
+        }
+      }, BURGER_DEBOUNCE_THRESHOLD),
+    );
+
+    document.addEventListener('click', (event) => {
+      if (
+        event.target instanceof Node &&
+        !this.navigation.element.contains(event.target) &&
+        !this.menuIcon.contains(event.target)
+      ) {
+        this.closeMenu();
+      }
+    });
   }
 }
