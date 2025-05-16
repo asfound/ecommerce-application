@@ -1,0 +1,41 @@
+.details {
+  background-color: transparent;
+}
+
+.summary {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: max-content;
+
+  list-style: none;
+
+  transition: color var(--transition-duration);
+}
+
+.details .summary::-webkit-details-marker {
+  display: none;
+}
+
+.details[open] .summary::before {
+  content: '▼';
+  position: absolute;
+  right: -2.5rem;
+  margin-right: 0.8rem;
+}
+
+.details:not([open]) .summary::before {
+  content: '▶';
+  position: absolute;
+  right: -2.5rem;
+  margin-right: 0.8rem;
+}
+
+@media (hover: hover) {
+  .summary:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+}

@@ -52,14 +52,20 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLElement> {
     });
   }
 
-  public append(...children: (BaseComponent | HTMLElement | SVGElement)[]): void {
+  public append(
+    ...children: (BaseComponent | DocumentFragment | HTMLElement | SVGElement)[]
+  ): void {
     for (const child of children) {
       if (child instanceof BaseComponent) {
         this.children.add(child);
         this._element.append(child.element);
       }
 
-      if (child instanceof HTMLElement || child instanceof SVGElement) {
+      if (
+        child instanceof HTMLElement ||
+        child instanceof SVGElement ||
+        child instanceof DocumentFragment
+      ) {
         this._element.append(child);
       }
     }
