@@ -40,6 +40,7 @@ export default tseslint.config(
       'import/no-cycle': 'error',
       'import/named': 'off',
       'unicorn/no-null': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
       'unicorn/prevent-abbreviations': ['error', { allowList: { env: true } }],
       'lines-between-class-members': ['error', 'always'],
       'max-lines-per-function': ['error', { max: 40, skipBlankLines: true, skipComments: true }],
