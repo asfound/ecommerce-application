@@ -12,11 +12,12 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
 
     this.categoriesService = categoriesService;
 
-    this.categoriesService
-      .getCategories()
-      .then((categories) => {
-        view.createHTML(categories);
-      })
-      .catch(console.warn);
+    this.updateView();
+  }
+
+  private async updateView(): Promise<void> {
+    const categories = await this.categoriesService.getCategories();
+
+    this.view.createHTML(categories);
   }
 }
