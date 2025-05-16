@@ -1,5 +1,6 @@
 import type { AppCategory } from '~/api/services/categories/types';
 import type { Component } from '~/components/base-component/types';
+import type { CategoryNavigationItemClickHandler } from '~/components/category-navigation-item/category-navigation-item';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CategoryNavigationItem } from '~/components/category-navigation-item/category-navigation-item';
@@ -18,11 +19,11 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
     });
   }
 
-  public createHTML(categories: AppCategory[]): void {
+  public createHTML(categories: AppCategory[], onClick: CategoryNavigationItemClickHandler): void {
     const fragment = document.createDocumentFragment();
 
     for (const category of categories) {
-      fragment.append(new CategoryNavigationItem(category).element);
+      fragment.append(new CategoryNavigationItem(category, onClick).element);
     }
 
     this.append(this.summaryElement, fragment);

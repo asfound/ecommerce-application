@@ -1,4 +1,5 @@
 import type { CategoriesService } from '~/api/services/categories/categories.service';
+import type { AppCategory } from '~/api/services/categories/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
 
@@ -15,9 +16,13 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
     this.updateView();
   }
 
+  private handleCategoryItemClick = (category: AppCategory): void => {
+    console.warn(category.name);
+  };
+
   private async updateView(): Promise<void> {
     const categories = await this.categoriesService.getCategories();
 
-    this.view.createHTML(categories);
+    this.view.createHTML(categories, this.handleCategoryItemClick);
   }
 }
