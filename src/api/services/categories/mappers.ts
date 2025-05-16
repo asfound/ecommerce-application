@@ -13,10 +13,32 @@ const sortCategories = (categories: Category[]): Category[] => {
 export const mapToAppCategories = (categories: Category[]): AppCategory[] => {
   const sortedCategories = sortCategories(categories);
 
-  return sortedCategories.map((category) => ({
-    ancestors: category.ancestors,
-    description: category.description?.[APP_LOCALE] ?? '',
-    id: category.id,
-    name: category.name[APP_LOCALE],
-  }));
+  const categoryMap = new Map<string, AppCategory>();
+
+  for (const category of sortedCategories) {
+    categoryMap.set(category.id, {
+      ancestors: [],
+      description: category.description?.[APP_LOCALE] ?? '',
+      id: category.id,
+      level: 0,
+      name: category.name[APP_LOCALE],
+    });
+  }
+
+  for (const category of sortedCategories) {
+    const categoryFromMap = categoryMap.get(category.id);
+
+    if (!categoryFromMap) {
+      continue;
+    }
+
+    const ancestors = category.ancestors
+      .map((ancestor) => categoryMap.get(ancestor.id))
+      .filter((category) => category != null);
+
+    categoryFromMap.ancestors = ancestors;
+    categoryFromMap.level = ancestors.length;
+  }
+
+  return [...categoryMap.values()];
 };

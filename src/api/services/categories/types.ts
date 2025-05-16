@@ -1,8 +1,7 @@
-import type { CategoryReference } from '@commercetools/platform-sdk';
-
 export interface AppCategory {
-  ancestors: CategoryReference[];
+  ancestors: AppCategory[];
   description: string;
   id: string;
+  level: number;
   name: string;
 }
