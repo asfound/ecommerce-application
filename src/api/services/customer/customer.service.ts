@@ -1,5 +1,4 @@
 import type {
-  BaseAddress,
   Customer,
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
@@ -7,6 +6,13 @@ import type {
 import type { ClientResponse } from '@commercetools/ts-client';
 
 import type { ApiRootGetter } from '~/api/types/types.ts';
+
+import type {
+  AddAddressPayload,
+  AddressPayload,
+  ChangeAddressPayload,
+  PersonalDataPayload,
+} from './types.ts';
 
 import {
   createAddAddressAction,
@@ -31,10 +37,7 @@ export class CustomerService {
     return CustomerService.instance;
   }
 
-  public async addAddress(payload: {
-    address: BaseAddress;
-    customerVersion: number;
-  }): Promise<ClientResponse<Customer>> {
+  public async addAddress(payload: AddAddressPayload): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = [createAddAddressAction(payload.address)];
 
     const response = await this.apiRoot()
@@ -45,11 +48,7 @@ export class CustomerService {
     return response;
   }
 
-  public async changeAddress(payload: {
-    address: BaseAddress;
-    addressId: string;
-    customerVersion: number;
-  }): Promise<ClientResponse<Customer>> {
+  public async changeAddress(payload: ChangeAddressPayload): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = [
       createChangeAddressAction({ address: payload.address, addressId: payload.addressId }),
     ];
@@ -76,10 +75,7 @@ export class CustomerService {
     return response;
   }
 
-  public async removeAddress(payload: {
-    addressId: string;
-    customerVersion: number;
-  }): Promise<ClientResponse<Customer>> {
+  public async removeAddress(payload: AddressPayload): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = [createRemoveAddressAction(payload.addressId)];
 
     const response = await this.apiRoot()
@@ -90,10 +86,9 @@ export class CustomerService {
     return response;
   }
 
-  public async setDefaultBillingAddress(payload: {
-    addressId: string;
-    customerVersion: number;
-  }): Promise<ClientResponse<Customer>> {
+  public async setDefaultBillingAddress(
+    payload: AddressPayload,
+  ): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = [
       createSetDefaultBillingAddressAction(payload.addressId),
     ];
@@ -106,10 +101,9 @@ export class CustomerService {
     return response;
   }
 
-  public async setDefaultShippingAddress(payload: {
-    addressId: string;
-    customerVersion: number;
-  }): Promise<ClientResponse<Customer>> {
+  public async setDefaultShippingAddress(
+    payload: AddressPayload,
+  ): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = [
       createSetDefaultShippingAddressAction(payload.addressId),
     ];
@@ -122,18 +116,17 @@ export class CustomerService {
     return response;
   }
 
-  public async updatePersonalData(
-    sourceCustomer: Customer,
-    editedCustomer: Customer,
-  ): Promise<ClientResponse<Customer>> {
+  public async updatePersonalData(payload: PersonalDataPayload): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = getPersonalDataUpdateActions(
-      sourceCustomer,
-      editedCustomer,
+      payload.sourceCustomer,
+      payload.editedCustomer,
     );
 
     const response = await this.apiRoot()
       .me()
-      .post({ body: { actions, version: sourceCustomer.version } })
+      .post({
+        body: { actions, version: payload.sourceCustomer.version },
+      })
       .execute();
 
     return response;
