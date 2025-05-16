@@ -1,5 +1,8 @@
 .details {
-  background-color: transparent;
+  padding-block: 1rem;
+  padding-inline: 2rem;
+  border-radius: var(--border-radius);
+  background-color: var(--color-dark);
 }
 
 .summary {
@@ -9,6 +12,7 @@
   align-items: center;
 
   width: max-content;
+  margin-bottom: 0.5rem;
 
   list-style: none;
 
@@ -19,18 +23,23 @@
   display: none;
 }
 
-.details[open] .summary::before {
-  content: '▼';
+.details[open] .summary::before,
+.details:not([open]) .summary::before {
   position: absolute;
   right: -2.5rem;
-  margin-right: 0.8rem;
+
+  width: 2rem;
+  height: 2rem;
+
+  text-align: center;
+}
+
+.details[open] .summary::before {
+  content: '-';
 }
 
 .details:not([open]) .summary::before {
-  content: '▶';
-  position: absolute;
-  right: -2.5rem;
-  margin-right: 0.8rem;
+  content: '+';
 }
 
 @media (hover: hover) {
