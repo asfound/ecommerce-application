@@ -43,6 +43,7 @@ beforeAll(() => {
 
 afterEach(() => {
   server.resetHandlers();
+  vi.restoreAllMocks();
 });
 
 afterAll(() => {
