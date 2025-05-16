@@ -1,5 +1,4 @@
-import type { Category } from '@commercetools/platform-sdk';
-
+import type { AppCategory } from '~/api/services/categories/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -10,7 +9,7 @@ export class CategoryNavigationView extends BaseComponent implements Component {
     super({ className: 'category-navigation', tagName: 'div' });
   }
 
-  public createHTML(categories: Category[]): void {
+  public createHTML(categories: AppCategory[]): void {
     console.warn(categories);
     this.append(div(null, 'Categories'));
   }

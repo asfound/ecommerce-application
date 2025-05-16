@@ -1,6 +1,8 @@
-import type { CategoryPagedQueryResponse, ClientResponse } from '@commercetools/platform-sdk';
-
 import type { ApiRootGetter } from '~/api/types/types';
+
+import type { AppCategory } from './types';
+
+import { mapToAppCategories } from './mappers';
 
 export class CategoriesService {
   private static instance: CategoriesService | null;
@@ -16,9 +18,9 @@ export class CategoriesService {
     return CategoriesService.instance;
   }
 
-  public async getCategories(): Promise<ClientResponse<CategoryPagedQueryResponse>> {
+  public async getCategories(): Promise<AppCategory[]> {
     const response = await this.apiRoot().categories().get().execute();
 
-    return response;
+    return mapToAppCategories(response.body.results);
   }
 }

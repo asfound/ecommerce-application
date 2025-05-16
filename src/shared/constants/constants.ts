@@ -48,3 +48,5 @@ export const CSS_CLASS_NAME = {
   NO_SCROLL: 'noScroll',
   WRAPPER: 'wrapper',
 } as const;
+
+export const APP_LOCALE = 'en-US';

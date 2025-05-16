@@ -14,8 +14,8 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
 
     this.categoriesService
       .getCategories()
-      .then(({ body }) => {
-        view.createHTML(body.results);
+      .then((categories) => {
+        view.createHTML(categories);
       })
       .catch(console.warn);
   }
