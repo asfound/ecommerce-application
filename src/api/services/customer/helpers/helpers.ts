@@ -7,7 +7,7 @@ import {
   createSetLastNameAction,
 } from '../actions/actions.ts';
 
-export const shouldUpdateField = <TField extends keyof Omit<Customer, 'addresses'>>(
+export const isUpdated = <TField extends keyof Omit<Customer, 'addresses'>>(
   sourceField: Customer[TField],
   editedField: Customer[TField],
 ): boolean => {
@@ -34,19 +34,19 @@ export const getPersonalDataUpdateActions = (
     lastName: editedLastName,
   } = editedCustomer;
 
-  if (shouldUpdateField(sourceFirstName, editedFirstName) && editedFirstName != null) {
+  if (isUpdated(sourceFirstName, editedFirstName) && editedFirstName != null) {
     actions.push(createSetFirstNameAction(editedFirstName));
   }
 
-  if (shouldUpdateField(sourceLastName, editedLastName) && editedLastName != null) {
+  if (isUpdated(sourceLastName, editedLastName) && editedLastName != null) {
     actions.push(createSetLastNameAction(editedLastName));
   }
 
-  if (shouldUpdateField(sourceEmail, editedEmail) && editedEmail.length > 0) {
+  if (isUpdated(sourceEmail, editedEmail) && editedEmail.length > 0) {
     actions.push(createChangeEmailAction(editedEmail));
   }
 
-  if (shouldUpdateField(sourceDateOfBirth, editedDateOfBirth) && editedDateOfBirth != null) {
+  if (isUpdated(sourceDateOfBirth, editedDateOfBirth) && editedDateOfBirth != null) {
     actions.push(createSetDateOfBirthAction(editedDateOfBirth));
   }
 
