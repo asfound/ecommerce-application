@@ -1,9 +1,9 @@
 import type { LocalStorageData, StorageType } from './types';
 
 export class BrowserStorageService<TData> {
-  private readonly keyPrefix: string;
+  protected storage: Storage;
 
-  private readonly storage: Storage;
+  private readonly keyPrefix: string;
 
   public constructor({ keyPrefix, storageType }: { keyPrefix: string; storageType: StorageType }) {
     this.storage = storageType === 'local' ? globalThis.localStorage : globalThis.sessionStorage;

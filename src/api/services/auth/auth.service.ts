@@ -62,6 +62,7 @@ export class AuthService {
       password: payload.password,
     };
 
+    // REAL REQUEST
     const response = await this.apiRoot().me().login().post({ body }).execute();
 
     if (isSuccessResponse(response)) {
