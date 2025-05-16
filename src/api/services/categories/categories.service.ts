@@ -2,6 +2,7 @@ import type { ApiRootGetter } from '~/api/types/types';
 
 import type { AppCategory } from './types';
 
+import { EXPAND_PATH } from './constants';
 import { mapToAppCategories } from './mappers';
 
 export class CategoriesService {
@@ -19,7 +20,10 @@ export class CategoriesService {
   }
 
   public async getCategories(): Promise<AppCategory[]> {
-    const response = await this.apiRoot().categories().get().execute();
+    const response = await this.apiRoot()
+      .categories()
+      .get({ queryArgs: { expand: EXPAND_PATH.ANCESTORS } })
+      .execute();
 
     return mapToAppCategories(response.body.results);
   }
