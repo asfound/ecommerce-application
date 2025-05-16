@@ -134,11 +134,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
   public checkValidity(): void {
     const formValid = this.inputComponents.every((input) => input.validate());
 
-    if (formValid) {
-      this.submitButton.enable();
-    } else {
-      this.submitButton.disable();
-    }
+    this.submitButton[formValid ? 'enable' : 'disable']();
   }
 
   public createHTML(): void {

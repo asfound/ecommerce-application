@@ -66,9 +66,7 @@ export class ClientTokenCache implements TokenCache {
   }
 
   public hasValidToken(): boolean {
-    const MINUTES_BEFORE_EXPIRATION = 5;
-    const MILLISECONDS_IN_SECOND = 1000;
-    const SECONDS_IN_MINUTE = 60;
+    const BUFFER_TIME_MS = 300_000;
 
     const expirationTime = this.tokenStore.expirationTime;
 
@@ -76,10 +74,7 @@ export class ClientTokenCache implements TokenCache {
       return false;
     }
 
-    return (
-      expirationTime - Date.now() >
-      MINUTES_BEFORE_EXPIRATION * SECONDS_IN_MINUTE * MILLISECONDS_IN_SECOND
-    );
+    return expirationTime - Date.now() > BUFFER_TIME_MS;
   }
 
   public set(cache: TokenStore): void {

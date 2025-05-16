@@ -6,7 +6,8 @@ import { EMAIL_VALIDATION_ERROR, VALIDATION_ERROR } from '../constants/constants
 import { COUNTRY_CODES } from '../constants/country-codes';
 
 export const validateEmailFormat: ValidatorFunction = (value) => {
-  const emailRegex = /^[^@]+@[^@]+\.[^@.]{2,}$/;
+  const emailRegex =
+    /^(?!.*[_.-]{2})(?!^[_.-])(?!.*[_\\-]$)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,6}$/;
   return emailRegex.test(value) ? null : EMAIL_VALIDATION_ERROR.INCORRECT_FORMAT;
 };
 

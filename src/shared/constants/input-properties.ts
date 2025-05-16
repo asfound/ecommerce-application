@@ -1,19 +1,7 @@
 import type { InputCheckboxProperties } from '~/components/common/input/input-checkbox/input-checkbox';
 import type { InputTextProperties } from '~/components/common/input/input-text/input-text';
 
-import {
-  validateDatalistValue,
-  validateEmailFormat,
-  validateHasDigit,
-  validateHasLowercase,
-  validateHasNoDigit,
-  validateHasUppercase,
-  validateMinAge,
-  validateMinLength,
-  validateNoSpaces,
-  validateOnlyEnglishLetters,
-  validateRequired,
-} from '../form-validators/form-validators';
+import * as validators from '../form-validators/form-validators';
 import {
   REQUIRED_MIN_AGE,
   REQUIRED_NAME_LENGTH,
@@ -30,20 +18,24 @@ export const COUNTRY_LIST_ID = {
 export const EMAIL_PROPS: InputTextProperties = {
   name: 'email',
   placeholder: 'Email',
-  validators: [validateRequired, validateNoSpaces, validateEmailFormat],
+  validators: [
+    validators.validateRequired,
+    validators.validateNoSpaces,
+    validators.validateEmailFormat,
+  ],
 } as const;
 
 export const PASSWORD_PROPS: InputTextProperties = {
   name: 'password',
   placeholder: 'Password',
   validators: [
-    validateRequired,
-    validateNoSpaces,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_PASSWORD_LENGTH),
-    validateHasUppercase,
-    validateHasLowercase,
-    validateHasDigit,
+    validators.validateRequired,
+    validators.validateNoSpaces,
+    validators.validateOnlyEnglishLetters,
+    validators.validateMinLength(REQUIRED_PASSWORD_LENGTH),
+    validators.validateHasUppercase,
+    validators.validateHasLowercase,
+    validators.validateHasDigit,
   ],
 } as const;
 
@@ -51,10 +43,10 @@ export const FIRST_NAME_PROPS: InputTextProperties = {
   name: 'first-name',
   placeholder: 'First Name',
   validators: [
-    validateRequired,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_NAME_LENGTH),
-    validateHasNoDigit,
+    validators.validateRequired,
+    validators.validateOnlyEnglishLetters,
+    validators.validateMinLength(REQUIRED_NAME_LENGTH),
+    validators.validateHasNoDigit,
   ],
 } as const;
 
@@ -62,60 +54,63 @@ export const LAST_NAME_PROPS: InputTextProperties = {
   name: 'last-name',
   placeholder: 'Last Name',
   validators: [
-    validateRequired,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_NAME_LENGTH),
-    validateHasNoDigit,
+    validators.validateRequired,
+    validators.validateOnlyEnglishLetters,
+    validators.validateMinLength(REQUIRED_NAME_LENGTH),
+    validators.validateHasNoDigit,
   ],
 } as const;
 
 export const DATE_OF_BIRTH_PROPS: InputTextProperties = {
   name: 'date-of-birth',
   placeholder: 'Date of birth',
-  validators: [validateRequired, validateMinAge(REQUIRED_MIN_AGE)],
+  validators: [validators.validateRequired, validators.validateMinAge(REQUIRED_MIN_AGE)],
 } as const;
 
 export const SHIPPING_COUNTRY_PROPS: InputTextProperties = {
   listId: COUNTRY_LIST_ID.SHIPPING,
   name: 'shipping-country',
   placeholder: 'Start typing a country...',
-  validators: [validateRequired, validateDatalistValue(COUNTRY_NAMES)],
+  validators: [validators.validateRequired, validators.validateDatalistValue(COUNTRY_NAMES)],
 } as const;
 
 export const BILLING_COUNTRY_PROPS: InputTextProperties = {
   listId: COUNTRY_LIST_ID.BILLING,
   name: 'billing-country',
   placeholder: 'Start typing a country...',
-  validators: [validateRequired, validateDatalistValue(COUNTRY_NAMES)],
+  validators: [validators.validateRequired, validators.validateDatalistValue(COUNTRY_NAMES)],
 } as const;
 
 export const CITY_PROPS: InputTextProperties = {
   name: 'city',
   placeholder: 'City',
   validators: [
-    validateRequired,
-    validateOnlyEnglishLetters,
-    validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH),
-    validateHasNoDigit,
+    validators.validateRequired,
+    validators.validateOnlyEnglishLetters,
+    validators.validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH),
+    validators.validateHasNoDigit,
   ],
 } as const;
 
 export const STREET_PROPS: InputTextProperties = {
   name: 'street',
   placeholder: 'Street',
-  validators: [validateRequired, validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH)],
+  validators: [
+    validators.validateRequired,
+    validators.validateMinLength(REQUIRED_STREET_AND_CITY_LENGTH),
+  ],
 } as const;
 
 export const SHIPPING_POSTAL_CODE_PROPS: InputTextProperties = {
   name: 'shipping-postal-code',
   placeholder: 'Postal Code',
-  validators: [validateRequired],
+  validators: [validators.validateRequired],
 } as const;
 
 export const BILLING_POSTAL_CODE_PROPS: InputTextProperties = {
   name: 'billing-postal-code',
   placeholder: 'Postal Code',
-  validators: [validateRequired],
+  validators: [validators.validateRequired],
 } as const;
 
 export const DEFAULT_CHECKBOX_PROPS: InputCheckboxProperties = {
@@ -131,5 +126,5 @@ export const USE_FOR_BILLING_PROPS: InputCheckboxProperties = {
 export const SUBSCRIPTION_EMAIL_PROPS: InputTextProperties = {
   name: 'email',
   placeholder: 'Email',
-  validators: [validateEmailFormat],
+  validators: [validators.validateEmailFormat],
 } as const;
