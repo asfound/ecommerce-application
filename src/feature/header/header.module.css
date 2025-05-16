@@ -1,0 +1,123 @@
+.header {
+  padding: 2.32rem 0;
+  background-color: var(--color-dark);
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iconsContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.logoLink {
+  transition: color var(--transition-duration);
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--color-white);
+  text-transform: uppercase;
+
+  transition: color var(--transition-duration);
+}
+
+.icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  stroke: var(--color-white);
+  transition: stroke var(--transition-duration);
+}
+
+.burger {
+  cursor: pointer;
+
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.4rem;
+  height: 2.4rem;
+  border: none;
+
+  background: none;
+
+  transition: gap var(--burger-transition-duration) ease;
+}
+
+.burger::before,
+.burger::after {
+  content: '';
+
+  display: block;
+
+  width: 2rem;
+  height: 1.5px;
+  border-radius: 1px;
+
+  background-color: var(--color-white);
+
+  transition: transform var(--burger-transition-duration) ease;
+}
+
+.burger.active {
+  gap: 0;
+}
+
+.burger.active::before {
+  transform: translateY(50%) rotate(135deg);
+}
+
+.burger.active::after {
+  transform: translateY(-50%) rotate(225deg);
+}
+
+@media (hover: hover) {
+  .iconContainer:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+
+  .iconContainer:hover .icon {
+    stroke: var(--color-accent);
+  }
+
+  .logoLink:hover {
+    color: var(--color-accent);
+  }
+}
+
+@media (width <= 1000px) {
+  .navigation {
+    order: 10;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  .iconsContainer {
+    margin-left: auto;
+  }
+
+  .iconText {
+    display: none;
+  }
+}
+
+/* use global style? */
+.hidden {
+  display: none;
+}

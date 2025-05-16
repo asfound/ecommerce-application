@@ -1,0 +1,56 @@
+.container {
+  max-width: 59.8rem;
+  margin-block: 4rem;
+  margin-inline: auto;
+  padding-block: 4rem;
+  padding-inline: 1rem;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-dark);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  max-width: 39.8rem;
+  margin-inline: auto;
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  margin-bottom: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.linkContainer {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+
+  font-size: 1.4rem;
+  color: var(--color-accent-light);
+  text-align: center;
+}
+
+.linkContainer a {
+  text-decoration: underline;
+  transition: color var(--transition-duration);
+}
+
+.linkContainer a:hover {
+  color: var(--color-accent);
+}

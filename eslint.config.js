@@ -38,6 +38,7 @@ export default tseslint.config(
   {
     rules: {
       'import/no-cycle': 'error',
+      'import/named': 'off',
       'unicorn/no-null': 'off',
       'unicorn/prevent-abbreviations': ['error', { allowList: { env: true } }],
       'lines-between-class-members': ['error', 'always'],

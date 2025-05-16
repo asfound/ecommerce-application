@@ -1,0 +1,20 @@
+.link {
+  font-size: 1.6rem;
+  color: inherit;
+  transition: color var(--transition-duration);
+}
+
+.link:hover {
+  color: var(--color-accent);
+}
+
+.active {
+  color: var(--color-accent);
+}
+
+.disabled {
+  pointer-events: none;
+
+  /* TODO: maybe change to some other color */
+  color: var(--color-accent-light);
+}

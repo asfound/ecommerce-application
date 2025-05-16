@@ -1,0 +1,55 @@
+import type { BaseComponent } from '~/components/base-component/base-component.ts';
+
+import { TITLE } from '~/shared/constants/constants.ts';
+
+import type { Route } from './types';
+
+import { WILDCARD_ROUTE } from './constants.ts';
+import { isNotLoggedIn } from './interceptors/interceptors.ts';
+import { ROUTE_PATH } from './route-path.ts';
+
+// TODO combine page title form project title + page title
+export const ROUTES: Route[] = [
+  {
+    async component(): Promise<BaseComponent> {
+      const { MainPage } = await import('../../pages/main-page.ts');
+      return new MainPage();
+    },
+    path: ROUTE_PATH.MAIN,
+    title: `${TITLE} | Main`,
+  },
+  {
+    canActivate: [isNotLoggedIn],
+    async component(): Promise<BaseComponent> {
+      const { LoginPage } = await import('../../pages/login-page.ts');
+      return new LoginPage();
+    },
+    path: ROUTE_PATH.LOGIN,
+    title: `${TITLE} | Login`,
+  },
+  {
+    async component(): Promise<BaseComponent> {
+      const { RegistrationPage } = await import('../../pages/registration-page.ts');
+      return new RegistrationPage();
+    },
+    path: ROUTE_PATH.REGISTRATION,
+    title: `${TITLE} | Registration`,
+  },
+  {
+    async component(): Promise<BaseComponent> {
+      const { CatalogPage } = await import('../../pages/catalog-page.ts');
+      return new CatalogPage();
+    },
+    path: ROUTE_PATH.CATALOG,
+    title: `${TITLE} | Catalog`,
+  },
+];
+
+export const FALLBACK_ROUTE: Route = {
+  async component(): Promise<BaseComponent> {
+    const { NotFoundPage } = await import('../../pages/not-found-page.ts');
+    return new NotFoundPage();
+  },
+  path: WILDCARD_ROUTE,
+  title: `${TITLE} | 404`,
+};
