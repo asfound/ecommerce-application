@@ -24,9 +24,7 @@ export function createElementFactory<TName extends Tag>(tag: TName) {
       setProperties(element, properties);
     }
 
-    if (children.length > 0) {
-      element.append(...children.filter((child) => child != null));
-    }
+    element.append(...children.filter((child): child is Node | string => child != null));
 
     return element;
   };

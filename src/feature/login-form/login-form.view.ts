@@ -72,11 +72,7 @@ export class LoginFormView extends BaseComponent implements Component {
   public checkValidity(): void {
     const formValid = this.inputComponents.every((input) => input.validate());
 
-    if (formValid) {
-      this.buttonSubmit.enable();
-    } else {
-      this.buttonSubmit.disable();
-    }
+    this.buttonSubmit[formValid ? 'enable' : 'disable']();
   }
 
   public createHTML(): void {
