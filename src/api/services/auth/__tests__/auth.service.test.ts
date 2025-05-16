@@ -11,5 +11,5 @@ test('login', async (): Promise<void> => {
     email: 'test@test.com',
     password: 'test',
   });
-  console.warn(response);
+  expect(response).not.toBeNull();
 });
