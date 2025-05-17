@@ -16,6 +16,8 @@ export const header = createElementFactory('header');
 
 export const main = createElementFactory('main');
 
+export const nav = createElementFactory('nav');
+
 export const p = createElementFactory('p');
 
 export const option = createElementFactory('option');

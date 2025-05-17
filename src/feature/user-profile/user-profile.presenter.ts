@@ -12,6 +12,12 @@ export class UserProfilePresenter extends Presenter<UserProfileView> {
 
     this.customerService = customerService;
 
-    console.warn(this.customerService);
+    this.updateView();
+  }
+
+  private async updateView(): Promise<void> {
+    const userInformation = await this.customerService.getCustomer();
+
+    this.view.createHTML(userInformation);
   }
 }

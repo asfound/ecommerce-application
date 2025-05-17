@@ -10,6 +10,7 @@ import type { ApiRootGetter } from '~/api/types/types.ts';
 import type {
   AddAddressPayload,
   AddressPayload,
+  AppCustomer,
   ChangeAddressPayload,
   PersonalDataPayload,
 } from './types.ts';
@@ -22,6 +23,7 @@ import {
   createSetDefaultShippingAddressAction,
 } from './actions/actions.ts';
 import { getPersonalDataUpdateActions } from './helpers/helpers.ts';
+import { mapToAppCustomer } from './mappers.ts';
 
 export class CustomerService {
   private static instance: CustomerService | null = null;
@@ -63,8 +65,10 @@ export class CustomerService {
     return this.apiRoot().me().password().post({ body: payload }).execute();
   }
 
-  public async getCustomer(): Promise<ClientResponse<Customer>> {
-    return this.apiRoot().me().get().execute();
+  public async getCustomer(): Promise<AppCustomer> {
+    const response = await this.apiRoot().me().get().execute();
+
+    return mapToAppCustomer(response.body);
   }
 
   public async removeAddress(payload: AddressPayload): Promise<ClientResponse<Customer>> {

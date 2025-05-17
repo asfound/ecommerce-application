@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-block: 4rem;
+}
+
+.block {
+  padding-block: 2rem 3rem;
+  padding-inline: 3rem;
+  border-radius: var(--border-radius);
+  background-color: var(--color-dark);
+}
+
+.navigationBlock {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 30.5rem;
+}
+
+.informationBlock {
+  flex: 1;
+  min-width: 28.9rem;
+}
+
+.heading {
+  margin-bottom: 2rem;
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+.navigationItem {
+  margin-bottom: 2rem;
+  font-weight: 500;
+  transition: color var(--transition-duration);
+}
+
+.navigationItem:last-child {
+  margin-bottom: 0;
+}
+
+.navigationItem:hover {
+  cursor: pointer;
+  color: var(--color-accent);
+}
