@@ -20,13 +20,17 @@ export class ProductsService {
     return ProductsService.instance;
   }
 
-  public async getByCategoryId(id: string): Promise<AppProduct[]> {
+  public async getByCategoryId(payload: {
+    categoryId: string;
+    limit: number;
+  }): Promise<AppProduct[]> {
     const response = await this.apiRoot()
       .productProjections()
       .search()
       .get({
         queryArgs: {
-          ['filter.query']: [`categories.id: "${id}"`],
+          ['filter.query']: [`categories.id: "${payload.categoryId}"`],
+          limit: payload.limit,
           markMatchingVariants: true,
         },
       })

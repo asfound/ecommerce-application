@@ -5,6 +5,8 @@ import { Presenter } from '~/shared/presenter/presenter';
 
 import type { CategoryNavigationView } from './category-navigation.view';
 
+import { catalogAction } from '../store/actions';
+
 export class CategoryNavigationPresenter extends Presenter<CategoryNavigationView> {
   private readonly categoriesService: CategoriesService;
 
@@ -17,7 +19,7 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
   }
 
   private handleCategoryItemClick = (category: AppCategory): void => {
-    console.warn(category.name);
+    catalogAction.setCategoryId(category.id);
   };
 
   private async updateView(): Promise<void> {
