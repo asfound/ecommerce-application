@@ -1,17 +1,12 @@
 import type { AppProduct } from '~/api/services/products/types';
 
 import { div, img } from '~/shared/create-element/tags';
+import { formatPrice } from '~/shared/utils/format-price';
 
 import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
 import styles from './product-card.module.css';
-
-// TODO: remove/replace
-const PRICE = {
-  DIVIDER: 100,
-  PRECISION: 2,
-} as const;
 
 export class ProductCard extends BaseComponent implements Component {
   private readonly product: AppProduct;
@@ -38,10 +33,7 @@ export class ProductCard extends BaseComponent implements Component {
       this.product.description,
     );
 
-    const priceElement = div(
-      { className: styles.price },
-      '$' + (this.product.price.default / PRICE.DIVIDER).toFixed(PRICE.PRECISION),
-    );
+    const priceElement = div({ className: styles.price }, formatPrice(this.product.price.default));
 
     const content = div(
       { className: styles.content },
