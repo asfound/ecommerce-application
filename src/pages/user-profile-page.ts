@@ -1,12 +1,24 @@
+import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { h1 } from '~/shared/create-element/tags';
+import { UserProfilePresenter } from '~/feature/user-profile/user-profile.presenter';
+import { UserProfileView } from '~/feature/user-profile/user-profile.view';
 
 export class UserProfilePage extends BaseComponent {
+  private readonly userProfilePresenter;
+
   public constructor() {
     super({ tagName: 'div' });
 
-    const content = h1(null, 'User Profile');
+    const customerService = SERVICE_HUB.provideCustomerService();
 
-    this.append(content);
+    this.userProfilePresenter = new UserProfilePresenter(new UserProfileView(), customerService);
+
+    this.append(this.userProfilePresenter.getView());
+  }
+
+  public override destroy(): void {
+    this.userProfilePresenter.destroy();
+
+    super.destroy();
   }
 }
