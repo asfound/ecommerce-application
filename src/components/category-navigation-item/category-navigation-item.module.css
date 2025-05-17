@@ -11,6 +11,11 @@
   padding-left: 1rem;
 }
 
+.active {
+  pointer-events: none;
+  color: var(--color-accent);
+}
+
 @media (hover: hover) {
   .item:hover {
     cursor: pointer;

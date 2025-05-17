@@ -17,4 +17,8 @@ export class CategoryNavigationItem extends BaseComponent {
       onClick(category);
     });
   }
+
+  public setActive(active: boolean): void {
+    this.toggleClassName(styles.active, active);
+  }
 }

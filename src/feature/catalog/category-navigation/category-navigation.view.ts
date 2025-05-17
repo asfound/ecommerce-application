@@ -10,6 +10,8 @@ import styles from './category-navigation.module.css';
 import { CATEGORY_HEADING } from './constants';
 
 export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> implements Component {
+  private activeItem: CategoryNavigationItem | null = null;
+
   private readonly summaryElement = summary(
     { className: styles.summary },
     h2(null, CATEGORY_HEADING),
@@ -27,7 +29,20 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
     this.append(this.summaryElement);
 
     for (const category of categories) {
-      this.append(new CategoryNavigationItem(category, onClick));
+      const categoryItem = new CategoryNavigationItem(category, (category) => {
+        onClick(category);
+        this.setActiveItem(categoryItem);
+      });
+
+      this.append(categoryItem);
     }
+  }
+
+  private setActiveItem(categoryItem: CategoryNavigationItem): void {
+    if (this.activeItem) {
+      this.activeItem.setActive(false);
+    }
+    this.activeItem = categoryItem;
+    this.activeItem.setActive(true);
   }
 }
