@@ -7,9 +7,13 @@ import { CategoryNavigationItem } from '~/components/category-navigation-item/ca
 import { h2, summary } from '~/shared/create-element/tags';
 
 import styles from './category-navigation.module.css';
+import { CATEGORY_HEADING } from './constants';
 
 export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> implements Component {
-  private readonly summaryElement = summary({ className: styles.summary }, h2(null, 'Categories'));
+  private readonly summaryElement = summary(
+    { className: styles.summary },
+    h2(null, CATEGORY_HEADING),
+  );
 
   public constructor() {
     super({
