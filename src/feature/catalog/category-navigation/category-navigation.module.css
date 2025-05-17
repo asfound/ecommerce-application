@@ -43,3 +43,9 @@
     color: var(--color-accent);
   }
 }
+
+@media (width <= 640px) {
+  .heading {
+    font-size: 2rem;
+  }
+}

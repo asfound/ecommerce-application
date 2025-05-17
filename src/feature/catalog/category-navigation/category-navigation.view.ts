@@ -18,7 +18,7 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
 
   private readonly summaryElement = summary(
     { className: styles.summary },
-    h2(null, CATEGORY_HEADING),
+    h2({ className: styles.heading }, CATEGORY_HEADING),
     this.arrowIcon,
   );
 
