@@ -92,8 +92,14 @@ test('subscribe should not call callback whe isImmediate set to false', () => {
 });
 
 test('callbacks should be called with proper arguments', () => {
-  const counterCallback = vi.fn((c: number) => c);
-  const userCallback = vi.fn((u: { age: string; name: string }) => u);
+  const counterCallback = vi.fn((c: number) => {
+    void c;
+    return;
+  });
+  const userCallback = vi.fn((u: { age: string; name: string }) => {
+    void u;
+    return;
+  });
 
   store.subscribe(selectCounter, counterCallback);
   store.subscribe(selectUser, userCallback);

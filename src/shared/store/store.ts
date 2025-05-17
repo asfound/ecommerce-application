@@ -50,7 +50,7 @@ export class Store<TState extends object> {
 
   public subscribe<TSlice>(
     selector: SelectorFunction<TState, TSlice>,
-    callback: (payload: TSlice) => void,
+    callback: (payload: TSlice) => Promise<void> | void,
     options?: {
       equalityFunction?(a: TSlice, b: TSlice): boolean;
       isImmediate?: boolean;
