@@ -1,3 +1,5 @@
+import type { AppProduct } from '~/api/services/products/types';
+
 import { div, img } from '~/shared/create-element/tags';
 
 import type { Component } from '../base-component/types';
@@ -11,37 +13,31 @@ const PRICE = {
   PRECISION: 2,
 } as const;
 
-export interface ProductCardProperties {
-  description: string;
-  imageURL: string;
-  name: string;
-  price: number;
-}
-
 export class ProductCard extends BaseComponent implements Component {
-  private readonly properties: ProductCardProperties;
+  private readonly product: AppProduct;
 
-  public constructor(properties: ProductCardProperties) {
+  public constructor(product: AppProduct) {
     super({ className: styles.card, tagName: 'div' });
 
-    this.properties = properties;
+    this.product = product;
 
     this.createHTML();
   }
 
   public createHTML(): void {
     const imageELement = img({
+      alt: this.product.image.label,
       className: styles.image,
-      src: this.properties.imageURL,
+      src: this.product.image.url,
     });
 
-    const titleElement = div({ className: styles.title }, this.properties.name);
+    const titleElement = div({ className: styles.title }, this.product.name);
 
-    const descriptionElement = div({ className: styles.description }, this.properties.description);
+    const descriptionElement = div({ className: styles.description }, this.product.description);
 
     const priceElement = div(
       { className: styles.price },
-      '$' + (this.properties.price / PRICE.DIVIDER).toFixed(PRICE.PRECISION),
+      '$' + (this.product.price.default / PRICE.DIVIDER).toFixed(PRICE.PRECISION),
     );
 
     const content = div(

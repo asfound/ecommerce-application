@@ -19,9 +19,10 @@ export class CatalogPage extends BaseComponent {
     const PC = new ProductCard({
       description:
         'Smooth yet intense, this blend offers deep caramel sweetness, hints of dark cherry, and a velvety crema. Ideal for milk-based espresso drinks. 100% Arabica from Brazil and Ethiopia. A roast that marries depth with elegance.',
-      imageURL: 'https://placehold.co/400',
+      image: { label: 'aa', url: 'https://placehold.co/400' },
       name: 'Velvet Forge',
-      price: 2500,
+      price: { default: 25_000 },
+      sku: 'asddasdas',
     });
 
     SERVICE_HUB.provideProductsService()
