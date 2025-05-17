@@ -14,3 +14,14 @@ export const isNotLoggedIn = (router: Router): boolean => {
 
   return true;
 };
+
+export const isLoggedIn = (router: Router): boolean => {
+  const loggedIn = SERVICE_HUB.provideAuthService().isLoggedIn();
+
+  if (!loggedIn) {
+    router.navigate(ROUTE_PATH.LOGIN);
+    return false;
+  }
+
+  return true;
+};
