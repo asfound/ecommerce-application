@@ -33,6 +33,25 @@
   color: var(--color-accent-light);
 }
 
-.price {
+.pricesContainer {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
   font-family: var(--font-montserrat);
+}
+
+.defaultPrice {
+  color: inherit;
+}
+
+.oldPrice {
+  font-size: 1.4rem;
+  text-decoration: line-through;
+}
+
+.discountedPrice {
+  padding: 0.3rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  background-color: var(--color-accent);
 }

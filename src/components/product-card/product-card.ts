@@ -33,13 +33,22 @@ export class ProductCard extends BaseComponent implements Component {
       this.product.description,
     );
 
-    const priceElement = div({ className: styles.price }, formatPrice(this.product.price.default));
+    const pricesContainer = div(
+      { className: styles.pricesContainer },
+      this.product.price.discounted
+        ? div({ className: styles.discountedPrice }, formatPrice(this.product.price.discounted))
+        : null,
+      div(
+        { className: this.product.price.discounted ? styles.oldPrice : styles.defaultPrice },
+        formatPrice(this.product.price.default),
+      ),
+    );
 
     const content = div(
       { className: styles.content },
       titleElement,
       descriptionElement,
-      priceElement,
+      pricesContainer,
     );
 
     this.append(imageELement, content);

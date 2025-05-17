@@ -14,6 +14,7 @@ export const mapToAppProducts = (products: ProductProjection[]): AppProduct[] =>
     name: product.name[APP_LOCALE],
     price: {
       default: product.masterVariant.prices?.[0].value.centAmount ?? 0,
+      discounted: product.masterVariant.prices?.[0].discounted?.value.centAmount,
     },
     sku: product.masterVariant.sku ?? '',
   }));
