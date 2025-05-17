@@ -1,13 +1,15 @@
 .card {
-  max-width: 29rem;
-  margin-top: 2rem;
   border-radius: var(--border-radius);
   background-color: var(--color-dark);
 }
 
 .image {
+  width: 100%;
+  height: 29rem;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
+
+  object-fit: cover;
 }
 
 .content {

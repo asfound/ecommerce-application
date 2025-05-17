@@ -3,8 +3,7 @@
   grid-template-columns: repeat(auto-fit, minmax(29rem, 1fr));
   gap: 2rem;
   place-content: center;
+  justify-items: center;
 
   border-radius: var(--border-radius);
-
-  background-color: var(--color-dark);
 }

@@ -6,13 +6,15 @@ import { ProductCardListPresenter } from '~/feature/product-card-list/product-ca
 import { ProductCardListView } from '~/feature/product-card-list/product-card-list.view';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 
+import styles from './catalog-page.module.css';
+
 export class CatalogPage extends BaseComponent {
   private readonly categoryNavigationPresenter: CategoryNavigationPresenter;
 
   private readonly productCardListPresenter: ProductCardListPresenter;
 
   public constructor() {
-    super({ className: CSS_CLASS_NAME.WRAPPER, tagName: 'div' });
+    super({ className: [CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
 
     this.categoryNavigationPresenter = new CategoryNavigationPresenter(
       new CategoryNavigationView(),
