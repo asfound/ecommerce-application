@@ -1,0 +1,16 @@
+.list {
+  display: grid;
+  grid-area: products;
+  grid-template-columns: repeat(auto-fit, minmax(29rem, 1fr));
+  gap: 2rem;
+  place-content: center;
+  justify-items: center;
+
+  border-radius: var(--border-radius);
+}
+
+@media (width <= 640px) {
+  .list {
+    gap: 1rem;
+  }
+}

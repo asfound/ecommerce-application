@@ -1,0 +1,21 @@
+.page {
+  display: grid;
+  grid-template-areas:
+    'categories products'
+    'filters products';
+  grid-template-columns: 29rem 1fr;
+  gap: 2rem;
+
+  margin-block: 4rem;
+}
+
+@media (width <= 640px) {
+  .page {
+    grid-template-areas:
+      'categories'
+      'filters'
+      'products';
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

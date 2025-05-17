@@ -1,0 +1,24 @@
+.item {
+  background-color: transparent;
+  transition: color var(--transition-duration);
+}
+
+.rootCategory {
+  font-weight: 500;
+}
+
+.subcategory {
+  padding-left: 1rem;
+}
+
+.active {
+  pointer-events: none;
+  color: var(--color-accent);
+}
+
+@media (hover: hover) {
+  .item:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+}

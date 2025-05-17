@@ -37,3 +37,7 @@ export const label = createElementFactory('label');
 export const li = createElementFactory('li');
 
 export const ul = createElementFactory('ul');
+
+export const details = createElementFactory('details');
+
+export const summary = createElementFactory('summary');

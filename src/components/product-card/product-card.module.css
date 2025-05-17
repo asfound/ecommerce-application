@@ -1,0 +1,38 @@
+.card {
+  border-radius: var(--border-radius);
+  background-color: var(--color-dark);
+}
+
+.image {
+  width: 100%;
+  height: 29rem;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+
+  object-fit: cover;
+}
+
+.content {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem 2rem 2rem;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
+  font-size: 1.4rem;
+  color: var(--color-accent-light);
+}
+
+.price {
+  font-family: var(--font-montserrat);
+}
