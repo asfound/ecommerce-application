@@ -1,9 +1,9 @@
 import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { CategoryNavigationPresenter } from '~/feature/category-navigation/category-navigation.presenter';
-import { CategoryNavigationView } from '~/feature/category-navigation/category-navigation.view';
-import { ProductCardListPresenter } from '~/feature/product-card-list/product-card-list.presenter';
-import { ProductCardListView } from '~/feature/product-card-list/product-card-list.view';
+import { CategoryNavigationPresenter } from '~/feature/catalog/category-navigation/category-navigation.presenter';
+import { CategoryNavigationView } from '~/feature/catalog/category-navigation/category-navigation.view';
+import { ProductCardListPresenter } from '~/feature/catalog/product-card-list/product-card-list.presenter';
+import { ProductCardListView } from '~/feature/catalog/product-card-list/product-card-list.view';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 
 import styles from './catalog-page.module.css';
