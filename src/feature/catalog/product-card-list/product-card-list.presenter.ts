@@ -18,17 +18,25 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
     this.updateView();
 
+    this.setupSubscriptions();
+  }
+
+  private setupSubscriptions(): void {
     this.subscribeCategoryId();
   }
 
   private subscribeCategoryId(): void {
-    const unsubscribe = catalogStore.subscribe(catalogSelector.selectCategoryId, (categoryId) => {
-      this.productsService
-        .getByCategoryId({ categoryId, limit: PRODUCTS_PER_PAGE })
-        .then((products) => {
-          this.view.createHTML(products);
-        });
-    });
+    const unsubscribe = catalogStore.subscribe(
+      catalogSelector.selectCategoryId,
+      (categoryId) => {
+        this.productsService
+          .getByCategoryId({ categoryId, limit: PRODUCTS_PER_PAGE })
+          .then((products) => {
+            this.view.createHTML(products);
+          });
+      },
+      { isImmediate: false },
+    );
 
     this.storeSubscription.add(unsubscribe);
   }
