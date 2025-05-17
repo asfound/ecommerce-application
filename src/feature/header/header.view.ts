@@ -87,7 +87,7 @@ export class HeaderView extends BaseComponent implements Component {
     const accountIcon = div(
       { className: styles.iconContainer },
       createSvgIcon(accountSvg, styles.icon),
-      span({ className: styles.iconText }, HEADER_ICON_TEXT.ACCOUNT),
+      span({ className: styles.iconText }, HEADER_ICON_TEXT.PROFILE),
     );
 
     const iconsContainer = div(

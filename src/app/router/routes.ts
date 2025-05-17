@@ -43,6 +43,14 @@ export const ROUTES: Route[] = [
     path: ROUTE_PATH.CATALOG,
     title: `${TITLE} | Catalog`,
   },
+  {
+    async component(): Promise<BaseComponent> {
+      const { UserProfilePage } = await import('../../pages/user-profile-page.ts');
+      return new UserProfilePage();
+    },
+    path: ROUTE_PATH.PROFILE,
+    title: `${TITLE} | Profile`,
+  },
 ];
 
 export const FALLBACK_ROUTE: Route = {
