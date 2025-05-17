@@ -33,7 +33,10 @@ export class ProductCard extends BaseComponent implements Component {
 
     const titleElement = div({ className: styles.title }, this.product.name);
 
-    const descriptionElement = div({ className: styles.description }, this.product.description);
+    const descriptionElement = div(
+      { className: styles.description, title: this.product.description },
+      this.product.description,
+    );
 
     const priceElement = div(
       { className: styles.price },
