@@ -24,6 +24,12 @@ export class CatalogPage extends BaseComponent {
       price: 2500,
     });
 
+    SERVICE_HUB.provideProductsService()
+      .getProducts({ limit: 10 })
+      .then((response) => {
+        console.warn(response);
+      });
+
     this.append(this.categoryNavigationPresenter.getView(), PC);
   }
 
