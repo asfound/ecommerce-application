@@ -1,6 +1,10 @@
 .card {
   border-radius: var(--border-radius);
   background-color: var(--color-dark);
+  outline: 3px solid transparent;
+  transition:
+    transform var(--transition-duration),
+    outline-color var(--transition-duration);
 }
 
 .imageContainer {
@@ -74,4 +78,12 @@
   border-radius: var(--border-radius);
   font-weight: 500;
   background-color: var(--color-accent);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+    outline-color: var(--color-accent);
+  }
 }
