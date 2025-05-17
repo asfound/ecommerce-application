@@ -8,3 +8,9 @@
 
   border-radius: var(--border-radius);
 }
+
+@media (width <= 640px) {
+  .list {
+    gap: 1rem;
+  }
+}

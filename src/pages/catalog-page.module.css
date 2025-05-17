@@ -8,3 +8,14 @@
 
   margin-block: 4rem;
 }
+
+@media (width <= 640px) {
+  .page {
+    grid-template-areas:
+      'categories'
+      'filters'
+      'products';
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
