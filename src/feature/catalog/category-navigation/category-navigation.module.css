@@ -12,9 +12,10 @@
   position: relative;
 
   display: flex;
+  gap: 1rem;
   align-items: center;
+  justify-content: space-between;
 
-  width: max-content;
   margin-bottom: 0.5rem;
 
   list-style: none;
@@ -22,27 +23,18 @@
   transition: color var(--transition-duration);
 }
 
-.details .summary::-webkit-details-marker {
+.summary::-webkit-details-marker,
+.summary::marker {
   display: none;
 }
 
-.details[open] .summary::before,
-.details:not([open]) .summary::before {
-  position: absolute;
-  right: -2.5rem;
-
+.icon {
   width: 2rem;
-  height: 2rem;
-
-  text-align: center;
+  height: 1rem;
 }
 
-.details[open] .summary::before {
-  content: '-';
-}
-
-.details:not([open]) .summary::before {
-  content: '+';
+.rotated {
+  transform: rotate(180deg);
 }
 
 @media (hover: hover) {
