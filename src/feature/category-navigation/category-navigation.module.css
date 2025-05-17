@@ -1,7 +1,10 @@
 .details {
+  grid-area: categories;
+
   padding-block: 1rem;
   padding-inline: 2rem;
   border-radius: var(--border-radius);
+
   background-color: var(--color-dark);
 }
 

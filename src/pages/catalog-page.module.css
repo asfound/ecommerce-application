@@ -1,6 +1,10 @@
 .page {
   display: grid;
+  grid-template-areas:
+    'categories products'
+    'filters products';
   grid-template-columns: 29rem 1fr;
   gap: 2rem;
+
   margin-block: 4rem;
 }
