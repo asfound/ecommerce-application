@@ -100,6 +100,10 @@ export class Router {
 
     const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
 
+    if (matcher?.route.canActivate?.some((interceptor) => !interceptor(this))) {
+      return;
+    }
+
     if (!matcher) {
       routerAction.setSearchParameters({});
 
@@ -107,10 +111,6 @@ export class Router {
 
       this.updatePage({ route: this.fallbackRoute });
 
-      return;
-    }
-
-    if (matcher.route.canActivate?.some((interceptor) => !interceptor(this))) {
       return;
     }
 

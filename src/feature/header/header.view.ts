@@ -40,6 +40,12 @@ export class HeaderView extends BaseComponent implements Component {
 
   private readonly navigation = new Navigation(ROUTER_LINKS);
 
+  private readonly profileIcon = div(
+    { className: styles.iconContainer },
+    createSvgIcon(accountSvg, styles.icon),
+    span({ className: styles.iconText }, HEADER_ICON_TEXT.PROFILE),
+  );
+
   public constructor() {
     super({ className: styles.header, tagName: 'header' });
 
@@ -70,6 +76,16 @@ export class HeaderView extends BaseComponent implements Component {
     );
   }
 
+  public bindProfileClickHandler(handler: VoidFunction): void {
+    this.profileIcon.addEventListener(
+      'click',
+      () => {
+        handler();
+      },
+      { signal: this.abortController.signal },
+    );
+  }
+
   public createHTML(): void {
     const logoElement = new Logo();
     this.logoLink.append(logoElement.element);
@@ -84,16 +100,11 @@ export class HeaderView extends BaseComponent implements Component {
       createSvgIcon(cartSvg, styles.icon),
       span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
     );
-    const accountIcon = div(
-      { className: styles.iconContainer },
-      createSvgIcon(accountSvg, styles.icon),
-      span({ className: styles.iconText }, HEADER_ICON_TEXT.PROFILE),
-    );
 
     const iconsContainer = div(
       { className: styles.iconsContainer },
       cartIcon,
-      accountIcon,
+      this.profileIcon,
       this.logoutIcon,
       this.menuIcon,
     );
@@ -110,6 +121,10 @@ export class HeaderView extends BaseComponent implements Component {
 
   public setLogoutIconVisible(isVisible: boolean): void {
     this.logoutIcon.classList.toggle(styles.hidden, !isVisible);
+  }
+
+  public setProfileIconVisible(isVisible: boolean): void {
+    this.profileIcon.classList.toggle(styles.hidden, !isVisible);
   }
 
   private closeMenu(): void {
