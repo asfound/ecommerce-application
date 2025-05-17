@@ -29,7 +29,7 @@ export class ProductsService {
       .search()
       .get({
         queryArgs: {
-          ['filter.query']: [`categories.id: "${payload.categoryId}"`],
+          ['filter.query']: [`categories.id: subtree("${payload.categoryId}")`],
           limit: payload.limit,
           markMatchingVariants: true,
         },

@@ -8,6 +8,8 @@ import type { Component } from '../base-component/types';
 import { BaseComponent } from '../base-component/base-component';
 import styles from './product-card.module.css';
 
+const DISCOUNT_PERCENTAGE_VALUE = '-10%';
+
 export class ProductCard extends BaseComponent implements Component {
   private readonly product: AppProduct;
 
@@ -20,11 +22,17 @@ export class ProductCard extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const imageELement = img({
-      alt: this.product.image.label,
-      className: styles.image,
-      src: this.product.image.url,
-    });
+    const imageContainer = div(
+      { className: styles.imageContainer },
+      img({
+        alt: this.product.image.label,
+        className: styles.image,
+        src: this.product.image.url,
+      }),
+      this.product.price.discounted
+        ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
+        : null,
+    );
 
     const titleElement = div({ className: styles.title }, this.product.name);
 
@@ -33,15 +41,24 @@ export class ProductCard extends BaseComponent implements Component {
       this.product.description,
     );
 
-    const priceElement = div({ className: styles.price }, formatPrice(this.product.price.default));
+    const pricesContainer = div(
+      { className: styles.pricesContainer },
+      this.product.price.discounted
+        ? div({ className: styles.discountedPrice }, formatPrice(this.product.price.discounted))
+        : null,
+      div(
+        { className: this.product.price.discounted ? styles.oldPrice : styles.defaultPrice },
+        formatPrice(this.product.price.default),
+      ),
+    );
 
     const content = div(
       { className: styles.content },
       titleElement,
       descriptionElement,
-      priceElement,
+      pricesContainer,
     );
 
-    this.append(imageELement, content);
+    this.append(imageContainer, content);
   }
 }
