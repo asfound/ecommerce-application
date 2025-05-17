@@ -1,0 +1,30 @@
+.card {
+  max-width: 29rem;
+  margin-top: 2rem;
+  border-radius: var(--border-radius);
+  background-color: var(--color-dark);
+}
+
+.image {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.content {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem 2rem 2rem;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.description {
+  font-size: 1.4rem;
+  color: var(--color-accent-light);
+}
+
+.price {
+  font-family: var(--font-montserrat);
+}
