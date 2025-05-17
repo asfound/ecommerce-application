@@ -3,6 +3,10 @@
   background-color: var(--color-dark);
 }
 
+.imageContainer {
+  position: relative;
+}
+
 .image {
   width: 100%;
   height: 29rem;
@@ -10,6 +14,22 @@
   border-top-right-radius: var(--border-radius);
 
   object-fit: cover;
+}
+
+.discountLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 7rem;
+  height: 3rem;
+  padding: 0.4rem 2rem;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+
+  text-align: center;
+
+  background-color: var(--color-accent);
 }
 
 .content {
