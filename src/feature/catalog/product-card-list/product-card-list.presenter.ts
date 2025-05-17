@@ -4,6 +4,7 @@ import { Presenter } from '~/shared/presenter/presenter';
 
 import type { ProductCardListView } from './product-card-list.view';
 
+import { PRODUCTS_PER_PAGE } from '../constants';
 import { catalogSelector } from '../store/selectors';
 import { catalogStore } from '../store/store';
 
@@ -22,16 +23,18 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
   private subscribeCategoryId(): void {
     const unsubscribe = catalogStore.subscribe(catalogSelector.selectCategoryId, (categoryId) => {
-      this.productsService.getByCategoryId({ categoryId, limit: 12 }).then((products) => {
-        this.view.createHTML(products);
-      });
+      this.productsService
+        .getByCategoryId({ categoryId, limit: PRODUCTS_PER_PAGE })
+        .then((products) => {
+          this.view.createHTML(products);
+        });
     });
 
     this.storeSubscription.add(unsubscribe);
   }
 
   private async updateView(): Promise<void> {
-    const products = await this.productsService.getProducts({ limit: 12 });
+    const products = await this.productsService.getProducts({ limit: PRODUCTS_PER_PAGE });
 
     this.view.createHTML(products);
   }
