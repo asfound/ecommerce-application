@@ -4,15 +4,14 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { div, h1, li, ul } from '~/shared/create-element/tags';
 
+import { HEADING, NAV_ITEMS } from './constants';
 import styles from './user-profile.module.css';
 
-const PROFILE_NAVIGATION_TEXT = {
-  ADDRESSES: 'Addresses',
-  HEADING: 'Profile',
-  PERSONAL: 'Personal information',
-};
-
 export class UserProfileView extends BaseComponent implements Component {
+  private readonly contentBlocks: HTMLDivElement[] = [];
+
+  private readonly navigationItems: HTMLLIElement[] = [];
+
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
   }
@@ -20,23 +19,63 @@ export class UserProfileView extends BaseComponent implements Component {
   public createHTML(userInformation: AppCustomer): void {
     console.warn(userInformation);
 
-    const navigation = ul(
-      null,
-      li({ className: styles.navigationItem }, PROFILE_NAVIGATION_TEXT.PERSONAL),
-      li({ className: styles.navigationItem }, PROFILE_NAVIGATION_TEXT.ADDRESSES),
-    );
-
     const navigationBlock = div(
       { className: [styles.block, styles.navigationBlock] },
-      h1({ className: styles.heading }, PROFILE_NAVIGATION_TEXT.HEADING),
-      navigation,
+      h1({ className: styles.heading }, HEADING),
+      this.createNavigation(),
     );
 
-    const informationBlock = div(
-      { className: [styles.block, styles.informationBlock] },
-      'Information',
+    const informationContent = div(
+      { className: [styles.content, styles.visible], id: NAV_ITEMS.INFORMATION.ID },
+      'Personal info',
     );
 
-    this.append(navigationBlock, informationBlock);
+    const addressesContent = div(
+      { className: styles.content, id: NAV_ITEMS.ADDRESSES.ID },
+      'Addresses',
+    );
+
+    this.contentBlocks.push(informationContent, addressesContent);
+
+    const contentBlock = div(
+      { className: [styles.block, styles.contentBlock] },
+      informationContent,
+      addressesContent,
+    );
+
+    this.append(navigationBlock, contentBlock);
+  }
+
+  private createNavigation(): HTMLUListElement {
+    const informationItem = li(
+      { className: [styles.navigationItem, styles.active] },
+      NAV_ITEMS.INFORMATION.TEXT,
+    );
+    const addressesItem = li({ className: styles.navigationItem }, NAV_ITEMS.ADDRESSES.TEXT);
+
+    informationItem.dataset.target = NAV_ITEMS.INFORMATION.ID;
+    addressesItem.dataset.target = NAV_ITEMS.ADDRESSES.ID;
+
+    this.navigationItems.push(informationItem, addressesItem);
+
+    for (const item of this.navigationItems) {
+      item.addEventListener('click', () => {
+        this.handleNavigationClick(item);
+      });
+    }
+
+    return ul(null, informationItem, addressesItem);
+  }
+
+  private handleNavigationClick(item: HTMLLIElement): void {
+    const targetId = item.dataset.target;
+
+    for (const navItem of this.navigationItems) {
+      navItem.classList.toggle(styles.active, navItem === item);
+    }
+
+    for (const block of this.contentBlocks) {
+      block.classList.toggle(styles.visible, block.id === targetId);
+    }
   }
 }

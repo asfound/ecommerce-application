@@ -18,7 +18,7 @@
   max-width: 30.5rem;
 }
 
-.informationBlock {
+.contentBlock {
   flex: 1;
   min-width: 28.9rem;
 }
@@ -42,4 +42,16 @@
 .navigationItem:hover {
   cursor: pointer;
   color: var(--color-accent);
+}
+
+.navigationItem.active {
+  color: var(--color-accent);
+}
+
+.content {
+  display: none;
+}
+
+.visible {
+  display: block;
 }
