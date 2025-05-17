@@ -20,12 +20,10 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
   }
 
   public createHTML(categories: AppCategory[], onClick: CategoryNavigationItemClickHandler): void {
-    const fragment = document.createDocumentFragment();
+    this.append(this.summaryElement);
 
     for (const category of categories) {
-      fragment.append(new CategoryNavigationItem(category, onClick).element);
+      this.append(new CategoryNavigationItem(category, onClick));
     }
-
-    this.append(this.summaryElement, fragment);
   }
 }
