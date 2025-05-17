@@ -20,6 +20,21 @@ export class ProductsService {
     return ProductsService.instance;
   }
 
+  public async getByCategoryId(id: string): Promise<AppProduct[]> {
+    const response = await this.apiRoot()
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          ['filter.query']: [`categories.id: "${id}"`],
+          markMatchingVariants: true,
+        },
+      })
+      .execute();
+
+    return mapToAppProducts(response.body.results);
+  }
+
   public async getProducts(payload: { limit: number }): Promise<AppProduct[]> {
     const TEMPORARY_SORT = `name.${APP_LOCALE} asc`;
 
