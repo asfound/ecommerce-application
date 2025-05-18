@@ -30,6 +30,9 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
       event.preventDefault();
 
       handler(this.inputSearch.value.trim());
+
+      this.inputSearch.clear();
+      this.buttonSearch.disable();
     });
   }
 
