@@ -18,7 +18,11 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
   public constructor() {
     super({ className: styles.form, tagName: 'form' });
 
+    this.buttonSearch.setAttributes({ disabled: true });
+
     this.append(this.inputSearch, this.buttonSearch);
+
+    this.setupListeners();
   }
 
   public bindSearchHandler(handler: SearchHandlerFunction): void {
@@ -26,6 +30,14 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
       event.preventDefault();
 
       handler(this.inputSearch.value.trim());
+    });
+  }
+
+  private setupListeners(): void {
+    this.inputSearch.addListener('input', () => {
+      const emptyString = this.inputSearch.value.trim() === '';
+
+      this.buttonSearch[emptyString ? 'disable' : 'enable']();
     });
   }
 }
