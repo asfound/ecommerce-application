@@ -1,8 +1,8 @@
-import type { BaseAddress, MyCustomerDraft } from '@commercetools/platform-sdk';
+import type { BaseAddress } from '@commercetools/platform-sdk';
 
-import type { SignupPayload } from '../types';
+import type { AppCustomerDraft, SignupPayload } from '../types';
 
-export const createCustomerDraft = (payload: SignupPayload): MyCustomerDraft => {
+export const createCustomerDraft = (payload: SignupPayload): AppCustomerDraft => {
   const { dateOfBirth, email, firstName, lastName, password } = payload;
 
   const { billingAddress, shippingAddress, shippingAsBilling } = payload.addresses;
@@ -18,6 +18,11 @@ export const createCustomerDraft = (payload: SignupPayload): MyCustomerDraft => 
 
   return {
     addresses,
+    billingAddresses: shippingAsBilling
+      ? [DEFAULT_SHIPPING_ADDRESS_INDEX]
+      : billingAddress
+        ? [DEFAULT_BILLING_ADDRESS_INDEX]
+        : undefined,
     dateOfBirth,
     defaultBillingAddress:
       !shippingAsBilling && billingAddress?.default ? DEFAULT_BILLING_ADDRESS_INDEX : undefined,
@@ -26,5 +31,6 @@ export const createCustomerDraft = (payload: SignupPayload): MyCustomerDraft => 
     firstName,
     lastName,
     password,
+    shippingAddresses: [DEFAULT_SHIPPING_ADDRESS_INDEX],
   };
 };

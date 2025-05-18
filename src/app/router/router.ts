@@ -139,6 +139,7 @@ export class Router {
     payload.route
       .component()
       .then((page) => {
+        document.title = '';
         document.title = payload.route.title;
         this.routerOutlet.replaceChildren(page);
       })
