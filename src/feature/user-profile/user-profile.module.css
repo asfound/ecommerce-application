@@ -16,6 +16,7 @@
   flex-shrink: 0;
   width: 100%;
   max-width: 30.5rem;
+  height: max-content;
 }
 
 .contentBlock {
@@ -46,6 +47,24 @@
 
 .navigationItem.active {
   color: var(--color-accent);
+}
+
+.addresses {
+  display: flex;
+  gap: 1rem;
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.addressCol {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 .content {

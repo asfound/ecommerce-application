@@ -1,11 +1,17 @@
-import type { AppCustomer } from '~/api/services/customer/types';
+import type { AppCustomer, AppCustomerAddress } from '~/api/services/customer/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { UserAddress } from '~/components/user-address/user-address';
 import { div, h1, li, ul } from '~/shared/create-element/tags';
 
 import { HEADING, NAV_ITEMS } from './constants';
 import styles from './user-profile.module.css';
+
+const TITLE = {
+  BILLING: 'Billing addresses',
+  SHIPPING: 'Shipping addresses',
+};
 
 export class UserProfileView extends BaseComponent implements Component {
   private readonly contentBlocks: HTMLDivElement[] = [];
@@ -30,9 +36,9 @@ export class UserProfileView extends BaseComponent implements Component {
       'Personal info',
     );
 
-    const addressesContent = div(
-      { className: styles.content, id: NAV_ITEMS.ADDRESSES.ID },
-      'Addresses',
+    const addressesContent = this.createAddresses(
+      userInformation.shippingAddresses,
+      userInformation.billingAddresses,
     );
 
     this.contentBlocks.push(informationContent, addressesContent);
@@ -44,6 +50,38 @@ export class UserProfileView extends BaseComponent implements Component {
     );
 
     this.append(navigationBlock, contentBlock);
+  }
+
+  private createAddresses(
+    shippingAddresses: AppCustomerAddress[],
+    billingAddresses: AppCustomerAddress[],
+  ): HTMLDivElement {
+    const shippingCol = div(
+      { className: styles.addressCol },
+      div({ className: styles.title }, TITLE.SHIPPING),
+    );
+    const billingCol = div(
+      { className: styles.addressCol },
+      div({ className: styles.title }, TITLE.BILLING),
+    );
+
+    if (shippingAddresses.length > 0) {
+      for (const address of shippingAddresses) {
+        const userAddress = new UserAddress(address);
+        shippingCol.append(userAddress.element);
+      }
+    }
+
+    if (billingAddresses.length > 0) {
+      for (const address of billingAddresses) {
+        const userAddress = new UserAddress(address);
+        billingCol.append(userAddress.element);
+      }
+    }
+
+    const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
+
+    return div({ className: styles.content, id: NAV_ITEMS.ADDRESSES.ID }, addressesContainer);
   }
 
   private createNavigation(): HTMLUListElement {
