@@ -1,3 +1,10 @@
+import type { MyCustomerDraft } from '@commercetools/platform-sdk';
+
+export interface AppCustomerDraft extends MyCustomerDraft {
+  billingAddresses?: number[];
+  shippingAddresses?: number[];
+}
+
 export interface CustomerAddress {
   city: string;
   country: string;
