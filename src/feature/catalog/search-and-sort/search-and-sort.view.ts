@@ -1,14 +1,13 @@
 import { BaseComponent } from '~/components/base-component/base-component';
-import { InputSearch } from '~/components/common/input/input-search/input-search';
-import { SEARCH_PROPS } from '~/shared/constants/input-properties';
+import { SearchProductsForm } from '~/components/search-products-form/search-products-form';
 
 import styles from './search-and-sort.module.css';
 export class SearchAndSortView extends BaseComponent {
-  private readonly inputSearch = new InputSearch(SEARCH_PROPS);
+  private readonly formSearch = new SearchProductsForm();
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
 
-    this.append(this.inputSearch);
+    this.append(this.formSearch);
   }
 }
