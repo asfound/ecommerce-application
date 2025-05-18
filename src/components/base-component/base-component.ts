@@ -80,10 +80,6 @@ export class BaseComponent<TElementType extends HTMLElement = HTMLElement> {
   }
 
   public destroyChildren(): void {
-    if (this.children.size === 0) {
-      return;
-    }
-
     for (const child of this.children) {
       child.destroy();
     }
