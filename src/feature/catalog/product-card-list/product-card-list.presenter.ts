@@ -44,7 +44,11 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       searchTerm,
     });
 
-    this.view.createHTML(products, this.handleNavigateToDetails);
+    if (products.length === 0) {
+      this.view.showNotFoundWidget(searchTerm);
+    } else {
+      this.view.createHTML(products, this.handleNavigateToDetails);
+    }
   };
 
   private setupSubscriptions(): void {
