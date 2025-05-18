@@ -32,6 +32,7 @@ export class ProductCard extends BaseComponent implements Component {
       this.product.price.discounted
         ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
         : null,
+      this.product.bestSeller ? div({ className: styles.bestSellerLabel }, 'Bestseller') : null,
     );
 
     const titleElement = div({ className: styles.title }, this.product.name);

@@ -1,6 +1,7 @@
 import { ProductCard } from './product-card';
 
 const productCard = new ProductCard({
+  bestSeller: false,
   description: 'test',
   image: { label: 'test', url: 'test' },
   name: 'test',
