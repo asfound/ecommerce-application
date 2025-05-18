@@ -9,6 +9,7 @@ import { BaseComponent } from '../base-component/base-component';
 import styles from './product-card.module.css';
 
 const DISCOUNT_PERCENTAGE_VALUE = '-10%';
+const BESTSELLER_VALUE = 'Bestseller';
 
 export class ProductCard extends BaseComponent implements Component {
   private readonly product: AppProduct;
@@ -32,7 +33,7 @@ export class ProductCard extends BaseComponent implements Component {
       this.product.price.discounted
         ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
         : null,
-      this.product.bestSeller ? div({ className: styles.bestSellerLabel }, 'Bestseller') : null,
+      this.product.bestSeller ? div({ className: styles.bestSellerLabel }, BESTSELLER_VALUE) : null,
     );
 
     const titleElement = div({ className: styles.title }, this.product.name);
