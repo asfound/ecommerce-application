@@ -1,0 +1,107 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+
+  margin-block: 4rem;
+}
+
+.block {
+  padding-block: 2rem 3rem;
+  padding-inline: 3rem;
+  border-radius: var(--border-radius);
+  background-color: var(--color-dark);
+}
+
+.navigationBlock {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 30.5rem;
+  height: max-content;
+}
+
+.contentBlock {
+  flex: 1;
+  min-width: 28.9rem;
+}
+
+.heading {
+  margin-bottom: 2rem;
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+.navigationItem {
+  margin-bottom: 2rem;
+  font-weight: 500;
+  transition: color var(--transition-duration);
+}
+
+.navigationItem:last-child {
+  margin-bottom: 0;
+}
+
+.navigationItem:hover {
+  cursor: pointer;
+  color: var(--color-accent);
+}
+
+.navigationItem.active {
+  color: var(--color-accent);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.userName {
+  display: flex;
+  gap: 2rem;
+}
+
+.userInfo {
+  display: block;
+}
+
+.fieldName {
+  margin-right: 1rem;
+  color: var(--color-accent-light);
+}
+
+.addresses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.addressCol {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 22.5rem;
+}
+
+.content {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+@media (width <= 640px) {
+  .contentBlock {
+    max-width: 30.5rem;
+  }
+}
