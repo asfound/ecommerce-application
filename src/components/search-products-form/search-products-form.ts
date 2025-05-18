@@ -1,3 +1,4 @@
+import { SERVICE_HUB } from '~/api/services/service-hub';
 import { SEARCH_PROPS } from '~/shared/constants/input-properties';
 
 import { BaseComponent } from '../base-component/base-component';
@@ -39,6 +40,12 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
   private setupListeners(): void {
     this.inputSearch.addListener('input', () => {
       const emptyString = this.inputSearch.value.trim() === '';
+
+      SERVICE_HUB.provideSuggestionsService()
+        .suggest(this.inputSearch.value)
+        .then((response) => {
+          console.warn(response.body);
+        });
 
       this.buttonSearch[emptyString ? 'disable' : 'enable']();
     });
