@@ -132,5 +132,5 @@ export const SUBSCRIPTION_EMAIL_PROPS: InputTextProperties = {
 
 export const SEARCH_PROPS: InputBaseProperties = {
   name: 'search',
-  placeholder: 'Search',
+  placeholder: 'Search all products',
 } as const;
