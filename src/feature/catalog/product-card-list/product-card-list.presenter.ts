@@ -24,6 +24,15 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.setupSubscriptions();
   }
 
+  private readonly handleCategoryIdChange = async (categoryId: string): Promise<void> => {
+    const products = await this.productsService.getByCategoryId({
+      categoryId,
+      limit: PRODUCTS_PER_PAGE,
+    });
+
+    this.view.createHTML(products, this.handleNavigateToDetails);
+  };
+
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
     Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, { name: product.name, sku: product.sku });
   };
@@ -35,14 +44,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private subscribeCategoryId(): void {
     const unsubscribe = catalogStore.subscribe(
       catalogSelector.selectCategoryId,
-      async (categoryId) => {
-        const products = await this.productsService.getByCategoryId({
-          categoryId,
-          limit: PRODUCTS_PER_PAGE,
-        });
-
-        this.view.createHTML(products, this.handleNavigateToDetails);
-      },
+      this.handleCategoryIdChange,
       { isImmediate: false },
     );
 
