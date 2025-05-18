@@ -1,7 +1,9 @@
 .container {
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   justify-content: center;
+
   margin-block: 4rem;
 }
 
@@ -72,7 +74,8 @@
 
 .addresses {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 3rem;
 }
 
 .title {
@@ -86,6 +89,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-width: 22.5rem;
 }
 
 .content {
@@ -94,4 +98,10 @@
 
 .visible {
   display: block;
+}
+
+@media (width <= 640px) {
+  .contentBlock {
+    max-width: 30.5rem;
+  }
 }
