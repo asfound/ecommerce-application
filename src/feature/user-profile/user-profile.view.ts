@@ -2,11 +2,11 @@ import type { AppCustomer, AppCustomerAddress } from '~/api/services/customer/ty
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
-import { Button } from '~/components/common/button/button';
 import { UserAddress } from '~/components/user-address/user-address';
-import { div, h1, li, span, ul } from '~/shared/create-element/tags';
+import { UserDetails } from '~/components/user-details/user-details';
+import { div, h1, li, ul } from '~/shared/create-element/tags';
 
-import { FIELD_NAME, HEADING, NAV_ITEMS, TITLE } from './constants';
+import { HEADING, NAV_ITEMS, TITLE } from './constants';
 import styles from './user-profile.module.css';
 
 export class UserProfileView extends BaseComponent implements Component {
@@ -98,41 +98,12 @@ export class UserProfileView extends BaseComponent implements Component {
   }
 
   private createPersonalInformation(userInformation: AppCustomer): HTMLDivElement {
-    const detailsBlock = div(
-      { className: styles.details },
-      div(
-        { className: styles.userName },
-        div(
-          null,
-          span({ className: styles.fieldName }, FIELD_NAME.FIRST_NAME),
-          span({ className: styles.userInfo }, userInformation.firstName),
-        ),
-        div(
-          null,
-          span({ className: styles.fieldName }, FIELD_NAME.LAST_NAME),
-          span({ className: styles.userInfo }, userInformation.lastName),
-        ),
-      ),
-      div(
-        null,
-        span({ className: styles.fieldName }, FIELD_NAME.BIRTHDAY),
-        span({ className: styles.userInfo }, userInformation.dateOfBirth),
-      ),
-      div(
-        null,
-        span({ className: styles.fieldName }, FIELD_NAME.EMAIL),
-        span({ className: styles.userInfo }, userInformation.email),
-      ),
-    );
-
-    const editButton = new Button({ textContent: 'Edit', type: 'submit' });
-    editButton.disable();
+    const userDetails = new UserDetails(userInformation);
 
     return div(
       { className: [styles.content, styles.visible], id: NAV_ITEMS.INFORMATION.ID },
       div({ className: styles.title }, TITLE.PERSONAL),
-      detailsBlock,
-      editButton.element,
+      userDetails.element,
     );
   }
 
