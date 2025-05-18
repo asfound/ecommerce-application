@@ -5,6 +5,8 @@ import { Button } from '../common/button/button';
 import { InputSearch } from '../common/input/input-search/input-search';
 import styles from './search-products-form.module.css';
 
+export type SearchHandlerFunction = (searchTerm: string) => void;
+
 export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
   private readonly buttonSearch = new Button({
     textContent: 'Search',
@@ -17,5 +19,13 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
     super({ className: styles.form, tagName: 'form' });
 
     this.append(this.inputSearch, this.buttonSearch);
+  }
+
+  public bindSearchHandler(handler: SearchHandlerFunction): void {
+    this.addListener('submit', (event) => {
+      event.preventDefault();
+
+      handler(this.inputSearch.value.trim());
+    });
   }
 }

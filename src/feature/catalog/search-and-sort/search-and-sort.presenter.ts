@@ -12,6 +12,15 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
 
     this.productsService = productsService;
 
-    console.warn(this.productsService);
+    this.bindViewHandlers();
   }
+
+  private bindViewHandlers(): void {
+    this.view.bindSearchHandler(this.handleSearch);
+  }
+
+  private readonly handleSearch = (searchTerm: string): void => {
+    console.warn(searchTerm);
+    console.warn(this.productsService);
+  };
 }

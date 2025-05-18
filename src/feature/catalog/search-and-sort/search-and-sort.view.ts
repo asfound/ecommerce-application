@@ -1,3 +1,5 @@
+import type { SearchHandlerFunction } from '~/components/search-products-form/search-products-form';
+
 import { BaseComponent } from '~/components/base-component/base-component';
 import { SearchProductsForm } from '~/components/search-products-form/search-products-form';
 
@@ -9,5 +11,9 @@ export class SearchAndSortView extends BaseComponent {
     super({ className: styles.container, tagName: 'div' });
 
     this.append(this.formSearch);
+  }
+
+  public bindSearchHandler(handler: SearchHandlerFunction): void {
+    this.formSearch.bindSearchHandler(handler);
   }
 }
