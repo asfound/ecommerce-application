@@ -49,4 +49,20 @@ export class ProductsService {
 
     return mapToAppProducts(response.body.results);
   }
+
+  public async searchByName(name: string): Promise<AppProduct[]> {
+    const response = await this.apiRoot()
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          [`text.${APP_LOCALE}`]: name,
+          fuzzy: true,
+          markMatchingVariants: true,
+        },
+      })
+      .execute();
+
+    return mapToAppProducts(response.body.results);
+  }
 }
