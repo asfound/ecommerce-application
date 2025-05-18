@@ -24,4 +24,12 @@ export class SearchAndSortView extends BaseComponent {
       }, SEARCH_DEBOUNCE_TIMEOUT),
     );
   }
+
+  public clearInput(): void {
+    this.inputSearch.clear();
+  }
+
+  public setInputPlaceholder(categoryName: string): void {
+    this.inputSearch.setAttributes({ placeholder: `Search in ${categoryName}` });
+  }
 }

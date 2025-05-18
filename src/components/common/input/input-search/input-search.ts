@@ -17,4 +17,8 @@ export class InputSearch extends InputBase {
 
     this.inputComponent.setAttributes({ type: INPUT_TYPE.SEARCH });
   }
+
+  public override setAttributes(attributes: Partial<HTMLInputElement>): void {
+    this.inputComponent.setAttributes(attributes);
+  }
 }

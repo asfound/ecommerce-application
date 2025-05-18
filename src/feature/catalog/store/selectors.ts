@@ -6,7 +6,10 @@ const selectCategoryId = createSelector((state: CatalogState) => state.categoryI
 
 const selectSearchTerm = createSelector((state: CatalogState) => state.searchTerm);
 
+const selectCategoryName = createSelector((state: CatalogState) => state.categoryName);
+
 export const catalogSelector = {
   selectCategoryId,
+  selectCategoryName,
   selectSearchTerm,
 } as const;
