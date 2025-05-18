@@ -6,6 +6,8 @@ import type { AppProduct } from './types';
 
 import { mapToAppProducts } from './mappers';
 
+const TEMPORARY_SORT = `name.${APP_LOCALE} asc`;
+
 export class ProductsService {
   private static instance: null | ProductsService = null;
 
@@ -40,8 +42,6 @@ export class ProductsService {
   }
 
   public async getProducts(payload: { limit: number }): Promise<AppProduct[]> {
-    const TEMPORARY_SORT = `name.${APP_LOCALE} asc`;
-
     const response = await this.apiRoot()
       .productProjections()
       .get({ queryArgs: { limit: payload.limit, sort: TEMPORARY_SORT } })
@@ -50,15 +50,17 @@ export class ProductsService {
     return mapToAppProducts(response.body.results);
   }
 
-  public async searchByName(name: string): Promise<AppProduct[]> {
+  public async searchByTerm(payload: { limit: number; searchTerm: string }): Promise<AppProduct[]> {
     const response = await this.apiRoot()
       .productProjections()
       .search()
       .get({
         queryArgs: {
-          [`text.${APP_LOCALE}`]: name,
+          [`text.${APP_LOCALE}`]: payload.searchTerm,
           fuzzy: true,
+          limit: payload.limit,
           markMatchingVariants: true,
+          sort: TEMPORARY_SORT,
         },
       })
       .execute();

@@ -38,7 +38,10 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   };
 
   private readonly handleSearchTermChange = async (searchTerm: string): Promise<void> => {
-    const products = await this.productsService.searchByName(searchTerm);
+    const products = await this.productsService.searchByTerm({
+      limit: PRODUCTS_PER_PAGE,
+      searchTerm,
+    });
 
     this.view.createHTML(products, this.handleNavigateToDetails);
   };
