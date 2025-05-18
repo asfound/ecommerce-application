@@ -1,0 +1,150 @@
+import type { AppCustomer, AppCustomerAddress } from '~/api/services/customer/types';
+import type { Component } from '~/components/base-component/types';
+
+import { BaseComponent } from '~/components/base-component/base-component';
+import { Button } from '~/components/common/button/button';
+import { UserAddress } from '~/components/user-address/user-address';
+import { div, h1, li, span, ul } from '~/shared/create-element/tags';
+
+import { FIELD_NAME, HEADING, NAV_ITEMS, TITLE } from './constants';
+import styles from './user-profile.module.css';
+
+export class UserProfileView extends BaseComponent implements Component {
+  private readonly contentBlocks: HTMLDivElement[] = [];
+
+  private readonly navigationItems: HTMLLIElement[] = [];
+
+  public constructor() {
+    super({ className: styles.container, tagName: 'div' });
+  }
+
+  public createHTML(userInformation: AppCustomer): void {
+    console.warn(userInformation);
+
+    const navigationBlock = div(
+      { className: [styles.block, styles.navigationBlock] },
+      h1({ className: styles.heading }, HEADING),
+      this.createNavigation(),
+    );
+
+    const informationContent = this.createPersonalInformation(userInformation);
+    const addressesContent = this.createAddresses(
+      userInformation.shippingAddresses,
+      userInformation.billingAddresses,
+    );
+
+    this.contentBlocks.push(informationContent, addressesContent);
+
+    const contentBlock = div(
+      { className: [styles.block, styles.contentBlock] },
+      informationContent,
+      addressesContent,
+    );
+
+    this.append(navigationBlock, contentBlock);
+  }
+
+  private createAddresses(
+    shippingAddresses: AppCustomerAddress[],
+    billingAddresses: AppCustomerAddress[],
+  ): HTMLDivElement {
+    const shippingCol = div(
+      { className: styles.addressCol },
+      div({ className: styles.title }, TITLE.SHIPPING),
+    );
+    const billingCol = div(
+      { className: styles.addressCol },
+      div({ className: styles.title }, TITLE.BILLING),
+    );
+
+    if (shippingAddresses.length > 0) {
+      for (const address of shippingAddresses) {
+        const userAddress = new UserAddress(address);
+        shippingCol.append(userAddress.element);
+      }
+    }
+
+    if (billingAddresses.length > 0) {
+      for (const address of billingAddresses) {
+        const userAddress = new UserAddress(address);
+        billingCol.append(userAddress.element);
+      }
+    }
+
+    const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
+
+    return div({ className: styles.content, id: NAV_ITEMS.ADDRESSES.ID }, addressesContainer);
+  }
+
+  private createNavigation(): HTMLUListElement {
+    const informationItem = li(
+      { className: [styles.navigationItem, styles.active] },
+      NAV_ITEMS.INFORMATION.TEXT,
+    );
+    const addressesItem = li({ className: styles.navigationItem }, NAV_ITEMS.ADDRESSES.TEXT);
+
+    informationItem.dataset.target = NAV_ITEMS.INFORMATION.ID;
+    addressesItem.dataset.target = NAV_ITEMS.ADDRESSES.ID;
+
+    this.navigationItems.push(informationItem, addressesItem);
+
+    for (const item of this.navigationItems) {
+      item.addEventListener('click', () => {
+        this.handleNavigationClick(item);
+      });
+    }
+
+    return ul(null, informationItem, addressesItem);
+  }
+
+  private createPersonalInformation(userInformation: AppCustomer): HTMLDivElement {
+    const detailsBlock = div(
+      { className: styles.details },
+      div(
+        { className: styles.userName },
+        div(
+          null,
+          span({ className: styles.fieldName }, FIELD_NAME.FIRST_NAME),
+          span({ className: styles.userInfo }, userInformation.firstName),
+        ),
+        div(
+          null,
+          span({ className: styles.fieldName }, FIELD_NAME.LAST_NAME),
+          span({ className: styles.userInfo }, userInformation.lastName),
+        ),
+      ),
+      div(
+        null,
+        span({ className: styles.fieldName }, FIELD_NAME.BIRTHDAY),
+        span({ className: styles.userInfo }, userInformation.dateOfBirth),
+      ),
+      div(
+        null,
+        span({ className: styles.fieldName }, FIELD_NAME.EMAIL),
+        span({ className: styles.userInfo }, userInformation.email),
+      ),
+    );
+
+    const editButton = new Button({ textContent: 'Edit', type: 'submit' });
+    editButton.disable();
+
+    return div(
+      { className: [styles.content, styles.visible], id: NAV_ITEMS.INFORMATION.ID },
+      div({ className: styles.title }, TITLE.PERSONAL),
+      detailsBlock,
+      editButton.element,
+    );
+  }
+
+  private handleNavigationClick(item: HTMLLIElement): void {
+    const targetId = item.dataset.target;
+
+    for (const navItem of this.navigationItems) {
+      navItem.classList.toggle(styles.active, navItem === item);
+    }
+
+    for (const block of this.contentBlocks) {
+      block.classList.toggle(styles.visible, block.id === targetId);
+    }
+  }
+}

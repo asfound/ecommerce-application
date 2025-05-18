@@ -10,6 +10,25 @@ export interface AddressPayload {
   customerVersion: number;
 }
 
+export interface AppCustomer {
+  billingAddresses: AppCustomerAddress[];
+  dateOfBirth: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  shippingAddresses: AppCustomerAddress[];
+  version: number;
+}
+
+export interface AppCustomerAddress {
+  city: string;
+  country: string;
+  defaultBilling: boolean;
+  defaultShipping: boolean;
+  postalCode: string;
+  streetName: string;
+}
+
 export interface ChangeAddressPayload extends AddressPayload {
   address: BaseAddress;
 }
