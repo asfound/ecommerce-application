@@ -1,3 +1,4 @@
+import type { InputBaseProperties } from '~/components/common/input/input-base';
 import type { InputCheckboxProperties } from '~/components/common/input/input-checkbox/input-checkbox';
 import type { InputTextProperties } from '~/components/common/input/input-text/input-text';
 
@@ -127,4 +128,9 @@ export const SUBSCRIPTION_EMAIL_PROPS: InputTextProperties = {
   name: 'email',
   placeholder: 'Email',
   validators: [validators.validateEmailFormat],
+} as const;
+
+export const SEARCH_PROPS: InputBaseProperties = {
+  name: 'search',
+  placeholder: 'Search',
 } as const;

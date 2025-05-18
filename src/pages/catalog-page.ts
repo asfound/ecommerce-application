@@ -32,7 +32,10 @@ export class CatalogPage extends BaseComponent {
       SERVICE_HUB.provideProductsService(),
     );
 
-    this.searchAndSortPresenter = new SearchAndSortPresenter(new SearchAndSortView());
+    this.searchAndSortPresenter = new SearchAndSortPresenter(
+      new SearchAndSortView(),
+      SERVICE_HUB.provideProductsService(),
+    );
 
     const sidebarElement = div(
       { className: styles.sidebarElement },
