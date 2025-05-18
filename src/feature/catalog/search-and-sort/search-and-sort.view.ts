@@ -5,7 +5,7 @@ import { debounce } from '~/shared/utils/debounce';
 
 import styles from './search-and-sort.module.css';
 
-const SEARCH_DEBOUNCE_TIMEOUT = 500;
+const SEARCH_DEBOUNCE_TIMEOUT = 600;
 
 export class SearchAndSortView extends BaseComponent {
   private readonly inputSearch = new InputSearch(SEARCH_PROPS);
