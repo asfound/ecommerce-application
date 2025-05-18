@@ -44,6 +44,14 @@ export const ROUTES: Route[] = [
     title: `${TITLE} | Catalog`,
   },
   {
+    async component(): Promise<BaseComponent> {
+      const { ProductDetailsPage } = await import('../../pages/product-details.ts');
+      return new ProductDetailsPage();
+    },
+    path: ROUTE_PATH.PRODUCT_DETAILS,
+    title: `${TITLE} | Product`,
+  },
+  {
     canActivate: [isLoggedIn],
     async component(): Promise<BaseComponent> {
       const { UserProfilePage } = await import('../../pages/user-profile-page.ts');
