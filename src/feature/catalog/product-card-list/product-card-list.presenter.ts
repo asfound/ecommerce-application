@@ -37,8 +37,16 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, { name: product.name, sku: product.sku });
   };
 
+  private readonly handleSearchTermChange = async (searchTerm: string): Promise<void> => {
+    const products = await this.productsService.searchByName(searchTerm);
+
+    this.view.createHTML(products, this.handleNavigateToDetails);
+  };
+
   private setupSubscriptions(): void {
     this.subscribeCategoryId();
+
+    this.subscribeSearchTerm();
   }
 
   private subscribeCategoryId(): void {
@@ -46,6 +54,18 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       catalogSelector.selectCategoryId,
       this.handleCategoryIdChange,
       { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribeSearchTerm(): void {
+    const unsubscribe = catalogStore.subscribe(
+      catalogSelector.selectSearchTerm,
+      this.handleSearchTermChange,
+      {
+        isImmediate: false,
+      },
     );
 
     this.storeSubscription.add(unsubscribe);

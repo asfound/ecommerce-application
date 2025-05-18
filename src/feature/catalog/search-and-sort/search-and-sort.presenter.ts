@@ -4,6 +4,8 @@ import { Presenter } from '~/shared/presenter/presenter';
 
 import type { SearchAndSortView } from './search-and-sort.view';
 
+import { catalogAction } from '../store/actions';
+
 export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
   private readonly productsService: ProductsService;
 
@@ -13,6 +15,8 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
     this.productsService = productsService;
 
     this.bindViewHandlers();
+
+    console.warn(this.productsService);
   }
 
   private bindViewHandlers(): void {
@@ -20,7 +24,6 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
   }
 
   private readonly handleSearch = (searchTerm: string): void => {
-    console.warn(searchTerm);
-    console.warn(this.productsService);
+    catalogAction.setSearchTerm(searchTerm);
   };
 }
