@@ -19,7 +19,7 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
   public constructor() {
     super({ className: styles.form, tagName: 'form' });
 
-    this.buttonSearch.setAttributes({ disabled: true });
+    // this.buttonSearch.setAttributes({ disabled: true });
 
     this.append(this.inputSearch, this.buttonSearch);
 
@@ -32,14 +32,14 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
 
       handler(this.inputSearch.value.trim());
 
-      this.inputSearch.clear();
-      this.buttonSearch.disable();
+      // this.inputSearch.clear();
+      // this.buttonSearch.disable();
     });
   }
 
   private setupListeners(): void {
     this.inputSearch.addListener('input', () => {
-      const emptyString = this.inputSearch.value.trim() === '';
+      // const emptyString = this.inputSearch.value.trim() === '';
 
       SERVICE_HUB.provideSuggestionsService()
         .suggest(this.inputSearch.value)
@@ -47,7 +47,7 @@ export class SearchProductsForm extends BaseComponent<HTMLFormElement> {
           console.warn(response.body);
         });
 
-      this.buttonSearch[emptyString ? 'disable' : 'enable']();
+      // this.buttonSearch[emptyString ? 'disable' : 'enable']();
     });
   }
 }
