@@ -59,6 +59,10 @@ img {
   max-width: 100%;
 }
 
+input {
+  accent-color: var(--color-accent);
+}
+
 .wrapper {
   max-width: 128rem;
   margin-inline: auto;
