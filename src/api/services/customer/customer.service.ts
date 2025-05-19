@@ -106,17 +106,19 @@ export class CustomerService {
       .execute();
   }
 
-  public async updatePersonalData(payload: PersonalDataPayload): Promise<ClientResponse<Customer>> {
+  public async updatePersonalData(payload: PersonalDataPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = getPersonalDataUpdateActions(
       payload.sourceCustomer,
       payload.editedCustomer,
     );
 
-    return this.apiRoot()
+    const response = await this.apiRoot()
       .me()
       .post({
         body: { actions, version: payload.sourceCustomer.version },
       })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 }

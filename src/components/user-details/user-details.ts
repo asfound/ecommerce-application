@@ -1,4 +1,4 @@
-import type { AppCustomer } from '~/api/services/customer/types';
+import type { AppCustomer, PersonalDataPayload } from '~/api/services/customer/types';
 
 import {
   DATE_OF_BIRTH_PROPS,
@@ -31,12 +31,9 @@ export const BUTTON_TEXT = {
 };
 
 export class UserDetails extends BaseComponent implements Component {
-  private isEditing = false;
-
   private readonly cancelButton = new Button({
     onClick: (): void => {
-      this.isEditing = false;
-      this.createHTML();
+      this.createBaseView();
     },
     textContent: BUTTON_TEXT.CANCEL,
     type: 'button',
@@ -59,18 +56,25 @@ export class UserDetails extends BaseComponent implements Component {
     type: 'submit',
   });
 
-  private readonly userInformation: AppCustomer;
+  private userInformation: AppCustomer | null = null;
 
-  public constructor(userInformation: AppCustomer) {
+  public constructor() {
     super({ tagName: 'div' });
 
-    this.userInformation = userInformation;
-
     this.storeInputs();
-
     this.setStyles();
+  }
 
-    this.createHTML();
+  public bindSubmitHandler(handler: (payload: PersonalDataPayload) => void): void {
+    this.formElement.addEventListener(
+      'submit',
+      (event) => {
+        event.preventDefault();
+
+        handler(this.getPayload());
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public checkValidity(): void {
@@ -79,12 +83,9 @@ export class UserDetails extends BaseComponent implements Component {
     this.submitButton[formValid ? 'enable' : 'disable']();
   }
 
-  public createHTML(): void {
-    if (this.isEditing) {
-      this.createFormView();
-    } else {
-      this.createBaseView();
-    }
+  public createHTML(userInformation: AppCustomer): void {
+    this.userInformation = userInformation;
+    this.createBaseView();
   }
 
   private addInputComponent(input: InputBase): void {
@@ -98,8 +99,7 @@ export class UserDetails extends BaseComponent implements Component {
   private createBaseView(): void {
     const editButton = new Button({
       onClick: (): void => {
-        this.isEditing = true;
-        this.createHTML();
+        this.createFormView();
       },
       textContent: BUTTON_TEXT.EDIT,
       type: 'button',
@@ -112,23 +112,23 @@ export class UserDetails extends BaseComponent implements Component {
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.FIRST_NAME),
-        span({ className: styles.userInfo }, this.userInformation.firstName),
+        span({ className: styles.userInfo }, this.userInformation?.firstName),
       ),
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.LAST_NAME),
-        span({ className: styles.userInfo }, this.userInformation.lastName),
+        span({ className: styles.userInfo }, this.userInformation?.lastName),
       ),
 
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.BIRTHDAY),
-        span({ className: styles.userInfo }, this.userInformation.dateOfBirth),
+        span({ className: styles.userInfo }, this.userInformation?.dateOfBirth),
       ),
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.EMAIL),
-        span({ className: styles.userInfo }, this.userInformation.email),
+        span({ className: styles.userInfo }, this.userInformation?.email),
       ),
       editButton.element,
     );
@@ -137,10 +137,10 @@ export class UserDetails extends BaseComponent implements Component {
   }
 
   private createFormView(): void {
-    this.inputFirstName.setValue(this.userInformation.firstName);
-    this.inputLastName.setValue(this.userInformation.lastName);
-    this.inputBirthDate.setValue(this.userInformation.dateOfBirth);
-    this.inputEmail.setValue(this.userInformation.email);
+    this.inputFirstName.setValue(this.userInformation?.firstName ?? '');
+    this.inputLastName.setValue(this.userInformation?.lastName ?? '');
+    this.inputBirthDate.setValue(this.userInformation?.dateOfBirth ?? '');
+    this.inputEmail.setValue(this.userInformation?.email ?? '');
     this.submitButton.disable();
 
     this.formElement.append(
@@ -153,6 +153,26 @@ export class UserDetails extends BaseComponent implements Component {
     );
 
     this.replaceChildren(this.formElement);
+  }
+
+  private getPayload(): PersonalDataPayload {
+    const sourceCustomer = {
+      dateOfBirth: this.userInformation?.dateOfBirth ?? '',
+      email: this.userInformation?.email ?? '',
+      firstName: this.userInformation?.firstName ?? '',
+      lastName: this.userInformation?.lastName ?? '',
+      version: this.userInformation?.version ?? 0,
+    };
+
+    const editedCustomer = {
+      dateOfBirth: this.inputBirthDate.value.trim(),
+      email: this.inputEmail.value.trim(),
+      firstName: this.inputFirstName.value.trim(),
+      lastName: this.inputLastName.value.trim(),
+      version: this.userInformation?.version ?? 0,
+    };
+
+    return { editedCustomer, sourceCustomer };
   }
 
   private setStyles(): void {

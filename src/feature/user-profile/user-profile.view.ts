@@ -1,4 +1,8 @@
-import type { AppCustomer, AppCustomerAddress } from '~/api/services/customer/types';
+import type {
+  AppCustomer,
+  AppCustomerAddress,
+  PersonalDataPayload,
+} from '~/api/services/customer/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -14,13 +18,17 @@ export class UserProfileView extends BaseComponent implements Component {
 
   private readonly navigationItems: HTMLLIElement[] = [];
 
+  private readonly userDetails = new UserDetails();
+
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
   }
 
-  public createHTML(userInformation: AppCustomer): void {
-    console.warn(userInformation);
+  public bindPersonalDataUpdateHandler(handler: (payload: PersonalDataPayload) => void): void {
+    this.userDetails.bindSubmitHandler(handler);
+  }
 
+  public createHTML(userInformation: AppCustomer): void {
     const navigationBlock = div(
       { className: [styles.block, styles.navigationBlock] },
       h1({ className: styles.heading }, HEADING),
@@ -98,12 +106,12 @@ export class UserProfileView extends BaseComponent implements Component {
   }
 
   private createPersonalInformation(userInformation: AppCustomer): HTMLDivElement {
-    const userDetails = new UserDetails(userInformation);
+    this.userDetails.createHTML(userInformation);
 
     return div(
       { className: [styles.content, styles.visible], id: NAV_ITEMS.INFORMATION.ID },
       div({ className: styles.title }, TITLE.PERSONAL),
-      userDetails.element,
+      this.userDetails.element,
     );
   }
 
