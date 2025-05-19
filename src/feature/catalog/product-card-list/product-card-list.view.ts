@@ -5,17 +5,17 @@ import type { ProductCardClickHandler } from '~/components/product-card/product-
 import huhGif from '~/assets/img/huh-cat.gif';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProductCard } from '~/components/product-card/product-card';
-import { div, h2, img } from '~/shared/create-element/tags';
+import { div, img, p } from '~/shared/create-element/tags';
 
 import styles from './product-card-list.module.css';
 
 export class ProductCardListView extends BaseComponent implements Component {
-  private readonly notFoundHeading = h2({ className: styles.notFoundHeading });
+  private readonly notFoundHeading = p({ className: styles.notFoundDescription });
 
   private readonly notFoundWidget = div(
     { className: styles.notFoundWidget },
-    this.notFoundHeading,
     img({ className: styles.notFoundGif, src: huhGif }),
+    this.notFoundHeading,
   );
 
   public constructor() {
@@ -29,7 +29,7 @@ export class ProductCardListView extends BaseComponent implements Component {
   }
 
   public showNotFoundWidget(searchTerm: string): void {
-    this.notFoundHeading.textContent = `No results found for "${searchTerm}"`;
+    this.notFoundHeading.textContent = `Huh?! No results found for '${searchTerm}'.`;
     this.replaceChildren(this.notFoundWidget);
   }
 }
