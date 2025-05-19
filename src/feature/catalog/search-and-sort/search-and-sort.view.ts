@@ -14,7 +14,7 @@ const SEARCH_DEBOUNCE_TIMEOUT = 600;
 export class SearchAndSortView extends BaseComponent {
   private readonly sortIcon = createSvgIcon(iconSort, styles.icon);
 
-  private readonly buttonOrder = button({ className: styles.button }, 'Order: ', this.sortIcon);
+  private readonly buttonOrder = button({ className: styles.button }, 'ORDER: ', this.sortIcon);
 
   private readonly inputSearch = new InputSearch(SEARCH_PROPS);
 
