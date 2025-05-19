@@ -49,7 +49,7 @@ export class UserProfileView extends BaseComponent implements Component {
       addressesContent,
     );
 
-    this.append(navigationBlock, contentBlock);
+    this.replaceChildren(navigationBlock, contentBlock);
   }
 
   private createAddresses(
