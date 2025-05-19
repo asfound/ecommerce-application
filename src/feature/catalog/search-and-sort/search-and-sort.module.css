@@ -8,3 +8,33 @@
   align-items: center;
   color: var(--color-accent-light);
 }
+
+.button {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  border: none;
+
+  color: var(--color-accent-light);
+
+  background-color: transparent;
+
+  transition: color var(--transition-duration);
+}
+
+.icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .button:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+}

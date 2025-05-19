@@ -1,8 +1,10 @@
+import iconSort from '~/assets/icons/sort.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
 import { InputSearch } from '~/components/common/input/input-search/input-search';
 import { SEARCH_PROPS } from '~/shared/constants/input-properties';
-import { div } from '~/shared/create-element/tags';
+import { button, div } from '~/shared/create-element/tags';
+import { createSvgIcon } from '~/shared/utils/create-svg';
 import { debounce } from '~/shared/utils/debounce';
 
 import styles from './search-and-sort.module.css';
@@ -10,6 +12,10 @@ import styles from './search-and-sort.module.css';
 const SEARCH_DEBOUNCE_TIMEOUT = 600;
 
 export class SearchAndSortView extends BaseComponent {
+  private readonly sortIcon = createSvgIcon(iconSort, styles.icon);
+
+  private readonly buttonOrder = button({ className: styles.button }, 'Order: ', this.sortIcon);
+
   private readonly inputSearch = new InputSearch(SEARCH_PROPS);
 
   private readonly inputSortName = new InputRadio({
@@ -27,12 +33,15 @@ export class SearchAndSortView extends BaseComponent {
     'SORT BY:',
     this.inputSortName.element,
     this.inputSortPrice.element,
+    this.buttonOrder,
   );
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
 
     this.append(this.inputSearch, this.sortContainer);
+
+    this.setupListeners();
   }
 
   public bindSearchHandler(handler: (searchTerm: string) => void): void {
@@ -50,5 +59,15 @@ export class SearchAndSortView extends BaseComponent {
 
   public setInputPlaceholder(categoryName: string): void {
     this.inputSearch.setAttributes({ placeholder: `Search in ${categoryName}` });
+  }
+
+  private setupListeners(): void {
+    this.buttonOrder.addEventListener(
+      'click',
+      () => {
+        this.sortIcon.classList.toggle(styles.rotated);
+      },
+      { signal: this.abortController.signal },
+    );
   }
 }
