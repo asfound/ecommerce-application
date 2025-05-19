@@ -62,7 +62,7 @@ export class UserDetails extends BaseComponent implements Component {
   private readonly userInformation: AppCustomer;
 
   public constructor(userInformation: AppCustomer) {
-    super({ className: 'USER-DETAILS', tagName: 'div' });
+    super({ tagName: 'div' });
 
     this.userInformation = userInformation;
 
@@ -80,8 +80,6 @@ export class UserDetails extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    this.replaceChildren();
-
     if (this.isEditing) {
       this.createFormView();
     } else {
@@ -106,6 +104,7 @@ export class UserDetails extends BaseComponent implements Component {
       textContent: BUTTON_TEXT.EDIT,
       type: 'button',
     });
+    editButton.addClassNames(styles.detailsItem);
 
     const detailsBlock = div(
       { className: styles.details },
