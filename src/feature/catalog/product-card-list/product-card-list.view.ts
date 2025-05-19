@@ -11,7 +11,7 @@ import { div, img, p } from '~/shared/create-element/tags';
 import styles from './product-card-list.module.css';
 
 export class ProductCardListView extends BaseComponent implements Component {
-  private readonly loaderComponent = new Loader();
+  private readonly loaderComponent = new Loader({ size: 'medium' });
 
   private readonly notFoundHeading = p({ className: styles.notFoundDescription });
 

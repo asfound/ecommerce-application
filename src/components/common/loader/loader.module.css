@@ -7,9 +7,9 @@
   display: inline-block;
 
   box-sizing: border-box;
-  width: 4.8rem;
-  height: 4.8rem;
-  border: 3px solid var(--color-white);
+  width: var(--loader-size);
+  height: var(--loader-size);
+  border: var(--loader-border) solid var(--color-white);
   border-radius: 50%;
 
   animation: rotation 1s linear infinite;
@@ -24,11 +24,25 @@
   translate: -50% -50%;
 
   box-sizing: border-box;
-  width: 5.6rem;
-  height: 5.6rem;
-  border: 5px solid;
+  width: var(--loader-outer-size);
+  height: var(--loader-outer-size);
+  border: var(--loader-outer-border) solid;
   border-color: var(--color-accent) transparent;
   border-radius: 50%;
+}
+
+.loader.small {
+  --loader-size: 3.2rem;
+  --loader-outer-size: 3.6rem;
+  --loader-border: 2px;
+  --loader-outer-border: 4px;
+}
+
+.loader.medium {
+  --loader-size: 4.8rem;
+  --loader-border: 3px;
+  --loader-outer-border: 5px;
+  --loader-outer-size: 5.6rem;
 }
 
 .hidden {

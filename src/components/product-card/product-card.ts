@@ -15,7 +15,7 @@ const BESTSELLER_VALUE = 'Bestseller';
 export type ProductCardClickHandler = (product: AppProduct) => void;
 
 export class ProductCard extends BaseComponent implements Component {
-  private readonly loaderComponent = new Loader();
+  private readonly loaderComponent = new Loader({ size: 'small' });
 
   private readonly onNavigateToDetails: ProductCardClickHandler;
 
