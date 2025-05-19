@@ -15,7 +15,7 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
 
     this.categoriesService = categoriesService;
 
-    this.updateView();
+    this.initView();
   }
 
   private handleCategoryItemClick = (category: AppCategory): void => {
@@ -23,7 +23,7 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
     catalogAction.setCategoryName(category.name);
   };
 
-  private async updateView(): Promise<void> {
+  private async initView(): Promise<void> {
     const categories = await this.categoriesService.getCategories();
 
     this.view.createHTML(categories, this.handleCategoryItemClick);

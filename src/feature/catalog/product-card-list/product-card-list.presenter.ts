@@ -19,7 +19,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
     this.productsService = productsService;
 
-    this.updateView();
+    this.initView();
 
     this.setupSubscriptions();
   }
@@ -50,6 +50,12 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       this.view.createHTML(products, this.handleNavigateToDetails);
     }
   };
+
+  private async initView(): Promise<void> {
+    const products = await this.productsService.getProducts({ limit: PRODUCTS_PER_PAGE });
+
+    this.view.createHTML(products, this.handleNavigateToDetails);
+  }
 
   private setupSubscriptions(): void {
     this.subscribeCategoryId();
@@ -95,11 +101,5 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     );
 
     this.storeSubscription.add(unsubscribe);
-  }
-
-  private async updateView(): Promise<void> {
-    const products = await this.productsService.getProducts({ limit: PRODUCTS_PER_PAGE });
-
-    this.view.createHTML(products, this.handleNavigateToDetails);
   }
 }
