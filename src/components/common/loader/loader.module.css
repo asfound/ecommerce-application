@@ -2,7 +2,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
 
   display: inline-block;
 
@@ -21,7 +21,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
 
   box-sizing: border-box;
   width: 5.6rem;
