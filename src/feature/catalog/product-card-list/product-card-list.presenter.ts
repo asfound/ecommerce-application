@@ -8,6 +8,7 @@ import { Presenter } from '~/shared/presenter/presenter';
 import type { ProductCardListView } from './product-card-list.view';
 
 import { PRODUCTS_PER_PAGE } from '../constants';
+import { catalogAction } from '../store/actions';
 import { catalogSelector } from '../store/selectors';
 import { catalogStore } from '../store/store';
 
@@ -25,12 +26,18 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private readonly handleCategoryIdChange = async (categoryId: string): Promise<void> => {
-    const products = await this.productsService.getByCategoryId({
-      categoryId,
-      limit: PRODUCTS_PER_PAGE,
-    });
+    try {
+      catalogAction.setLoading(true);
 
-    this.view.createHTML(products, this.handleNavigateToDetails);
+      const products = await this.productsService.getByCategoryId({
+        categoryId,
+        limit: PRODUCTS_PER_PAGE,
+      });
+
+      this.view.createHTML(products, this.handleNavigateToDetails);
+    } finally {
+      catalogAction.setLoading(false);
+    }
   };
 
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
@@ -38,23 +45,35 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   };
 
   private readonly handleSearchTermChange = async (searchTerm: string): Promise<void> => {
-    const products = await this.productsService.searchByTerm({
-      categoryId: catalogStore.select(catalogSelector.selectCategoryId),
-      limit: PRODUCTS_PER_PAGE,
-      searchTerm,
-    });
+    try {
+      catalogAction.setLoading(true);
 
-    if (products.length === 0) {
-      this.view.showNotFoundWidget(searchTerm);
-    } else {
-      this.view.createHTML(products, this.handleNavigateToDetails);
+      const products = await this.productsService.searchByTerm({
+        categoryId: catalogStore.select(catalogSelector.selectCategoryId),
+        limit: PRODUCTS_PER_PAGE,
+        searchTerm,
+      });
+
+      if (products.length === 0) {
+        this.view.showNotFoundWidget(searchTerm);
+      } else {
+        this.view.createHTML(products, this.handleNavigateToDetails);
+      }
+    } finally {
+      catalogAction.setLoading(false);
     }
   };
 
   private async initView(): Promise<void> {
-    const products = await this.productsService.getProducts({ limit: PRODUCTS_PER_PAGE });
+    try {
+      catalogAction.setLoading(true);
 
-    this.view.createHTML(products, this.handleNavigateToDetails);
+      const products = await this.productsService.getProducts({ limit: PRODUCTS_PER_PAGE });
+
+      this.view.createHTML(products, this.handleNavigateToDetails);
+    } finally {
+      catalogAction.setLoading(false);
+    }
   }
 
   private setupSubscriptions(): void {
@@ -79,11 +98,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     const unsubscribe = catalogStore.subscribe(
       catalogSelector.selectLoading,
       (loading) => {
-        if (loading) {
-          this.view.showLoader();
-        } else {
-          this.view.hideLoader();
-        }
+        this.view[loading ? 'showLoader' : 'hideLoader']();
       },
       { isImmediate: false },
     );
