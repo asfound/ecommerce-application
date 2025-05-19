@@ -14,8 +14,6 @@ export class UserProfileView extends BaseComponent implements Component {
 
   private readonly navigationItems: HTMLLIElement[] = [];
 
-  private readonly userDetails = new UserDetails();
-
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
   }
@@ -100,12 +98,12 @@ export class UserProfileView extends BaseComponent implements Component {
   }
 
   private createPersonalInformation(userInformation: AppCustomer): HTMLDivElement {
-    this.userDetails.createHTML(userInformation);
+    const userDetails = new UserDetails(userInformation);
 
     return div(
       { className: [styles.content, styles.visible], id: NAV_ITEMS.INFORMATION.ID },
       div({ className: styles.title }, TITLE.PERSONAL),
-      this.userDetails.element,
+      userDetails.element,
     );
   }
 

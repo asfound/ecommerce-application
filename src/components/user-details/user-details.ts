@@ -50,12 +50,18 @@ export class UserDetails extends BaseComponent implements Component {
     type: 'submit',
   });
 
-  public constructor() {
+  private readonly userInformation: AppCustomer;
+
+  public constructor(userInformation: AppCustomer) {
     super({ tagName: 'div' });
+
+    this.userInformation = userInformation;
 
     this.storeInputs();
 
     this.setStyles();
+
+    this.createHTML();
   }
 
   public checkValidity(): void {
@@ -64,13 +70,13 @@ export class UserDetails extends BaseComponent implements Component {
     this.submitButton[formValid ? 'enable' : 'disable']();
   }
 
-  public createHTML(userInformation: AppCustomer): void {
+  public createHTML(): void {
     this.replaceChildren();
 
     if (this.isEditing) {
-      this.createFormView(userInformation);
+      this.createFormView();
     } else {
-      this.createBaseView(userInformation);
+      this.createBaseView();
     }
   }
 
@@ -82,30 +88,30 @@ export class UserDetails extends BaseComponent implements Component {
     });
   }
 
-  private createBaseView(userInformation: AppCustomer): void {
+  private createBaseView(): void {
     const detailsBlock = div(
       { className: styles.details },
 
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.FIRST_NAME),
-        span({ className: styles.userInfo }, userInformation.firstName),
+        span({ className: styles.userInfo }, this.userInformation.firstName),
       ),
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.LAST_NAME),
-        span({ className: styles.userInfo }, userInformation.lastName),
+        span({ className: styles.userInfo }, this.userInformation.lastName),
       ),
 
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.BIRTHDAY),
-        span({ className: styles.userInfo }, userInformation.dateOfBirth),
+        span({ className: styles.userInfo }, this.userInformation.dateOfBirth),
       ),
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.EMAIL),
-        span({ className: styles.userInfo }, userInformation.email),
+        span({ className: styles.userInfo }, this.userInformation.email),
       ),
     );
 
@@ -113,17 +119,17 @@ export class UserDetails extends BaseComponent implements Component {
 
     editButton.addListener('click', () => {
       this.isEditing = true;
-      this.createHTML(userInformation);
+      this.createHTML();
     });
 
     this.append(detailsBlock, editButton);
   }
 
-  private createFormView(userInformation: AppCustomer): void {
-    this.inputFirstName.setValue(userInformation.firstName);
-    this.inputLastName.setValue(userInformation.lastName);
-    this.inputBirthDate.setValue(userInformation.dateOfBirth);
-    this.inputEmail.setValue(userInformation.email);
+  private createFormView(): void {
+    this.inputFirstName.setValue(this.userInformation.firstName);
+    this.inputLastName.setValue(this.userInformation.lastName);
+    this.inputBirthDate.setValue(this.userInformation.dateOfBirth);
+    this.inputEmail.setValue(this.userInformation.email);
     this.submitButton.disable();
 
     const cancelButton = new Button({ textContent: BUTTON_TEXT.CANCEL, type: 'button' });
@@ -131,7 +137,7 @@ export class UserDetails extends BaseComponent implements Component {
 
     cancelButton.addListener('click', () => {
       this.isEditing = false;
-      this.createHTML(userInformation);
+      this.createHTML();
     });
 
     this.formElement.append(
