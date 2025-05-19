@@ -55,12 +55,30 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.subscribeCategoryId();
 
     this.subscribeSearchTerm();
+
+    this.subscribeLoading();
   }
 
   private subscribeCategoryId(): void {
     const unsubscribe = catalogStore.subscribe(
       catalogSelector.selectCategoryId,
       this.handleCategoryIdChange,
+      { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribeLoading(): void {
+    const unsubscribe = catalogStore.subscribe(
+      catalogSelector.selectLoading,
+      (loading) => {
+        if (loading) {
+          this.view.showLoader();
+        } else {
+          this.view.hideLoader();
+        }
+      },
       { isImmediate: false },
     );
 

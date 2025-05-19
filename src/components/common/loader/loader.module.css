@@ -1,0 +1,46 @@
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: inline-block;
+
+  box-sizing: border-box;
+  width: 4.8rem;
+  height: 4.8rem;
+  border: 3px solid var(--color-white);
+  border-radius: 50%;
+
+  animation: rotation 1s linear infinite;
+}
+
+.loader::after {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  box-sizing: border-box;
+  width: 5.6rem;
+  height: 5.6rem;
+  border: 5px solid;
+  border-color: var(--color-accent) transparent;
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

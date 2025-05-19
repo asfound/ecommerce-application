@@ -8,8 +8,11 @@ const selectSearchTerm = createSelector((state: CatalogState) => state.searchTer
 
 const selectCategoryName = createSelector((state: CatalogState) => state.categoryName);
 
+const selectLoading = createSelector((state: CatalogState) => state.loading);
+
 export const catalogSelector = {
   selectCategoryId,
   selectCategoryName,
+  selectLoading,
   selectSearchTerm,
 } as const;

@@ -12,8 +12,13 @@ const setCategoryName = (categoryName: string): void => {
   catalogStore.setState({ categoryName });
 };
 
+const setLoading = (loading: boolean): void => {
+  catalogStore.setState({ loading });
+};
+
 export const catalogAction = {
   setCategoryId,
   setCategoryName,
+  setLoading,
   setSearchTerm,
 } as const;

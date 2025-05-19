@@ -4,12 +4,15 @@ import type { ProductCardClickHandler } from '~/components/product-card/product-
 
 import huhGif from '~/assets/img/huh-cat.gif';
 import { BaseComponent } from '~/components/base-component/base-component';
+import { Loader } from '~/components/common/loader/loader';
 import { ProductCard } from '~/components/product-card/product-card';
 import { div, img, p } from '~/shared/create-element/tags';
 
 import styles from './product-card-list.module.css';
 
 export class ProductCardListView extends BaseComponent implements Component {
+  private readonly loaderComponent = new Loader();
+
   private readonly notFoundHeading = p({ className: styles.notFoundDescription });
 
   private readonly notFoundWidget = div(
@@ -26,6 +29,15 @@ export class ProductCardListView extends BaseComponent implements Component {
     this.replaceChildren(
       ...products.map((product) => new ProductCard(product, onNavigateToDetails)),
     );
+  }
+
+  public hideLoader(): void {
+    this.loaderComponent.hide();
+  }
+
+  public showLoader(): void {
+    this.replaceChildren(this.loaderComponent);
+    this.loaderComponent.show();
   }
 
   public showNotFoundWidget(searchTerm: string): void {
