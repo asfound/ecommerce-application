@@ -95,13 +95,9 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private subscribeLoading(): void {
-    const unsubscribe = catalogStore.subscribe(
-      catalogSelector.selectLoading,
-      (loading) => {
-        this.view[loading ? 'showLoader' : 'hideLoader']();
-      },
-      { isImmediate: false },
-    );
+    const unsubscribe = catalogStore.subscribe(catalogSelector.selectLoading, (loading) => {
+      this.view[loading ? 'showLoader' : 'hideLoader']();
+    });
 
     this.storeSubscription.add(unsubscribe);
   }
@@ -110,9 +106,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     const unsubscribe = catalogStore.subscribe(
       catalogSelector.selectSearchTerm,
       this.handleSearchTermChange,
-      {
-        isImmediate: false,
-      },
+      { isImmediate: false },
     );
 
     this.storeSubscription.add(unsubscribe);
