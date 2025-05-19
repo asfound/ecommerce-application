@@ -1,21 +1,27 @@
 .page {
   display: grid;
-  grid-template-areas:
-    'categories products'
-    'filters products';
   grid-template-columns: 29rem 1fr;
   gap: 2rem;
-
   margin-block: 4rem;
+}
+
+.sidebarElement {
+  background-color: transparent;
+}
+
+.mainContentElement {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 3rem;
 }
 
 @media (width <= 640px) {
   .page {
-    grid-template-areas:
-      'categories'
-      'filters'
-      'products';
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .mainContentElement {
+    gap: 2rem;
   }
 }

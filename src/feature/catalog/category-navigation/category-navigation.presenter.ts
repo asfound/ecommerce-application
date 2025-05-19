@@ -20,6 +20,7 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
 
   private handleCategoryItemClick = (category: AppCategory): void => {
     catalogAction.setCategoryId(category.id);
+    catalogAction.setCategoryName(category.name);
   };
 
   private async updateView(): Promise<void> {

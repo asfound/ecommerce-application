@@ -11,15 +11,23 @@ import styles from './product-card.module.css';
 const DISCOUNT_PERCENTAGE_VALUE = '-10%';
 const BESTSELLER_VALUE = 'Bestseller';
 
+export type ProductCardClickHandler = (product: AppProduct) => void;
+
 export class ProductCard extends BaseComponent implements Component {
+  private readonly onNavigateToDetails: ProductCardClickHandler;
+
   private readonly product: AppProduct;
 
-  public constructor(product: AppProduct) {
+  public constructor(product: AppProduct, onNavigateToDetails: ProductCardClickHandler) {
     super({ className: styles.card, tagName: 'div' });
 
     this.product = product;
 
+    this.onNavigateToDetails = onNavigateToDetails;
+
     this.createHTML();
+
+    this.setupListeners();
   }
 
   public createHTML(): void {
@@ -62,5 +70,11 @@ export class ProductCard extends BaseComponent implements Component {
     );
 
     this.append(imageContainer, content);
+  }
+
+  private setupListeners(): void {
+    this.addListener('click', () => {
+      this.onNavigateToDetails(this.product);
+    });
   }
 }
