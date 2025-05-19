@@ -19,3 +19,10 @@
   flex: 0 0 calc(50% - 1rem);
   max-width: 100%;
 }
+
+@media (width <= 640px) {
+  .formItem,
+  .detailsItem {
+    flex: 0 0 100%;
+  }
+}
