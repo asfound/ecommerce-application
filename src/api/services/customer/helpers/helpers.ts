@@ -1,5 +1,7 @@
 import type { Customer, MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 
+import type { PersonalData } from '../types.ts';
+
 import {
   createChangeEmailAction,
   createSetDateOfBirthAction,
@@ -15,8 +17,8 @@ export const isUpdated = <TField extends keyof Omit<Customer, 'addresses'>>(
 };
 
 export const getPersonalDataUpdateActions = (
-  sourceCustomer: Customer,
-  editedCustomer: Customer,
+  sourceCustomer: PersonalData,
+  editedCustomer: PersonalData,
 ): MyCustomerUpdateAction[] => {
   const actions: MyCustomerUpdateAction[] = [];
 
@@ -34,11 +36,11 @@ export const getPersonalDataUpdateActions = (
     lastName: editedLastName,
   } = editedCustomer;
 
-  if (isUpdated(sourceFirstName, editedFirstName) && editedFirstName != null) {
+  if (isUpdated(sourceFirstName, editedFirstName)) {
     actions.push(createSetFirstNameAction(editedFirstName));
   }
 
-  if (isUpdated(sourceLastName, editedLastName) && editedLastName != null) {
+  if (isUpdated(sourceLastName, editedLastName)) {
     actions.push(createSetLastNameAction(editedLastName));
   }
 
@@ -46,7 +48,7 @@ export const getPersonalDataUpdateActions = (
     actions.push(createChangeEmailAction(editedEmail));
   }
 
-  if (isUpdated(sourceDateOfBirth, editedDateOfBirth) && editedDateOfBirth != null) {
+  if (isUpdated(sourceDateOfBirth, editedDateOfBirth)) {
     actions.push(createSetDateOfBirthAction(editedDateOfBirth));
   }
 

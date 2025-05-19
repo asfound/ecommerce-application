@@ -1,4 +1,4 @@
-import type { BaseAddress, Customer } from '@commercetools/platform-sdk';
+import type { BaseAddress } from '@commercetools/platform-sdk';
 
 export interface AddAddressPayload {
   address: BaseAddress;
@@ -33,7 +33,15 @@ export interface ChangeAddressPayload extends AddressPayload {
   address: BaseAddress;
 }
 
+export interface PersonalData {
+  dateOfBirth: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  version: number;
+}
+
 export interface PersonalDataPayload {
-  editedCustomer: Customer;
-  sourceCustomer: Customer;
+  editedCustomer: PersonalData;
+  sourceCustomer: PersonalData;
 }
