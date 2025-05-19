@@ -36,16 +36,18 @@ export class UserProfileView extends BaseComponent implements Component {
     );
 
     const informationContent = this.createPersonalInformation(userInformation);
+    const passwordContent = this.createChangePassword();
     const addressesContent = this.createAddresses(
       userInformation.shippingAddresses,
       userInformation.billingAddresses,
     );
 
-    this.contentBlocks.push(informationContent, addressesContent);
+    this.contentBlocks.push(informationContent, passwordContent, addressesContent);
 
     const contentBlock = div(
       { className: [styles.block, styles.contentBlock] },
       informationContent,
+      passwordContent,
       addressesContent,
     );
 
@@ -84,17 +86,26 @@ export class UserProfileView extends BaseComponent implements Component {
     return div({ className: styles.content, id: NAV_ITEMS.ADDRESSES.ID }, addressesContainer);
   }
 
+  private createChangePassword(): HTMLDivElement {
+    return div(
+      { className: styles.content, id: NAV_ITEMS.PASSWORD.ID },
+      div({ className: styles.title }, TITLE.PASSWORD),
+    );
+  }
+
   private createNavigation(): HTMLUListElement {
     const informationItem = li(
       { className: [styles.navigationItem, styles.active] },
       NAV_ITEMS.INFORMATION.TEXT,
     );
+    const passwordItem = li({ className: styles.navigationItem }, NAV_ITEMS.PASSWORD.TEXT);
     const addressesItem = li({ className: styles.navigationItem }, NAV_ITEMS.ADDRESSES.TEXT);
 
     informationItem.dataset.target = NAV_ITEMS.INFORMATION.ID;
+    passwordItem.dataset.target = NAV_ITEMS.PASSWORD.ID;
     addressesItem.dataset.target = NAV_ITEMS.ADDRESSES.ID;
 
-    this.navigationItems.push(informationItem, addressesItem);
+    this.navigationItems.push(informationItem, passwordItem, addressesItem);
 
     for (const item of this.navigationItems) {
       item.addEventListener('click', () => {
@@ -102,7 +113,7 @@ export class UserProfileView extends BaseComponent implements Component {
       });
     }
 
-    return ul(null, informationItem, addressesItem);
+    return ul(null, informationItem, passwordItem, addressesItem);
   }
 
   private createPersonalInformation(userInformation: AppCustomer): HTMLDivElement {
