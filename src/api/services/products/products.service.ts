@@ -11,6 +11,7 @@ const TEMPORARY_SORT = `name.${APP_LOCALE} asc`;
 export interface ProductsPayload {
   categoryId?: string;
   productsPerPage: number;
+  searchTerm?: string;
   sortDirection: 'asc' | 'desc';
   sortField: 'name' | 'price';
 }
@@ -35,6 +36,7 @@ export class ProductsService {
       .search()
       .get({
         queryArgs: {
+          [`text.${APP_LOCALE}`]: payload.searchTerm ?? undefined,
           ['filter.query']: payload.categoryId
             ? [`categories.id: subtree("${payload.categoryId}")`]
             : undefined,

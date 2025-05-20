@@ -5,6 +5,7 @@ import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { Presenter } from '~/shared/presenter/presenter';
 
+import type { CatalogState } from '../store/store';
 import type { ProductCardListView } from './product-card-list.view';
 
 import { PRODUCTS_PER_PAGE } from '../constants';
@@ -82,6 +83,14 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.subscribeSearchTerm();
 
     this.subscribeLoading();
+
+    // TODO: refactor
+    const unsubscribe = catalogStore.subscribe(
+      catalogSelector.selectWithoutLoading,
+      this.updateView,
+      { isImmediate: false },
+    );
+    this.storeSubscription.add(unsubscribe);
   }
 
   private subscribeCategoryId(): void {
@@ -111,4 +120,13 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
     this.storeSubscription.add(unsubscribe);
   }
+
+  private updateView = async (state: Omit<CatalogState, 'loading'>): Promise<void> => {
+    const products = await this.productsService.filterProducts({
+      ...state,
+      productsPerPage: PRODUCTS_PER_PAGE,
+    });
+
+    this.view.createHTML(products, this.handleNavigateToDetails);
+  };
 }

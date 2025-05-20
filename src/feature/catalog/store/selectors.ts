@@ -14,6 +14,14 @@ const selectSortDirection = createSelector((state: CatalogState) => state.sortDi
 
 const selectSortField = createSelector((state: CatalogState) => state.sortField);
 
+const selectWithoutLoading = createSelector((state: CatalogState) => ({
+  categoryId: state.categoryId,
+  categoryName: state.categoryName,
+  searchTerm: state.searchTerm,
+  sortDirection: state.sortDirection,
+  sortField: state.sortField,
+}));
+
 export const catalogSelector = {
   selectCategoryId,
   selectCategoryName,
@@ -21,4 +29,5 @@ export const catalogSelector = {
   selectSearchTerm,
   selectSortDirection,
   selectSortField,
+  selectWithoutLoading,
 } as const;
