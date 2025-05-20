@@ -22,7 +22,7 @@ export class ProductCard extends BaseComponent implements Component {
   private readonly product: AppProduct;
 
   public constructor(product: AppProduct, onNavigateToDetails: ProductCardClickHandler) {
-    super({ className: styles.card, tagName: 'div' });
+    super({ className: styles.card, tagName: 'li' });
 
     this.product = product;
 
