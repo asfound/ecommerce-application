@@ -8,7 +8,6 @@ import { Presenter } from '~/shared/presenter/presenter';
 import type { CatalogState } from '../store/store';
 import type { ProductCardListView } from './product-card-list.view';
 
-import { PRODUCTS_PER_PAGE } from '../constants';
 import { catalogLoadingAction } from '../store/actions';
 import { catalogLoadingSelector } from '../store/selectors';
 import { catalogLoadingStore, catalogStore } from '../store/store';
@@ -33,10 +32,14 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private setupSubscriptions(): void {
     this.subscribeLoading();
 
-    // TODO: refactor
+    this.subscribeCatalogStateChange();
+  }
+
+  private subscribeCatalogStateChange(): void {
     const unsubscribe = catalogStore.subscribe((state) => state, this.updateView, {
       isImmediate: false,
     });
+
     this.storeSubscription.add(unsubscribe);
   }
 
@@ -51,14 +54,11 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.storeSubscription.add(unsubscribe);
   }
 
-  private updateView = async (state: Omit<CatalogState, 'loading'>): Promise<void> => {
+  private updateView = async (state: CatalogState): Promise<void> => {
     try {
       catalogLoadingAction.setLoading(true);
 
-      const products = await this.productsService.filterProducts({
-        ...state,
-        productsPerPage: PRODUCTS_PER_PAGE,
-      });
+      const products = await this.productsService.filterProducts(state);
 
       if (products.length === 0) {
         this.view.showNotFoundWidget(state.searchTerm);

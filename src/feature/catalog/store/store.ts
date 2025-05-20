@@ -2,8 +2,11 @@ import type { ProductsFilterPayload } from '~/api/services/products/types';
 
 import { createStore } from '~/shared/store/create-store';
 
+import { PRODUCTS_PER_PAGE } from '../constants';
+
 export interface CatalogState {
   categoryId: string;
+  productsPerPage: number;
   searchTerm: string;
   sortDirection: ProductsFilterPayload['sortDirection'];
   sortField: ProductsFilterPayload['sortField'];
@@ -11,6 +14,7 @@ export interface CatalogState {
 
 const initialState: CatalogState = {
   categoryId: '',
+  productsPerPage: PRODUCTS_PER_PAGE,
   searchTerm: '',
   sortDirection: 'asc',
   sortField: 'name',
