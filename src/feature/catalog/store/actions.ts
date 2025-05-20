@@ -1,6 +1,6 @@
 import type { CatalogState } from './store';
 
-import { catalogLoadingStore, catalogStore } from './store';
+import { catalogCategoryNameStore, catalogLoadingStore, catalogStore } from './store';
 
 const setCategoryId = (categoryId: string): void => {
   catalogStore.setState({ categoryId });
@@ -11,7 +11,7 @@ const setSearchTerm = (searchTerm: string): void => {
 };
 
 const setCategoryName = (categoryName: string): void => {
-  catalogStore.setState({ categoryName });
+  catalogCategoryNameStore.setState({ categoryName });
 };
 
 const setLoading = (loading: boolean): void => {
@@ -28,9 +28,15 @@ const setSortField = (sortField: CatalogState['sortField']): void => {
 
 export const catalogAction = {
   setCategoryId,
-  setCategoryName,
-  setLoading,
   setSearchTerm,
   setSortDirection,
   setSortField,
+} as const;
+
+export const catalogLoadingAction = {
+  setLoading,
+} as const;
+
+export const catalogCategoryNameAction = {
+  setCategoryName,
 } as const;

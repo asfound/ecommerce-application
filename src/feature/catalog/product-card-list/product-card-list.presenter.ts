@@ -9,8 +9,8 @@ import type { CatalogState } from '../store/store';
 import type { ProductCardListView } from './product-card-list.view';
 
 import { PRODUCTS_PER_PAGE } from '../constants';
-import { catalogAction } from '../store/actions';
-import { catalogSelector } from '../store/selectors';
+import { catalogLoadingAction } from '../store/actions';
+import { catalogLoadingSelector } from '../store/selectors';
 import { catalogLoadingStore, catalogStore } from '../store/store';
 
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
@@ -41,16 +41,19 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private subscribeLoading(): void {
-    const unsubscribe = catalogLoadingStore.subscribe(catalogSelector.selectLoading, (loading) => {
-      this.view[loading ? 'showLoader' : 'hideLoader']();
-    });
+    const unsubscribe = catalogLoadingStore.subscribe(
+      catalogLoadingSelector.selectLoading,
+      (loading) => {
+        this.view[loading ? 'showLoader' : 'hideLoader']();
+      },
+    );
 
     this.storeSubscription.add(unsubscribe);
   }
 
   private updateView = async (state: Omit<CatalogState, 'loading'>): Promise<void> => {
     try {
-      catalogAction.setLoading(true);
+      catalogLoadingAction.setLoading(true);
 
       const products = await this.productsService.filterProducts({
         ...state,
@@ -59,7 +62,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
       this.view.createHTML(products, this.handleNavigateToDetails);
     } finally {
-      catalogAction.setLoading(false);
+      catalogLoadingAction.setLoading(false);
     }
   };
 }

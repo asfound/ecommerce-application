@@ -4,8 +4,6 @@ import { createStore } from '~/shared/store/create-store';
 
 export interface CatalogState {
   categoryId: string;
-  categoryName: string;
-  loading: boolean;
   searchTerm: string;
   sortDirection: ProductsFilterPayload['sortDirection'];
   sortField: ProductsFilterPayload['sortField'];
@@ -13,8 +11,6 @@ export interface CatalogState {
 
 const initialState: CatalogState = {
   categoryId: '',
-  categoryName: '',
-  loading: false,
   searchTerm: '',
   sortDirection: 'asc',
   sortField: 'name',
@@ -26,8 +22,12 @@ export interface CatalogLoadingState {
   loading: boolean;
 }
 
-const initialLoadingState: CatalogLoadingState = {
-  loading: false,
-};
+export const catalogLoadingStore = createStore<CatalogLoadingState>({ loading: true });
 
-export const catalogLoadingStore = createStore(initialLoadingState);
+export interface CatalogCategoryNameState {
+  categoryName: string;
+}
+
+export const catalogCategoryNameStore = createStore<CatalogCategoryNameState>({
+  categoryName: '',
+});
