@@ -1,4 +1,4 @@
-import type { ProductsFilterPayload } from '~/api/services/products/products.service';
+import type { ProductsFilterPayload } from '~/api/services/products/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
 

@@ -1,4 +1,4 @@
-import type { ProductsFilterPayload } from '~/api/services/products/products.service';
+import type { ProductsFilterPayload } from '~/api/services/products/types';
 
 import iconSort from '~/assets/icons/sort.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
