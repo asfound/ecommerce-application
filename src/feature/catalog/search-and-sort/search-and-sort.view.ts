@@ -11,9 +11,8 @@ import { debounce } from '~/shared/utils/debounce';
 
 import type { CatalogState } from '../store/store';
 
+import { INPUT_SORT_PROPS, SEARCH_DEBOUNCE_TIMEOUT, SEARCH_SORT_TEXT } from './constants';
 import styles from './search-and-sort.module.css';
-
-const SEARCH_DEBOUNCE_TIMEOUT = 600;
 
 export type SortByFieldHandler = (sortField: ProductsFilterPayload['sortField']) => void;
 export type SortDirectionHandler = (sortDirection: ProductsFilterPayload['sortDirection']) => void;
@@ -21,23 +20,21 @@ export type SortDirectionHandler = (sortDirection: ProductsFilterPayload['sortDi
 export class SearchAndSortView extends BaseComponent {
   private readonly sortIcon = createSvgIcon(iconSort, [styles.icon, styles.rotated].join(' '));
 
-  private readonly buttonDirection = button({ className: styles.button }, 'ORDER: ', this.sortIcon);
+  private readonly buttonDirection = button(
+    { className: styles.button },
+    SEARCH_SORT_TEXT.ORDER,
+    this.sortIcon,
+  );
 
   private readonly inputSearch = new InputSearch(SEARCH_PROPS);
 
-  private readonly inputSortName = new InputRadio({
-    label: 'Name',
-    name: 'sort-field',
-  });
+  private readonly inputSortName = new InputRadio(INPUT_SORT_PROPS.NAME);
 
-  private readonly inputSortPrice = new InputRadio({
-    label: 'Price',
-    name: 'sort-field',
-  });
+  private readonly inputSortPrice = new InputRadio(INPUT_SORT_PROPS.PRICE);
 
   private readonly sortContainer = div(
     { className: styles.sortContainer },
-    'SORT BY:',
+    SEARCH_SORT_TEXT.SORT_BY,
     this.inputSortName.element,
     this.inputSortPrice.element,
     this.buttonDirection,
@@ -91,7 +88,7 @@ export class SearchAndSortView extends BaseComponent {
   }
 
   public setInputPlaceholder(categoryName: string): void {
-    this.inputSearch.setAttributes({ placeholder: `Search in ${categoryName}` });
+    this.inputSearch.setAttributes({ placeholder: SEARCH_SORT_TEXT.SEARCH_IN(categoryName) });
   }
 
   public setSortDirection(sortDirection: CatalogState['sortDirection']): void {

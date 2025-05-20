@@ -8,6 +8,7 @@ import { Loader } from '~/components/common/loader/loader';
 import { ProductCard } from '~/components/product-card/product-card';
 import { div, img, p } from '~/shared/create-element/tags';
 
+import { PRODUCT_CARD_LIST_TEXT } from './constants';
 import styles from './product-card-list.module.css';
 
 export class ProductCardListView extends BaseComponent implements Component {
@@ -41,7 +42,7 @@ export class ProductCardListView extends BaseComponent implements Component {
   }
 
   public showNotFoundWidget(searchTerm: string): void {
-    this.notFoundHeading.textContent = `Huh?! No results found for '${searchTerm}'.`;
+    this.notFoundHeading.textContent = PRODUCT_CARD_LIST_TEXT.NOT_FOUND(searchTerm);
     this.replaceChildren(this.notFoundWidget);
   }
 }
