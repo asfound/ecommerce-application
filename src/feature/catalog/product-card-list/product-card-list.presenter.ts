@@ -60,6 +60,11 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
         productsPerPage: PRODUCTS_PER_PAGE,
       });
 
+      if (products.length === 0) {
+        this.view.showNotFoundWidget(state.searchTerm);
+        return;
+      }
+
       this.view.createHTML(products, this.handleNavigateToDetails);
     } finally {
       catalogLoadingAction.setLoading(false);
