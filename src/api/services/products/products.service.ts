@@ -8,6 +8,13 @@ import { mapToAppProducts } from './mappers';
 
 const TEMPORARY_SORT = `name.${APP_LOCALE} asc`;
 
+export interface ProductsPayload {
+  categoryId?: string;
+  productsPerPage: number;
+  sortDirection: 'asc' | 'desc';
+  sortField: 'name' | 'price';
+}
+
 export class ProductsService {
   private static instance: null | ProductsService = null;
 
@@ -20,6 +27,28 @@ export class ProductsService {
   public static getInstance(apiRoot: ApiRootGetter): ProductsService {
     ProductsService.instance ??= new ProductsService(apiRoot);
     return ProductsService.instance;
+  }
+
+  public async filterProducts(payload: ProductsPayload): Promise<AppProduct[]> {
+    const response = await this.apiRoot()
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          ['filter.query']: payload.categoryId
+            ? [`categories.id: subtree("${payload.categoryId}")`]
+            : undefined,
+          limit: payload.productsPerPage,
+          markMatchingVariants: true,
+          sort:
+            payload.sortField === 'name'
+              ? `name.${APP_LOCALE} ${payload.sortDirection}`
+              : `price ${payload.sortDirection}`,
+        },
+      })
+      .execute();
+
+    return mapToAppProducts(response.body.results);
   }
 
   public async getByCategoryId(payload: {
