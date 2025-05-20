@@ -1,6 +1,6 @@
 import { createSelector } from '~/shared/store/create-selector';
 
-import type { CatalogState } from './store';
+import type { CatalogLoadingState, CatalogState } from './store';
 
 const selectCategoryId = createSelector((state: CatalogState) => state.categoryId);
 
@@ -8,19 +8,11 @@ const selectSearchTerm = createSelector((state: CatalogState) => state.searchTer
 
 const selectCategoryName = createSelector((state: CatalogState) => state.categoryName);
 
-const selectLoading = createSelector((state: CatalogState) => state.loading);
+const selectLoading = createSelector((state: CatalogLoadingState) => state.loading);
 
 const selectSortDirection = createSelector((state: CatalogState) => state.sortDirection);
 
 const selectSortField = createSelector((state: CatalogState) => state.sortField);
-
-const selectWithoutLoading = createSelector((state: CatalogState) => ({
-  categoryId: state.categoryId,
-  categoryName: state.categoryName,
-  searchTerm: state.searchTerm,
-  sortDirection: state.sortDirection,
-  sortField: state.sortField,
-}));
 
 export const catalogSelector = {
   selectCategoryId,
@@ -29,5 +21,4 @@ export const catalogSelector = {
   selectSearchTerm,
   selectSortDirection,
   selectSortField,
-  selectWithoutLoading,
 } as const;

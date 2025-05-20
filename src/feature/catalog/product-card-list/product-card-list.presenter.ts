@@ -11,7 +11,7 @@ import type { ProductCardListView } from './product-card-list.view';
 import { PRODUCTS_PER_PAGE } from '../constants';
 import { catalogAction } from '../store/actions';
 import { catalogSelector } from '../store/selectors';
-import { catalogStore } from '../store/store';
+import { catalogLoadingStore, catalogStore } from '../store/store';
 
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private readonly productsService: ProductsService;
@@ -85,11 +85,9 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.subscribeLoading();
 
     // TODO: refactor
-    const unsubscribe = catalogStore.subscribe(
-      catalogSelector.selectWithoutLoading,
-      this.updateView,
-      { isImmediate: false },
-    );
+    const unsubscribe = catalogStore.subscribe((state) => state, this.updateView, {
+      isImmediate: false,
+    });
     this.storeSubscription.add(unsubscribe);
   }
 
@@ -104,7 +102,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private subscribeLoading(): void {
-    const unsubscribe = catalogStore.subscribe(catalogSelector.selectLoading, (loading) => {
+    const unsubscribe = catalogLoadingStore.subscribe(catalogSelector.selectLoading, (loading) => {
       this.view[loading ? 'showLoader' : 'hideLoader']();
     });
 
@@ -122,11 +120,17 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private updateView = async (state: Omit<CatalogState, 'loading'>): Promise<void> => {
-    const products = await this.productsService.filterProducts({
-      ...state,
-      productsPerPage: PRODUCTS_PER_PAGE,
-    });
+    try {
+      catalogAction.setLoading(true);
 
-    this.view.createHTML(products, this.handleNavigateToDetails);
+      const products = await this.productsService.filterProducts({
+        ...state,
+        productsPerPage: PRODUCTS_PER_PAGE,
+      });
+
+      this.view.createHTML(products, this.handleNavigateToDetails);
+    } finally {
+      catalogAction.setLoading(false);
+    }
   };
 }

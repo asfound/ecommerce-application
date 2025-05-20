@@ -19,3 +19,13 @@ const initialState: CatalogState = {
 };
 
 export const catalogStore = createStore(initialState);
+
+export interface CatalogLoadingState {
+  loading: boolean;
+}
+
+const initialLoadingState: CatalogLoadingState = {
+  loading: false,
+};
+
+export const catalogLoadingStore = createStore(initialLoadingState);
