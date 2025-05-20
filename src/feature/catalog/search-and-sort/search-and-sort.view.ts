@@ -1,3 +1,5 @@
+import type { ProductsPayload } from '~/api/services/products/products.service';
+
 import iconSort from '~/assets/icons/sort.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
@@ -13,10 +15,13 @@ import styles from './search-and-sort.module.css';
 
 const SEARCH_DEBOUNCE_TIMEOUT = 600;
 
+export type SortByFieldHandler = (sortField: ProductsPayload['sortField']) => void;
+export type SortDirectionHandler = (sortDirection: ProductsPayload['sortDirection']) => void;
+
 export class SearchAndSortView extends BaseComponent {
   private readonly sortIcon = createSvgIcon(iconSort, [styles.icon, styles.rotated].join(' '));
 
-  private readonly buttonOrder = button({ className: styles.button }, 'ORDER: ', this.sortIcon);
+  private readonly buttonDirection = button({ className: styles.button }, 'ORDER: ', this.sortIcon);
 
   private readonly inputSearch = new InputSearch(SEARCH_PROPS);
 
@@ -35,8 +40,10 @@ export class SearchAndSortView extends BaseComponent {
     'SORT BY:',
     this.inputSortName.element,
     this.inputSortPrice.element,
-    this.buttonOrder,
+    this.buttonDirection,
   );
+
+  private sortDirection: ProductsPayload['sortDirection'] = 'asc';
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
@@ -55,6 +62,30 @@ export class SearchAndSortView extends BaseComponent {
     );
   }
 
+  public bindSortByNameHandler(handler: SortByFieldHandler): void {
+    this.inputSortName.addListener('change', () => {
+      handler('name');
+    });
+  }
+
+  public bindSortByPriceHandler(handler: SortByFieldHandler): void {
+    this.inputSortPrice.addListener('change', () => {
+      handler('price');
+    });
+  }
+
+  public bindSortDirectionHandler(handler: SortDirectionHandler): void {
+    this.buttonDirection.addEventListener(
+      'click',
+      () => {
+        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+
+        handler(this.sortDirection);
+      },
+      { signal: this.abortController.signal },
+    );
+  }
+
   public clearInput(): void {
     this.inputSearch.clear();
   }
@@ -65,8 +96,10 @@ export class SearchAndSortView extends BaseComponent {
 
   public setSortDirection(sortDirection: CatalogState['sortDirection']): void {
     if (sortDirection === 'asc') {
+      this.sortDirection = 'asc';
       this.sortIcon.classList.add(styles.rotated);
     } else {
+      this.sortDirection = 'desc';
       this.sortIcon.classList.remove(styles.rotated);
     }
   }
@@ -82,7 +115,7 @@ export class SearchAndSortView extends BaseComponent {
   }
 
   private setupListeners(): void {
-    this.buttonOrder.addEventListener(
+    this.buttonDirection.addEventListener(
       'click',
       () => {
         this.sortIcon.classList.toggle(styles.rotated);
