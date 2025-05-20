@@ -19,5 +19,9 @@ export class InputDate extends InputBase {
     this.inputComponent.addListener('focus', () => {
       this.inputComponent.setAttributes({ type: INPUT_TYPE.DATE });
     });
+
+    this.inputComponent.addListener('blur', () => {
+      this.inputComponent.setAttributes({ type: INPUT_TYPE.TEXT });
+    });
   }
 }
