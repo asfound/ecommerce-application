@@ -5,6 +5,8 @@ export interface CatalogState {
   categoryName: string;
   loading: boolean;
   searchTerm: string;
+  sortDirection: 'asc' | 'desc';
+  sortField: 'name' | 'price';
 }
 
 const initialState: CatalogState = {
@@ -12,6 +14,8 @@ const initialState: CatalogState = {
   categoryName: '',
   loading: false,
   searchTerm: '',
+  sortDirection: 'asc',
+  sortField: 'name',
 };
 
 export const catalogStore = createStore(initialState);

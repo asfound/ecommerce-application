@@ -7,12 +7,14 @@ import { button, div } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { debounce } from '~/shared/utils/debounce';
 
+import type { CatalogState } from '../store/store';
+
 import styles from './search-and-sort.module.css';
 
 const SEARCH_DEBOUNCE_TIMEOUT = 600;
 
 export class SearchAndSortView extends BaseComponent {
-  private readonly sortIcon = createSvgIcon(iconSort, styles.icon);
+  private readonly sortIcon = createSvgIcon(iconSort, [styles.icon, styles.rotated].join(' '));
 
   private readonly buttonOrder = button({ className: styles.button }, 'ORDER: ', this.sortIcon);
 
@@ -20,12 +22,12 @@ export class SearchAndSortView extends BaseComponent {
 
   private readonly inputSortName = new InputRadio({
     label: 'Name',
-    name: 'sort-by',
+    name: 'sort-field',
   });
 
   private readonly inputSortPrice = new InputRadio({
     label: 'Price',
-    name: 'sort-by',
+    name: 'sort-field',
   });
 
   private readonly sortContainer = div(
@@ -59,6 +61,24 @@ export class SearchAndSortView extends BaseComponent {
 
   public setInputPlaceholder(categoryName: string): void {
     this.inputSearch.setAttributes({ placeholder: `Search in ${categoryName}` });
+  }
+
+  public setSortDirection(sortDirection: CatalogState['sortDirection']): void {
+    if (sortDirection === 'asc') {
+      this.sortIcon.classList.add(styles.rotated);
+    } else {
+      this.sortIcon.classList.remove(styles.rotated);
+    }
+  }
+
+  public setSortField(sortField: CatalogState['sortField']): void {
+    if (sortField === 'name') {
+      this.inputSortName.setChecked(true);
+      this.inputSortPrice.setChecked(false);
+    } else {
+      this.inputSortName.setChecked(false);
+      this.inputSortPrice.setChecked(true);
+    }
   }
 
   private setupListeners(): void {

@@ -10,9 +10,15 @@ const selectCategoryName = createSelector((state: CatalogState) => state.categor
 
 const selectLoading = createSelector((state: CatalogState) => state.loading);
 
+const selectSortDirection = createSelector((state: CatalogState) => state.sortDirection);
+
+const selectSortField = createSelector((state: CatalogState) => state.sortField);
+
 export const catalogSelector = {
   selectCategoryId,
   selectCategoryName,
   selectLoading,
   selectSearchTerm,
+  selectSortDirection,
+  selectSortField,
 } as const;

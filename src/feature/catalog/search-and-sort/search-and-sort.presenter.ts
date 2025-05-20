@@ -13,6 +13,8 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
     this.bindViewHandlers();
 
     this.setupSubscriptions();
+
+    this.initView();
   }
 
   private bindViewHandlers(): void {
@@ -22,6 +24,11 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
   private readonly handleSearch = (searchTerm: string): void => {
     catalogAction.setSearchTerm(searchTerm);
   };
+
+  private initView(): void {
+    this.view.setSortField(catalogStore.select(catalogSelector.selectSortField));
+    this.view.setSortDirection(catalogStore.select(catalogSelector.selectSortDirection));
+  }
 
   private setupSubscriptions(): void {
     this.subscribeCategoryNameChange();

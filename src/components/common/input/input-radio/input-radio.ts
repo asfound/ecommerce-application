@@ -32,4 +32,12 @@ export class InputRadio extends InputBase {
       this.inputComponent.addClassNames(styles.checkbox);
     }
   }
+
+  public override setAttributes(attributes: Partial<HTMLInputElement>): void {
+    this.inputComponent.setAttributes(attributes);
+  }
+
+  public setChecked(checked: boolean): void {
+    this.inputComponent.element.checked = checked;
+  }
 }
