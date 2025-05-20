@@ -21,67 +21,16 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
     this.productsService = productsService;
 
-    this.initView();
+    this.updateView(catalogStore.getState());
 
     this.setupSubscriptions();
   }
-
-  private readonly handleCategoryIdChange = async (categoryId: string): Promise<void> => {
-    try {
-      catalogAction.setLoading(true);
-
-      const products = await this.productsService.getByCategoryId({
-        categoryId,
-        limit: PRODUCTS_PER_PAGE,
-      });
-
-      this.view.createHTML(products, this.handleNavigateToDetails);
-    } finally {
-      catalogAction.setLoading(false);
-    }
-  };
 
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
     Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, { name: product.name, sku: product.sku });
   };
 
-  private readonly handleSearchTermChange = async (searchTerm: string): Promise<void> => {
-    try {
-      catalogAction.setLoading(true);
-
-      const products = await this.productsService.searchByTerm({
-        categoryId: catalogStore.select(catalogSelector.selectCategoryId),
-        limit: PRODUCTS_PER_PAGE,
-        searchTerm,
-      });
-
-      if (products.length === 0) {
-        this.view.showNotFoundWidget(searchTerm);
-      } else {
-        this.view.createHTML(products, this.handleNavigateToDetails);
-      }
-    } finally {
-      catalogAction.setLoading(false);
-    }
-  };
-
-  private async initView(): Promise<void> {
-    try {
-      catalogAction.setLoading(true);
-
-      const products = await this.productsService.getProducts({ limit: PRODUCTS_PER_PAGE });
-
-      this.view.createHTML(products, this.handleNavigateToDetails);
-    } finally {
-      catalogAction.setLoading(false);
-    }
-  }
-
   private setupSubscriptions(): void {
-    this.subscribeCategoryId();
-
-    this.subscribeSearchTerm();
-
     this.subscribeLoading();
 
     // TODO: refactor
@@ -91,30 +40,10 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.storeSubscription.add(unsubscribe);
   }
 
-  private subscribeCategoryId(): void {
-    const unsubscribe = catalogStore.subscribe(
-      catalogSelector.selectCategoryId,
-      this.handleCategoryIdChange,
-      { isImmediate: false },
-    );
-
-    this.storeSubscription.add(unsubscribe);
-  }
-
   private subscribeLoading(): void {
     const unsubscribe = catalogLoadingStore.subscribe(catalogSelector.selectLoading, (loading) => {
       this.view[loading ? 'showLoader' : 'hideLoader']();
     });
-
-    this.storeSubscription.add(unsubscribe);
-  }
-
-  private subscribeSearchTerm(): void {
-    const unsubscribe = catalogStore.subscribe(
-      catalogSelector.selectSearchTerm,
-      this.handleSearchTermChange,
-      { isImmediate: false },
-    );
 
     this.storeSubscription.add(unsubscribe);
   }

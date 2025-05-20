@@ -1,4 +1,4 @@
-import type { ProductsPayload } from '~/api/services/products/products.service';
+import type { ProductsFilterPayload } from '~/api/services/products/products.service';
 
 import { Presenter } from '~/shared/presenter/presenter';
 
@@ -31,12 +31,14 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
   };
 
   private readonly handleSortDirectionChange = (
-    sortDirection: ProductsPayload['sortDirection'],
+    sortDirection: ProductsFilterPayload['sortDirection'],
   ): void => {
     catalogAction.setSortDirection(sortDirection);
   };
 
-  private readonly handleSortFieldChange = (sortField: ProductsPayload['sortField']): void => {
+  private readonly handleSortFieldChange = (
+    sortField: ProductsFilterPayload['sortField'],
+  ): void => {
     catalogAction.setSortField(sortField);
   };
 

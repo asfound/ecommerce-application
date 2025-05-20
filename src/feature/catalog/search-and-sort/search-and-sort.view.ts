@@ -1,4 +1,4 @@
-import type { ProductsPayload } from '~/api/services/products/products.service';
+import type { ProductsFilterPayload } from '~/api/services/products/products.service';
 
 import iconSort from '~/assets/icons/sort.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -15,8 +15,8 @@ import styles from './search-and-sort.module.css';
 
 const SEARCH_DEBOUNCE_TIMEOUT = 600;
 
-export type SortByFieldHandler = (sortField: ProductsPayload['sortField']) => void;
-export type SortDirectionHandler = (sortDirection: ProductsPayload['sortDirection']) => void;
+export type SortByFieldHandler = (sortField: ProductsFilterPayload['sortField']) => void;
+export type SortDirectionHandler = (sortDirection: ProductsFilterPayload['sortDirection']) => void;
 
 export class SearchAndSortView extends BaseComponent {
   private readonly sortIcon = createSvgIcon(iconSort, [styles.icon, styles.rotated].join(' '));
@@ -43,7 +43,7 @@ export class SearchAndSortView extends BaseComponent {
     this.buttonDirection,
   );
 
-  private sortDirection: ProductsPayload['sortDirection'] = 'asc';
+  private sortDirection: ProductsFilterPayload['sortDirection'] = 'asc';
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });

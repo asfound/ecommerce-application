@@ -1,3 +1,5 @@
+import type { ProductsFilterPayload } from '~/api/services/products/products.service';
+
 import { createStore } from '~/shared/store/create-store';
 
 export interface CatalogState {
@@ -5,8 +7,8 @@ export interface CatalogState {
   categoryName: string;
   loading: boolean;
   searchTerm: string;
-  sortDirection: 'asc' | 'desc';
-  sortField: 'name' | 'price';
+  sortDirection: ProductsFilterPayload['sortDirection'];
+  sortField: ProductsFilterPayload['sortField'];
 }
 
 const initialState: CatalogState = {
