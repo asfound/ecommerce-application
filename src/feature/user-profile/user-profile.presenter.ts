@@ -1,5 +1,3 @@
-import type { MyCustomerChangePassword } from '@commercetools/platform-sdk';
-
 import type { CustomerService } from '~/api/services/customer/customer.service';
 import type {
   AppChangePasswordPayload,
@@ -31,16 +29,7 @@ export class UserProfilePresenter extends Presenter<UserProfileView> {
 
   private readonly handlePasswordChange = (payload: AppChangePasswordPayload): void => {
     this.customerService
-      .getCustomer()
-      .then((appCustomerData) => {
-        const changePasswordPayload: MyCustomerChangePassword = {
-          currentPassword: payload.currentPassword,
-          newPassword: payload.newPassword,
-          version: appCustomerData.version,
-        };
-
-        return this.customerService.changePassword(changePasswordPayload);
-      })
+      .changePassword(payload)
       .then((updatedCustomer) => {
         this.updateView(updatedCustomer);
       })
