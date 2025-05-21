@@ -53,7 +53,7 @@ export class UserProfilePresenter extends Presenter<UserProfileView> {
     try {
       const updatedCustomer = await this.customerService.updatePersonalData(payload);
       this.updateView(updatedCustomer);
-      showToast(USER_NOTIFICATION.PASSWORD_SUCCESS);
+      showToast(USER_NOTIFICATION.INFORMATION_SUCCESS);
     } catch (error: unknown) {
       if (isError(error)) {
         this.view.showError(error.message);

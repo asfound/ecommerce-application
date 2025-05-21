@@ -67,6 +67,10 @@ export class UserDetails extends BaseComponent implements Component {
         event.preventDefault();
 
         handler(this.getPayload());
+
+        for (const input of this.inputComponents) {
+          input.reset();
+        }
       },
       { signal: this.abortController.signal },
     );

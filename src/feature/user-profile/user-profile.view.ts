@@ -163,5 +163,7 @@ export class UserProfileView extends BaseComponent implements Component {
     for (const block of this.contentBlocks) {
       block.classList.toggle(styles.visible, block.id === targetId);
     }
+
+    this.hideError();
   }
 }
