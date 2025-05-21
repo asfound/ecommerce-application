@@ -51,27 +51,6 @@
   color: var(--color-accent);
 }
 
-.details {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.userName {
-  display: flex;
-  gap: 2rem;
-}
-
-.userInfo {
-  display: block;
-}
-
-.fieldName {
-  margin-right: 1rem;
-  color: var(--color-accent-light);
-}
-
 .addresses {
   display: flex;
   flex-wrap: wrap;

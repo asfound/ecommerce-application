@@ -70,6 +70,10 @@ export abstract class InputBase extends BaseComponent {
     this.inputComponent.addClassNames(styles.invalid);
   }
 
+  public setValue(value: string): void {
+    this.inputComponent.element.value = value;
+  }
+
   public validate(): boolean {
     for (const validator of this.validators) {
       const errorMessage = validator(this.inputComponent.element.value);
