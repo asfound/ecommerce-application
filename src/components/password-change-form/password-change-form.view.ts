@@ -1,5 +1,5 @@
 import { BUTTON_TEXT } from '~/shared/constants/constants';
-import { PASSWORD_PROPS } from '~/shared/constants/input-properties';
+import { NEW_PASSWORD_PROPS, OLD_PASSWORD_PROPS } from '~/shared/constants/input-properties';
 import { form } from '~/shared/create-element/tags';
 
 import type { Component } from '../base-component/types';
@@ -13,7 +13,7 @@ import styles from './password-change-form.module.css';
 export class PasswordChangeForm extends BaseComponent implements Component {
   private readonly cancelButton = new Button({
     onClick: (): void => {
-      console.warn('cancel');
+      this.cancelChanges();
     },
     textContent: BUTTON_TEXT.CANCEL,
     type: 'button',
@@ -21,11 +21,11 @@ export class PasswordChangeForm extends BaseComponent implements Component {
 
   private readonly formElement = form({ className: styles.form });
 
-  private inputComponents: InputBase[] = [];
+  private readonly inputComponents: InputBase[] = [];
 
-  private readonly inputNewPassword = new InputPassword(PASSWORD_PROPS);
+  private readonly inputNewPassword = new InputPassword(NEW_PASSWORD_PROPS);
 
-  private readonly inputOldPassword = new InputPassword(PASSWORD_PROPS);
+  private readonly inputOldPassword = new InputPassword(OLD_PASSWORD_PROPS);
 
   private readonly submitButton = new Button({
     textContent: BUTTON_TEXT.SAVE,
@@ -48,11 +48,15 @@ export class PasswordChangeForm extends BaseComponent implements Component {
 
   public createHTML(): void {
     this.formElement.append(
-      this.inputNewPassword.element,
       this.inputOldPassword.element,
+      this.inputNewPassword.element,
       this.cancelButton.element,
       this.submitButton.element,
     );
+
+    this.submitButton.disable();
+    this.cancelButton.disable();
+
     this.append(this.formElement);
   }
 
@@ -61,7 +65,19 @@ export class PasswordChangeForm extends BaseComponent implements Component {
 
     input.addListener('input', () => {
       this.checkValidity();
+
+      if (this.cancelButton.element.disabled) {
+        this.cancelButton.enable();
+      }
     });
+  }
+
+  private cancelChanges(): void {
+    this.submitButton.disable();
+    this.cancelButton.disable();
+    for (const input of this.inputComponents) {
+      input.reset();
+    }
   }
 
   private setStyles(): void {
