@@ -1,4 +1,5 @@
 import type {
+  AppChangePasswordPayload,
   AppCustomer,
   AppCustomerAddress,
   PersonalDataPayload,
@@ -6,7 +7,7 @@ import type {
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
-import { PasswordChangeForm } from '~/components/password-change-form/password-change-form.view';
+import { PasswordChangeForm } from '~/components/password-change-form/password-change-form';
 import { UserAddress } from '~/components/user-address/user-address';
 import { UserDetails } from '~/components/user-details/user-details';
 import { div, h1, li, ul } from '~/shared/create-element/tags';
@@ -25,6 +26,10 @@ export class UserProfileView extends BaseComponent implements Component {
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
+  }
+
+  public bindPasswordChangeHandler(handler: (payload: AppChangePasswordPayload) => void): void {
+    this.passwordChangeForm.bindSubmitHandler(handler);
   }
 
   public bindPersonalDataUpdateHandler(handler: (payload: PersonalDataPayload) => void): void {

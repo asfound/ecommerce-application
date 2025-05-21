@@ -59,10 +59,10 @@ export class CustomerService {
       .execute();
   }
 
-  public async changePassword(
-    payload: MyCustomerChangePassword,
-  ): Promise<ClientResponse<Customer>> {
-    return this.apiRoot().me().password().post({ body: payload }).execute();
+  public async changePassword(payload: MyCustomerChangePassword): Promise<AppCustomer> {
+    const response = await this.apiRoot().me().password().post({ body: payload }).execute();
+
+    return mapToAppCustomer(response.body);
   }
 
   public async getCustomer(): Promise<AppCustomer> {

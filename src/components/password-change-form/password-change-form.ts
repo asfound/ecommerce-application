@@ -1,3 +1,5 @@
+import type { AppChangePasswordPayload } from '~/api/services/customer/types';
+
 import { BUTTON_TEXT } from '~/shared/constants/constants';
 import { NEW_PASSWORD_PROPS, OLD_PASSWORD_PROPS } from '~/shared/constants/input-properties';
 import { form } from '~/shared/create-element/tags';
@@ -13,7 +15,7 @@ import styles from './password-change-form.module.css';
 export class PasswordChangeForm extends BaseComponent implements Component {
   private readonly cancelButton = new Button({
     onClick: (): void => {
-      this.cancelChanges();
+      this.resetChanges();
     },
     textContent: BUTTON_TEXT.CANCEL,
     type: 'button',
@@ -38,6 +40,20 @@ export class PasswordChangeForm extends BaseComponent implements Component {
     this.storeInputs();
     this.setStyles();
     this.createHTML();
+  }
+
+  public bindSubmitHandler(handler: (payload: AppChangePasswordPayload) => void): void {
+    this.formElement.addEventListener(
+      'submit',
+      (event) => {
+        event.preventDefault();
+
+        handler(this.getPayload());
+
+        this.resetChanges();
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public checkValidity(): void {
@@ -72,7 +88,14 @@ export class PasswordChangeForm extends BaseComponent implements Component {
     });
   }
 
-  private cancelChanges(): void {
+  private getPayload(): AppChangePasswordPayload {
+    return {
+      currentPassword: this.inputOldPassword.value.trim(),
+      newPassword: this.inputNewPassword.value.trim(),
+    };
+  }
+
+  private resetChanges(): void {
     this.submitButton.disable();
     this.cancelButton.disable();
     for (const input of this.inputComponents) {
