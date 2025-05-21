@@ -26,8 +26,23 @@ const setSortField = (sortField: CatalogState['sortField']): void => {
   catalogStore.setState({ sortField });
 };
 
+const setBestSeller = (bestSeller: boolean): void => {
+  catalogStore.setState({ bestSeller });
+};
+
+const setMaxPrice = (max: number): void => {
+  catalogStore.setState({ priceRange: { max } });
+};
+
+const setMinPrice = (min: number): void => {
+  catalogStore.setState({ priceRange: { min } });
+};
+
 export const catalogAction = {
+  setBestSeller,
   setCategoryId,
+  setMaxPrice,
+  setMinPrice,
   setSearchTerm,
   setSortDirection,
   setSortField,

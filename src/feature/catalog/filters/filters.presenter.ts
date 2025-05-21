@@ -2,6 +2,7 @@ import { Presenter } from '~/shared/presenter/presenter';
 
 import type { FiltersView } from './filters.view';
 
+import { catalogAction } from '../store/actions';
 import { FILTER_BEST_SELLERS_PROPS, FILTER_PRICE_RANGE_PROPS } from './constants';
 
 export class FiltersPresenter extends Presenter<FiltersView> {
@@ -12,15 +13,15 @@ export class FiltersPresenter extends Presenter<FiltersView> {
   }
 
   private readonly handleBestSellerChange = (checkedValues: string[]): void => {
-    console.warn('best seller change handler', checkedValues);
+    catalogAction.setBestSeller(checkedValues.length > 0);
   };
 
   private readonly handleMaxPriceChange = (maxPrice: string): void => {
-    console.warn('max price change handler', maxPrice);
+    catalogAction.setMaxPrice(Number.parseFloat(maxPrice));
   };
 
   private readonly handleMinPriceChange = (minPrice: string): void => {
-    console.warn('min price change handler', minPrice);
+    catalogAction.setMinPrice(Number.parseFloat(minPrice));
   };
 
   private initVIew(): void {
