@@ -49,24 +49,29 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
     this.append(this.summaryElement);
 
     if (properties.type === 'price-range') {
-      const inputMinPrice = new InputNumber({ name: 'min-price', placeholder: 'From' });
-      inputMinPrice.addListener('input', () => {
-        properties.onMinPriceChange(inputMinPrice.value);
-      });
-
-      const inputMaxPrice = new InputNumber({ name: 'max-price', placeholder: 'To' });
-      inputMaxPrice.addListener('input', () => {
-        properties.onMaxPriceChange(inputMaxPrice.value);
-      });
-
-      const pricesContainer = div(
-        { className: styles.priceRangeContainer },
-        inputMinPrice.element,
-        inputMaxPrice.element,
-      );
-
-      this.append(pricesContainer);
+      this.createPriceRangeFilter(properties);
+      return;
     }
+  }
+
+  private createPriceRangeFilter(properties: FilterPriceRangeProperties): void {
+    const inputMinPrice = new InputNumber({ name: 'min-price', placeholder: 'From' });
+    inputMinPrice.addListener('input', () => {
+      properties.onMinPriceChange(inputMinPrice.value);
+    });
+
+    const inputMaxPrice = new InputNumber({ name: 'max-price', placeholder: 'To' });
+    inputMaxPrice.addListener('input', () => {
+      properties.onMaxPriceChange(inputMaxPrice.value);
+    });
+
+    const pricesContainer = div(
+      { className: styles.priceRangeContainer },
+      inputMinPrice.element,
+      inputMaxPrice.element,
+    );
+
+    this.append(pricesContainer);
   }
 
   private setupListeners(): void {
