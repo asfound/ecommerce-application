@@ -1,3 +1,5 @@
 .filters {
+  padding: 2rem;
+  border-radius: var(--border-radius);
   background-color: var(--color-dark);
 }
