@@ -18,7 +18,7 @@ export class FiltersView extends BaseComponent {
         console.warn(checkedValues);
       },
       options: [{ label: 'Bestseller', value: 'true' }],
-      title: 'Best seller',
+      title: 'Unique offers',
       type: 'checkboxes',
     });
 
