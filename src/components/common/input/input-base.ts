@@ -64,6 +64,12 @@ export abstract class InputBase extends BaseComponent {
     this.inputComponent.addClassNames(styles.valid);
   }
 
+  public reset(): void {
+    this.clear();
+    this.clearErrorMessage();
+    this.inputComponent.removeClassNames(styles.valid);
+  }
+
   public setErrorMessage(errorMessage: string): void {
     this.errorMessageComponent.setTextContent(errorMessage);
     this.inputComponent.removeClassNames(styles.valid);

@@ -40,6 +40,16 @@ export const PASSWORD_PROPS: InputTextProperties = {
   ],
 } as const;
 
+export const OLD_PASSWORD_PROPS: InputTextProperties = {
+  ...PASSWORD_PROPS,
+  placeholder: 'Old password',
+} as const;
+
+export const NEW_PASSWORD_PROPS: InputTextProperties = {
+  ...PASSWORD_PROPS,
+  placeholder: 'New password',
+} as const;
+
 export const FIRST_NAME_PROPS: InputTextProperties = {
   name: 'first-name',
   placeholder: 'First Name',

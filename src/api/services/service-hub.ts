@@ -14,7 +14,7 @@ export const SERVICE_HUB = {
     return CategoriesService.getInstance(getApiRoot);
   },
   provideCustomerService() {
-    return CustomerService.getInstance(getApiRoot);
+    return CustomerService.getInstance(getApiRoot, SERVICE_HUB.provideAuthService());
   },
   provideProductsService() {
     return ProductsService.getInstance(getApiRoot);

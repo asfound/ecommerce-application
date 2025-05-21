@@ -1,5 +1,6 @@
 import type { AppCustomer, PersonalDataPayload } from '~/api/services/customer/types';
 
+import { BUTTON_TEXT } from '~/shared/constants/constants';
 import {
   DATE_OF_BIRTH_PROPS,
   EMAIL_PROPS,
@@ -22,12 +23,6 @@ export const FIELD_NAME = {
   EMAIL: 'Email:',
   FIRST_NAME: 'First name:',
   LAST_NAME: 'Last name:',
-};
-
-export const BUTTON_TEXT = {
-  CANCEL: 'Cancel',
-  EDIT: 'Edit',
-  SAVE: 'Save changes',
 };
 
 export class UserDetails extends BaseComponent implements Component {
@@ -65,13 +60,17 @@ export class UserDetails extends BaseComponent implements Component {
     this.setStyles();
   }
 
-  public bindSubmitHandler(handler: (payload: PersonalDataPayload) => void): void {
+  public bindSubmitHandler(handler: (payload: PersonalDataPayload) => Promise<void>): void {
     this.formElement.addEventListener(
       'submit',
       (event) => {
         event.preventDefault();
 
         handler(this.getPayload());
+
+        for (const input of this.inputComponents) {
+          input.reset();
+        }
       },
       { signal: this.abortController.signal },
     );

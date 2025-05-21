@@ -10,6 +10,11 @@ export interface AddressPayload {
   customerVersion: number;
 }
 
+export interface AppChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface AppCustomer {
   billingAddresses: AppCustomerAddress[];
   dateOfBirth: string;

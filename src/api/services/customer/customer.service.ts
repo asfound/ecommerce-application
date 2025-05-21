@@ -7,9 +7,11 @@ import type { ClientResponse } from '@commercetools/ts-client';
 
 import type { ApiRootGetter } from '~/api/types/types.ts';
 
+import type { AuthService } from '../auth/auth.service.ts';
 import type {
   AddAddressPayload,
   AddressPayload,
+  AppChangePasswordPayload,
   AppCustomer,
   ChangeAddressPayload,
   PersonalDataPayload,
@@ -30,12 +32,15 @@ export class CustomerService {
 
   private readonly apiRoot;
 
-  private constructor(apiRoot: ApiRootGetter) {
+  private readonly authService: AuthService;
+
+  private constructor(apiRoot: ApiRootGetter, authService: AuthService) {
     this.apiRoot = apiRoot;
+    this.authService = authService;
   }
 
-  public static getInstance(apiRoot: ApiRootGetter): CustomerService {
-    CustomerService.instance ??= new CustomerService(apiRoot);
+  public static getInstance(apiRoot: ApiRootGetter, authService: AuthService): CustomerService {
+    CustomerService.instance ??= new CustomerService(apiRoot, authService);
     return CustomerService.instance;
   }
 
@@ -59,10 +64,28 @@ export class CustomerService {
       .execute();
   }
 
-  public async changePassword(
-    payload: MyCustomerChangePassword,
-  ): Promise<ClientResponse<Customer>> {
-    return this.apiRoot().me().password().post({ body: payload }).execute();
+  public async changePassword(payload: AppChangePasswordPayload): Promise<AppCustomer> {
+    const appCustomerData = await this.getCustomer();
+
+    const changePasswordPayload: MyCustomerChangePassword = {
+      currentPassword: payload.currentPassword,
+      newPassword: payload.newPassword,
+      version: appCustomerData.version,
+    };
+
+    const response = await this.apiRoot()
+      .me()
+      .password()
+      .post({ body: changePasswordPayload })
+      .execute();
+
+    this.authService.logout();
+    await this.authService.login({
+      email: appCustomerData.email,
+      password: payload.newPassword,
+    });
+
+    return mapToAppCustomer(response.body);
   }
 
   public async getCustomer(): Promise<AppCustomer> {

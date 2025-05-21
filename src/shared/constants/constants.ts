@@ -50,3 +50,9 @@ export const CSS_CLASS_NAME = {
 } as const;
 
 export const APP_LOCALE = 'en-US';
+
+export const BUTTON_TEXT = {
+  CANCEL: 'Cancel',
+  EDIT: 'Edit',
+  SAVE: 'Save changes',
+};
