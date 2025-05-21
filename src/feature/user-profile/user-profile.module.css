@@ -22,7 +22,11 @@
 }
 
 .contentBlock {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 2rem;
+
   min-width: 28.9rem;
 }
 

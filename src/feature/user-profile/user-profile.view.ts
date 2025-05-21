@@ -1,4 +1,5 @@
 import type {
+  AppChangePasswordPayload,
   AppCustomer,
   AppCustomerAddress,
   PersonalDataPayload,
@@ -6,6 +7,8 @@ import type {
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { ErrorMessage } from '~/components/common/error-message/error-message';
+import { PasswordChangeForm } from '~/components/password-change-form/password-change-form';
 import { UserAddress } from '~/components/user-address/user-address';
 import { UserDetails } from '~/components/user-details/user-details';
 import { div, h1, li, ul } from '~/shared/create-element/tags';
@@ -16,7 +19,11 @@ import styles from './user-profile.module.css';
 export class UserProfileView extends BaseComponent implements Component {
   private readonly contentBlocks: HTMLDivElement[] = [];
 
+  private readonly errorMessageComponent = new ErrorMessage();
+
   private readonly navigationItems: HTMLLIElement[] = [];
+
+  private readonly passwordChangeForm = new PasswordChangeForm();
 
   private readonly userDetails = new UserDetails();
 
@@ -24,7 +31,15 @@ export class UserProfileView extends BaseComponent implements Component {
     super({ className: styles.container, tagName: 'div' });
   }
 
-  public bindPersonalDataUpdateHandler(handler: (payload: PersonalDataPayload) => void): void {
+  public bindPasswordChangeHandler(
+    handler: (payload: AppChangePasswordPayload) => Promise<void>,
+  ): void {
+    this.passwordChangeForm.bindSubmitHandler(handler);
+  }
+
+  public bindPersonalDataUpdateHandler(
+    handler: (payload: PersonalDataPayload) => Promise<void>,
+  ): void {
     this.userDetails.bindSubmitHandler(handler);
   }
 
@@ -36,20 +51,31 @@ export class UserProfileView extends BaseComponent implements Component {
     );
 
     const informationContent = this.createPersonalInformation(userInformation);
+    const passwordContent = this.createChangePassword();
     const addressesContent = this.createAddresses(
       userInformation.shippingAddresses,
       userInformation.billingAddresses,
     );
 
-    this.contentBlocks.push(informationContent, addressesContent);
+    this.contentBlocks.push(informationContent, passwordContent, addressesContent);
 
     const contentBlock = div(
       { className: [styles.block, styles.contentBlock] },
+      this.errorMessageComponent.element,
       informationContent,
+      passwordContent,
       addressesContent,
     );
 
     this.replaceChildren(navigationBlock, contentBlock);
+  }
+
+  public hideError(): void {
+    this.errorMessageComponent.hide();
+  }
+
+  public showError(errorMessage: string): void {
+    this.errorMessageComponent.show(errorMessage);
   }
 
   private createAddresses(
@@ -84,17 +110,29 @@ export class UserProfileView extends BaseComponent implements Component {
     return div({ className: styles.content, id: NAV_ITEMS.ADDRESSES.ID }, addressesContainer);
   }
 
+  private createChangePassword(): HTMLDivElement {
+    this.passwordChangeForm.createHTML();
+
+    return div(
+      { className: styles.content, id: NAV_ITEMS.PASSWORD.ID },
+      div({ className: styles.title }, TITLE.PASSWORD),
+      this.passwordChangeForm.element,
+    );
+  }
+
   private createNavigation(): HTMLUListElement {
     const informationItem = li(
       { className: [styles.navigationItem, styles.active] },
       NAV_ITEMS.INFORMATION.TEXT,
     );
+    const passwordItem = li({ className: styles.navigationItem }, NAV_ITEMS.PASSWORD.TEXT);
     const addressesItem = li({ className: styles.navigationItem }, NAV_ITEMS.ADDRESSES.TEXT);
 
     informationItem.dataset.target = NAV_ITEMS.INFORMATION.ID;
+    passwordItem.dataset.target = NAV_ITEMS.PASSWORD.ID;
     addressesItem.dataset.target = NAV_ITEMS.ADDRESSES.ID;
 
-    this.navigationItems.push(informationItem, addressesItem);
+    this.navigationItems.push(informationItem, passwordItem, addressesItem);
 
     for (const item of this.navigationItems) {
       item.addEventListener('click', () => {
@@ -102,7 +140,7 @@ export class UserProfileView extends BaseComponent implements Component {
       });
     }
 
-    return ul(null, informationItem, addressesItem);
+    return ul(null, informationItem, passwordItem, addressesItem);
   }
 
   private createPersonalInformation(userInformation: AppCustomer): HTMLDivElement {
@@ -125,5 +163,7 @@ export class UserProfileView extends BaseComponent implements Component {
     for (const block of this.contentBlocks) {
       block.classList.toggle(styles.visible, block.id === targetId);
     }
+
+    this.hideError();
   }
 }
