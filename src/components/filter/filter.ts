@@ -5,12 +5,15 @@ import { createSvgIcon } from '~/shared/utils/create-svg';
 import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
+import { InputCheckbox } from '../common/input/input-checkbox/input-checkbox';
 import { InputNumber } from '../common/input/input-number/input-number';
 import styles from './filter.module.css';
 
 export type FilterProperties = FilterCheckboxesProperties | FilterPriceRangeProperties;
 
 interface FilterCheckboxesProperties {
+  onChange(checkedValues: string[]): void;
+  options: { label: string; value: string }[];
   title: string;
   type: 'checkboxes';
 }
@@ -24,6 +27,8 @@ interface FilterPriceRangeProperties {
 
 export class Filter extends BaseComponent<HTMLDetailsElement> implements Component {
   private readonly arrowIcon = createSvgIcon(iconArrowUp, styles.icon);
+
+  private readonly checkedValues = new Set<string>();
 
   private readonly titleElement = div({ className: styles.title });
 
@@ -51,6 +56,26 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
     if (properties.type === 'price-range') {
       this.createPriceRangeFilter(properties);
       return;
+    }
+
+    this.createCheckboxesFilter(properties);
+  }
+
+  private createCheckboxesFilter(properties: FilterCheckboxesProperties): void {
+    for (const option of properties.options) {
+      const inputCheckbox = new InputCheckbox({ label: option.label, name: option.value });
+
+      inputCheckbox.addListener('change', () => {
+        if (inputCheckbox.checked) {
+          this.checkedValues.add(option.value);
+        } else {
+          this.checkedValues.delete(option.value);
+        }
+
+        properties.onChange([...this.checkedValues]);
+      });
+
+      this.append(inputCheckbox);
     }
   }
 
