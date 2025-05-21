@@ -3,7 +3,10 @@ import type { FilterQueryArguments, ProductsFilterPayload } from './types';
 import { FILTER, QUERY_KEY, SORT_FIELD } from './constants';
 
 export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryArguments => {
+  const filters: string[] = [];
+
   const queryArguments: FilterQueryArguments = {
+    [QUERY_KEY.FILTER_QUERY]: filters,
     [QUERY_KEY.LIMIT]: payload.productsPerPage,
     [QUERY_KEY.MATCHING_VARIANTS]: true,
     [QUERY_KEY.SORT]: getSortType(payload),
@@ -16,19 +19,19 @@ export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryAr
   }
 
   if (payload.categoryId) {
-    queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.CATEGORY_SUBTREE(payload.categoryId);
+    filters.push(FILTER.CATEGORY_SUBTREE(payload.categoryId));
   }
 
   if (payload.weight?.length) {
-    queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.WEIGHT(payload.weight);
+    filters.push(FILTER.WEIGHT(payload.weight));
   }
 
   if (payload.bestSeller) {
-    queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.BEST_SELLER;
+    filters.push(FILTER.BEST_SELLER);
   }
 
   if (payload.priceRange.min !== undefined || payload.priceRange.max !== undefined) {
-    queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.PRICE(payload.priceRange);
+    filters.push(FILTER.PRICE(payload.priceRange));
   }
 
   return queryArguments;
