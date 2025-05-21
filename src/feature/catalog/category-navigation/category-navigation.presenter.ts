@@ -5,7 +5,8 @@ import { Presenter } from '~/shared/presenter/presenter';
 
 import type { CategoryNavigationView } from './category-navigation.view';
 
-import { catalogAction, catalogCategoryNameAction } from '../store/actions';
+import { catalogCategoryNameAction } from '../store/actions';
+import { catalogStore } from '../store/store';
 
 export class CategoryNavigationPresenter extends Presenter<CategoryNavigationView> {
   private readonly categoriesService: CategoriesService;
@@ -19,7 +20,7 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
   }
 
   private handleCategoryItemClick = (category: AppCategory): void => {
-    catalogAction.setCategoryId(category.id);
+    catalogStore.setState({ categoryId: category.id, searchTerm: '' });
     catalogCategoryNameAction.setCategoryName(category.name);
   };
 
