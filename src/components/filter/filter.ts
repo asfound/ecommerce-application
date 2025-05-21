@@ -9,21 +9,21 @@ import { InputCheckbox } from '../common/input/input-checkbox/input-checkbox';
 import { InputNumber } from '../common/input/input-number/input-number';
 import styles from './filter.module.css';
 
-export type FilterProperties = FilterCheckboxesProperties | FilterPriceRangeProperties;
-
-interface FilterCheckboxesProperties {
+export interface FilterCheckboxesProperties {
   onChange(checkedValues: string[]): void;
-  options: { label: string; value: string }[];
+  options: { label: string; value: boolean | string }[];
   title: string;
   type: 'checkboxes';
 }
 
-interface FilterPriceRangeProperties {
+export interface FilterPriceRangeProperties {
   onMaxPriceChange(maxPrice: string): void;
   onMinPriceChange(minPrice: string): void;
   title: string;
   type: 'price-range';
 }
+
+export type FilterProperties = FilterCheckboxesProperties | FilterPriceRangeProperties;
 
 export class Filter extends BaseComponent<HTMLDetailsElement> implements Component {
   private readonly arrowIcon = createSvgIcon(iconArrowUp, styles.icon);
@@ -63,13 +63,16 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
 
   private createCheckboxesFilter(properties: FilterCheckboxesProperties): void {
     for (const option of properties.options) {
-      const inputCheckbox = new InputCheckbox({ label: option.label, name: option.value });
+      const inputCheckbox = new InputCheckbox({
+        label: option.label,
+        name: option.value.toString(),
+      });
 
       inputCheckbox.addListener('change', () => {
         if (inputCheckbox.checked) {
-          this.checkedValues.add(option.value);
+          this.checkedValues.add(option.value.toString());
         } else {
-          this.checkedValues.delete(option.value);
+          this.checkedValues.delete(option.value.toString());
         }
 
         properties.onChange([...this.checkedValues]);

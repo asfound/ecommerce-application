@@ -1,3 +1,8 @@
+import type {
+  FilterCheckboxesProperties,
+  FilterPriceRangeProperties,
+} from '~/components/filter/filter';
+
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Filter } from '~/components/filter/filter';
 import { h2 } from '~/shared/create-element/tags';
@@ -13,26 +18,16 @@ export class FiltersView extends BaseComponent {
   public constructor() {
     super({ className: styles.filters, tagName: 'div' });
 
-    this.filterBestSeller.createHTML({
-      onChange(checkedValues) {
-        console.warn(checkedValues);
-      },
-      options: [{ label: 'Bestseller', value: 'true' }],
-      title: 'Unique offers',
-      type: 'checkboxes',
-    });
+    this.append(this.heading, this.filterBestSeller);
+  }
 
-    this.filterPriceRange.createHTML({
-      onMaxPriceChange(maxPrice) {
-        console.warn(maxPrice);
-      },
-      onMinPriceChange(minPrice) {
-        console.warn(minPrice);
-      },
-      title: 'Price range',
-      type: 'price-range',
-    });
+  public initBestSellerFilter(properties: FilterCheckboxesProperties): void {
+    this.filterBestSeller.createHTML(properties);
+    this.append(this.filterBestSeller);
+  }
 
-    this.append(this.heading, this.filterBestSeller, this.filterPriceRange);
+  public initPriceRangeFilter(properties: FilterPriceRangeProperties): void {
+    this.filterPriceRange.createHTML(properties);
+    this.append(this.filterPriceRange);
   }
 }
