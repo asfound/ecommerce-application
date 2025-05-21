@@ -7,6 +7,7 @@ import type {
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { ErrorMessage } from '~/components/common/error-message/error-message';
 import { PasswordChangeForm } from '~/components/password-change-form/password-change-form';
 import { UserAddress } from '~/components/user-address/user-address';
 import { UserDetails } from '~/components/user-details/user-details';
@@ -17,6 +18,8 @@ import styles from './user-profile.module.css';
 
 export class UserProfileView extends BaseComponent implements Component {
   private readonly contentBlocks: HTMLDivElement[] = [];
+
+  private readonly errorMessageComponent = new ErrorMessage();
 
   private readonly navigationItems: HTMLLIElement[] = [];
 
@@ -58,12 +61,21 @@ export class UserProfileView extends BaseComponent implements Component {
 
     const contentBlock = div(
       { className: [styles.block, styles.contentBlock] },
+      this.errorMessageComponent.element,
       informationContent,
       passwordContent,
       addressesContent,
     );
 
     this.replaceChildren(navigationBlock, contentBlock);
+  }
+
+  public hideError(): void {
+    this.errorMessageComponent.hide();
+  }
+
+  public showError(errorMessage: string): void {
+    this.errorMessageComponent.show(errorMessage);
   }
 
   private createAddresses(

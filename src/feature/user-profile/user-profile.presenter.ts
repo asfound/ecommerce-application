@@ -6,8 +6,12 @@ import type {
 } from '~/api/services/customer/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
+import { isError } from '~/shared/type-predicates/type-predicates';
+import { showToast } from '~/shared/utils/show-toast';
 
 import type { UserProfileView } from './user-profile.view';
+
+import { USER_NOTIFICATION } from './constants';
 
 export class UserProfilePresenter extends Presenter<UserProfileView> {
   private readonly customerService: CustomerService;
@@ -33,8 +37,13 @@ export class UserProfilePresenter extends Presenter<UserProfileView> {
     try {
       const updatedCustomer = await this.customerService.changePassword(payload);
       this.updateView(updatedCustomer);
+      showToast(USER_NOTIFICATION.PASSWORD_SUCCESS);
     } catch (error: unknown) {
-      console.warn(error);
+      if (isError(error)) {
+        this.view.showError(error.message);
+      }
+    } finally {
+      window.scrollTo({ top: 0 });
     }
   };
 
@@ -44,8 +53,13 @@ export class UserProfilePresenter extends Presenter<UserProfileView> {
     try {
       const updatedCustomer = await this.customerService.updatePersonalData(payload);
       this.updateView(updatedCustomer);
+      showToast(USER_NOTIFICATION.PASSWORD_SUCCESS);
     } catch (error: unknown) {
-      console.warn(error);
+      if (isError(error)) {
+        this.view.showError(error.message);
+      }
+    } finally {
+      window.scrollTo({ top: 0 });
     }
   };
 

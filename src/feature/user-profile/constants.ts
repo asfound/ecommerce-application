@@ -21,3 +21,8 @@ export const TITLE = {
   PERSONAL: NAV_ITEMS.INFORMATION.TEXT,
   SHIPPING: 'Shipping addresses',
 };
+
+export const USER_NOTIFICATION = {
+  INFORMATION_SUCCESS: 'Information has been successfully updated!',
+  PASSWORD_SUCCESS: 'Password has been successfully updated!',
+};
