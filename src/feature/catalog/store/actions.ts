@@ -30,12 +30,12 @@ const setBestSeller = (bestSeller: boolean): void => {
   catalogStore.setState({ bestSeller });
 };
 
-const setMaxPrice = (max: number): void => {
-  catalogStore.setState({ priceRange: { max } });
+const setMaxPrice = (max: number | undefined): void => {
+  catalogStore.setState((previous) => ({ priceRange: { ...previous.priceRange, max } }));
 };
 
-const setMinPrice = (min: number): void => {
-  catalogStore.setState({ priceRange: { min } });
+const setMinPrice = (min: number | undefined): void => {
+  catalogStore.setState((previous) => ({ priceRange: { ...previous.priceRange, min } }));
 };
 
 export const catalogAction = {

@@ -17,11 +17,13 @@ export class FiltersPresenter extends Presenter<FiltersView> {
   };
 
   private readonly handleMaxPriceChange = (maxPrice: string): void => {
-    catalogAction.setMaxPrice(Number.parseFloat(maxPrice));
+    const max = maxPrice.length > 0 ? Number.parseFloat(maxPrice) : undefined;
+    catalogAction.setMaxPrice(max);
   };
 
   private readonly handleMinPriceChange = (minPrice: string): void => {
-    catalogAction.setMinPrice(Number.parseFloat(minPrice));
+    const min = minPrice.length > 0 ? Number.parseFloat(minPrice) : undefined;
+    catalogAction.setMinPrice(min);
   };
 
   private initVIew(): void {
