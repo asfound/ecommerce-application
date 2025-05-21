@@ -1,5 +1,6 @@
 import type { AppCustomer, PersonalDataPayload } from '~/api/services/customer/types';
 
+import { BUTTON_TEXT } from '~/shared/constants/constants';
 import {
   DATE_OF_BIRTH_PROPS,
   EMAIL_PROPS,
@@ -22,12 +23,6 @@ export const FIELD_NAME = {
   EMAIL: 'Email:',
   FIRST_NAME: 'First name:',
   LAST_NAME: 'Last name:',
-};
-
-export const BUTTON_TEXT = {
-  CANCEL: 'Cancel',
-  EDIT: 'Edit',
-  SAVE: 'Save changes',
 };
 
 export class UserDetails extends BaseComponent implements Component {

@@ -6,6 +6,7 @@ import type {
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { PasswordChangeForm } from '~/components/password-change-form/password-change-form.view';
 import { UserAddress } from '~/components/user-address/user-address';
 import { UserDetails } from '~/components/user-details/user-details';
 import { div, h1, li, ul } from '~/shared/create-element/tags';
@@ -17,6 +18,8 @@ export class UserProfileView extends BaseComponent implements Component {
   private readonly contentBlocks: HTMLDivElement[] = [];
 
   private readonly navigationItems: HTMLLIElement[] = [];
+
+  private readonly passwordChangeForm = new PasswordChangeForm();
 
   private readonly userDetails = new UserDetails();
 
@@ -87,9 +90,12 @@ export class UserProfileView extends BaseComponent implements Component {
   }
 
   private createChangePassword(): HTMLDivElement {
+    this.passwordChangeForm.createHTML();
+
     return div(
       { className: styles.content, id: NAV_ITEMS.PASSWORD.ID },
       div({ className: styles.title }, TITLE.PASSWORD),
+      this.passwordChangeForm.element,
     );
   }
 
