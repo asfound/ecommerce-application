@@ -1,0 +1,52 @@
+.container {
+  max-width: 29rem;
+  padding: 1rem;
+  border: 1px solid red;
+}
+
+.summary {
+  position: relative;
+
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 0.5rem;
+
+  font-size: 1.4rem;
+  font-weight: 500;
+  list-style: none;
+
+  transition: color var(--transition-duration);
+}
+
+.summary::-webkit-details-marker,
+.summary::marker {
+  display: none;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+.checkboxesContainer {
+  background-color: red;
+}
+
+.priceRangeContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+@media (hover: hover) {
+  .summary:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+}
