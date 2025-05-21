@@ -5,7 +5,6 @@ import { AuthService } from './auth/auth.service';
 import { CategoriesService } from './categories/categories.service';
 import { CustomerService } from './customer/customer.service';
 import { ProductsService } from './products/products.service';
-import { SuggestionsService } from './suggestions/suggestions.service';
 
 export const SERVICE_HUB = {
   provideAuthService() {
@@ -19,8 +18,5 @@ export const SERVICE_HUB = {
   },
   provideProductsService() {
     return ProductsService.getInstance(getApiRoot);
-  },
-  provideSuggestionsService() {
-    return SuggestionsService.getInstance(getApiRoot);
   },
 } as const;

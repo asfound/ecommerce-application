@@ -9,7 +9,7 @@ export class CategoryNavigationItem extends BaseComponent {
   public constructor(category: AppCategory, onClick: CategoryNavigationItemClickHandler) {
     super({
       className: [styles.item, category.level === 0 ? styles.rootCategory : styles.subcategory],
-      tagName: 'li',
+      tagName: 'div',
       textContent: category.name,
     });
 

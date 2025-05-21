@@ -1,11 +1,12 @@
 import type { AppProduct } from '~/api/services/products/types';
 
-import { div, img } from '~/shared/create-element/tags';
+import { div } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
+import { Loader } from '../common/loader/loader';
 import styles from './product-card.module.css';
 
 const DISCOUNT_PERCENTAGE_VALUE = '-10%';
@@ -14,12 +15,14 @@ const BESTSELLER_VALUE = 'Bestseller';
 export type ProductCardClickHandler = (product: AppProduct) => void;
 
 export class ProductCard extends BaseComponent implements Component {
+  private readonly loaderComponent = new Loader({ size: 'small' });
+
   private readonly onNavigateToDetails: ProductCardClickHandler;
 
   private readonly product: AppProduct;
 
   public constructor(product: AppProduct, onNavigateToDetails: ProductCardClickHandler) {
-    super({ className: styles.card, tagName: 'div' });
+    super({ className: styles.card, tagName: 'li' });
 
     this.product = product;
 
@@ -31,18 +34,7 @@ export class ProductCard extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const imageContainer = div(
-      { className: styles.imageContainer },
-      img({
-        alt: this.product.image.label,
-        className: styles.image,
-        src: this.product.image.url,
-      }),
-      this.product.price.discounted
-        ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
-        : null,
-      this.product.bestSeller ? div({ className: styles.bestSellerLabel }, BESTSELLER_VALUE) : null,
-    );
+    const imageContainer = this.createImageContainer();
 
     const titleElement = div({ className: styles.title }, this.product.name);
 
@@ -70,6 +62,34 @@ export class ProductCard extends BaseComponent implements Component {
     );
 
     this.append(imageContainer, content);
+  }
+
+  private createImageContainer(): HTMLDivElement {
+    this.loaderComponent.show();
+
+    const imageContainer = div(
+      { className: styles.imageContainer },
+      this.loaderComponent.element,
+      this.product.price.discounted
+        ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
+        : null,
+      this.product.bestSeller ? div({ className: styles.bestSellerLabel }, BESTSELLER_VALUE) : null,
+    );
+
+    const image = new Image();
+    image.classList.add(styles.image);
+    image.src = this.product.image.url;
+
+    image.addEventListener(
+      'load',
+      () => {
+        imageContainer.append(image);
+        this.loaderComponent.hide();
+      },
+      { signal: this.abortController.signal },
+    );
+
+    return imageContainer;
   }
 
   private setupListeners(): void {

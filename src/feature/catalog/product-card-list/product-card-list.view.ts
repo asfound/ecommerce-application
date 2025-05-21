@@ -4,12 +4,16 @@ import type { ProductCardClickHandler } from '~/components/product-card/product-
 
 import huhGif from '~/assets/img/huh-cat.gif';
 import { BaseComponent } from '~/components/base-component/base-component';
+import { Loader } from '~/components/common/loader/loader';
 import { ProductCard } from '~/components/product-card/product-card';
 import { div, img, p } from '~/shared/create-element/tags';
 
+import { PRODUCT_CARD_LIST_TEXT } from './constants';
 import styles from './product-card-list.module.css';
 
 export class ProductCardListView extends BaseComponent implements Component {
+  private readonly loaderComponent = new Loader({ size: 'medium' });
+
   private readonly notFoundHeading = p({ className: styles.notFoundDescription });
 
   private readonly notFoundWidget = div(
@@ -28,8 +32,17 @@ export class ProductCardListView extends BaseComponent implements Component {
     );
   }
 
+  public hideLoader(): void {
+    this.loaderComponent.hide();
+  }
+
+  public showLoader(): void {
+    this.replaceChildren(this.loaderComponent);
+    this.loaderComponent.show();
+  }
+
   public showNotFoundWidget(searchTerm: string): void {
-    this.notFoundHeading.textContent = `Huh?! No results found for '${searchTerm}'.`;
+    this.notFoundHeading.textContent = PRODUCT_CARD_LIST_TEXT.NOT_FOUND(searchTerm);
     this.replaceChildren(this.notFoundWidget);
   }
 }
