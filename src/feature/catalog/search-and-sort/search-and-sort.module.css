@@ -7,8 +7,10 @@
 
 .sortContainer {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
+
   color: var(--color-accent-light);
 }
 
@@ -40,5 +42,11 @@
   .button:hover {
     cursor: pointer;
     color: var(--color-accent);
+  }
+}
+
+@media (width <= 900px) {
+  .container {
+    flex-direction: column;
   }
 }
