@@ -2,6 +2,8 @@ import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { ProductsFilterPayload } from './types';
 
+const CENTS_IN_DOLLAR = 100;
+
 export const PRODUCT_ATTRIBUTE = {
   BEST_SELLER: 'bestSeller',
 } as const;
@@ -15,7 +17,17 @@ export const QUERY_KEY = {
 } as const;
 
 export const FILTER = {
+  BEST_SELLER: 'variants.attributes.bestSeller:true',
   CATEGORY_SUBTREE: (categoryId: string) => `categories.id: subtree("${categoryId}")`,
+  PRICE: (priceRange: ProductsFilterPayload['priceRange']) => {
+    const from = priceRange.min ? priceRange.min * CENTS_IN_DOLLAR : '*';
+    const to = priceRange.max ? priceRange.max * CENTS_IN_DOLLAR : '*';
+    return `variants.price.centAmount:range(${from.toString()} to ${to.toString()})`;
+  },
+  WEIGHT: (weight: ('lg' | 'md' | 'sm')[]) => {
+    const weights = weight.map((value) => `"${value}"`).join(',');
+    return `variants.attributes.weight.key:${weights}`;
+  },
 } as const;
 
 export const SORT_FIELD = {

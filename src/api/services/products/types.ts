@@ -32,9 +32,12 @@ export interface FilterQueryArguments {
 }
 
 export interface ProductsFilterPayload {
+  bestSeller: boolean;
   categoryId?: string;
+  priceRange: { max?: number; min?: number };
   productsPerPage: number;
   searchTerm?: string;
   sortDirection: 'asc' | 'desc';
   sortField: 'name' | 'price';
+  weight?: ('lg' | 'md' | 'sm')[];
 }

@@ -19,6 +19,18 @@ export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryAr
     queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.CATEGORY_SUBTREE(payload.categoryId);
   }
 
+  if (payload.weight?.length) {
+    queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.WEIGHT(payload.weight);
+  }
+
+  if (payload.bestSeller) {
+    queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.BEST_SELLER;
+  }
+
+  if (payload.priceRange.min !== undefined || payload.priceRange.max !== undefined) {
+    queryArguments[QUERY_KEY.FILTER_QUERY] = FILTER.PRICE(payload.priceRange);
+  }
+
   return queryArguments;
 };
 
