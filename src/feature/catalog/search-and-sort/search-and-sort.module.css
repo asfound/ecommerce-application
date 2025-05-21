@@ -1,15 +1,16 @@
 .container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr max-content;
   gap: 2rem;
-  justify-content: space-between;
   width: 100%;
 }
 
 .sortContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
+
+  width: max-content;
 
   color: var(--color-accent-light);
 }
@@ -45,8 +46,16 @@
   }
 }
 
-@media (width <= 900px) {
+@media (width <= 1024px) {
   .container {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (width <= 389px) {
+  .sortContainer {
+    display: flex;
+    gap: 1rem;
+    text-wrap: nowrap;
   }
 }
