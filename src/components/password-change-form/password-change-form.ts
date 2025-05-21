@@ -42,7 +42,7 @@ export class PasswordChangeForm extends BaseComponent implements Component {
     this.createHTML();
   }
 
-  public bindSubmitHandler(handler: (payload: AppChangePasswordPayload) => void): void {
+  public bindSubmitHandler(handler: (payload: AppChangePasswordPayload) => Promise<void>): void {
     this.formElement.addEventListener(
       'submit',
       (event) => {

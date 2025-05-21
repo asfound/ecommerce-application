@@ -27,26 +27,26 @@ export class UserProfilePresenter extends Presenter<UserProfileView> {
     this.view.bindPasswordChangeHandler(this.handlePasswordChange);
   }
 
-  private readonly handlePasswordChange = (payload: AppChangePasswordPayload): void => {
-    this.customerService
-      .changePassword(payload)
-      .then((updatedCustomer) => {
-        this.updateView(updatedCustomer);
-      })
-      .catch((error: unknown) => {
-        console.warn(error);
-      });
+  private readonly handlePasswordChange = async (
+    payload: AppChangePasswordPayload,
+  ): Promise<void> => {
+    try {
+      const updatedCustomer = await this.customerService.changePassword(payload);
+      this.updateView(updatedCustomer);
+    } catch (error: unknown) {
+      console.warn(error);
+    }
   };
 
-  private readonly handlePersonalDataUpdate = (payload: PersonalDataPayload): void => {
-    this.customerService
-      .updatePersonalData(payload)
-      .then((updatedCustomer) => {
-        this.updateView(updatedCustomer);
-      })
-      .catch((error: unknown) => {
-        console.warn(error);
-      });
+  private readonly handlePersonalDataUpdate = async (
+    payload: PersonalDataPayload,
+  ): Promise<void> => {
+    try {
+      const updatedCustomer = await this.customerService.updatePersonalData(payload);
+      this.updateView(updatedCustomer);
+    } catch (error: unknown) {
+      console.warn(error);
+    }
   };
 
   private async initView(): Promise<void> {

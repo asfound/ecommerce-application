@@ -60,7 +60,7 @@ export class UserDetails extends BaseComponent implements Component {
     this.setStyles();
   }
 
-  public bindSubmitHandler(handler: (payload: PersonalDataPayload) => void): void {
+  public bindSubmitHandler(handler: (payload: PersonalDataPayload) => Promise<void>): void {
     this.formElement.addEventListener(
       'submit',
       (event) => {

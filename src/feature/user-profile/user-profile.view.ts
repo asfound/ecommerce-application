@@ -28,11 +28,15 @@ export class UserProfileView extends BaseComponent implements Component {
     super({ className: styles.container, tagName: 'div' });
   }
 
-  public bindPasswordChangeHandler(handler: (payload: AppChangePasswordPayload) => void): void {
+  public bindPasswordChangeHandler(
+    handler: (payload: AppChangePasswordPayload) => Promise<void>,
+  ): void {
     this.passwordChangeForm.bindSubmitHandler(handler);
   }
 
-  public bindPersonalDataUpdateHandler(handler: (payload: PersonalDataPayload) => void): void {
+  public bindPersonalDataUpdateHandler(
+    handler: (payload: PersonalDataPayload) => Promise<void>,
+  ): void {
     this.userDetails.bindSubmitHandler(handler);
   }
 
