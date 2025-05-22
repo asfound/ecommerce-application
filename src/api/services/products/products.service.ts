@@ -3,7 +3,7 @@ import type { ApiRootGetter } from '~/api/types/types';
 import type { AppProduct, ProductsFilterPayload } from './types';
 
 import { getQueryArguments } from './helpers';
-import { mapToAppProducts } from './mappers';
+import { mapToFlatAppProducts } from './mappers';
 
 export class ProductsService {
   private static instance: null | ProductsService = null;
@@ -28,6 +28,6 @@ export class ProductsService {
       .get({ queryArgs: queryArguments })
       .execute();
 
-    return mapToAppProducts(response.body.results);
+    return mapToFlatAppProducts(response.body.results, payload.sortField, payload.sortDirection);
   }
 }
