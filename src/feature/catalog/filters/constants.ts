@@ -34,3 +34,19 @@ export const FILTER_BRAND_PROPS = {
   title: 'Brand',
   type: 'checkboxes' as const,
 };
+
+export const CATEGORY_NAME = {
+  ACCESSORIES: 'Accessories',
+  ALL: '',
+  ARABICA: 'Arabica',
+  BLEND: 'Blend',
+  BREWING: 'Brewing',
+  DARK_ROAST: 'Dark roast',
+  DRINKWARE: 'Drinkware',
+  GRINDERS: 'Grinders',
+  HONEY_PROCESS: 'Honey Process',
+  LIGHT_ROAST: 'Light Roast',
+  NATURAL_PROCESS: 'Natural Process',
+  ROBUSTA: 'Robusta',
+  WASHED_PROCESS: 'Washed Process',
+} as const;

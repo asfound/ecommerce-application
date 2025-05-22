@@ -30,7 +30,11 @@ export type FilterProperties = FilterCheckboxesProperties | FilterPriceRangeProp
 export class Filter extends BaseComponent<HTMLDetailsElement> implements Component {
   private readonly arrowIcon = createSvgIcon(iconArrowUp, styles.icon);
 
+  private readonly checkboxInputs = new Set<InputCheckbox>();
+
   private readonly checkedValues = new Set<string>();
+
+  private readonly numberInputs = new Set<InputNumber>();
 
   private readonly titleElement = div({ className: styles.title });
 
@@ -63,6 +67,30 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
     this.createCheckboxesFilter(properties);
   }
 
+  public override destroy(): void {
+    for (const input of this.checkboxInputs) input.destroy();
+    this.checkboxInputs.clear();
+
+    for (const input of this.numberInputs) input.destroy();
+    this.numberInputs.clear();
+
+    super.destroy();
+  }
+
+  public hide(): void {
+    this.addClassNames(styles.hidden);
+  }
+
+  public resetCheckboxes(): void {
+    for (const input of this.checkboxInputs) {
+      input.setChecked(false);
+    }
+  }
+
+  public show(): void {
+    this.removeClassNames(styles.hidden);
+  }
+
   private createCheckboxesFilter(properties: FilterCheckboxesProperties): void {
     for (const option of properties.options) {
       const inputCheckbox = new InputCheckbox({
@@ -79,6 +107,8 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
 
         properties.onChange([...this.checkedValues]);
       });
+
+      this.checkboxInputs.add(inputCheckbox);
 
       this.append(inputCheckbox);
     }
@@ -100,6 +130,8 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
       inputMinPrice.element,
       inputMaxPrice.element,
     );
+
+    this.numberInputs.add(inputMinPrice).add(inputMaxPrice);
 
     this.append(pricesContainer);
   }

@@ -46,6 +46,10 @@
   gap: 1rem;
 }
 
+.hidden {
+  display: none;
+}
+
 @media (hover: hover) {
   .summary:hover {
     cursor: pointer;

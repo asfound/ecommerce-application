@@ -1,3 +1,5 @@
+import { debounce } from 'lodash';
+
 import type { ProductsService } from '~/api/services/products/products.service';
 import type { AppProduct } from '~/api/services/products/types';
 
@@ -11,6 +13,7 @@ import type { ProductCardListView } from './product-card-list.view';
 import { catalogLoadingAction } from '../store/actions';
 import { catalogLoadingSelector } from '../store/selectors';
 import { catalogLoadingStore, catalogStore } from '../store/store';
+import { VIEW_UPDATE_DELAY } from './constants';
 
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private readonly productsService: ProductsService;
@@ -36,9 +39,13 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private subscribeCatalogStateChange(): void {
-    const unsubscribe = catalogStore.subscribe((state) => state, this.updateView, {
-      isImmediate: false,
-    });
+    const unsubscribe = catalogStore.subscribe(
+      (state) => state,
+      debounce(this.updateView, VIEW_UPDATE_DELAY),
+      {
+        isImmediate: false,
+      },
+    );
 
     this.storeSubscription.add(unsubscribe);
   }

@@ -8,6 +8,8 @@ import { Filter } from '~/components/filter/filter';
 import { h2 } from '~/shared/create-element/tags';
 
 import styles from './filters.module.css';
+
+export type AvailableFilter = 'brand' | 'weight';
 export class FiltersView extends BaseComponent {
   private readonly filterBestSeller = new Filter();
 
@@ -23,6 +25,15 @@ export class FiltersView extends BaseComponent {
     super({ className: styles.filters, tagName: 'div' });
 
     this.append(this.heading, this.filterBestSeller);
+  }
+
+  public hideFilter(filter: AvailableFilter): void {
+    if (filter === 'brand') {
+      this.filterBrand.hide();
+      return;
+    }
+
+    this.filterWeight.hide();
   }
 
   public initBestSellerFilter(properties: FilterCheckboxesProperties): void {
@@ -43,5 +54,29 @@ export class FiltersView extends BaseComponent {
   public initWeightFilter(properties: FilterCheckboxesProperties): void {
     this.filterWeight.createHTML(properties);
     this.append(this.filterWeight);
+  }
+
+  public resetCheckboxes(filter: 'all' | AvailableFilter): void {
+    if (filter === 'all') {
+      this.filterBrand.resetCheckboxes();
+      this.filterWeight.resetCheckboxes();
+      return;
+    }
+
+    if (filter === 'brand') {
+      this.filterBrand.resetCheckboxes();
+      return;
+    }
+
+    this.filterWeight.resetCheckboxes();
+  }
+
+  public showFilter(filter: AvailableFilter): void {
+    if (filter === 'brand') {
+      this.filterBrand.show();
+      return;
+    }
+
+    this.filterWeight.show();
   }
 }
