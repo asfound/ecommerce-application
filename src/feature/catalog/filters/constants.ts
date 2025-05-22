@@ -50,3 +50,13 @@ export const CATEGORY_NAME = {
   ROBUSTA: 'Robusta',
   WASHED_PROCESS: 'Washed Process',
 } as const;
+
+export const FILTER = {
+  ALL: 'all',
+  BRAND: 'brand',
+  WEIGHT: 'weight',
+} as const;
+
+export const FILTER_VIEW_TEXT = {
+  FILTERS: 'Filters',
+};

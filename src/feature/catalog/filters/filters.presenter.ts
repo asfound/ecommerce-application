@@ -9,6 +9,7 @@ import { catalogCategoryNameSelector } from '../store/selectors';
 import { catalogCategoryNameStore, type CatalogState, catalogStore } from '../store/store';
 import {
   CATEGORY_NAME,
+  FILTER,
   FILTER_BEST_SELLERS_PROPS,
   FILTER_BRAND_PROPS,
   FILTER_PRICE_RANGE_PROPS,
@@ -77,17 +78,17 @@ export class FiltersPresenter extends Presenter<FiltersView> {
       onChange: this.handleBrandChange,
     });
 
-    this.view.hideFilter('brand');
-    this.view.hideFilter('weight');
+    this.view.hideFilter(FILTER.BRAND);
+    this.view.hideFilter(FILTER.WEIGHT);
   }
 
   private readonly onCategoryNameChange = (categoryName: string): void => {
     if (categoryName === CATEGORY_NAME.ALL) {
       catalogStore.setState({ brand: [], weight: [] });
 
-      this.view.hideFilter('brand');
-      this.view.hideFilter('weight');
-      this.view.resetCheckboxes('all');
+      this.view.hideFilter(FILTER.BRAND);
+      this.view.hideFilter(FILTER.WEIGHT);
+      this.view.resetCheckboxes(FILTER.ALL);
 
       return;
     }
@@ -100,17 +101,17 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     ) {
       catalogAction.setWeights([]);
 
-      this.view.showFilter('brand');
-      this.view.hideFilter('weight');
-      this.view.resetCheckboxes('weight');
+      this.view.showFilter(FILTER.BRAND);
+      this.view.hideFilter(FILTER.WEIGHT);
+      this.view.resetCheckboxes(FILTER.WEIGHT);
 
       return;
     } else {
       catalogAction.setBrands([]);
 
-      this.view.showFilter('weight');
-      this.view.hideFilter('brand');
-      this.view.resetCheckboxes('brand');
+      this.view.showFilter(FILTER.WEIGHT);
+      this.view.hideFilter(FILTER.BRAND);
+      this.view.resetCheckboxes(FILTER.BRAND);
 
       return;
     }

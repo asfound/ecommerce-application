@@ -7,9 +7,11 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { Filter } from '~/components/filter/filter';
 import { h2 } from '~/shared/create-element/tags';
 
+import { FILTER, FILTER_VIEW_TEXT } from './constants';
 import styles from './filters.module.css';
 
-export type AvailableFilter = 'brand' | 'weight';
+export type AvailableFilter = (typeof FILTER)[keyof typeof FILTER];
+
 export class FiltersView extends BaseComponent {
   private readonly filterBestSeller = new Filter();
 
@@ -19,7 +21,7 @@ export class FiltersView extends BaseComponent {
 
   private readonly filterWeight = new Filter();
 
-  private readonly heading = h2(null, 'Filters');
+  private readonly heading = h2(null, FILTER_VIEW_TEXT.FILTERS);
 
   public constructor() {
     super({ className: styles.filters, tagName: 'div' });
@@ -28,7 +30,7 @@ export class FiltersView extends BaseComponent {
   }
 
   public hideFilter(filter: AvailableFilter): void {
-    if (filter === 'brand') {
+    if (filter === FILTER.BRAND) {
       this.filterBrand.hide();
       return;
     }
@@ -56,14 +58,14 @@ export class FiltersView extends BaseComponent {
     this.append(this.filterWeight);
   }
 
-  public resetCheckboxes(filter: 'all' | AvailableFilter): void {
-    if (filter === 'all') {
+  public resetCheckboxes(filter: AvailableFilter): void {
+    if (filter === FILTER.ALL) {
       this.filterBrand.resetCheckboxes();
       this.filterWeight.resetCheckboxes();
       return;
     }
 
-    if (filter === 'brand') {
+    if (filter === FILTER.BRAND) {
       this.filterBrand.resetCheckboxes();
       return;
     }
@@ -72,7 +74,7 @@ export class FiltersView extends BaseComponent {
   }
 
   public showFilter(filter: AvailableFilter): void {
-    if (filter === 'brand') {
+    if (filter === FILTER.BRAND) {
       this.filterBrand.show();
       return;
     }
