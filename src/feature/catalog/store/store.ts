@@ -22,7 +22,7 @@ const initialState: CatalogState = {
   productsPerPage: PRODUCTS_PER_PAGE,
   searchTerm: '',
   sortDirection: 'asc',
-  sortField: 'name',
+  sortField: 'price',
   weight: [],
 };
 

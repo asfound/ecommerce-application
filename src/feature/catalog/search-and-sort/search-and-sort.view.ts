@@ -36,8 +36,8 @@ export class SearchAndSortView extends BaseComponent {
   private readonly sortContainer = div(
     { className: styles.sortContainer },
     SEARCH_SORT_TEXT.SORT_BY,
-    this.inputSortName.element,
     this.inputSortPrice.element,
+    this.inputSortName.element,
     this.buttonDirection,
   );
 
