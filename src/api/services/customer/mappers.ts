@@ -11,6 +11,7 @@ const mapAddresses = (
   return addresses
     .filter((address) => addressIds?.includes(address.id ?? ''))
     .map((address) => ({
+      addressId: address.id,
       city: address.city ?? '',
       country: address.country,
       defaultBilling: defaultBillingAddressId === address.id,
