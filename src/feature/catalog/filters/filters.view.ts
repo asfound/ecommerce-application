@@ -11,6 +11,8 @@ import styles from './filters.module.css';
 export class FiltersView extends BaseComponent {
   private readonly filterBestSeller = new Filter();
 
+  private readonly filterBrand = new Filter();
+
   private readonly filterPriceRange = new Filter();
 
   private readonly filterWeight = new Filter();
@@ -26,6 +28,11 @@ export class FiltersView extends BaseComponent {
   public initBestSellerFilter(properties: FilterCheckboxesProperties): void {
     this.filterBestSeller.createHTML(properties);
     this.append(this.filterBestSeller);
+  }
+
+  public initBrandFilter(properties: FilterCheckboxesProperties): void {
+    this.filterBrand.createHTML(properties);
+    this.append(this.filterBrand);
   }
 
   public initPriceRangeFilter(properties: FilterPriceRangeProperties): void {

@@ -18,6 +18,10 @@ const setLoading = (loading: boolean): void => {
   catalogLoadingStore.setState({ loading });
 };
 
+const setBrands = (brand: string[]): void => {
+  catalogStore.setState({ brand });
+};
+
 const setSortDirection = (sortDirection: CatalogState['sortDirection']): void => {
   catalogStore.setState({ sortDirection });
 };
@@ -44,6 +48,7 @@ const setWeights = (weights: CatalogState['weight']): void => {
 
 export const catalogAction = {
   setBestSeller,
+  setBrands,
   setCategoryId,
   setMaxPrice,
   setMinPrice,

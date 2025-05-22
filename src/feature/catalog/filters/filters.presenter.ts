@@ -8,6 +8,7 @@ import { USER_INPUT_DEBOUNCE_TIMEOUT } from '../constants';
 import { catalogAction } from '../store/actions';
 import {
   FILTER_BEST_SELLERS_PROPS,
+  FILTER_BRAND_PROPS,
   FILTER_PRICE_RANGE_PROPS,
   FILTER_WEIGHT_PROPS,
 } from './constants';
@@ -21,6 +22,10 @@ export class FiltersPresenter extends Presenter<FiltersView> {
 
   private readonly handleBestSellerChange = (checkedValues: string[]): void => {
     catalogAction.setBestSeller(checkedValues.length > 0);
+  };
+
+  private readonly handleBrandChange = (checkedValues: string[]): void => {
+    catalogAction.setBrands(checkedValues);
   };
 
   private handleMaxPriceChange(maxPrice: string): void {
@@ -61,6 +66,11 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     this.view.initWeightFilter({
       ...FILTER_WEIGHT_PROPS,
       onChange: this.handleWeightChange,
+    });
+
+    this.view.initBrandFilter({
+      ...FILTER_BRAND_PROPS,
+      onChange: this.handleBrandChange,
     });
   }
 }

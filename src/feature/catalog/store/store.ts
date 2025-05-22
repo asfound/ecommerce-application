@@ -6,6 +6,7 @@ import { PRODUCTS_PER_PAGE } from '../constants';
 
 export interface CatalogState {
   bestSeller: boolean;
+  brand: string[];
   categoryId: string;
   priceRange: ProductsFilterPayload['priceRange'];
   productsPerPage: number;
@@ -17,6 +18,7 @@ export interface CatalogState {
 
 const initialState: CatalogState = {
   bestSeller: false,
+  brand: [],
   categoryId: '',
   priceRange: {},
   productsPerPage: PRODUCTS_PER_PAGE,
