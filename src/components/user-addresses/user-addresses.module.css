@@ -1,12 +1,11 @@
 .addresses {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 3rem;
 }
 
 .addressCol {
   display: flex;
-  flex: 1;
   flex-direction: column;
   min-width: 22.5rem;
 }

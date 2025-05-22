@@ -23,6 +23,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
   }
 
   private updateView(userInformation: AppCustomer): void {
+    console.warn(userInformation);
     this.view.createHTML({
       billingAddresses: userInformation.billingAddresses,
       shippingAddresses: userInformation.shippingAddresses,

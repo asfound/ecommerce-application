@@ -1,11 +1,33 @@
 .defaultLabel {
+  font-weight: 500;
+  color: var(--color-accent);
+}
+
+.fieldName {
+  margin-right: 1rem;
   color: var(--color-accent-light);
 }
 
-.address {
-  margin-bottom: 1rem;
+.form,
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
-.addressLine {
-  display: block;
+.details {
+  row-gap: 1rem;
+}
+
+.formItem,
+.detailsItem {
+  flex: 0 0 calc(50% - 1rem);
+  max-width: 100%;
+}
+
+@media (width <= 768px) {
+  .formItem,
+  .detailsItem {
+    flex: 0 0 100%;
+  }
 }

@@ -53,6 +53,7 @@ export const APP_LOCALE = 'en-US';
 
 export const BUTTON_TEXT = {
   CANCEL: 'Cancel',
+  DELETE: 'Delete',
   EDIT: 'Edit',
   SAVE: 'Save changes',
 };
