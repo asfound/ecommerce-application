@@ -22,16 +22,20 @@ export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryAr
     filters.push(FILTER.CATEGORY_SUBTREE(payload.categoryId));
   }
 
-  if (payload.weight?.length) {
-    filters.push(FILTER.WEIGHT(payload.weight));
-  }
-
   if (payload.bestSeller) {
     filters.push(FILTER.BEST_SELLER);
   }
 
   if (payload.priceRange.min !== undefined || payload.priceRange.max !== undefined) {
     filters.push(FILTER.PRICE(payload.priceRange));
+  }
+
+  if (payload.weight?.length) {
+    filters.push(FILTER.WEIGHT(payload.weight));
+  }
+
+  if (payload.brand?.length) {
+    filters.push(FILTER.BRAND(payload.brand));
   }
 
   return queryArguments;

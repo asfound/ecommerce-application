@@ -19,6 +19,10 @@ export const QUERY_KEY = {
 
 export const FILTER = {
   BEST_SELLER: 'variants.attributes.bestSeller:true',
+  BRAND: (brand: string[]) => {
+    const brands = brand.map((value) => `"${value}"`).join(',');
+    return `variants.attributes.brand:${brands}`;
+  },
   CATEGORY_SUBTREE: (categoryId: string) => `categories.id: subtree("${categoryId}")`,
   PRICE: (priceRange: ProductsFilterPayload['priceRange']) => {
     const from = priceRange.min ? priceRange.min * CENTS_IN_DOLLAR : '*';

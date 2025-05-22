@@ -41,6 +41,7 @@ export interface FilterQueryArguments {
 
 export interface ProductsFilterPayload {
   bestSeller: boolean;
+  brand?: string[];
   categoryId?: string;
   priceRange: { max?: number; min?: number };
   productsPerPage: number;
