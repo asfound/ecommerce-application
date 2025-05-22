@@ -36,7 +36,10 @@ export class ProductCard extends BaseComponent implements Component {
   public createHTML(): void {
     const imageContainer = this.createImageContainer();
 
-    const titleElement = div({ className: styles.title }, this.product.name);
+    const titleElement = div(
+      { className: styles.title },
+      `${this.product.name}${this.product.weight ? `, ${this.product.weight}g` : ''}`,
+    );
 
     const descriptionElement = div(
       { className: styles.description, title: this.product.description },
