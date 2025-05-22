@@ -5,9 +5,12 @@ const productCard = new ProductCard(
     bestSeller: false,
     description: 'test',
     image: { label: 'test', url: 'test' },
+    images: [],
     name: 'test',
     price: { default: 0 },
     sku: 'test',
+    variants: [],
+    weight: 'test',
   },
   vi.fn(),
 );

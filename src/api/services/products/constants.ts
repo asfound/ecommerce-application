@@ -6,6 +6,7 @@ const CENTS_IN_DOLLAR = 100;
 
 export const PRODUCT_ATTRIBUTE = {
   BEST_SELLER: 'bestSeller',
+  WEIGHT: 'weight',
 } as const;
 
 export const QUERY_KEY = {
