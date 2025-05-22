@@ -9,10 +9,11 @@ import type { InputBase } from '../common/input/input-base';
 
 import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
+import { ErrorMessage } from '../common/error-message/error-message';
 import { InputPassword } from '../common/input/input-password/input-password';
-import styles from './password-change-form.module.css';
+import styles from './user-password-change.module.css';
 
-export class PasswordChangeForm extends BaseComponent implements Component {
+export class UserPasswordChangeView extends BaseComponent implements Component {
   private readonly cancelButton = new Button({
     onClick: (): void => {
       this.resetChanges();
@@ -20,6 +21,8 @@ export class PasswordChangeForm extends BaseComponent implements Component {
     textContent: BUTTON_TEXT.CANCEL,
     type: 'button',
   });
+
+  private readonly errorMessageComponent = new ErrorMessage();
 
   private readonly formElement = form({ className: styles.form });
 
@@ -35,14 +38,16 @@ export class PasswordChangeForm extends BaseComponent implements Component {
   });
 
   public constructor() {
-    super({ tagName: 'div' });
+    super({ className: styles.container, tagName: 'div' });
 
     this.storeInputs();
     this.setStyles();
     this.createHTML();
   }
 
-  public bindSubmitHandler(handler: (payload: AppChangePasswordPayload) => Promise<void>): void {
+  public bindPasswordChangeHandler(
+    handler: (payload: AppChangePasswordPayload) => Promise<void>,
+  ): void {
     this.formElement.addEventListener(
       'submit',
       (event) => {
@@ -50,7 +55,7 @@ export class PasswordChangeForm extends BaseComponent implements Component {
 
         handler(this.getPayload());
 
-        this.resetChanges();
+        this.submitButton.disable();
       },
       { signal: this.abortController.signal },
     );
@@ -63,6 +68,8 @@ export class PasswordChangeForm extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
+    this.resetChanges();
+
     this.formElement.append(
       this.inputOldPassword.element,
       this.inputNewPassword.element,
@@ -73,7 +80,25 @@ export class PasswordChangeForm extends BaseComponent implements Component {
     this.submitButton.disable();
     this.cancelButton.disable();
 
-    this.append(this.formElement);
+    this.hideError();
+
+    this.append(this.errorMessageComponent, this.formElement);
+  }
+
+  public hideError(): void {
+    this.errorMessageComponent.hide();
+  }
+
+  public resetChanges(): void {
+    this.submitButton.disable();
+    this.cancelButton.disable();
+    for (const input of this.inputComponents) {
+      input.reset();
+    }
+  }
+
+  public showError(errorMessage: string): void {
+    this.errorMessageComponent.show(errorMessage);
   }
 
   private addInputComponent(input: InputBase): void {
@@ -86,6 +111,10 @@ export class PasswordChangeForm extends BaseComponent implements Component {
         this.cancelButton.enable();
       }
     });
+
+    input.addListener('focus', () => {
+      this.hideError();
+    });
   }
 
   private getPayload(): AppChangePasswordPayload {
@@ -93,14 +122,6 @@ export class PasswordChangeForm extends BaseComponent implements Component {
       currentPassword: this.inputOldPassword.value.trim(),
       newPassword: this.inputNewPassword.value.trim(),
     };
-  }
-
-  private resetChanges(): void {
-    this.submitButton.disable();
-    this.cancelButton.disable();
-    for (const input of this.inputComponents) {
-      input.reset();
-    }
   }
 
   private setStyles(): void {

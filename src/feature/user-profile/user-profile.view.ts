@@ -1,136 +1,84 @@
-import type {
-  AppChangePasswordPayload,
-  AppCustomer,
-  AppCustomerAddress,
-  PersonalDataPayload,
-} from '~/api/services/customer/types';
 import type { Component } from '~/components/base-component/types';
 
+import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { ErrorMessage } from '~/components/common/error-message/error-message';
-import { PasswordChangeForm } from '~/components/password-change-form/password-change-form';
-import { UserAddress } from '~/components/user-address/user-address';
-import { UserDetails } from '~/components/user-details/user-details';
+import { UserAddressesPresenter } from '~/components/user-addresses/user-addresses.presenter';
+import { UserAddressesView } from '~/components/user-addresses/user-addresses.view';
+import { UserDetailsPresenter } from '~/components/user-details/user-details.presenter';
+import { UserDetailsView } from '~/components/user-details/user-details.view';
+import { UserPasswordChangePresenter } from '~/components/user-password-change/user-password-change.presenter';
+import { UserPasswordChangeView } from '~/components/user-password-change/user-password-change.view';
 import { div, h1, li, ul } from '~/shared/create-element/tags';
 
-import { HEADING, NAV_ITEMS, TITLE } from './constants';
+import { HEADING, NAV_ITEMS } from './constants';
 import styles from './user-profile.module.css';
 
 export class UserProfileView extends BaseComponent implements Component {
-  private readonly contentBlocks: HTMLDivElement[] = [];
-
-  private readonly errorMessageComponent = new ErrorMessage();
+  private readonly contentBlock: HTMLDivElement = div({
+    className: [styles.block, styles.contentBlock],
+  });
 
   private readonly navigationItems: HTMLLIElement[] = [];
 
-  private readonly passwordChangeForm = new PasswordChangeForm();
+  private readonly userAddressesPresenter;
 
-  private readonly userDetails = new UserDetails();
+  private readonly userDetailsPresenter;
+
+  private readonly userPasswordChangePresenter;
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
+
+    const customerService = SERVICE_HUB.provideCustomerService();
+
+    this.userDetailsPresenter = new UserDetailsPresenter(new UserDetailsView(), customerService);
+
+    this.userPasswordChangePresenter = new UserPasswordChangePresenter(
+      new UserPasswordChangeView(),
+      customerService,
+    );
+
+    this.userAddressesPresenter = new UserAddressesPresenter(
+      new UserAddressesView(),
+      customerService,
+    );
+
+    this.createHTML();
   }
 
-  public bindPasswordChangeHandler(
-    handler: (payload: AppChangePasswordPayload) => Promise<void>,
-  ): void {
-    this.passwordChangeForm.bindSubmitHandler(handler);
-  }
-
-  public bindPersonalDataUpdateHandler(
-    handler: (payload: PersonalDataPayload) => Promise<void>,
-  ): void {
-    this.userDetails.bindSubmitHandler(handler);
-  }
-
-  public createHTML(userInformation: AppCustomer): void {
+  public createHTML(): void {
     const navigationBlock = div(
       { className: [styles.block, styles.navigationBlock] },
       h1({ className: styles.heading }, HEADING),
-      this.createNavigation(),
+      this.createNavigationList(),
     );
 
-    const informationContent = this.createPersonalInformation(userInformation);
-    const passwordContent = this.createChangePassword();
-    const addressesContent = this.createAddresses(
-      userInformation.shippingAddresses,
-      userInformation.billingAddresses,
-    );
+    this.showInfoBlock();
 
-    this.contentBlocks.push(informationContent, passwordContent, addressesContent);
-
-    const contentBlock = div(
-      { className: [styles.block, styles.contentBlock] },
-      this.errorMessageComponent.element,
-      informationContent,
-      passwordContent,
-      addressesContent,
-    );
-
-    this.replaceChildren(navigationBlock, contentBlock);
+    this.append(navigationBlock, this.contentBlock);
   }
 
-  public hideError(): void {
-    this.errorMessageComponent.hide();
-  }
-
-  public showError(errorMessage: string): void {
-    this.errorMessageComponent.show(errorMessage);
-  }
-
-  private createAddresses(
-    shippingAddresses: AppCustomerAddress[],
-    billingAddresses: AppCustomerAddress[],
-  ): HTMLDivElement {
-    const shippingCol = div(
-      { className: styles.addressCol },
-      div({ className: styles.title }, TITLE.SHIPPING),
-    );
-    const billingCol = div(
-      { className: styles.addressCol },
-      div({ className: styles.title }, TITLE.BILLING),
-    );
-
-    if (shippingAddresses.length > 0) {
-      for (const address of shippingAddresses) {
-        const userAddress = new UserAddress(address);
-        shippingCol.append(userAddress.element);
-      }
-    }
-
-    if (billingAddresses.length > 0) {
-      for (const address of billingAddresses) {
-        const userAddress = new UserAddress(address);
-        billingCol.append(userAddress.element);
-      }
-    }
-
-    const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
-
-    return div({ className: styles.content, id: NAV_ITEMS.ADDRESSES.ID }, addressesContainer);
-  }
-
-  private createChangePassword(): HTMLDivElement {
-    this.passwordChangeForm.createHTML();
-
-    return div(
-      { className: styles.content, id: NAV_ITEMS.PASSWORD.ID },
-      div({ className: styles.title }, TITLE.PASSWORD),
-      this.passwordChangeForm.element,
-    );
-  }
-
-  private createNavigation(): HTMLUListElement {
+  private createNavigationList(): HTMLUListElement {
     const informationItem = li(
       { className: [styles.navigationItem, styles.active] },
-      NAV_ITEMS.INFORMATION.TEXT,
+      NAV_ITEMS.INFORMATION.TITLE,
     );
-    const passwordItem = li({ className: styles.navigationItem }, NAV_ITEMS.PASSWORD.TEXT);
-    const addressesItem = li({ className: styles.navigationItem }, NAV_ITEMS.ADDRESSES.TEXT);
 
-    informationItem.dataset.target = NAV_ITEMS.INFORMATION.ID;
-    passwordItem.dataset.target = NAV_ITEMS.PASSWORD.ID;
-    addressesItem.dataset.target = NAV_ITEMS.ADDRESSES.ID;
+    informationItem.addEventListener('click', () => {
+      this.showInfoBlock();
+    });
+
+    const passwordItem = li({ className: styles.navigationItem }, NAV_ITEMS.PASSWORD.TITLE);
+
+    passwordItem.addEventListener('click', () => {
+      this.showPasswordBlock();
+    });
+
+    const addressesItem = li({ className: styles.navigationItem }, NAV_ITEMS.ADDRESSES.TITLE);
+
+    addressesItem.addEventListener('click', () => {
+      this.showAddressesBlock();
+    });
 
     this.navigationItems.push(informationItem, passwordItem, addressesItem);
 
@@ -143,27 +91,34 @@ export class UserProfileView extends BaseComponent implements Component {
     return ul(null, informationItem, passwordItem, addressesItem);
   }
 
-  private createPersonalInformation(userInformation: AppCustomer): HTMLDivElement {
-    this.userDetails.createHTML(userInformation);
-
-    return div(
-      { className: [styles.content, styles.visible], id: NAV_ITEMS.INFORMATION.ID },
-      div({ className: styles.title }, TITLE.PERSONAL),
-      this.userDetails.element,
-    );
-  }
-
   private handleNavigationClick(item: HTMLLIElement): void {
-    const targetId = item.dataset.target;
-
     for (const navItem of this.navigationItems) {
       navItem.classList.toggle(styles.active, navItem === item);
     }
+  }
 
-    for (const block of this.contentBlocks) {
-      block.classList.toggle(styles.visible, block.id === targetId);
-    }
+  private showAddressesBlock(): void {
+    this.contentBlock.replaceChildren(
+      div({ className: styles.title }, NAV_ITEMS.ADDRESSES.TITLE),
+      this.userAddressesPresenter.getView().element,
+    );
+  }
 
-    this.hideError();
+  private showInfoBlock(): void {
+    this.contentBlock.replaceChildren(
+      div({ className: styles.title }, NAV_ITEMS.INFORMATION.TITLE),
+      this.userDetailsPresenter.getView().element,
+    );
+
+    this.userDetailsPresenter.resetView();
+  }
+
+  private showPasswordBlock(): void {
+    this.contentBlock.replaceChildren(
+      div({ className: styles.title }, NAV_ITEMS.PASSWORD.TITLE),
+      this.userPasswordChangePresenter.getView().element,
+    );
+
+    this.userPasswordChangePresenter.resetView();
   }
 }

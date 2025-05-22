@@ -1,0 +1,18 @@
+.addresses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.addressCol {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 22.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}

@@ -7,7 +7,7 @@ import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
-import styles from './user-address.module.css';
+import styles from './address.module.css';
 
 export class UserAddress extends BaseComponent implements Component {
   private readonly address: AppCustomerAddress;

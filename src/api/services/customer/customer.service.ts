@@ -80,6 +80,7 @@ export class CustomerService {
       .execute();
 
     this.authService.logout();
+
     await this.authService.login({
       email: appCustomerData.email,
       password: payload.newPassword,

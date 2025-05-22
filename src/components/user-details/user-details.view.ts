@@ -16,19 +16,13 @@ import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
 import { InputDate } from '../common/input/input-date/input-date';
 import { InputText } from '../common/input/input-text/input-text';
+import { FIELD_NAME } from './constants';
 import styles from './user-details.module.css';
 
-export const FIELD_NAME = {
-  BIRTHDAY: 'Birthday:',
-  EMAIL: 'Email:',
-  FIRST_NAME: 'First name:',
-  LAST_NAME: 'Last name:',
-};
-
-export class UserDetails extends BaseComponent implements Component {
+export class UserDetailsView extends BaseComponent implements Component {
   private readonly cancelButton = new Button({
     onClick: (): void => {
-      this.createBaseView();
+      this.resetView();
     },
     textContent: BUTTON_TEXT.CANCEL,
     type: 'button',
@@ -38,7 +32,7 @@ export class UserDetails extends BaseComponent implements Component {
 
   private readonly inputBirthDate = new InputDate(DATE_OF_BIRTH_PROPS);
 
-  private inputComponents: InputBase[] = [];
+  private readonly inputComponents: InputBase[] = [];
 
   private readonly inputEmail = new InputText(EMAIL_PROPS);
 
@@ -60,17 +54,13 @@ export class UserDetails extends BaseComponent implements Component {
     this.setStyles();
   }
 
-  public bindSubmitHandler(handler: (payload: PersonalDataPayload) => Promise<void>): void {
+  public bindDataUpdateHandler(handler: (payload: PersonalDataPayload) => Promise<void>): void {
     this.formElement.addEventListener(
       'submit',
       (event) => {
         event.preventDefault();
 
         handler(this.getPayload());
-
-        for (const input of this.inputComponents) {
-          input.reset();
-        }
       },
       { signal: this.abortController.signal },
     );
@@ -84,6 +74,17 @@ export class UserDetails extends BaseComponent implements Component {
 
   public createHTML(userInformation: AppCustomer): void {
     this.userInformation = userInformation;
+    this.createBaseView();
+  }
+
+  public resetInputs(): void {
+    for (const input of this.inputComponents) {
+      input.reset();
+    }
+  }
+
+  public resetView(): void {
+    this.resetInputs();
     this.createBaseView();
   }
 
@@ -103,11 +104,11 @@ export class UserDetails extends BaseComponent implements Component {
       textContent: BUTTON_TEXT.EDIT,
       type: 'button',
     });
+
     editButton.addClassNames(styles.detailsItem);
 
     const detailsBlock = div(
       { className: styles.details },
-
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.FIRST_NAME),
