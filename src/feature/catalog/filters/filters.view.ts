@@ -13,6 +13,8 @@ export class FiltersView extends BaseComponent {
 
   private readonly filterPriceRange = new Filter();
 
+  private readonly filterWeight = new Filter();
+
   private readonly heading = h2(null, 'Filters');
 
   public constructor() {
@@ -29,5 +31,10 @@ export class FiltersView extends BaseComponent {
   public initPriceRangeFilter(properties: FilterPriceRangeProperties): void {
     this.filterPriceRange.createHTML(properties);
     this.append(this.filterPriceRange);
+  }
+
+  public initWeightFilter(properties: FilterCheckboxesProperties): void {
+    this.filterWeight.createHTML(properties);
+    this.append(this.filterWeight);
   }
 }

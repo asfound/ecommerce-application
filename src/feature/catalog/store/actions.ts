@@ -38,6 +38,10 @@ const setMinPrice = (min: number | undefined): void => {
   catalogStore.setState((previous) => ({ priceRange: { ...previous.priceRange, min } }));
 };
 
+const setWeights = (weights: CatalogState['weight']): void => {
+  catalogStore.setState({ weight: weights });
+};
+
 export const catalogAction = {
   setBestSeller,
   setCategoryId,
@@ -46,6 +50,7 @@ export const catalogAction = {
   setSearchTerm,
   setSortDirection,
   setSortField,
+  setWeights,
 } as const;
 
 export const catalogLoadingAction = {

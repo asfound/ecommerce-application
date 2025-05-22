@@ -1,3 +1,5 @@
+import type { CatalogState } from '~/feature/catalog/store/store';
+
 import iconArrowUp from '~/assets/icons/arrow-up.svg';
 import { div, summary } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
@@ -10,7 +12,7 @@ import { InputNumber } from '../common/input/input-number/input-number';
 import styles from './filter.module.css';
 
 export interface FilterCheckboxesProperties {
-  onChange(checkedValues: string[]): void;
+  onChange(checkedValues: CatalogState['weight'] | string[]): void;
   options: { label: string; value: boolean | string }[];
   title: string;
   type: 'checkboxes';

@@ -1,11 +1,16 @@
 import { Presenter } from '~/shared/presenter/presenter';
 import { debounce } from '~/shared/utils/debounce';
 
+import type { CatalogState } from '../store/store';
 import type { FiltersView } from './filters.view';
 
 import { USER_INPUT_DEBOUNCE_TIMEOUT } from '../constants';
 import { catalogAction } from '../store/actions';
-import { FILTER_BEST_SELLERS_PROPS, FILTER_PRICE_RANGE_PROPS } from './constants';
+import {
+  FILTER_BEST_SELLERS_PROPS,
+  FILTER_PRICE_RANGE_PROPS,
+  FILTER_WEIGHT_PROPS,
+} from './constants';
 
 export class FiltersPresenter extends Presenter<FiltersView> {
   public constructor(view: FiltersView) {
@@ -28,6 +33,10 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     catalogAction.setMinPrice(min);
   }
 
+  private readonly handleWeightChange = (checkedValues: CatalogState['weight']): void => {
+    catalogAction.setWeights(checkedValues);
+  };
+
   private initVIew(): void {
     const debouncedHandleMaxPriceChange = debounce(
       this.handleMaxPriceChange.bind(this),
@@ -47,6 +56,11 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     this.view.initBestSellerFilter({
       ...FILTER_BEST_SELLERS_PROPS,
       onChange: this.handleBestSellerChange,
+    });
+
+    this.view.initWeightFilter({
+      ...FILTER_WEIGHT_PROPS,
+      onChange: this.handleWeightChange,
     });
   }
 }
