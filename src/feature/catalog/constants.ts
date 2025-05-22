@@ -1,1 +1,3 @@
 export const PRODUCTS_PER_PAGE = 12;
+
+export const USER_INPUT_DEBOUNCE_TIMEOUT = 700;

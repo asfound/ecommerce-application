@@ -11,7 +11,8 @@ import { debounce } from '~/shared/utils/debounce';
 
 import type { CatalogState } from '../store/store';
 
-import { INPUT_SORT_PROPS, SEARCH_DEBOUNCE_TIMEOUT, SEARCH_SORT_TEXT } from './constants';
+import { USER_INPUT_DEBOUNCE_TIMEOUT } from '../constants';
+import { INPUT_SORT_PROPS, SEARCH_SORT_TEXT } from './constants';
 import styles from './search-and-sort.module.css';
 
 export type SortByFieldHandler = (sortField: ProductsFilterPayload['sortField']) => void;
@@ -55,7 +56,7 @@ export class SearchAndSortView extends BaseComponent {
       'input',
       debounce(() => {
         handler(this.inputSearch.value.trim());
-      }, SEARCH_DEBOUNCE_TIMEOUT),
+      }, USER_INPUT_DEBOUNCE_TIMEOUT),
     );
   }
 

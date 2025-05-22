@@ -1,7 +1,9 @@
 import { Presenter } from '~/shared/presenter/presenter';
+import { debounce } from '~/shared/utils/debounce';
 
 import type { FiltersView } from './filters.view';
 
+import { USER_INPUT_DEBOUNCE_TIMEOUT } from '../constants';
 import { catalogAction } from '../store/actions';
 import { FILTER_BEST_SELLERS_PROPS, FILTER_PRICE_RANGE_PROPS } from './constants';
 
@@ -16,21 +18,30 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     catalogAction.setBestSeller(checkedValues.length > 0);
   };
 
-  private readonly handleMaxPriceChange = (maxPrice: string): void => {
+  private handleMaxPriceChange(maxPrice: string): void {
     const max = maxPrice.length > 0 ? Number.parseFloat(maxPrice) : undefined;
     catalogAction.setMaxPrice(max);
-  };
+  }
 
-  private readonly handleMinPriceChange = (minPrice: string): void => {
+  private handleMinPriceChange(minPrice: string): void {
     const min = minPrice.length > 0 ? Number.parseFloat(minPrice) : undefined;
     catalogAction.setMinPrice(min);
-  };
+  }
 
   private initVIew(): void {
+    const debouncedHandleMaxPriceChange = debounce(
+      this.handleMaxPriceChange.bind(this),
+      USER_INPUT_DEBOUNCE_TIMEOUT,
+    );
+    const debouncedHandleMinPriceChange = debounce(
+      this.handleMinPriceChange.bind(this),
+      USER_INPUT_DEBOUNCE_TIMEOUT,
+    );
+
     this.view.initPriceRangeFilter({
       ...FILTER_PRICE_RANGE_PROPS,
-      onMaxPriceChange: this.handleMaxPriceChange,
-      onMinPriceChange: this.handleMinPriceChange,
+      onMaxPriceChange: debouncedHandleMaxPriceChange,
+      onMinPriceChange: debouncedHandleMinPriceChange,
     });
 
     this.view.initBestSellerFilter({
