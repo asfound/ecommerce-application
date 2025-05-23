@@ -2,6 +2,7 @@ import { debounce } from 'lodash';
 
 import type { ProductsService } from '~/api/services/products/products.service';
 import type { AppProduct } from '~/api/services/products/types';
+import type { IntersectionLoader } from '~/components/intersection-loader/intersection-loader';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
@@ -18,7 +19,7 @@ import { VIEW_UPDATE_DELAY } from './constants';
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private currentPage = 1;
 
-  private readonly intersectionAnchor: HTMLElement;
+  private readonly intersectionAnchor: IntersectionLoader;
 
   private intersectionObserver: IntersectionObserver | null = null;
 
@@ -26,12 +27,13 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
   public constructor(
     view: ProductCardListView,
-    intersectionAnchor: HTMLElement,
+    intersectionAnchor: IntersectionLoader,
     productsService: ProductsService,
   ) {
     super(view);
 
     this.intersectionAnchor = intersectionAnchor;
+    intersectionAnchor.hide();
 
     this.productsService = productsService;
 
@@ -71,11 +73,13 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       { root: null, threshold: 1 },
     );
 
-    this.intersectionObserver.observe(this.intersectionAnchor);
+    this.intersectionObserver.observe(this.intersectionAnchor.element);
   }
 
   private async loadNextPage(): Promise<void> {
     this.currentPage += 1;
+
+    this.intersectionAnchor.show();
 
     const products = await this.productsService.filterProducts({
       ...catalogStore.getState(),
@@ -84,7 +88,12 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
     if (products.length === 0) {
       this.destroyIntersectionObserver();
+      this.intersectionAnchor.hide();
+
+      return;
     }
+
+    this.intersectionAnchor.hide();
 
     this.view.appendProducts(products, this.handleNavigateToDetails);
   }
