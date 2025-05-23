@@ -43,6 +43,7 @@ export interface ProductsFilterPayload {
   bestSeller: boolean;
   brand?: string[];
   categoryId?: string;
+  currentPage: number;
   priceRange: { max?: number; min?: number };
   productsPerPage: number;
   searchTerm?: string;

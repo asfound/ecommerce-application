@@ -14,6 +14,7 @@ export const QUERY_KEY = {
   FULL_TEXT_SEARCH: `text.${APP_LOCALE}`,
   LIMIT: 'limit',
   MATCHING_VARIANTS: 'markMatchingVariants',
+  OFFSET: 'offset',
   SORT: 'sort',
 } as const;
 
@@ -41,3 +42,5 @@ export const SORT_FIELD = {
   NAME: (direction: ProductsFilterPayload['sortDirection']) => `name.${APP_LOCALE} ${direction}`,
   PRICE: (direction: ProductsFilterPayload['sortDirection']) => `price ${direction}`,
 } as const;
+
+export const PAGE_NUMBER_TO_OFFSET_SHIFT = 1;

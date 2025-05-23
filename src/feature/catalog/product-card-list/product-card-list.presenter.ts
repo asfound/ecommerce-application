@@ -16,6 +16,8 @@ import { catalogLoadingStore, catalogStore } from '../store/store';
 import { VIEW_UPDATE_DELAY } from './constants';
 
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
+  private currentPage = 1;
+
   private readonly productsService: ProductsService;
 
   public constructor(view: ProductCardListView, productsService: ProductsService) {
@@ -65,7 +67,10 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     try {
       catalogLoadingAction.setLoading(true);
 
-      const products = await this.productsService.filterProducts(state);
+      const products = await this.productsService.filterProducts({
+        ...state,
+        currentPage: this.currentPage,
+      });
 
       if (products.length === 0) {
         this.view.showNotFoundWidget(state.searchTerm);

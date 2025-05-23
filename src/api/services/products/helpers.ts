@@ -1,6 +1,6 @@
 import type { FilterQueryArguments, ProductsFilterPayload } from './types';
 
-import { FILTER, QUERY_KEY, SORT_FIELD } from './constants';
+import { FILTER, PAGE_NUMBER_TO_OFFSET_SHIFT, QUERY_KEY, SORT_FIELD } from './constants';
 
 export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryArguments => {
   const filters: string[] = [];
@@ -9,6 +9,8 @@ export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryAr
     [QUERY_KEY.FILTER_QUERY]: filters,
     [QUERY_KEY.LIMIT]: payload.productsPerPage,
     [QUERY_KEY.MATCHING_VARIANTS]: true,
+    [QUERY_KEY.OFFSET]:
+      (payload.currentPage - PAGE_NUMBER_TO_OFFSET_SHIFT) * payload.productsPerPage,
     [QUERY_KEY.SORT]: getSortType(payload),
   };
 
