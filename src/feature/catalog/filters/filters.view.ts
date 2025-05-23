@@ -21,7 +21,7 @@ export class FiltersView extends BaseComponent {
 
   private readonly filterWeight = new Filter();
 
-  private readonly heading = h2(null, FILTER_VIEW_TEXT.FILTERS);
+  private readonly heading = h2({ className: styles.heading }, FILTER_VIEW_TEXT.FILTERS);
 
   public constructor() {
     super({ className: styles.filters, tagName: 'div' });

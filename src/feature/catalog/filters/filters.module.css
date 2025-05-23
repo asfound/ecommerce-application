@@ -3,3 +3,9 @@
   border-radius: var(--border-radius);
   background-color: var(--color-dark);
 }
+
+@media (width <= 640px) {
+  .heading {
+    font-size: 2rem;
+  }
+}
