@@ -92,6 +92,8 @@ export class UserPasswordChangeView extends BaseComponent implements Component {
   public resetChanges(): void {
     this.submitButton.disable();
     this.cancelButton.disable();
+    this.hideError();
+
     for (const input of this.inputComponents) {
       input.reset();
     }
