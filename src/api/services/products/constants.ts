@@ -25,9 +25,11 @@ export const FILTER = {
   },
   CATEGORY_SUBTREE: (categoryId: string) => `categories.id: subtree("${categoryId}")`,
   PRICE: (priceRange: ProductsFilterPayload['priceRange']) => {
-    const from = priceRange.min ? priceRange.min * CENTS_IN_DOLLAR : '*';
-    const to = priceRange.max ? priceRange.max * CENTS_IN_DOLLAR : '*';
-    return `variants.price.centAmount:range(${from.toString()} to ${to.toString()})`;
+    const from = priceRange.min == null ? '*' : priceRange.min * CENTS_IN_DOLLAR;
+
+    const to = priceRange.max == null ? '*' : priceRange.max * CENTS_IN_DOLLAR;
+
+    return `variants.price.centAmount:range (${from.toString()} to ${to.toString()})`;
   },
   WEIGHT: (weight: ('lg' | 'md' | 'sm')[]) => {
     const weights = weight.map((value) => `"${value}"`).join(',');
