@@ -14,6 +14,7 @@ import {
   FILTER_BRAND_PROPS,
   FILTER_PRICE_RANGE_PROPS,
   FILTER_WEIGHT_PROPS,
+  VALID_PRICE_LENGTH,
 } from './constants';
 
 export class FiltersPresenter extends Presenter<FiltersView> {
@@ -34,8 +35,7 @@ export class FiltersPresenter extends Presenter<FiltersView> {
   };
 
   private handleMaxPriceChange(maxPrice: string): void {
-    const max = maxPrice.length > 0 ? Number.parseFloat(maxPrice) : undefined;
-    catalogAction.setMaxPrice(max);
+    catalogAction.setMaxPrice(this.normalizePrice(maxPrice));
   }
 
   private handleMaxPriceReset = (): void => {
@@ -43,8 +43,7 @@ export class FiltersPresenter extends Presenter<FiltersView> {
   };
 
   private handleMinPriceChange(minPrice: string): void {
-    const min = minPrice.length > 0 ? Number.parseFloat(minPrice) : undefined;
-    catalogAction.setMinPrice(min);
+    catalogAction.setMinPrice(this.normalizePrice(minPrice));
   }
 
   private handleMinPriceReset = (): void => {
@@ -90,6 +89,12 @@ export class FiltersPresenter extends Presenter<FiltersView> {
 
     this.view.hideFilter(FILTER.BRAND);
     this.view.hideFilter(FILTER.WEIGHT);
+  }
+
+  private normalizePrice(price: string): number | undefined {
+    return price.length > 0 && price.length < VALID_PRICE_LENGTH
+      ? Number.parseFloat(price)
+      : undefined;
   }
 
   private readonly onCategoryNameChange = (categoryName: string): void => {

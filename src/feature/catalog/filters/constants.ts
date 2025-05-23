@@ -60,3 +60,5 @@ export const FILTER = {
 export const FILTER_VIEW_TEXT = {
   FILTERS: 'Filters',
 };
+
+export const VALID_PRICE_LENGTH = 16;
