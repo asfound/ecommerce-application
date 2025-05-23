@@ -115,12 +115,12 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
   }
 
   private createPriceRangeFilter(properties: FilterPriceRangeProperties): void {
-    const inputMinPrice = new InputNumber({ name: 'min-price', placeholder: 'From' });
+    const inputMinPrice = new InputNumber({ name: 'min-price', placeholder: '$ Min' });
     inputMinPrice.addListener('input', () => {
       properties.onMinPriceChange(inputMinPrice.value);
     });
 
-    const inputMaxPrice = new InputNumber({ name: 'max-price', placeholder: 'To' });
+    const inputMaxPrice = new InputNumber({ name: 'max-price', placeholder: '$ Max' });
     inputMaxPrice.addListener('input', () => {
       properties.onMaxPriceChange(inputMaxPrice.value);
     });
