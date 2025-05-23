@@ -21,7 +21,6 @@
 @media (width <= 640px) {
   .page {
     grid-template-columns: 1fr;
-    gap: 1rem;
   }
 
   .mainContentElement {

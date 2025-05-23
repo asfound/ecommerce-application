@@ -1,9 +1,5 @@
 .container {
-  max-width: 29rem;
   padding-block: 1rem;
-}
-
-.container:not(:last-of-type) {
   border-bottom: 1px solid var(--color-white);
 }
 
