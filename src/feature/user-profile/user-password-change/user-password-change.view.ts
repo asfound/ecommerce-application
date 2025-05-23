@@ -4,13 +4,13 @@ import { BUTTON_TEXT } from '~/shared/constants/constants';
 import { NEW_PASSWORD_PROPS, OLD_PASSWORD_PROPS } from '~/shared/constants/input-properties';
 import { form } from '~/shared/create-element/tags';
 
-import type { Component } from '../base-component/types';
-import type { InputBase } from '../common/input/input-base';
+import type { Component } from '../../../components/base-component/types';
+import type { InputBase } from '../../../components/common/input/input-base';
 
-import { BaseComponent } from '../base-component/base-component';
-import { Button } from '../common/button/button';
-import { ErrorMessage } from '../common/error-message/error-message';
-import { InputPassword } from '../common/input/input-password/input-password';
+import { BaseComponent } from '../../../components/base-component/base-component';
+import { Button } from '../../../components/common/button/button';
+import { ErrorMessage } from '../../../components/common/error-message/error-message';
+import { InputPassword } from '../../../components/common/input/input-password/input-password';
 import styles from './user-password-change.module.css';
 
 export class UserPasswordChangeView extends BaseComponent implements Component {

@@ -9,13 +9,13 @@ import {
 } from '~/shared/constants/input-properties';
 import { div, form, span } from '~/shared/create-element/tags';
 
-import type { Component } from '../base-component/types';
-import type { InputBase } from '../common/input/input-base';
+import type { Component } from '../../../components/base-component/types';
+import type { InputBase } from '../../../components/common/input/input-base';
 
-import { BaseComponent } from '../base-component/base-component';
-import { Button } from '../common/button/button';
-import { InputDate } from '../common/input/input-date/input-date';
-import { InputText } from '../common/input/input-text/input-text';
+import { BaseComponent } from '../../../components/base-component/base-component';
+import { Button } from '../../../components/common/button/button';
+import { InputDate } from '../../../components/common/input/input-date/input-date';
+import { InputText } from '../../../components/common/input/input-text/input-text';
 import { FIELD_NAME } from './constants';
 import styles from './user-details.module.css';
 

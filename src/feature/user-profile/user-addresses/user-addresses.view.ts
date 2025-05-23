@@ -2,10 +2,10 @@ import type { AppCustomerAddress } from '~/api/services/customer/types';
 
 import { div } from '~/shared/create-element/tags';
 
-import type { Component } from '../base-component/types';
+import type { Component } from '../../../components/base-component/types';
 
-import { UserAddress } from '../address/address';
-import { BaseComponent } from '../base-component/base-component';
+import { UserAddress } from '../../../components/address/address';
+import { BaseComponent } from '../../../components/base-component/base-component';
 import { TITLE } from './constants';
 import styles from './user-addresses.module.css';
 
