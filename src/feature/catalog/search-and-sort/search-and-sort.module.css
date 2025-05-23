@@ -23,6 +23,7 @@
   padding: 0;
   border: none;
 
+  line-height: 0;
   color: var(--color-accent-light);
 
   background-color: transparent;
