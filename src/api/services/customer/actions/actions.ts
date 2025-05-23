@@ -1,6 +1,8 @@
 import type {
   BaseAddress,
   MyCustomerAddAddressAction,
+  MyCustomerAddBillingAddressIdAction,
+  MyCustomerAddShippingAddressIdAction,
   MyCustomerChangeAddressAction,
   MyCustomerChangeEmailAction,
   MyCustomerRemoveAddressAction,
@@ -36,6 +38,20 @@ export const createSetDateOfBirthAction = (
 export const createAddAddressAction = (address: BaseAddress): MyCustomerAddAddressAction => ({
   action: 'addAddress',
   address,
+});
+
+export const createAddShippingAddressIdAction = (
+  addressKey: ReturnType<typeof crypto.randomUUID>,
+): MyCustomerAddShippingAddressIdAction => ({
+  action: 'addShippingAddressId',
+  addressKey,
+});
+
+export const createAddBillingAddressIdAction = (
+  addressKey: ReturnType<typeof crypto.randomUUID>,
+): MyCustomerAddBillingAddressIdAction => ({
+  action: 'addBillingAddressId',
+  addressKey,
 });
 
 export const createRemoveAddressAction = (addressId: string): MyCustomerRemoveAddressAction => ({

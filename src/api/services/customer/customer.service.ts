@@ -1,4 +1,5 @@
 import type {
+  BaseAddress,
   Customer,
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
@@ -19,6 +20,8 @@ import type {
 
 import {
   createAddAddressAction,
+  createAddBillingAddressIdAction,
+  createAddShippingAddressIdAction,
   createChangeAddressAction,
   createRemoveAddressAction,
   createSetDefaultBillingAddressAction,
@@ -45,7 +48,19 @@ export class CustomerService {
   }
 
   public async addAddress(payload: AddAddressPayload): Promise<ClientResponse<Customer>> {
-    const actions: MyCustomerUpdateAction[] = [createAddAddressAction(payload.address)];
+    const key = crypto.randomUUID();
+
+    const address: BaseAddress = { ...payload.address, key };
+
+    const actions: MyCustomerUpdateAction[] = [createAddAddressAction(address)];
+
+    if (payload.type === 'billing') {
+      actions.push(createAddBillingAddressIdAction(key));
+    }
+
+    if (payload.type === 'shipping') {
+      actions.push(createAddShippingAddressIdAction(key));
+    }
 
     return this.apiRoot()
       .me()
