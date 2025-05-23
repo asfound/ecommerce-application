@@ -10,7 +10,7 @@ import { SearchAndSortPresenter } from '~/feature/catalog/search-and-sort/search
 import { SearchAndSortView } from '~/feature/catalog/search-and-sort/search-and-sort.view';
 import { catalogStore } from '~/feature/catalog/store/store';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { div } from '~/shared/create-element/tags';
+import { div, h2 } from '~/shared/create-element/tags';
 
 import styles from './catalog-page.module.css';
 
@@ -31,8 +31,11 @@ export class CatalogPage extends BaseComponent {
       SERVICE_HUB.provideCategoriesService(),
     );
 
+    const intersectionAnchor = h2(null, 'LOADING...');
+
     this.productCardListPresenter = new ProductCardListPresenter(
       new ProductCardListView(),
+      intersectionAnchor,
       SERVICE_HUB.provideProductsService(),
     );
 
@@ -50,6 +53,7 @@ export class CatalogPage extends BaseComponent {
       { className: styles.mainContentElement },
       this.searchAndSortPresenter.getView().element,
       this.productCardListPresenter.getView().element,
+      intersectionAnchor,
     );
 
     this.append(sidebarElement, mainContentElement);

@@ -18,10 +18,20 @@ import { VIEW_UPDATE_DELAY } from './constants';
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private currentPage = 1;
 
+  private readonly intersectionAnchor: HTMLElement;
+
+  private intersectionObserver: IntersectionObserver | null = null;
+
   private readonly productsService: ProductsService;
 
-  public constructor(view: ProductCardListView, productsService: ProductsService) {
+  public constructor(
+    view: ProductCardListView,
+    intersectionAnchor: HTMLElement,
+    productsService: ProductsService,
+  ) {
     super(view);
+
+    this.intersectionAnchor = intersectionAnchor;
 
     this.productsService = productsService;
 
@@ -30,9 +40,54 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.setupSubscriptions();
   }
 
+  public override destroy(): void {
+    this.destroyIntersectionObserver();
+
+    super.destroy();
+  }
+
+  private destroyIntersectionObserver(): void {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
+  }
+
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
     Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, { name: product.name, sku: product.sku });
   };
+
+  private initIntersectionObserver(): void {
+    if (this.intersectionObserver) {
+      return;
+    }
+
+    this.intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          this.loadNextPage();
+        }
+      },
+      { root: null, threshold: 1 },
+    );
+
+    this.intersectionObserver.observe(this.intersectionAnchor);
+  }
+
+  private async loadNextPage(): Promise<void> {
+    this.currentPage += 1;
+
+    const products = await this.productsService.filterProducts({
+      ...catalogStore.getState(),
+      currentPage: this.currentPage,
+    });
+
+    if (products.length === 0) {
+      this.destroyIntersectionObserver();
+    }
+
+    this.view.appendProducts(products, this.handleNavigateToDetails);
+  }
 
   private setupSubscriptions(): void {
     this.subscribeLoading();
@@ -65,6 +120,8 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
   private updateView = async (state: CatalogState): Promise<void> => {
     try {
+      this.currentPage = 1;
+
       catalogLoadingAction.setLoading(true);
 
       const products = await this.productsService.filterProducts({
@@ -78,6 +135,8 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       }
 
       this.view.createHTML(products, this.handleNavigateToDetails);
+
+      this.initIntersectionObserver();
     } finally {
       catalogLoadingAction.setLoading(false);
     }
