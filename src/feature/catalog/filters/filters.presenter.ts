@@ -38,10 +38,18 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     catalogAction.setMaxPrice(max);
   }
 
+  private handleMaxPriceReset = (): void => {
+    catalogAction.setMaxPrice(undefined);
+  };
+
   private handleMinPriceChange(minPrice: string): void {
     const min = minPrice.length > 0 ? Number.parseFloat(minPrice) : undefined;
     catalogAction.setMinPrice(min);
   }
+
+  private handleMinPriceReset = (): void => {
+    catalogAction.setMinPrice(undefined);
+  };
 
   private readonly handleWeightChange = (checkedValues: CatalogState['weight']): void => {
     catalogAction.setWeights(checkedValues);
@@ -60,7 +68,9 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     this.view.initPriceRangeFilter({
       ...FILTER_PRICE_RANGE_PROPS,
       onMaxPriceChange: debouncedHandleMaxPriceChange,
+      onMaxPriceReset: this.handleMaxPriceReset,
       onMinPriceChange: debouncedHandleMinPriceChange,
+      onMinPriceReset: this.handleMinPriceReset,
     });
 
     this.view.initBestSellerFilter({

@@ -20,7 +20,9 @@ export interface FilterCheckboxesProperties {
 
 export interface FilterPriceRangeProperties {
   onMaxPriceChange(maxPrice: string): void;
+  onMaxPriceReset(): void;
   onMinPriceChange(minPrice: string): void;
+  onMinPriceReset(): void;
   title: string;
   type: 'price-range';
 }
@@ -116,13 +118,23 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
 
   private createPriceRangeFilter(properties: FilterPriceRangeProperties): void {
     const inputMinPrice = new InputNumber({ name: 'min-price', placeholder: '$ Min' });
+
     inputMinPrice.addListener('input', () => {
       properties.onMinPriceChange(inputMinPrice.value);
     });
 
+    inputMinPrice.bindResetHandler(() => {
+      properties.onMinPriceReset();
+    });
+
     const inputMaxPrice = new InputNumber({ name: 'max-price', placeholder: '$ Max' });
+
     inputMaxPrice.addListener('input', () => {
       properties.onMaxPriceChange(inputMaxPrice.value);
+    });
+
+    inputMaxPrice.bindResetHandler(() => {
+      properties.onMaxPriceReset();
     });
 
     const pricesContainer = div(
