@@ -1,6 +1,7 @@
 import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services/customer/types';
 
-import { div } from '~/shared/create-element/tags';
+import { BUTTON_TEXT } from '~/shared/constants/constants';
+import { button, div } from '~/shared/create-element/tags';
 
 import type { Component } from '../../../components/base-component/types';
 
@@ -10,6 +11,10 @@ import { TITLE } from './constants';
 import styles from './user-addresses.module.css';
 
 export class UserAddressesView extends BaseComponent implements Component {
+  private readonly addBillingAddressButton = button({ className: styles.button }, BUTTON_TEXT.ADD);
+
+  private readonly addShippingAddressButton = button({ className: styles.button }, BUTTON_TEXT.ADD);
+
   public constructor() {
     super({ tagName: 'div' });
   }
@@ -25,11 +30,19 @@ export class UserAddressesView extends BaseComponent implements Component {
 
     const shippingCol = div(
       { className: styles.addressCol },
-      div({ className: styles.title }, TITLE.SHIPPING),
+      div(
+        { className: styles.colHeader },
+        div({ className: styles.title }, TITLE.SHIPPING),
+        this.addShippingAddressButton,
+      ),
     );
     const billingCol = div(
       { className: styles.addressCol },
-      div({ className: styles.title }, TITLE.BILLING),
+      div(
+        { className: styles.colHeader },
+        div({ className: styles.title }, TITLE.BILLING),
+        this.addBillingAddressButton,
+      ),
     );
 
     if (shippingAddresses.length > 0) {
