@@ -2,6 +2,7 @@ import type { ProfileNavigationItemProperties } from '~/feature/user-profile/pro
 
 import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
+import { Loader } from '~/components/common/loader/loader';
 import { HEADING, PROFILE_NAVIGATION_ITEMS } from '~/feature/user-profile/constants';
 import { ProfileNavigationPresenter } from '~/feature/user-profile/profile-navigation/profile-navigation.presenter';
 import { ProfileNavigationView } from '~/feature/user-profile/profile-navigation/profile-navigation.view';
@@ -20,6 +21,8 @@ export class UserProfilePage extends BaseComponent {
   private readonly contentBlock: HTMLDivElement = div({
     className: [styles.block, styles.contentBlock],
   });
+
+  private readonly loader = new Loader({ size: 'medium' });
 
   private readonly navigationItems: ProfileNavigationItemProperties[] = [
     {
@@ -58,7 +61,9 @@ export class UserProfilePage extends BaseComponent {
     this.profileNavigationPresenter = new ProfileNavigationPresenter(
       new ProfileNavigationView(this.navigationItems),
     );
+
     this.userDetailsPresenter = new UserDetailsPresenter(new UserDetailsView(), customerService);
+
     this.userPasswordChangePresenter = new UserPasswordChangePresenter(
       new UserPasswordChangeView(),
       customerService,
@@ -90,12 +95,20 @@ export class UserProfilePage extends BaseComponent {
   }
 
   private showAddressesBlock(): void {
-    this.contentBlock.replaceChildren(
-      div({ className: styles.title }, PROFILE_NAVIGATION_ITEMS.ADDRESSES),
-      this.userAddressesPresenter.getView().element,
-    );
+    this.contentBlock.replaceChildren(this.loader.element);
+    this.loader.show();
 
-    this.userAddressesPresenter.init();
+    this.userAddressesPresenter
+      .init()
+      .then(() => {
+        this.contentBlock.replaceChildren(
+          div({ className: styles.title }, PROFILE_NAVIGATION_ITEMS.ADDRESSES),
+          this.userAddressesPresenter.getView().element,
+        );
+      })
+      .finally(() => {
+        this.loader.hide();
+      });
   }
 
   private showInfoBlock(): void {
