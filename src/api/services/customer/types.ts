@@ -7,6 +7,11 @@ export interface AddAddressPayload {
   type: 'billing' | 'shipping';
 }
 
+export interface AddressIdentificationPayload {
+  id?: string;
+  key?: string;
+}
+
 export interface AddressPayload {
   addressId?: string;
   addressKey?: string;

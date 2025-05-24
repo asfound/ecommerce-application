@@ -55,11 +55,11 @@ export class CustomerService {
     const actions: MyCustomerUpdateAction[] = [createAddAddressAction(address)];
 
     if (payload.type === 'billing') {
-      actions.push(createAddBillingAddressIdAction(key));
+      actions.push(createAddBillingAddressIdAction({ key }));
     }
 
     if (payload.type === 'shipping') {
-      actions.push(createAddShippingAddressIdAction(key));
+      actions.push(createAddShippingAddressIdAction({ key }));
     }
 
     if (payload.default && payload.type === 'billing') {
@@ -162,6 +162,7 @@ export class CustomerService {
   public async unsetDefaultBillingAddress(payload: AddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [
       createRemoveBillingAddressIdAction(payload.addressId),
+      createAddBillingAddressIdAction({ id: payload.addressId }),
     ];
 
     const response = await this.apiRoot()
@@ -175,6 +176,7 @@ export class CustomerService {
   public async unsetDefaultShippingAddress(payload: AddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [
       createRemoveShippingAddressIdAction(payload.addressId),
+      createAddShippingAddressIdAction({ id: payload.addressId }),
     ];
 
     const response = await this.apiRoot()

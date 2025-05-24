@@ -15,6 +15,8 @@ import type {
   MyCustomerSetLastNameAction,
 } from '@commercetools/platform-sdk';
 
+import type { AddressIdentificationPayload } from '../types';
+
 export const createSetFirstNameAction = (firstName: string): MyCustomerSetFirstNameAction => ({
   action: 'setFirstName',
   firstName,
@@ -43,17 +45,19 @@ export const createAddAddressAction = (address: BaseAddress): MyCustomerAddAddre
 });
 
 export const createAddShippingAddressIdAction = (
-  addressKey: ReturnType<typeof crypto.randomUUID>,
+  payload: AddressIdentificationPayload,
 ): MyCustomerAddShippingAddressIdAction => ({
   action: 'addShippingAddressId',
-  addressKey,
+  addressId: payload.id,
+  addressKey: payload.key,
 });
 
 export const createAddBillingAddressIdAction = (
-  addressKey: ReturnType<typeof crypto.randomUUID>,
+  payload: AddressIdentificationPayload,
 ): MyCustomerAddBillingAddressIdAction => ({
   action: 'addBillingAddressId',
-  addressKey,
+  addressId: payload.id,
+  addressKey: payload.key,
 });
 
 export const createRemoveAddressAction = (addressId?: string): MyCustomerRemoveAddressAction => ({
@@ -70,19 +74,17 @@ export const createChangeAddressAction = (payload: {
   addressId: payload.addressId,
 });
 
-export const createSetDefaultShippingAddressAction = (payload: {
-  id?: string;
-  key?: string;
-}): MyCustomerSetDefaultShippingAddressAction => ({
+export const createSetDefaultShippingAddressAction = (
+  payload: AddressIdentificationPayload,
+): MyCustomerSetDefaultShippingAddressAction => ({
   action: 'setDefaultShippingAddress',
   addressId: payload.id,
   addressKey: payload.key,
 });
 
-export const createSetDefaultBillingAddressAction = (payload: {
-  id?: string;
-  key?: string;
-}): MyCustomerSetDefaultBillingAddressAction => ({
+export const createSetDefaultBillingAddressAction = (
+  payload: AddressIdentificationPayload,
+): MyCustomerSetDefaultBillingAddressAction => ({
   action: 'setDefaultBillingAddress',
   addressId: payload.id,
   addressKey: payload.key,
