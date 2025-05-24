@@ -10,7 +10,13 @@ const setPathname = (pathname: string): void => {
   routerStore.setState({ pathname });
 };
 
+// FOR USE ONLY INSIDE ROUTER
 const setSearchParameters = (searchParameters: SearchParameters): void => {
+  routerStore.setState({ searchParameters });
+};
+
+// FOR OUTER USAGE ON PAGE OR COMPONENT
+const replaceSearchParameters = (searchParameters: SearchParameters): void => {
   routerStore.setState({ searchParameters });
 
   routerInstance.updateHistory({
@@ -26,6 +32,7 @@ const initialize = (router: Router): void => {
 
 export const routerAction = {
   initialize,
+  setAndReplaceSearchParameters: replaceSearchParameters,
   setPathname,
   setSearchParameters,
 } as const;

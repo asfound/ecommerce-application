@@ -111,7 +111,7 @@ export class Router {
     if (!matcher) {
       routerAction.setSearchParameters({});
 
-      this.updateHistory({ pathname, pushState: payload.pushState, searchParameters });
+      this.updateHistory({ pathname, pushState: payload.pushState, searchParameters: {} });
 
       this.updatePage({ route: this.fallbackRoute });
 
@@ -133,9 +133,10 @@ export class Router {
   } {
     const { pathname, searchParams } = new URL(payload.path, globalThis.location.origin);
 
-    const searchParameters = payload.searchParameters
-      ? new URLSearchParams(payload.searchParameters)
-      : searchParams;
+    const searchParameters =
+      payload.searchParameters == null
+        ? searchParams
+        : new URLSearchParams(payload.searchParameters);
 
     return { pathname, searchParameters: Object.fromEntries(searchParameters) };
   }
