@@ -18,3 +18,7 @@
   /* TODO: maybe change to some other color */
   color: var(--color-accent-light);
 }
+
+.hidden {
+  display: none;
+}
