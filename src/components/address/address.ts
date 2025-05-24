@@ -150,6 +150,11 @@ export class UserAddress extends BaseComponent implements Component {
       ),
       div(
         { className: styles.detailsItem },
+        span({ className: styles.fieldName }, FIELD_NAME.POSTCODE),
+        span(null, this.address.postalCode),
+      ),
+      div(
+        { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.CITY),
         span(null, this.address.city),
       ),
@@ -158,11 +163,6 @@ export class UserAddress extends BaseComponent implements Component {
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.STREET),
         span(null, this.address.streetName),
-      ),
-      div(
-        { className: styles.detailsItem },
-        span({ className: styles.fieldName }, FIELD_NAME.POSTCODE),
-        span(null, this.address.postalCode),
       ),
 
       editButton.element,
@@ -193,9 +193,10 @@ export class UserAddress extends BaseComponent implements Component {
 
     this.formElement.append(
       this.inputCountry.element,
+      this.inputPostcode.element,
       this.inputCity.element,
       this.inputStreet.element,
-      this.inputPostcode.element,
+
       this.cancelButton.element,
       this.submitButton.element,
       this.createDataList(),
@@ -257,9 +258,9 @@ export class UserAddress extends BaseComponent implements Component {
   }
 
   private storeInputs(): void {
-    this.addInputComponent(this.inputCity);
     this.addInputComponent(this.inputCountry);
-    this.addInputComponent(this.inputStreet);
     this.addInputComponent(this.inputPostcode);
+    this.addInputComponent(this.inputCity);
+    this.addInputComponent(this.inputStreet);
   }
 }
