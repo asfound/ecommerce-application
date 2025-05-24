@@ -51,21 +51,61 @@ export class UserAddressesView extends BaseComponent implements Component {
   ): void {
     const { billingAddresses, shippingAddresses } = addressesData;
 
-    const shippingCol = div({ className: styles.addressCol }, this.shippingColHeader);
-    const billingCol = div({ className: styles.addressCol }, this.billingColHeader);
+    const shippingCol = this.createShippingAddresses(
+      shippingAddresses,
+      onAddressChange,
+      onAddressDeletion,
+      onShippingDefaultToggle,
+      onBillingDefaultToggle,
+    );
 
-    if (shippingAddresses.length > 0) {
-      for (const address of shippingAddresses) {
-        const userAddress = new UserAddress(
-          address,
-          onAddressChange,
-          onAddressDeletion,
-          onShippingDefaultToggle,
-          onBillingDefaultToggle,
-        );
-        shippingCol.append(userAddress.element);
-      }
-    }
+    const billingCol = this.createBillingAddresses(
+      billingAddresses,
+      onAddressChange,
+      onAddressDeletion,
+      onShippingDefaultToggle,
+      onBillingDefaultToggle,
+    );
+
+    this.addShippingAddressButton.classList.remove(styles.hidden);
+    this.addBillingAddressButton.classList.remove(styles.hidden);
+
+    const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
+
+    this.replaceChildren(addressesContainer);
+  }
+
+  public setupListeners(
+    handlerForShipping: AddressFormProperties['onSubmit'],
+    handlerForBilling: AddressFormProperties['onSubmit'],
+  ): void {
+    this.addShippingAddressButton.addEventListener(
+      'click',
+      () => {
+        this.newShippingAddressHandler(handlerForShipping);
+        this.addShippingAddressButton.classList.add(styles.hidden);
+      },
+      { signal: this.abortController.signal },
+    );
+
+    this.addBillingAddressButton.addEventListener(
+      'click',
+      () => {
+        this.newBillingAddressHandler(handlerForBilling);
+        this.addBillingAddressButton.classList.add(styles.hidden);
+      },
+      { signal: this.abortController.signal },
+    );
+  }
+
+  private createBillingAddresses(
+    billingAddresses: AppCustomerAddress[],
+    onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
+    onAddressDeletion: (payload: string) => Promise<void>,
+    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+  ): HTMLDivElement {
+    const billingCol = div({ className: styles.addressCol }, this.billingColHeader);
 
     if (billingAddresses.length > 0) {
       for (const address of billingAddresses) {
@@ -80,19 +120,44 @@ export class UserAddressesView extends BaseComponent implements Component {
       }
     }
 
-    const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
-
-    this.replaceChildren(addressesContainer);
+    return billingCol;
   }
 
-  public setupListeners(handler: AddressFormProperties['onSubmit']): void {
-    this.addShippingAddressButton.addEventListener(
-      'click',
-      () => {
-        this.newShippingAddressHandler(handler);
-        this.addShippingAddressButton.classList.add(styles.hidden);
-      },
-      { signal: this.abortController.signal },
+  private createShippingAddresses(
+    shippingAddresses: AppCustomerAddress[],
+    onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
+    onAddressDeletion: (payload: string) => Promise<void>,
+    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+  ): HTMLDivElement {
+    const shippingCol = div({ className: styles.addressCol }, this.shippingColHeader);
+
+    for (const address of shippingAddresses) {
+      const userAddress = new UserAddress(
+        address,
+        onAddressChange,
+        onAddressDeletion,
+        onShippingDefaultToggle,
+        onBillingDefaultToggle,
+      );
+      shippingCol.append(userAddress.element);
+    }
+
+    return shippingCol;
+  }
+
+  private newBillingAddressHandler(handler: AddressFormProperties['onSubmit']): void {
+    this.billingColHeader.after(
+      new NewAddressForm({
+        onCancel: (): void => {
+          this.addBillingAddressButton.classList.remove(styles.hidden);
+        },
+        onSubmit: (...arguments_): Promise<void> => {
+          const result = handler(...arguments_);
+          this.addBillingAddressButton.classList.remove(styles.hidden);
+          return result;
+        },
+      }).element,
     );
   }
 
@@ -102,7 +167,11 @@ export class UserAddressesView extends BaseComponent implements Component {
         onCancel: (): void => {
           this.addShippingAddressButton.classList.remove(styles.hidden);
         },
-        onSubmit: handler,
+        onSubmit: (...arguments_): Promise<void> => {
+          const result = handler(...arguments_);
+          this.addShippingAddressButton.classList.remove(styles.hidden);
+          return result;
+        },
       }).element,
     );
   }

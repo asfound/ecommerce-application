@@ -94,6 +94,8 @@ export class UserProfilePage extends BaseComponent {
       div({ className: styles.title }, PROFILE_NAVIGATION_ITEMS.ADDRESSES),
       this.userAddressesPresenter.getView().element,
     );
+
+    this.userAddressesPresenter.init();
   }
 
   private showInfoBlock(): void {

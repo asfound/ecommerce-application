@@ -25,10 +25,14 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
     this.init();
 
-    view.setupListeners(this.handleNewShippingAddress);
+    view.setupListeners(this.handleNewShippingAddress, this.handleNewBillingAddress);
+  }
 
-    console.warn(this.handleNewBillingAddress);
-    console.warn(this.handleNewShippingAddress);
+  public async init(): Promise<void> {
+    const userInformation = await this.customerService.getCustomer();
+
+    this.updateCustomerVersion(userInformation.version);
+    this.updateView(userInformation);
   }
 
   private readonly handleAddressChange = async (
@@ -129,8 +133,6 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
       const updatedCustomer = await this.customerService.addAddress(addNewShippingAddressPayload);
 
-      console.warn('handleNewShippingAddress', updatedCustomer);
-
       this.updateCustomerVersion(updatedCustomer.version);
       this.updateView(updatedCustomer);
     } catch (error: unknown) {
@@ -167,13 +169,6 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       }
     }
   };
-
-  private async init(): Promise<void> {
-    const userInformation = await this.customerService.getCustomer();
-
-    this.updateCustomerVersion(userInformation.version);
-    this.updateView(userInformation);
-  }
 
   private updateCustomerVersion(newVersion: number): void {
     this.customerVersion = newVersion;

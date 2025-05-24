@@ -1,6 +1,6 @@
 export const TITLE = {
-  BILLING: 'Billing addresses',
-  SHIPPING: 'Shipping addresses',
+  BILLING: 'Billing addresses:',
+  SHIPPING: 'Shipping addresses:',
 };
 
 export const ADD_BUTTON_TEXT = {

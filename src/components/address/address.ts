@@ -159,8 +159,7 @@ export class UserAddress extends BaseComponent implements Component {
 
     const addressBlock = div(
       { className: styles.details },
-      this.inputDefaultShipping.element,
-      this.inputDefaultBilling.element,
+
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.COUNTRY),
@@ -182,6 +181,8 @@ export class UserAddress extends BaseComponent implements Component {
         span({ className: styles.fieldName }, FIELD_NAME.STREET),
         span(null, this.address.streetName),
       ),
+      this.inputDefaultShipping.element,
+      this.inputDefaultBilling.element,
 
       editButton.element,
       this.deleteButton.element,
