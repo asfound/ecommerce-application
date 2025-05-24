@@ -3,10 +3,18 @@ import type { QueryParam } from '@commercetools/platform-sdk';
 export interface AppProduct {
   bestSeller: boolean;
   description: string;
-  image: { label: string; url: string };
+  image: AppProductImage;
+  images: AppProductImage[];
   name: string;
   price: { default: number; discounted?: number };
   sku: string;
+  variants: AppProduct[];
+  weight: string | undefined;
+}
+
+export interface AppProductImage {
+  label: string;
+  url: string;
 }
 export interface FilterQueryArguments {
   [key: string]: QueryParam;
@@ -32,9 +40,14 @@ export interface FilterQueryArguments {
 }
 
 export interface ProductsFilterPayload {
+  bestSeller: boolean;
+  brand?: string[];
   categoryId?: string;
+  currentPage: number;
+  priceRange: { max?: number; min?: number };
   productsPerPage: number;
   searchTerm?: string;
   sortDirection: 'asc' | 'desc';
   sortField: 'name' | 'price';
+  weight?: ('lg' | 'md' | 'sm')[];
 }

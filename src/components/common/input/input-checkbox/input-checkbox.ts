@@ -32,4 +32,8 @@ export class InputCheckbox extends InputBase {
       this.inputComponent.addClassNames(styles.checkbox);
     }
   }
+
+  public setChecked(checked: boolean): void {
+    this.inputComponent.element.checked = checked;
+  }
 }

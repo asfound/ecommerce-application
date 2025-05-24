@@ -1,5 +1,8 @@
+import { debounce } from 'lodash';
+
 import type { ProductsService } from '~/api/services/products/products.service';
 import type { AppProduct } from '~/api/services/products/types';
+import type { IntersectionLoader } from '~/components/intersection-loader/intersection-loader';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
@@ -11,12 +14,26 @@ import type { ProductCardListView } from './product-card-list.view';
 import { catalogLoadingAction } from '../store/actions';
 import { catalogLoadingSelector } from '../store/selectors';
 import { catalogLoadingStore, catalogStore } from '../store/store';
+import { VIEW_UPDATE_DELAY } from './constants';
 
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
+  private currentPage = 1;
+
+  private readonly intersectionAnchor: IntersectionLoader;
+
+  private intersectionObserver: IntersectionObserver | null = null;
+
   private readonly productsService: ProductsService;
 
-  public constructor(view: ProductCardListView, productsService: ProductsService) {
+  public constructor(
+    view: ProductCardListView,
+    intersectionAnchor: IntersectionLoader,
+    productsService: ProductsService,
+  ) {
     super(view);
+
+    this.intersectionAnchor = intersectionAnchor;
+    intersectionAnchor.hide();
 
     this.productsService = productsService;
 
@@ -25,9 +42,61 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     this.setupSubscriptions();
   }
 
+  public override destroy(): void {
+    this.destroyIntersectionObserver();
+
+    super.destroy();
+  }
+
+  private destroyIntersectionObserver(): void {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
+  }
+
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
     Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, { name: product.name, sku: product.sku });
   };
+
+  private initIntersectionObserver(): void {
+    if (this.intersectionObserver) {
+      return;
+    }
+
+    this.intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          this.loadNextPage();
+        }
+      },
+      { root: null, threshold: 1 },
+    );
+
+    this.intersectionObserver.observe(this.intersectionAnchor.element);
+  }
+
+  private async loadNextPage(): Promise<void> {
+    this.currentPage += 1;
+
+    this.intersectionAnchor.show();
+
+    const products = await this.productsService.filterProducts({
+      ...catalogStore.getState(),
+      currentPage: this.currentPage,
+    });
+
+    if (products.length === 0) {
+      this.destroyIntersectionObserver();
+      this.intersectionAnchor.hide();
+
+      return;
+    }
+
+    this.intersectionAnchor.hide();
+
+    this.view.appendProducts(products, this.handleNavigateToDetails);
+  }
 
   private setupSubscriptions(): void {
     this.subscribeLoading();
@@ -36,9 +105,13 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private subscribeCatalogStateChange(): void {
-    const unsubscribe = catalogStore.subscribe((state) => state, this.updateView, {
-      isImmediate: false,
-    });
+    const unsubscribe = catalogStore.subscribe(
+      (state) => state,
+      debounce(this.updateView, VIEW_UPDATE_DELAY),
+      {
+        isImmediate: false,
+      },
+    );
 
     this.storeSubscription.add(unsubscribe);
   }
@@ -56,9 +129,14 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
   private updateView = async (state: CatalogState): Promise<void> => {
     try {
+      this.currentPage = 1;
+
       catalogLoadingAction.setLoading(true);
 
-      const products = await this.productsService.filterProducts(state);
+      const products = await this.productsService.filterProducts({
+        ...state,
+        currentPage: this.currentPage,
+      });
 
       if (products.length === 0) {
         this.view.showNotFoundWidget(state.searchTerm);
@@ -66,6 +144,8 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       }
 
       this.view.createHTML(products, this.handleNavigateToDetails);
+
+      this.initIntersectionObserver();
     } finally {
       catalogLoadingAction.setLoading(false);
     }

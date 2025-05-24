@@ -37,6 +37,7 @@
 .discountLabel {
   top: 0;
   width: 7rem;
+  border-top-left-radius: var(--border-radius);
   background-color: var(--color-accent);
 }
 

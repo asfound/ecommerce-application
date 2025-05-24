@@ -1,7 +1,6 @@
-.details {
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  background-color: var(--color-dark);
+.container {
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--color-white);
 }
 
 .summary {
@@ -14,6 +13,7 @@
 
   margin-bottom: 0.5rem;
 
+  font-weight: 500;
   list-style: none;
 
   transition: color var(--transition-duration);
@@ -25,23 +25,30 @@
 }
 
 .icon {
-  width: 2rem;
-  height: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .rotated {
   transform: rotate(180deg);
 }
 
+.checkboxesContainer {
+  background-color: red;
+}
+
+.priceRangeContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
 @media (hover: hover) {
   .summary:hover {
     cursor: pointer;
     color: var(--color-accent);
-  }
-}
-
-@media (width <= 640px) {
-  .heading {
-    font-size: 2rem;
   }
 }

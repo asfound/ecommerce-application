@@ -8,5 +8,3 @@ export const INPUT_SORT_PROPS = {
   NAME: { label: 'Name', name: 'sort-field' },
   PRICE: { label: 'Price', name: 'sort-field' },
 } as const;
-
-export const SEARCH_DEBOUNCE_TIMEOUT = 600;

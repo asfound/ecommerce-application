@@ -1,0 +1,14 @@
+.intersectionLoader {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  height: 6rem;
+
+  background-color: var(--color-dark);
+}
+
+.hidden {
+  visibility: hidden;
+}

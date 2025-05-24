@@ -26,6 +26,15 @@ export class ProductCardListView extends BaseComponent implements Component {
     super({ className: styles.list, tagName: 'ul' });
   }
 
+  public appendProducts(
+    products: AppProduct[],
+    onNavigateToDetails: ProductCardClickHandler,
+  ): void {
+    for (const product of products) {
+      this.append(new ProductCard(product, onNavigateToDetails));
+    }
+  }
+
   public createHTML(products: AppProduct[], onNavigateToDetails: ProductCardClickHandler): void {
     this.replaceChildren(
       ...products.map((product) => new ProductCard(product, onNavigateToDetails)),
