@@ -52,7 +52,8 @@ export const CSS_CLASS_NAME = {
 export const APP_LOCALE = 'en-US';
 
 export const BUTTON_TEXT = {
-  ADD: '+ Add Address',
+  ADD: 'Add',
+  ADD_ADDRESS: '+ Add Address',
   CANCEL: 'Cancel',
   DELETE: 'Delete',
   EDIT: 'Edit',

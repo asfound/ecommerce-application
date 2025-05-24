@@ -79,25 +79,23 @@ export const DATE_OF_BIRTH_PROPS: InputTextProperties = {
   validators: [validators.validateRequired, validators.validateMinAge(REQUIRED_MIN_AGE)],
 } as const;
 
-export const SHIPPING_COUNTRY_PROPS: InputTextProperties = {
-  listId: COUNTRY_LIST_ID.SHIPPING,
-  name: 'shipping-country',
-  placeholder: 'Start typing a country...',
-  validators: [validators.validateRequired, validators.validateDatalistValue(COUNTRY_NAMES)],
-} as const;
-
-export const BILLING_COUNTRY_PROPS: InputTextProperties = {
-  listId: COUNTRY_LIST_ID.BILLING,
-  name: 'billing-country',
-  placeholder: 'Start typing a country...',
-  validators: [validators.validateRequired, validators.validateDatalistValue(COUNTRY_NAMES)],
-} as const;
-
 export const UNIVERSAL_COUNTRY_PROPS: InputTextProperties = {
   listId: COUNTRY_LIST_ID.UNIVERSAL,
   name: 'country',
-  placeholder: 'Start typing a country...',
+  placeholder: 'Country',
   validators: [validators.validateRequired, validators.validateDatalistValue(COUNTRY_NAMES)],
+} as const;
+
+export const SHIPPING_COUNTRY_PROPS: InputTextProperties = {
+  ...UNIVERSAL_COUNTRY_PROPS,
+  listId: COUNTRY_LIST_ID.SHIPPING,
+  name: 'shipping-country',
+} as const;
+
+export const BILLING_COUNTRY_PROPS: InputTextProperties = {
+  ...UNIVERSAL_COUNTRY_PROPS,
+  listId: COUNTRY_LIST_ID.BILLING,
+  name: 'billing-country',
 } as const;
 
 export const CITY_PROPS: InputTextProperties = {

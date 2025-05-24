@@ -1,7 +1,7 @@
 .addresses {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 4rem;
 }
 
 .addressCol {
@@ -35,6 +35,10 @@
   background-color: var(--color-black);
 
   transition: color var(--transition-duration);
+}
+
+.hidden {
+  display: none;
 }
 
 @media (hover: hover) {

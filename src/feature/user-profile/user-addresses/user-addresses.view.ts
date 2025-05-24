@@ -1,5 +1,6 @@
 import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services/customer/types';
 
+import { NewAddressForm } from '~/components/new-address-form/new-address-form';
 import { BUTTON_TEXT } from '~/shared/constants/constants';
 import { button, div } from '~/shared/create-element/tags';
 
@@ -11,12 +12,32 @@ import { TITLE } from './constants';
 import styles from './user-addresses.module.css';
 
 export class UserAddressesView extends BaseComponent implements Component {
-  private readonly addBillingAddressButton = button({ className: styles.button }, BUTTON_TEXT.ADD);
+  private readonly addBillingAddressButton = button(
+    { className: styles.button },
+    BUTTON_TEXT.ADD_ADDRESS,
+  );
 
-  private readonly addShippingAddressButton = button({ className: styles.button }, BUTTON_TEXT.ADD);
+  private readonly addShippingAddressButton = button(
+    { className: styles.button },
+    BUTTON_TEXT.ADD_ADDRESS,
+  );
+
+  private readonly billingColHeader = div(
+    { className: styles.colHeader },
+    div({ className: styles.title }, TITLE.BILLING),
+    this.addBillingAddressButton,
+  );
+
+  private readonly shippingColHeader = div(
+    { className: styles.colHeader },
+    div({ className: styles.title }, TITLE.SHIPPING),
+    this.addShippingAddressButton,
+  );
 
   public constructor() {
     super({ tagName: 'div' });
+
+    this.setupListeners();
   }
 
   public createHTML(
@@ -28,22 +49,8 @@ export class UserAddressesView extends BaseComponent implements Component {
   ): void {
     const { billingAddresses, shippingAddresses } = addressesData;
 
-    const shippingCol = div(
-      { className: styles.addressCol },
-      div(
-        { className: styles.colHeader },
-        div({ className: styles.title }, TITLE.SHIPPING),
-        this.addShippingAddressButton,
-      ),
-    );
-    const billingCol = div(
-      { className: styles.addressCol },
-      div(
-        { className: styles.colHeader },
-        div({ className: styles.title }, TITLE.BILLING),
-        this.addBillingAddressButton,
-      ),
-    );
+    const shippingCol = div({ className: styles.addressCol }, this.shippingColHeader);
+    const billingCol = div({ className: styles.addressCol }, this.billingColHeader);
 
     if (shippingAddresses.length > 0) {
       for (const address of shippingAddresses) {
@@ -60,7 +67,26 @@ export class UserAddressesView extends BaseComponent implements Component {
     }
 
     const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
-
+    console.warn('here');
     this.replaceChildren(addressesContainer);
+  }
+
+  private newShippingAddressHandler(): void {
+    this.shippingColHeader.after(
+      new NewAddressForm(() => {
+        this.addShippingAddressButton.classList.remove(styles.hidden);
+      }).element,
+    );
+  }
+
+  private setupListeners(): void {
+    this.addShippingAddressButton.addEventListener(
+      'click',
+      () => {
+        this.newShippingAddressHandler();
+        this.addShippingAddressButton.classList.add(styles.hidden);
+      },
+      { signal: this.abortController.signal },
+    );
   }
 }

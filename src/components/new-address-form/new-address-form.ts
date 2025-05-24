@@ -1,17 +1,14 @@
-import type { AppCustomerAddress } from '~/api/services/customer/types';
-
 import { BUTTON_TEXT } from '~/shared/constants/constants';
-import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
+import { COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   CITY_PROPS,
   COUNTRY_LIST_ID,
-  DEFAULT_BILLING_CHECKBOX_PROPS,
-  DEFAULT_SHIPPING_CHECKBOX_PROPS,
+  DEFAULT_CHECKBOX_PROPS,
   STREET_PROPS,
   UNIVERSAL_COUNTRY_PROPS,
   UNIVERSAL_POSTAL_CODE_PROPS,
 } from '~/shared/constants/input-properties';
-import { datalist, form, option } from '~/shared/create-element/tags';
+import { datalist, div, form, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
 import type { Component } from '../base-component/types';
@@ -21,7 +18,7 @@ import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
 import { InputCheckbox } from '../common/input/input-checkbox/input-checkbox';
 import { InputText } from '../common/input/input-text/input-text';
-import styles from './address-form.module.css';
+import styles from './new-address-form.module.css';
 
 export interface AddressFormData {
   city: string;
@@ -32,17 +29,21 @@ export interface AddressFormData {
 }
 
 export interface AddressFormProperties {
-  address?: AppCustomerAddress;
-  onCancel(): void;
   onSubmit(data: AddressFormData): void;
 }
 
-export class AddressForm extends BaseComponent implements Component {
-  private readonly address: AppCustomerAddress | null = null;
+export class NewAddressForm extends BaseComponent implements Component {
+  // private readonly onSubmit: (data: AddressFormData) => void;
+  private readonly onCancel: () => void;
 
-  private readonly cancelButton = new Button({ textContent: BUTTON_TEXT.CANCEL, type: 'button' });
-
-  private readonly countryName;
+  private readonly cancelButton = new Button({
+    onClick: (): void => {
+      this.onCancel();
+      this.destroy();
+    },
+    textContent: BUTTON_TEXT.CANCEL,
+    type: 'button',
+  });
 
   private readonly formElement = form({ className: styles.form });
 
@@ -52,33 +53,26 @@ export class AddressForm extends BaseComponent implements Component {
 
   private readonly inputCountry = new InputText(UNIVERSAL_COUNTRY_PROPS);
 
-  private readonly inputDefaultBilling = new InputCheckbox(DEFAULT_BILLING_CHECKBOX_PROPS);
-
-  private readonly inputDefaultShipping = new InputCheckbox(DEFAULT_SHIPPING_CHECKBOX_PROPS);
+  private readonly inputDefault = new InputCheckbox(DEFAULT_CHECKBOX_PROPS);
 
   private readonly inputPostcode = new InputText(UNIVERSAL_POSTAL_CODE_PROPS);
 
   private readonly inputStreet = new InputText(STREET_PROPS);
 
-  private readonly onCancel: () => void;
+  private readonly submitButton = new Button({
+    textContent: BUTTON_TEXT.ADD,
+    type: 'submit',
+  });
 
-  private readonly onSubmit: (data: AddressFormData) => void;
-
-  private readonly submitButton = new Button({ textContent: BUTTON_TEXT.SAVE, type: 'button' });
-
-  public constructor(properties: AddressFormProperties) {
+  public constructor(onCancel: () => void) {
     super({ tagName: 'form' });
 
-    if (properties.address) {
-      this.address = properties.address;
-      this.countryName = this.getCountryByCode(this.address.country);
-    }
+    // this.onSubmit = (data): void => {
+    //   properties.onSubmit(data);
+    // };
 
     this.onCancel = (): void => {
-      properties.onCancel();
-    };
-    this.onSubmit = (data): void => {
-      properties.onSubmit(data);
+      onCancel();
     };
 
     this.storeInputs();
@@ -94,22 +88,20 @@ export class AddressForm extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    if (this.address && this.countryName) {
-      this.inputCountry.setValue(this.countryName);
-      this.inputCity.setValue(this.address.city);
-      this.inputStreet.setValue(this.address.streetName);
-      this.inputPostcode.setValue(this.address.postalCode);
-    }
-
     this.formElement.append(
+      div({ className: styles.formTitle }, 'New address details:'),
       this.inputCountry.element,
       this.inputPostcode.element,
       this.inputCity.element,
       this.inputStreet.element,
+      this.inputDefault.element,
+
       this.cancelButton.element,
       this.submitButton.element,
       this.createDataList(),
     );
+
+    this.submitButton.disable();
 
     this.inputPostcode.addValidator(validatePostalCode(() => this.inputCountry.value));
 
@@ -135,26 +127,23 @@ export class AddressForm extends BaseComponent implements Component {
     return datalistElement;
   }
 
-  private getCountryByCode(countryCode: string): string {
-    return Object.entries(COUNTRY_CODES).find(([, value]) => value === countryCode)?.[0] ?? '';
-  }
-
-  private getPayload(): AddressFormData {
-    return {
-      city: this.inputCity.value.trim(),
-      country: COUNTRY_CODES[this.inputCountry.value] ?? '',
-      postalCode: this.inputPostcode.value.trim(),
-      streetName: this.inputStreet.value.trim(),
-    };
-  }
+  // private getPayload(): AddressFormData {
+  //   return {
+  //     city: this.inputCity.value.trim(),
+  //     country: COUNTRY_CODES[this.inputCountry.value] ?? '',
+  //     postalCode: this.inputPostcode.value.trim(),
+  //     streetName: this.inputStreet.value.trim(),
+  //   };
+  // }
 
   private setStyles(): void {
     this.inputCountry.addClassNames(styles.formItem);
     this.inputCity.addClassNames(styles.formItem);
     this.inputStreet.addClassNames(styles.formItem);
     this.inputPostcode.addClassNames(styles.formItem);
-    this.inputDefaultBilling.addClassNames(styles.detailsItem);
-    this.inputDefaultShipping.addClassNames(styles.detailsItem);
+
+    this.cancelButton.addClassNames(styles.formItem);
+    this.submitButton.addClassNames(styles.formItem);
   }
 
   private setupListeners(): void {
@@ -164,13 +153,11 @@ export class AddressForm extends BaseComponent implements Component {
       }
     });
 
-    this.cancelButton.addListener('click', this.onCancel);
+    // this.addListener('click', (event) => {
+    //   event.preventDefault();
 
-    this.addListener('click', (event) => {
-      event.preventDefault();
-
-      this.onSubmit(this.getPayload());
-    });
+    //   this.onSubmit(this.getPayload());
+    // });
   }
 
   private storeInputs(): void {
