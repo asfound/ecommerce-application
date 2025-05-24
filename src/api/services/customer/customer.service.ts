@@ -47,7 +47,7 @@ export class CustomerService {
     return CustomerService.instance;
   }
 
-  public async addAddress(payload: AddAddressPayload): Promise<ClientResponse<Customer>> {
+  public async addAddress(payload: AddAddressPayload): Promise<AppCustomer> {
     const key = crypto.randomUUID();
 
     const address: BaseAddress = { ...payload.address, key };
@@ -62,10 +62,12 @@ export class CustomerService {
       actions.push(createAddShippingAddressIdAction(key));
     }
 
-    return this.apiRoot()
+    const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
   public async changeAddress(payload: ChangeAddressPayload): Promise<AppCustomer> {
@@ -112,13 +114,15 @@ export class CustomerService {
     return mapToAppCustomer(response.body);
   }
 
-  public async removeAddress(payload: AddressPayload): Promise<ClientResponse<Customer>> {
+  public async removeAddress(payload: AddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [createRemoveAddressAction(payload.addressId)];
 
-    return this.apiRoot()
+    const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
   public async setDefaultBillingAddress(

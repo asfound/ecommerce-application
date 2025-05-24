@@ -37,7 +37,15 @@ export class UserAddress extends BaseComponent implements Component {
 
   private readonly countryName;
 
-  private readonly deleteButton = new Button({ textContent: BUTTON_TEXT.DELETE, type: 'button' });
+  private readonly onAddressDeletion: (payload: string) => Promise<void>;
+
+  private readonly deleteButton = new Button({
+    onClick: (): void => {
+      this.onAddressDeletion(this.address.addressId);
+    },
+    textContent: BUTTON_TEXT.DELETE,
+    type: 'button',
+  });
 
   private readonly formElement = form({ className: styles.form });
 
@@ -62,12 +70,14 @@ export class UserAddress extends BaseComponent implements Component {
   public constructor(
     address: AppCustomerAddress,
     onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
+    onAddressDeletion: (payload: string) => Promise<void>,
   ) {
     super({ tagName: 'div' });
 
     this.address = address;
     this.countryName = this.getCountryByCode();
     this.onAddressChange = onAddressChange;
+    this.onAddressDeletion = onAddressDeletion;
 
     this.storeInputs();
     this.setStyles();

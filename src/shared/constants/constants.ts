@@ -59,3 +59,8 @@ export const BUTTON_TEXT = {
   EDIT: 'Edit',
   SAVE: 'Save changes',
 };
+
+export const BUTTON_TITLE = {
+  BILLING: 'Add new billing address',
+  SHIPPING: 'Add new shipping address',
+};

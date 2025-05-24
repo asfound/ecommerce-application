@@ -1,5 +1,5 @@
 import { BUTTON_TEXT } from '~/shared/constants/constants';
-import { COUNTRY_NAMES } from '~/shared/constants/country-codes';
+import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   CITY_PROPS,
   COUNTRY_LIST_ID,
@@ -20,20 +20,22 @@ import { InputCheckbox } from '../common/input/input-checkbox/input-checkbox';
 import { InputText } from '../common/input/input-text/input-text';
 import styles from './new-address-form.module.css';
 
-export interface AddressFormData {
-  city: string;
-  country: string;
-  default?: boolean;
-  postalCode: string;
-  streetName: string;
+export interface AddressFormProperties {
+  onCancel(): void;
+  onSubmit(data: NewAddressFormData): void;
 }
 
-export interface AddressFormProperties {
-  onSubmit(data: AddressFormData): void;
+export interface NewAddressFormData {
+  address: {
+    city: string;
+    country: string;
+    postalCode: string;
+    streetName: string;
+  };
+  default?: boolean;
 }
 
 export class NewAddressForm extends BaseComponent implements Component {
-  // private readonly onSubmit: (data: AddressFormData) => void;
   private readonly onCancel: () => void;
 
   private readonly cancelButton = new Button({
@@ -59,20 +61,22 @@ export class NewAddressForm extends BaseComponent implements Component {
 
   private readonly inputStreet = new InputText(STREET_PROPS);
 
+  private readonly onSubmit: (data: NewAddressFormData) => void;
+
   private readonly submitButton = new Button({
     textContent: BUTTON_TEXT.ADD,
     type: 'submit',
   });
 
-  public constructor(onCancel: () => void) {
+  public constructor(properties: AddressFormProperties) {
     super({ tagName: 'form' });
 
-    // this.onSubmit = (data): void => {
-    //   properties.onSubmit(data);
-    // };
+    this.onSubmit = (data): void => {
+      properties.onSubmit(data);
+    };
 
     this.onCancel = (): void => {
-      onCancel();
+      properties.onCancel();
     };
 
     this.storeInputs();
@@ -127,14 +131,17 @@ export class NewAddressForm extends BaseComponent implements Component {
     return datalistElement;
   }
 
-  // private getPayload(): AddressFormData {
-  //   return {
-  //     city: this.inputCity.value.trim(),
-  //     country: COUNTRY_CODES[this.inputCountry.value] ?? '',
-  //     postalCode: this.inputPostcode.value.trim(),
-  //     streetName: this.inputStreet.value.trim(),
-  //   };
-  // }
+  private getPayload(): NewAddressFormData {
+    return {
+      address: {
+        city: this.inputCity.value.trim(),
+        country: COUNTRY_CODES[this.inputCountry.value] ?? '',
+        postalCode: this.inputPostcode.value.trim(),
+        streetName: this.inputStreet.value.trim(),
+      },
+      default: this.inputDefault.checked,
+    };
+  }
 
   private setStyles(): void {
     this.inputCountry.addClassNames(styles.formItem);
@@ -153,11 +160,11 @@ export class NewAddressForm extends BaseComponent implements Component {
       }
     });
 
-    // this.addListener('click', (event) => {
-    //   event.preventDefault();
+    this.addListener('click', (event) => {
+      event.preventDefault();
 
-    //   this.onSubmit(this.getPayload());
-    // });
+      this.onSubmit(this.getPayload());
+    });
   }
 
   private storeInputs(): void {

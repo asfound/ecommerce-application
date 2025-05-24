@@ -1,7 +1,7 @@
 import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services/customer/types';
 
 import { NewAddressForm } from '~/components/new-address-form/new-address-form';
-import { BUTTON_TEXT } from '~/shared/constants/constants';
+import { BUTTON_TEXT, BUTTON_TITLE } from '~/shared/constants/constants';
 import { button, div } from '~/shared/create-element/tags';
 
 import type { Component } from '../../../components/base-component/types';
@@ -13,12 +13,12 @@ import styles from './user-addresses.module.css';
 
 export class UserAddressesView extends BaseComponent implements Component {
   private readonly addBillingAddressButton = button(
-    { className: styles.button },
+    { className: styles.button, title: BUTTON_TITLE.BILLING },
     BUTTON_TEXT.ADD_ADDRESS,
   );
 
   private readonly addShippingAddressButton = button(
-    { className: styles.button },
+    { className: styles.button, title: BUTTON_TITLE.SHIPPING },
     BUTTON_TEXT.ADD_ADDRESS,
   );
 
@@ -46,6 +46,7 @@ export class UserAddressesView extends BaseComponent implements Component {
       shippingAddresses: AppCustomerAddress[];
     },
     onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
+    onAddressDeletion: (payload: string) => Promise<void>,
   ): void {
     const { billingAddresses, shippingAddresses } = addressesData;
 
@@ -54,27 +55,32 @@ export class UserAddressesView extends BaseComponent implements Component {
 
     if (shippingAddresses.length > 0) {
       for (const address of shippingAddresses) {
-        const userAddress = new UserAddress(address, onAddressChange);
+        const userAddress = new UserAddress(address, onAddressChange, onAddressDeletion);
         shippingCol.append(userAddress.element);
       }
     }
 
     if (billingAddresses.length > 0) {
       for (const address of billingAddresses) {
-        const userAddress = new UserAddress(address, onAddressChange);
+        const userAddress = new UserAddress(address, onAddressChange, onAddressDeletion);
         billingCol.append(userAddress.element);
       }
     }
 
     const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
-    console.warn('here');
+
     this.replaceChildren(addressesContainer);
   }
 
   private newShippingAddressHandler(): void {
     this.shippingColHeader.after(
-      new NewAddressForm(() => {
-        this.addShippingAddressButton.classList.remove(styles.hidden);
+      new NewAddressForm({
+        onCancel: (): void => {
+          this.addShippingAddressButton.classList.remove(styles.hidden);
+        },
+        onSubmit: (data): void => {
+          console.warn(data);
+        },
       }).element,
     );
   }
