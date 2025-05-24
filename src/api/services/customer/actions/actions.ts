@@ -54,30 +54,34 @@ export const createAddBillingAddressIdAction = (
   addressKey,
 });
 
-export const createRemoveAddressAction = (addressId: string): MyCustomerRemoveAddressAction => ({
+export const createRemoveAddressAction = (addressId?: string): MyCustomerRemoveAddressAction => ({
   action: 'removeAddress',
   addressId,
 });
 
 export const createChangeAddressAction = (payload: {
   address: BaseAddress;
-  addressId: string;
+  addressId?: string;
 }): MyCustomerChangeAddressAction => ({
   action: 'changeAddress',
   address: payload.address,
   addressId: payload.addressId,
 });
 
-export const createSetDefaultShippingAddressAction = (
-  addressId: string,
-): MyCustomerSetDefaultShippingAddressAction => ({
+export const createSetDefaultShippingAddressAction = (payload: {
+  id?: string;
+  key?: string;
+}): MyCustomerSetDefaultShippingAddressAction => ({
   action: 'setDefaultShippingAddress',
-  addressId,
+  addressId: payload.id,
+  addressKey: payload.key,
 });
 
-export const createSetDefaultBillingAddressAction = (
-  addressId: string,
-): MyCustomerSetDefaultBillingAddressAction => ({
+export const createSetDefaultBillingAddressAction = (payload: {
+  id?: string;
+  key?: string;
+}): MyCustomerSetDefaultBillingAddressAction => ({
   action: 'setDefaultBillingAddress',
-  addressId,
+  addressId: payload.id,
+  addressKey: payload.key,
 });

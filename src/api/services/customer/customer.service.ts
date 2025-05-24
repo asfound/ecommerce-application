@@ -62,6 +62,14 @@ export class CustomerService {
       actions.push(createAddShippingAddressIdAction(key));
     }
 
+    if (payload.default && payload.type === 'billing') {
+      actions.push(createSetDefaultBillingAddressAction({ key }));
+    }
+
+    if (payload.default && payload.type === 'shipping') {
+      actions.push(createSetDefaultShippingAddressAction({ key }));
+    }
+
     const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
@@ -129,7 +137,7 @@ export class CustomerService {
     payload: AddressPayload,
   ): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = [
-      createSetDefaultBillingAddressAction(payload.addressId),
+      createSetDefaultBillingAddressAction({ id: payload.addressId, key: payload.addressKey }),
     ];
 
     return this.apiRoot()
@@ -142,7 +150,7 @@ export class CustomerService {
     payload: AddressPayload,
   ): Promise<ClientResponse<Customer>> {
     const actions: MyCustomerUpdateAction[] = [
-      createSetDefaultShippingAddressAction(payload.addressId),
+      createSetDefaultShippingAddressAction({ id: payload.addressId, key: payload.addressKey }),
     ];
 
     return this.apiRoot()

@@ -73,6 +73,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       const addNewShippingAddressPayload: AddAddressPayload = {
         address: payload.address,
         customerVersion: this.customerVersion ?? 0,
+        default: payload.default,
         type: 'billing',
       };
 
@@ -94,6 +95,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       const addNewShippingAddressPayload: AddAddressPayload = {
         address: payload.address,
         customerVersion: this.customerVersion ?? 0,
+        default: payload.default,
         type: 'shipping',
       };
 

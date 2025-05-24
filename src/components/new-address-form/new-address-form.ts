@@ -32,7 +32,7 @@ export interface NewAddressFormData {
     postalCode: string;
     streetName: string;
   };
-  default?: boolean;
+  default: boolean;
 }
 
 export class NewAddressForm extends BaseComponent implements Component {

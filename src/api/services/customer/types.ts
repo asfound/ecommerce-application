@@ -3,11 +3,13 @@ import type { BaseAddress } from '@commercetools/platform-sdk';
 export interface AddAddressPayload {
   address: BaseAddress;
   customerVersion: number;
+  default: boolean;
   type: 'billing' | 'shipping';
 }
 
 export interface AddressPayload {
-  addressId: string;
+  addressId?: string;
+  addressKey?: string;
   customerVersion: number;
 }
 
