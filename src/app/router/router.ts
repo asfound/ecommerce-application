@@ -108,6 +108,10 @@ export class Router {
     routerAction.setPathname(pathname);
     routerAction.setSearchParameters(searchParameters);
 
+    if (matcher?.route.canActivate?.some((interceptor) => !interceptor(this))) {
+      return;
+    }
+
     if (!matcher) {
       routerAction.setSearchParameters({});
 
@@ -115,10 +119,6 @@ export class Router {
 
       this.updatePage({ route: this.fallbackRoute });
 
-      return;
-    }
-
-    if (matcher.route.canActivate?.some((interceptor) => !interceptor(this))) {
       return;
     }
 
