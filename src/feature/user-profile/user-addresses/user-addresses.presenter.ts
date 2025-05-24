@@ -68,6 +68,34 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
     }
   };
 
+  private readonly handleBillingToggle = async (id: string, checked: boolean): Promise<void> => {
+    try {
+      let updatedCustomer: AppCustomer;
+
+      if (checked) {
+        updatedCustomer = await this.customerService.setDefaultBillingAddress({
+          addressId: id,
+          customerVersion: this.customerVersion ?? 0,
+        });
+
+        this.updateCustomerVersion(updatedCustomer.version);
+        this.updateView(updatedCustomer);
+      } else {
+        updatedCustomer = await this.customerService.unsetDefaultBillingAddress({
+          addressId: id,
+          customerVersion: this.customerVersion ?? 0,
+        });
+
+        this.updateCustomerVersion(updatedCustomer.version);
+        this.updateView(updatedCustomer);
+      }
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+    }
+  };
+
   private readonly handleNewBillingAddress = async (payload: NewAddressFormData): Promise<void> => {
     try {
       const addNewShippingAddressPayload: AddAddressPayload = {
@@ -112,6 +140,34 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
     }
   };
 
+  private readonly handleShippingToggle = async (id: string, checked: boolean): Promise<void> => {
+    try {
+      let updatedCustomer: AppCustomer;
+
+      if (checked) {
+        updatedCustomer = await this.customerService.setDefaultShippingAddress({
+          addressId: id,
+          customerVersion: this.customerVersion ?? 0,
+        });
+
+        this.updateCustomerVersion(updatedCustomer.version);
+        this.updateView(updatedCustomer);
+      } else {
+        updatedCustomer = await this.customerService.unsetDefaultShippingAddress({
+          addressId: id,
+          customerVersion: this.customerVersion ?? 0,
+        });
+
+        this.updateCustomerVersion(updatedCustomer.version);
+        this.updateView(updatedCustomer);
+      }
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+    }
+  };
+
   private async init(): Promise<void> {
     const userInformation = await this.customerService.getCustomer();
 
@@ -131,6 +187,8 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       },
       this.handleAddressChange,
       this.handleAddressDeletion,
+      this.handleShippingToggle,
+      this.handleBillingToggle,
     );
   }
 }

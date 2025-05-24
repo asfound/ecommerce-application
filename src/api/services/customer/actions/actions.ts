@@ -6,6 +6,8 @@ import type {
   MyCustomerChangeAddressAction,
   MyCustomerChangeEmailAction,
   MyCustomerRemoveAddressAction,
+  MyCustomerRemoveBillingAddressIdAction,
+  MyCustomerRemoveShippingAddressIdAction,
   MyCustomerSetDateOfBirthAction,
   MyCustomerSetDefaultBillingAddressAction,
   MyCustomerSetDefaultShippingAddressAction,
@@ -84,4 +86,18 @@ export const createSetDefaultBillingAddressAction = (payload: {
   action: 'setDefaultBillingAddress',
   addressId: payload.id,
   addressKey: payload.key,
+});
+
+export const createRemoveShippingAddressIdAction = (
+  addressId?: string,
+): MyCustomerRemoveShippingAddressIdAction => ({
+  action: 'removeShippingAddressId',
+  addressId,
+});
+
+export const createRemoveBillingAddressIdAction = (
+  addressId?: string,
+): MyCustomerRemoveBillingAddressIdAction => ({
+  action: 'removeBillingAddressId',
+  addressId,
 });

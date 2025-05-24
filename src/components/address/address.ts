@@ -65,12 +65,18 @@ export class UserAddress extends BaseComponent implements Component {
 
   private readonly onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>;
 
+  private readonly onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
+
+  private readonly onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
+
   private readonly submitButton = new Button({ textContent: BUTTON_TEXT.SAVE, type: 'submit' });
 
   public constructor(
     address: AppCustomerAddress,
     onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
     onAddressDeletion: (payload: string) => Promise<void>,
+    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
   ) {
     super({ tagName: 'div' });
 
@@ -78,6 +84,8 @@ export class UserAddress extends BaseComponent implements Component {
     this.countryName = this.getCountryByCode();
     this.onAddressChange = onAddressChange;
     this.onAddressDeletion = onAddressDeletion;
+    this.onBillingDefaultToggle = onBillingDefaultToggle;
+    this.onShippingDefaultToggle = onShippingDefaultToggle;
 
     this.storeInputs();
     this.setStyles();
@@ -264,6 +272,14 @@ export class UserAddress extends BaseComponent implements Component {
       if (this.inputPostcode.value) {
         this.inputPostcode.validate();
       }
+    });
+
+    this.inputDefaultBilling.addListener('change', () => {
+      this.onBillingDefaultToggle(this.address.addressId, this.inputDefaultBilling.checked);
+    });
+
+    this.inputDefaultShipping.addListener('change', () => {
+      this.onShippingDefaultToggle(this.address.addressId, this.inputDefaultShipping.checked);
     });
   }
 

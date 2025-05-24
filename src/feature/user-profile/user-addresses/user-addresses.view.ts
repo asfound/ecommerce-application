@@ -46,6 +46,8 @@ export class UserAddressesView extends BaseComponent implements Component {
     },
     onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
     onAddressDeletion: (payload: string) => Promise<void>,
+    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
   ): void {
     const { billingAddresses, shippingAddresses } = addressesData;
 
@@ -54,14 +56,26 @@ export class UserAddressesView extends BaseComponent implements Component {
 
     if (shippingAddresses.length > 0) {
       for (const address of shippingAddresses) {
-        const userAddress = new UserAddress(address, onAddressChange, onAddressDeletion);
+        const userAddress = new UserAddress(
+          address,
+          onAddressChange,
+          onAddressDeletion,
+          onShippingDefaultToggle,
+          onBillingDefaultToggle,
+        );
         shippingCol.append(userAddress.element);
       }
     }
 
     if (billingAddresses.length > 0) {
       for (const address of billingAddresses) {
-        const userAddress = new UserAddress(address, onAddressChange, onAddressDeletion);
+        const userAddress = new UserAddress(
+          address,
+          onAddressChange,
+          onAddressDeletion,
+          onShippingDefaultToggle,
+          onBillingDefaultToggle,
+        );
         billingCol.append(userAddress.element);
       }
     }
