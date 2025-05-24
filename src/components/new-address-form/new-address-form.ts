@@ -8,7 +8,7 @@ import {
   UNIVERSAL_COUNTRY_PROPS,
   UNIVERSAL_POSTAL_CODE_PROPS,
 } from '~/shared/constants/input-properties';
-import { datalist, div, form, option } from '~/shared/create-element/tags';
+import { datalist, div, option } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
 import type { Component } from '../base-component/types';
@@ -22,7 +22,7 @@ import styles from './new-address-form.module.css';
 
 export interface AddressFormProperties {
   onCancel(): void;
-  onSubmit(data: NewAddressFormData): void;
+  onSubmit(data: NewAddressFormData): Promise<void>;
 }
 
 export interface NewAddressFormData {
@@ -36,18 +36,16 @@ export interface NewAddressFormData {
 }
 
 export class NewAddressForm extends BaseComponent implements Component {
-  private readonly onCancel: () => void;
+  private readonly properties;
 
   private readonly cancelButton = new Button({
     onClick: (): void => {
-      this.onCancel();
+      this.properties.onCancel();
       this.destroy();
     },
     textContent: BUTTON_TEXT.CANCEL,
     type: 'button',
   });
-
-  private readonly formElement = form({ className: styles.form });
 
   private readonly inputCity = new InputText(CITY_PROPS);
 
@@ -61,23 +59,15 @@ export class NewAddressForm extends BaseComponent implements Component {
 
   private readonly inputStreet = new InputText(STREET_PROPS);
 
-  private readonly onSubmit: (data: NewAddressFormData) => void;
-
   private readonly submitButton = new Button({
     textContent: BUTTON_TEXT.ADD,
     type: 'submit',
   });
 
   public constructor(properties: AddressFormProperties) {
-    super({ tagName: 'form' });
+    super({ className: styles.form, tagName: 'form' });
 
-    this.onSubmit = (data): void => {
-      properties.onSubmit(data);
-    };
-
-    this.onCancel = (): void => {
-      properties.onCancel();
-    };
+    this.properties = properties;
 
     this.storeInputs();
     this.setStyles();
@@ -92,7 +82,7 @@ export class NewAddressForm extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    this.formElement.append(
+    this.append(
       div({ className: styles.formTitle }, 'New address details:'),
       this.inputCountry.element,
       this.inputPostcode.element,
@@ -108,8 +98,6 @@ export class NewAddressForm extends BaseComponent implements Component {
     this.submitButton.disable();
 
     this.inputPostcode.addValidator(validatePostalCode(() => this.inputCountry.value));
-
-    this.replaceChildren(this.formElement);
   }
 
   private addInputComponent(input: InputBase): void {
@@ -160,10 +148,10 @@ export class NewAddressForm extends BaseComponent implements Component {
       }
     });
 
-    this.addListener('click', (event) => {
+    this.addListener('submit', (event) => {
       event.preventDefault();
 
-      this.onSubmit(this.getPayload());
+      this.properties.onSubmit(this.getPayload());
     });
   }
 

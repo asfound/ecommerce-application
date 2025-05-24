@@ -25,6 +25,8 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
     this.init();
 
+    view.setupListeners(this.handleNewShippingAddress);
+
     console.warn(this.handleNewBillingAddress);
     console.warn(this.handleNewShippingAddress);
   }
@@ -96,6 +98,8 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       };
 
       const updatedCustomer = await this.customerService.addAddress(addNewShippingAddressPayload);
+
+      console.warn('handleNewShippingAddress', updatedCustomer);
 
       this.updateCustomerVersion(updatedCustomer.version);
       this.updateView(updatedCustomer);

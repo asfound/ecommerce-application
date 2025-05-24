@@ -1,4 +1,5 @@
 import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services/customer/types';
+import type { AddressFormProperties } from '~/components/new-address-form/new-address-form';
 
 import { NewAddressForm } from '~/components/new-address-form/new-address-form';
 import { BUTTON_TEXT, BUTTON_TITLE } from '~/shared/constants/constants';
@@ -36,8 +37,6 @@ export class UserAddressesView extends BaseComponent implements Component {
 
   public constructor() {
     super({ tagName: 'div' });
-
-    this.setupListeners();
   }
 
   public createHTML(
@@ -72,27 +71,25 @@ export class UserAddressesView extends BaseComponent implements Component {
     this.replaceChildren(addressesContainer);
   }
 
-  private newShippingAddressHandler(): void {
+  public setupListeners(handler: AddressFormProperties['onSubmit']): void {
+    this.addShippingAddressButton.addEventListener(
+      'click',
+      () => {
+        this.newShippingAddressHandler(handler);
+        this.addShippingAddressButton.classList.add(styles.hidden);
+      },
+      { signal: this.abortController.signal },
+    );
+  }
+
+  private newShippingAddressHandler(handler: AddressFormProperties['onSubmit']): void {
     this.shippingColHeader.after(
       new NewAddressForm({
         onCancel: (): void => {
           this.addShippingAddressButton.classList.remove(styles.hidden);
         },
-        onSubmit: (data): void => {
-          console.warn(data);
-        },
+        onSubmit: handler,
       }).element,
-    );
-  }
-
-  private setupListeners(): void {
-    this.addShippingAddressButton.addEventListener(
-      'click',
-      () => {
-        this.newShippingAddressHandler();
-        this.addShippingAddressButton.classList.add(styles.hidden);
-      },
-      { signal: this.abortController.signal },
     );
   }
 }
