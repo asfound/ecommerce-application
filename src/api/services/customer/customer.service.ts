@@ -12,9 +12,9 @@ import type { AuthService } from '../auth/auth.service.ts';
 import type {
   AddAddressPayload,
   AddressPayload,
+  AppChangeAddressPayload,
   AppChangePasswordPayload,
   AppCustomer,
-  ChangeAddressPayload,
   PersonalDataPayload,
 } from './types.ts';
 
@@ -68,15 +68,19 @@ export class CustomerService {
       .execute();
   }
 
-  public async changeAddress(payload: ChangeAddressPayload): Promise<ClientResponse<Customer>> {
+  public async changeAddress(payload: AppChangeAddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [
       createChangeAddressAction({ address: payload.address, addressId: payload.addressId }),
     ];
 
-    return this.apiRoot()
+    const appCustomerData = await this.getCustomer();
+
+    const response = await this.apiRoot()
       .me()
-      .post({ body: { actions, version: payload.customerVersion } })
+      .post({ body: { actions, version: appCustomerData.version } })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
   public async changePassword(payload: AppChangePasswordPayload): Promise<AppCustomer> {

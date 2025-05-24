@@ -11,6 +11,10 @@ export interface AddressPayload {
   customerVersion: number;
 }
 
+export interface AppChangeAddressPayload extends Omit<AddressPayload, 'customerVersion'> {
+  address: BaseAddress;
+}
+
 export interface AppChangePasswordPayload {
   currentPassword: string;
   newPassword: string;
@@ -27,6 +31,7 @@ export interface AppCustomer {
 }
 
 export interface AppCustomerAddress {
+  addressId: string;
   city: string;
   country: string;
   defaultBilling: boolean;

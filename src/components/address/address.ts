@@ -1,16 +1,17 @@
-import type { AppCustomerAddress } from '~/api/services/customer/types';
+import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services/customer/types';
 
 import { BUTTON_TEXT } from '~/shared/constants/constants';
-import { COUNTRY_CODES } from '~/shared/constants/country-codes';
+import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   CITY_PROPS,
+  COUNTRY_LIST_ID,
   DEFAULT_BILLING_CHECKBOX_PROPS,
   DEFAULT_SHIPPING_CHECKBOX_PROPS,
   STREET_PROPS,
   UNIVERSAL_COUNTRY_PROPS,
   UNIVERSAL_POSTAL_CODE_PROPS,
 } from '~/shared/constants/input-properties';
-import { div, form, span } from '~/shared/create-element/tags';
+import { datalist, div, form, option, span } from '~/shared/create-element/tags';
 import { validatePostalCode } from '~/shared/form-validators/form-validators';
 
 import type { Component } from '../base-component/types';
@@ -26,7 +27,13 @@ import { FIELD_NAME } from './constants';
 export class UserAddress extends BaseComponent implements Component {
   private readonly address: AppCustomerAddress;
 
-  private readonly cancelButton = new Button({ textContent: BUTTON_TEXT.CANCEL, type: 'button' });
+  private readonly cancelButton = new Button({
+    onClick: (): void => {
+      this.resetView();
+    },
+    textContent: BUTTON_TEXT.CANCEL,
+    type: 'button',
+  });
 
   private readonly countryName;
 
@@ -48,19 +55,26 @@ export class UserAddress extends BaseComponent implements Component {
 
   private readonly inputStreet = new InputText(STREET_PROPS);
 
-  private readonly submitButton = new Button({ textContent: BUTTON_TEXT.SAVE, type: 'button' });
+  private readonly onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>;
 
-  public constructor(address: AppCustomerAddress) {
+  private readonly submitButton = new Button({ textContent: BUTTON_TEXT.SAVE, type: 'submit' });
+
+  public constructor(
+    address: AppCustomerAddress,
+    onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
+  ) {
     super({ tagName: 'div' });
 
     this.address = address;
     this.countryName = this.getCountryByCode();
+    this.onAddressChange = onAddressChange;
 
     this.storeInputs();
     this.setStyles();
     this.setupInputsState();
     this.setupListeners();
     this.createHTML();
+    this.addSubmitHandler();
   }
 
   public checkValidity(): void {
@@ -83,12 +97,35 @@ export class UserAddress extends BaseComponent implements Component {
     super.destroy();
   }
 
+  public resetInputs(): void {
+    for (const input of this.inputComponents) {
+      input.reset();
+    }
+  }
+
+  public resetView(): void {
+    this.resetInputs();
+    this.createBaseView();
+  }
+
   private addInputComponent(input: InputBase): void {
     this.inputComponents.push(input);
 
     input.addListener('input', () => {
       this.checkValidity();
     });
+  }
+
+  private addSubmitHandler(): void {
+    this.formElement.addEventListener(
+      'submit',
+      (event) => {
+        event.preventDefault();
+
+        this.onAddressChange(this.getPayload());
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   private createBaseView(): void {
@@ -132,7 +169,18 @@ export class UserAddress extends BaseComponent implements Component {
       this.deleteButton.element,
     );
 
-    this.append(addressBlock);
+    this.replaceChildren(addressBlock);
+  }
+
+  private createDataList(): HTMLDataListElement {
+    const datalistElement = datalist({ id: COUNTRY_LIST_ID.UNIVERSAL });
+
+    for (const item of COUNTRY_NAMES) {
+      const optionElement = option({ value: item });
+      datalistElement.append(optionElement);
+    }
+
+    return datalistElement;
   }
 
   private createFormView(): void {
@@ -141,6 +189,8 @@ export class UserAddress extends BaseComponent implements Component {
     this.inputStreet.setValue(this.address.streetName);
     this.inputPostcode.setValue(this.address.postalCode);
 
+    this.submitButton.disable();
+
     this.formElement.append(
       this.inputCountry.element,
       this.inputCity.element,
@@ -148,6 +198,7 @@ export class UserAddress extends BaseComponent implements Component {
       this.inputPostcode.element,
       this.cancelButton.element,
       this.submitButton.element,
+      this.createDataList(),
     );
 
     this.replaceChildren(this.formElement);
@@ -159,11 +210,27 @@ export class UserAddress extends BaseComponent implements Component {
     );
   }
 
+  private getPayload(): AppChangeAddressPayload {
+    return {
+      address: {
+        city: this.inputCity.value.trim(),
+        country: COUNTRY_CODES[this.inputCountry.value] ?? '',
+
+        postalCode: this.inputPostcode.value.trim(),
+        streetName: this.inputStreet.value.trim(),
+      },
+      addressId: this.address.addressId,
+    };
+  }
+
   private setStyles(): void {
     this.inputCountry.addClassNames(styles.formItem);
     this.inputCity.addClassNames(styles.formItem);
     this.inputStreet.addClassNames(styles.formItem);
     this.inputPostcode.addClassNames(styles.formItem);
+    this.cancelButton.addClassNames(styles.formItem);
+    this.submitButton.addClassNames(styles.formItem);
+
     this.deleteButton.addClassNames(styles.detailsItem);
     this.inputDefaultBilling.addClassNames(styles.detailsItem);
     this.inputDefaultShipping.addClassNames(styles.detailsItem);

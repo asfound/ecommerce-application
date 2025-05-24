@@ -1,5 +1,5 @@
 import type { CustomerService } from '~/api/services/customer/customer.service';
-import type { AppCustomer } from '~/api/services/customer/types';
+import type { AppChangeAddressPayload, AppCustomer } from '~/api/services/customer/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
 
@@ -16,6 +16,17 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
     this.initView();
   }
 
+  private readonly handleAddressChange = async (
+    payload: AppChangeAddressPayload,
+  ): Promise<void> => {
+    try {
+      const updatedCustomer = await this.customerService.changeAddress(payload);
+      this.updateView(updatedCustomer);
+    } catch (error: unknown) {
+      console.warn(error);
+    }
+  };
+
   private async initView(): Promise<void> {
     const userInformation = await this.customerService.getCustomer();
 
@@ -24,9 +35,12 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
   private updateView(userInformation: AppCustomer): void {
     console.warn(userInformation);
-    this.view.createHTML({
-      billingAddresses: userInformation.billingAddresses,
-      shippingAddresses: userInformation.shippingAddresses,
-    });
+    this.view.createHTML(
+      {
+        billingAddresses: userInformation.billingAddresses,
+        shippingAddresses: userInformation.shippingAddresses,
+      },
+      this.handleAddressChange,
+    );
   }
 }
