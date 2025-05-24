@@ -1,6 +1,7 @@
 import type { Router } from '../router';
 import type { SearchParameters } from '../types';
 
+import { PUSH_STATE_MODE } from '../constants';
 import { routerStore } from './store';
 
 let routerInstance: Router;
@@ -14,7 +15,7 @@ const setSearchParameters = (searchParameters: SearchParameters): void => {
 
   routerInstance.updateHistory({
     pathname: globalThis.location.pathname,
-    pushState: false,
+    pushState: PUSH_STATE_MODE.REPLACE,
     searchParameters,
   });
 };
