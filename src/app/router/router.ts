@@ -38,7 +38,7 @@ export class Router {
     });
 
     globalThis.addEventListener('DOMContentLoaded', () => {
-      this.handleRouteChange({ path: globalThis.location.href, pushState: true });
+      this.handleRouteChange({ path: globalThis.location.href, pushState: false });
     });
   }
 
