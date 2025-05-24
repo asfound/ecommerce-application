@@ -5,6 +5,11 @@ import type { Router } from './router';
 
 export type Interceptor = (router: Router) => boolean;
 
+export interface NavigateOptions {
+  pushState?: boolean;
+  searchParameters?: SearchParameters;
+}
+
 export interface Route {
   canActivate?: Interceptor[];
   component(): Promise<BaseComponent>;

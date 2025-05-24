@@ -8,7 +8,7 @@ export const isNotLoggedIn = (router: Router): boolean => {
   const loggedIn = SERVICE_HUB.provideAuthService().isLoggedIn();
 
   if (loggedIn) {
-    router.navigate(ROUTE_PATH.MAIN);
+    router.navigate(ROUTE_PATH.MAIN, { pushState: false });
     return false;
   }
 
@@ -19,7 +19,7 @@ export const isLoggedIn = (router: Router): boolean => {
   const loggedIn = SERVICE_HUB.provideAuthService().isLoggedIn();
 
   if (!loggedIn) {
-    router.navigate(ROUTE_PATH.LOGIN);
+    router.navigate(ROUTE_PATH.LOGIN, { pushState: false });
     return false;
   }
 

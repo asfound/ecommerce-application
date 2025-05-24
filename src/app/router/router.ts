@@ -1,6 +1,6 @@
 import { BaseComponent } from '~/components/base-component/base-component';
 
-import type { Route, RouteMatcher, SearchParameters } from './types';
+import type { NavigateOptions, Route, RouteMatcher, SearchParameters } from './types';
 
 import { ROUTER_ERROR } from './constants';
 import { createRouteMatcher } from './helpers/route-matcher';
@@ -38,7 +38,7 @@ export class Router {
     });
 
     globalThis.addEventListener('DOMContentLoaded', () => {
-      this.handleRouteChange({ path: globalThis.location.href, pushState: false });
+      this.handleRouteChange({ path: globalThis.location.href, pushState: true });
     });
   }
 
@@ -59,21 +59,21 @@ export class Router {
     globalThis.history.forward();
   }
 
-  public navigate(path: string, searchParameters?: SearchParameters): void {
+  public navigate(path: string, options?: NavigateOptions): void {
     const { pathname } = new URL(globalThis.location.href);
 
     if (path === pathname) {
       return;
     }
 
-    this.handleRouteChange({ path, pushState: true, searchParameters });
+    this.handleRouteChange({
+      path,
+      pushState: options?.pushState ?? true,
+      searchParameters: options?.searchParameters,
+    });
   }
 
-  public updateHistory(payload: {
-    pathname: string;
-    pushState: boolean;
-    searchParameters: SearchParameters;
-  }): void {
+  public updateHistory(payload: NavigateOptions & { pathname: string }): void {
     const searchParameters = new URLSearchParams(payload.searchParameters);
 
     const url =
@@ -88,11 +88,7 @@ export class Router {
     }
   }
 
-  private handleRouteChange(payload: {
-    path: string;
-    pushState: boolean;
-    searchParameters?: SearchParameters;
-  }): void {
+  private handleRouteChange(payload: NavigateOptions & { path: string }): void {
     const { pathname, searchParameters } = this.parseURL({
       path: payload.path,
       searchParameters: payload.searchParameters,
@@ -100,9 +96,8 @@ export class Router {
 
     const matcher = this.routeMatchers.find((matcher) => matcher.checkMatch(pathname));
 
-    if (matcher?.route.canActivate?.some((interceptor) => !interceptor(this))) {
-      return;
-    }
+    routerAction.setPathname(pathname);
+    routerAction.setSearchParameters(searchParameters);
 
     if (!matcher) {
       routerAction.setSearchParameters({});
@@ -114,12 +109,13 @@ export class Router {
       return;
     }
 
+    if (matcher.route.canActivate?.some((interceptor) => !interceptor(this))) {
+      return;
+    }
+
     this.updateHistory({ pathname, pushState: payload.pushState, searchParameters });
 
     this.updatePage({ route: matcher.route });
-
-    routerAction.setPathname(pathname);
-    routerAction.setSearchParameters(searchParameters);
   }
 
   private parseURL(payload: { path: string; searchParameters?: SearchParameters }): {
