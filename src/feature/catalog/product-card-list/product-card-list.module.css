@@ -4,8 +4,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(29rem, 1fr));
   gap: 2rem;
-  place-content: center;
-  justify-items: center;
+  align-content: start;
 
   min-height: 30rem;
   border-radius: var(--border-radius);
@@ -13,9 +12,9 @@
 
 .notFoundWidget {
   position: absolute;
-  top: 50%;
+  top: 20px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
 
   display: grid;
   gap: 1rem;
