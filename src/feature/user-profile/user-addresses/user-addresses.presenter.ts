@@ -13,6 +13,8 @@ import { showToast } from '~/shared/utils/show-toast';
 
 import type { UserAddressesView } from './user-addresses.view';
 
+import { USER_NOTIFICATION } from './constants';
+
 export class UserAddressesPresenter extends Presenter<UserAddressesView> {
   private readonly customerService: CustomerService;
 
@@ -49,6 +51,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
       this.updateCustomerVersion(updatedCustomer.version);
       this.updateView(updatedCustomer);
+      showToast(USER_NOTIFICATION.CHANGE);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -65,6 +68,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
       this.updateCustomerVersion(updatedCustomer.version);
       this.updateView(updatedCustomer);
+      showToast(USER_NOTIFICATION.DELETE);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -84,6 +88,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
         this.updateCustomerVersion(updatedCustomer.version);
         this.updateView(updatedCustomer);
+        showToast(USER_NOTIFICATION.SET_DEFAULT);
       } else {
         updatedCustomer = await this.customerService.unsetDefaultBillingAddress({
           addressId: id,
@@ -92,6 +97,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
         this.updateCustomerVersion(updatedCustomer.version);
         this.updateView(updatedCustomer);
+        showToast(USER_NOTIFICATION.UNSET_DEFAULT);
       }
     } catch (error: unknown) {
       if (isError(error)) {
@@ -113,6 +119,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
       this.updateCustomerVersion(updatedCustomer.version);
       this.updateView(updatedCustomer);
+      showToast(USER_NOTIFICATION.NEW);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -135,6 +142,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
       this.updateCustomerVersion(updatedCustomer.version);
       this.updateView(updatedCustomer);
+      showToast(USER_NOTIFICATION.NEW);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -154,6 +162,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
         this.updateCustomerVersion(updatedCustomer.version);
         this.updateView(updatedCustomer);
+        showToast(USER_NOTIFICATION.SET_DEFAULT);
       } else {
         updatedCustomer = await this.customerService.unsetDefaultShippingAddress({
           addressId: id,
@@ -162,6 +171,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
 
         this.updateCustomerVersion(updatedCustomer.version);
         this.updateView(updatedCustomer);
+        showToast(USER_NOTIFICATION.UNSET_DEFAULT);
       }
     } catch (error: unknown) {
       if (isError(error)) {
