@@ -251,8 +251,8 @@ export class UserAddress extends BaseComponent implements Component {
     this.submitButton.addClassNames(styles.formItem);
 
     this.deleteButton.addClassNames(styles.detailsItem);
-    this.inputDefaultBilling.addClassNames(styles.detailsItem);
-    this.inputDefaultShipping.addClassNames(styles.detailsItem);
+    this.inputDefaultBilling.addClassNames(styles.detailsItem, styles.checkbox);
+    this.inputDefaultShipping.addClassNames(styles.detailsItem, styles.checkbox);
   }
 
   private setupInputsState(): void {

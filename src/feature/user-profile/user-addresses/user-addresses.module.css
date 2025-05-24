@@ -21,11 +21,12 @@
 .colHeader {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 2rem;
   justify-content: space-between;
 }
 
 .button {
+  min-width: 21rem;
   padding: 0.8rem;
   border: none;
   border-radius: var(--border-radius);

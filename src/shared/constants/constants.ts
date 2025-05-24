@@ -53,7 +53,6 @@ export const APP_LOCALE = 'en-US';
 
 export const BUTTON_TEXT = {
   ADD: 'Add',
-  ADD_ADDRESS: '+ Add Address',
   CANCEL: 'Cancel',
   DELETE: 'Delete',
   EDIT: 'Edit',

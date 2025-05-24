@@ -25,6 +25,12 @@
   max-width: 100%;
 }
 
+@media (width <= 865px) {
+  .checkbox {
+    flex: 1 0 100%;
+  }
+}
+
 @media (width <= 768px) {
   .formItem,
   .detailsItem {

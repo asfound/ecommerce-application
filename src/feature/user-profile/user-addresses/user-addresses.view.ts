@@ -2,25 +2,25 @@ import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services
 import type { AddressFormProperties } from '~/components/new-address-form/new-address-form';
 
 import { NewAddressForm } from '~/components/new-address-form/new-address-form';
-import { BUTTON_TEXT, BUTTON_TITLE } from '~/shared/constants/constants';
+import { BUTTON_TITLE } from '~/shared/constants/constants';
 import { button, div } from '~/shared/create-element/tags';
 
 import type { Component } from '../../../components/base-component/types';
 
 import { UserAddress } from '../../../components/address/address';
 import { BaseComponent } from '../../../components/base-component/base-component';
-import { TITLE } from './constants';
+import { ADD_BUTTON_TEXT, TITLE } from './constants';
 import styles from './user-addresses.module.css';
 
 export class UserAddressesView extends BaseComponent implements Component {
   private readonly addBillingAddressButton = button(
     { className: styles.button, title: BUTTON_TITLE.BILLING },
-    BUTTON_TEXT.ADD_ADDRESS,
+    ADD_BUTTON_TEXT.BILLING,
   );
 
   private readonly addShippingAddressButton = button(
     { className: styles.button, title: BUTTON_TITLE.SHIPPING },
-    BUTTON_TEXT.ADD_ADDRESS,
+    ADD_BUTTON_TEXT.SHIPPING,
   );
 
   private readonly billingColHeader = div(
