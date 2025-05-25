@@ -1,16 +1,26 @@
-import { routerSelector } from '~/app/router/store/selectors';
-import { routerStore } from '~/app/router/store/store';
+import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { h1, h2 } from '~/shared/create-element/tags';
+import { ProductDetailsPresenter } from '~/feature/product-details/product-details.presenter';
+import { ProductDetailsView } from '~/feature/product-details/product-details.view';
+import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 
 export class ProductDetailsPage extends BaseComponent {
+  private readonly productDetailsPresenter: ProductDetailsPresenter;
+
   public constructor() {
-    super({ tagName: 'div' });
+    super({ className: CSS_CLASS_NAME.WRAPPER, tagName: 'div' });
 
-    const searchParameters = routerStore.select(routerSelector.selectSearchParameters);
+    this.productDetailsPresenter = new ProductDetailsPresenter(
+      new ProductDetailsView(),
+      SERVICE_HUB.provideProductsService(),
+    );
 
-    this.append(h1(null, 'Product Details'));
-    this.append(h2(null, `Product name: ${searchParameters.name}`));
-    this.append(h2(null, `Product SKU: ${searchParameters.sku}`));
+    this.append(this.productDetailsPresenter.getView());
+  }
+
+  public override destroy(): void {
+    this.productDetailsPresenter.destroy();
+
+    super.destroy();
   }
 }
