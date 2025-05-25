@@ -45,6 +45,7 @@ export const PROJECT_NAME = {
 export const TITLE = PROJECT_NAME.TEAM + PROJECT_NAME.PROJECT;
 
 export const CSS_CLASS_NAME = {
+  HIDDEN: 'hidden',
   NO_SCROLL: 'noScroll',
   WRAPPER: 'wrapper',
 } as const;
