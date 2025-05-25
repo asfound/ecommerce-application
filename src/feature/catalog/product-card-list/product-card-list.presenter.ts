@@ -56,7 +56,10 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   }
 
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
-    Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, { name: product.name, sku: product.sku });
+    Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, {
+      id: product.productId,
+      sku: product.sku,
+    });
   };
 
   private initIntersectionObserver(): void {

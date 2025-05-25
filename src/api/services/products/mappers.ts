@@ -15,9 +15,10 @@ const isAttribute = (value: unknown): value is { key: string; label: string } =>
   );
 };
 
-const mapVariantToAppProduct = (
+export const mapVariantToAppProduct = (
   variant: ProductVariant,
   projection: ProductProjection,
+  includeVariants = true,
 ): AppProduct => {
   const bestSellerAttribute = variant.attributes?.find(
     (attribute) => attribute.name === PRODUCT_ATTRIBUTE.BEST_SELLER,
@@ -30,6 +31,9 @@ const mapVariantToAppProduct = (
   const weightValue: unknown = weightAttribute?.value;
   const weightLabel = isAttribute(weightValue) ? weightValue.label : '';
 
+  const allVariants = [projection.masterVariant, ...projection.variants];
+  const otherVariants = allVariants.filter((v) => v.sku !== variant.sku);
+
   return {
     bestSeller: !!bestSellerAttribute?.value,
     description: projection.description?.[APP_LOCALE] ?? '',
@@ -37,18 +41,18 @@ const mapVariantToAppProduct = (
       label: variant.images?.[0]?.label ?? '',
       url: variant.images?.[0]?.url ?? '',
     },
-    images:
-      variant.images?.map((image) => ({
-        label: image.label ?? '',
-        url: image.url,
-      })) ?? [],
+    images: variant.images?.map((image) => ({ label: image.label ?? '', url: image.url })) ?? [],
     name: projection.name[APP_LOCALE],
     price: {
       default: variant.prices?.[0]?.value?.centAmount ?? 0,
       discounted: variant.prices?.[0]?.discounted?.value?.centAmount,
     },
+    productId: projection.id,
+    productType: projection.productType.obj?.key,
     sku: variant.sku ?? '',
-    variants: [],
+    variants: includeVariants
+      ? otherVariants.map((v) => mapVariantToAppProduct(v, projection, false))
+      : [],
     weight: weightAttribute ? weightLabel : undefined,
   };
 };

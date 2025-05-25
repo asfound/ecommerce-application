@@ -8,6 +8,8 @@ const productCard = new ProductCard(
     images: [],
     name: 'test',
     price: { default: 0 },
+    productId: 'test',
+    productType: 'test',
     sku: 'test',
     variants: [],
     weight: 'test',

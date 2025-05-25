@@ -9,6 +9,10 @@ export const PRODUCT_ATTRIBUTE = {
   WEIGHT: 'weight',
 } as const;
 
+export const EXPAND_PATH = {
+  PRODUCT_TYPE: 'productType',
+} as const;
+
 export const QUERY_KEY = {
   FILTER_QUERY: 'filter.query',
   FULL_TEXT_SEARCH: `text.${APP_LOCALE}`,

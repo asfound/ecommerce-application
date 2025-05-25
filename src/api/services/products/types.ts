@@ -7,6 +7,8 @@ export interface AppProduct {
   images: AppProductImage[];
   name: string;
   price: { default: number; discounted?: number };
+  productId: string;
+  productType: string | undefined;
   sku: string;
   variants: AppProduct[];
   weight: string | undefined;
