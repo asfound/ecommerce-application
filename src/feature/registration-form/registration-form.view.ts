@@ -11,6 +11,7 @@ import { InputDate } from '~/components/common/input/input-date/input-date';
 import { InputPassword } from '~/components/common/input/input-password/input-password';
 import { InputText } from '~/components/common/input/input-text/input-text';
 import { FormHeader } from '~/components/form-header/form-header';
+import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
 import {
   BILLING_COUNTRY_PROPS,
@@ -218,7 +219,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     this.inputShippingAsBilling.addListener('change', () => {
       const isBillingHidden = this.inputShippingAsBilling.checked;
 
-      this.billingAddressFieldset?.classList.toggle(styles.hidden, isBillingHidden);
+      this.billingAddressFieldset?.classList.toggle(CSS_CLASS_NAME.HIDDEN, isBillingHidden);
 
       if (isBillingHidden) {
         this.removeBillingAddressInputs();

@@ -1,0 +1,26 @@
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+
+  padding: 2rem;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-black);
+}
+
+.formTitle {
+  flex: 1 0 100%;
+  text-align: center;
+}
+
+.formItem {
+  flex: 0 0 calc(50% - 1rem);
+  max-width: 100%;
+}
+
+@media (width <= 768px) {
+  .formItem {
+    flex: 0 0 100%;
+  }
+}

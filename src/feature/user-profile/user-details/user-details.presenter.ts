@@ -1,22 +1,19 @@
+import { isError } from 'lodash';
+
 import type { CustomerService } from '~/api/services/customer/customer.service';
-import type {
-  AppChangePasswordPayload,
-  AppCustomer,
-  PersonalDataPayload,
-} from '~/api/services/customer/types';
+import type { AppCustomer, PersonalDataPayload } from '~/api/services/customer/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
-import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
 
-import type { UserProfileView } from './user-profile.view';
+import type { UserDetailsView } from './user-details.view';
 
 import { USER_NOTIFICATION } from './constants';
 
-export class UserProfilePresenter extends Presenter<UserProfileView> {
+export class UserDetailsPresenter extends Presenter<UserDetailsView> {
   private readonly customerService: CustomerService;
 
-  public constructor(view: UserProfileView, customerService: CustomerService) {
+  public constructor(view: UserDetailsView, customerService: CustomerService) {
     super(view);
 
     this.customerService = customerService;
@@ -26,37 +23,27 @@ export class UserProfilePresenter extends Presenter<UserProfileView> {
     this.bindViewHandlers();
   }
 
-  private bindViewHandlers(): void {
-    this.view.bindPersonalDataUpdateHandler(this.handlePersonalDataUpdate);
-    this.view.bindPasswordChangeHandler(this.handlePasswordChange);
+  public resetView(): void {
+    this.view.resetView();
   }
 
-  private readonly handlePasswordChange = async (
-    payload: AppChangePasswordPayload,
-  ): Promise<void> => {
-    try {
-      const updatedCustomer = await this.customerService.changePassword(payload);
-      this.updateView(updatedCustomer);
-      showToast(USER_NOTIFICATION.PASSWORD_SUCCESS);
-    } catch (error: unknown) {
-      if (isError(error)) {
-        this.view.showError(error.message);
-      }
-    } finally {
-      window.scrollTo({ top: 0 });
-    }
-  };
+  private bindViewHandlers(): void {
+    this.view.bindDataUpdateHandler(this.handlePersonalDataUpdate);
+  }
 
   private readonly handlePersonalDataUpdate = async (
     payload: PersonalDataPayload,
   ): Promise<void> => {
     try {
       const updatedCustomer = await this.customerService.updatePersonalData(payload);
+
+      this.view.resetInputs();
       this.updateView(updatedCustomer);
+
       showToast(USER_NOTIFICATION.INFORMATION_SUCCESS);
     } catch (error: unknown) {
       if (isError(error)) {
-        this.view.showError(error.message);
+        showToast(error.message, true);
       }
     } finally {
       window.scrollTo({ top: 0 });
