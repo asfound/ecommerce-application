@@ -3,16 +3,21 @@ import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
+import { Loader } from '~/components/common/loader/loader';
 import { div, h2, h3, img, p } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import styles from './product-details.module.css';
 
 export class ProductDetailsView extends BaseComponent implements Component {
+  private readonly loader = new Loader({ size: 'medium' });
+
   private productData: AppProduct | undefined = undefined;
 
   public constructor() {
     super({ className: ['PRODUCT_DETAILS', styles.productDetails], tagName: 'div' });
+
+    this.append(this.loader);
   }
 
   public createHTML(product: AppProduct, sku: string): void {
@@ -29,6 +34,18 @@ export class ProductDetailsView extends BaseComponent implements Component {
     const content = this.createContent(this.productData, weightButtons);
 
     this.append(slider, content);
+  }
+
+  public hideLoader(): void {
+    this.loader.hide();
+  }
+
+  public scrollToTop(): void {
+    window.scrollTo({ top: 0 });
+  }
+
+  public showLoader(): void {
+    this.loader.show();
   }
 
   private createContent(product: AppProduct, weightButtons: HTMLDivElement | null): HTMLDivElement {
