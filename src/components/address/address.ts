@@ -1,4 +1,5 @@
 import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services/customer/types';
+import type { AddressCallbacks } from '~/feature/user-profile/user-addresses/types';
 
 import { BUTTON_TEXT } from '~/shared/constants/constants';
 import { COUNTRY_CODES, COUNTRY_NAMES } from '~/shared/constants/country-codes';
@@ -27,6 +28,8 @@ import { FIELD_NAME } from './constants';
 export class UserAddress extends BaseComponent implements Component {
   private readonly address: AppCustomerAddress;
 
+  private readonly callbacks: AddressCallbacks;
+
   private readonly cancelButton = new Button({
     onClick: (): void => {
       this.resetView();
@@ -37,11 +40,11 @@ export class UserAddress extends BaseComponent implements Component {
 
   private readonly countryName;
 
-  private readonly onAddressDeletion: (payload: string) => Promise<void>;
+  // private readonly onAddressDeletion: (payload: string) => Promise<void>;
 
   private readonly deleteButton = new Button({
     onClick: (): void => {
-      this.onAddressDeletion(this.address.addressId);
+      this.callbacks.onAddressDeletion(this.address.addressId);
     },
     textContent: BUTTON_TEXT.DELETE,
     type: 'button',
@@ -63,29 +66,24 @@ export class UserAddress extends BaseComponent implements Component {
 
   private readonly inputStreet = new InputText(STREET_PROPS);
 
-  private readonly onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>;
+  // private readonly onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>;
 
-  private readonly onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
+  // private readonly onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
 
-  private readonly onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
+  // private readonly onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
 
   private readonly submitButton = new Button({ textContent: BUTTON_TEXT.SAVE, type: 'submit' });
 
-  public constructor(
-    address: AppCustomerAddress,
-    onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
-    onAddressDeletion: (payload: string) => Promise<void>,
-    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
-    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
-  ) {
+  public constructor(address: AppCustomerAddress, callbacks: AddressCallbacks) {
     super({ tagName: 'div' });
 
     this.address = address;
     this.countryName = this.getCountryByCode();
-    this.onAddressChange = onAddressChange;
-    this.onAddressDeletion = onAddressDeletion;
-    this.onBillingDefaultToggle = onBillingDefaultToggle;
-    this.onShippingDefaultToggle = onShippingDefaultToggle;
+    // this.onAddressChange = onAddressChange;
+    // this.onAddressDeletion = onAddressDeletion;
+    // this.onBillingDefaultToggle = onBillingDefaultToggle;
+    // this.onShippingDefaultToggle = onShippingDefaultToggle;
+    this.callbacks = callbacks;
 
     this.storeInputs();
     this.setStyles();
@@ -140,7 +138,7 @@ export class UserAddress extends BaseComponent implements Component {
       (event) => {
         event.preventDefault();
 
-        this.onAddressChange(this.getPayload());
+        this.callbacks.onAddressChange(this.getPayload());
       },
       { signal: this.abortController.signal },
     );
@@ -276,11 +274,17 @@ export class UserAddress extends BaseComponent implements Component {
     });
 
     this.inputDefaultBilling.addListener('change', () => {
-      this.onBillingDefaultToggle(this.address.addressId, this.inputDefaultBilling.checked);
+      this.callbacks.onBillingDefaultToggle(
+        this.address.addressId,
+        this.inputDefaultBilling.checked,
+      );
     });
 
     this.inputDefaultShipping.addListener('change', () => {
-      this.onShippingDefaultToggle(this.address.addressId, this.inputDefaultShipping.checked);
+      this.callbacks.onShippingDefaultToggle(
+        this.address.addressId,
+        this.inputDefaultShipping.checked,
+      );
     });
   }
 

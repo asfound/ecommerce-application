@@ -190,10 +190,12 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
         billingAddresses: userInformation.billingAddresses,
         shippingAddresses: userInformation.shippingAddresses,
       },
-      this.handleAddressChange,
-      this.handleAddressDeletion,
-      this.handleShippingToggle,
-      this.handleBillingToggle,
+      {
+        onAddressChange: this.handleAddressChange,
+        onAddressDeletion: this.handleAddressDeletion,
+        onBillingDefaultToggle: this.handleBillingToggle,
+        onShippingDefaultToggle: this.handleShippingToggle,
+      },
     );
   }
 }

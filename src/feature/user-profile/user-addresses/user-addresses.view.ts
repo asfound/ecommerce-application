@@ -1,4 +1,4 @@
-import type { AppChangeAddressPayload, AppCustomerAddress } from '~/api/services/customer/types';
+import type { AppCustomerAddress } from '~/api/services/customer/types';
 import type { AddressFormProperties } from '~/components/new-address-form/new-address-form';
 
 import { NewAddressForm } from '~/components/new-address-form/new-address-form';
@@ -6,6 +6,7 @@ import { BUTTON_TITLE, CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { button, div } from '~/shared/create-element/tags';
 
 import type { Component } from '../../../components/base-component/types';
+import type { AddressCallbacks, AddressesData } from './types';
 
 import { UserAddress } from '../../../components/address/address';
 import { BaseComponent } from '../../../components/base-component/base-component';
@@ -39,33 +40,10 @@ export class UserAddressesView extends BaseComponent implements Component {
     super({ tagName: 'div' });
   }
 
-  public createHTML(
-    addressesData: {
-      billingAddresses: AppCustomerAddress[];
-      shippingAddresses: AppCustomerAddress[];
-    },
-    onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
-    onAddressDeletion: (payload: string) => Promise<void>,
-    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
-    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
-  ): void {
-    const { billingAddresses, shippingAddresses } = addressesData;
+  public createHTML(addressesData: AddressesData, callbacks: AddressCallbacks): void {
+    const shippingCol = this.createShippingAddresses(addressesData.shippingAddresses, callbacks);
 
-    const shippingCol = this.createShippingAddresses(
-      shippingAddresses,
-      onAddressChange,
-      onAddressDeletion,
-      onShippingDefaultToggle,
-      onBillingDefaultToggle,
-    );
-
-    const billingCol = this.createBillingAddresses(
-      billingAddresses,
-      onAddressChange,
-      onAddressDeletion,
-      onShippingDefaultToggle,
-      onBillingDefaultToggle,
-    );
+    const billingCol = this.createBillingAddresses(addressesData.billingAddresses, callbacks);
 
     this.addShippingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
     this.addBillingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
@@ -100,22 +78,13 @@ export class UserAddressesView extends BaseComponent implements Component {
 
   private createBillingAddresses(
     billingAddresses: AppCustomerAddress[],
-    onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
-    onAddressDeletion: (payload: string) => Promise<void>,
-    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
-    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+    callbacks: AddressCallbacks,
   ): HTMLDivElement {
     const billingCol = div({ className: styles.addressCol }, this.billingColHeader);
 
     if (billingAddresses.length > 0) {
       for (const address of billingAddresses) {
-        const userAddress = new UserAddress(
-          address,
-          onAddressChange,
-          onAddressDeletion,
-          onShippingDefaultToggle,
-          onBillingDefaultToggle,
-        );
+        const userAddress = new UserAddress(address, callbacks);
 
         userAddress.addClassNames(styles.address);
         billingCol.append(userAddress.element);
@@ -127,21 +96,12 @@ export class UserAddressesView extends BaseComponent implements Component {
 
   private createShippingAddresses(
     shippingAddresses: AppCustomerAddress[],
-    onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>,
-    onAddressDeletion: (payload: string) => Promise<void>,
-    onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
-    onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>,
+    callbacks: AddressCallbacks,
   ): HTMLDivElement {
     const shippingCol = div({ className: styles.addressCol }, this.shippingColHeader);
 
     for (const address of shippingAddresses) {
-      const userAddress = new UserAddress(
-        address,
-        onAddressChange,
-        onAddressDeletion,
-        onShippingDefaultToggle,
-        onBillingDefaultToggle,
-      );
+      const userAddress = new UserAddress(address, callbacks);
 
       userAddress.addClassNames(styles.address);
       shippingCol.append(userAddress.element);
