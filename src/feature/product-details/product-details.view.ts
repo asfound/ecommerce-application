@@ -9,6 +9,11 @@ import { formatPrice } from '~/shared/utils/format-price';
 
 import styles from './product-details.module.css';
 
+export interface ProductDetailsViewProperties {
+  currentSKU: string;
+  product: AppProduct;
+}
+
 export class ProductDetailsView extends BaseComponent implements Component {
   private readonly loader = new Loader({ size: 'medium' });
 
@@ -20,8 +25,11 @@ export class ProductDetailsView extends BaseComponent implements Component {
     this.append(this.loader);
   }
 
-  public createHTML(product: AppProduct, sku: string): void {
-    this.productData = product.sku === sku ? product : product.variants.find((p) => p.sku === sku);
+  public createHTML(properties: ProductDetailsViewProperties): void {
+    this.productData =
+      properties.product.sku === properties.currentSKU
+        ? properties.product
+        : properties.product.variants.find((p) => p.sku === properties.currentSKU);
 
     if (!this.productData) {
       return;
@@ -29,7 +37,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
 
     const slider = this.createImageSlider(this.productData.images);
 
-    const weightButtons = this.createWeightButtons(product, sku);
+    const weightButtons = this.createWeightButtons(properties.product, properties.currentSKU);
 
     const content = this.createContent(this.productData, weightButtons);
 

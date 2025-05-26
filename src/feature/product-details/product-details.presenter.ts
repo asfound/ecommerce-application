@@ -25,7 +25,7 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
 
       const product = await this.productsService.getByProductId(searchParameters.id);
 
-      this.view.createHTML(product, searchParameters.sku);
+      this.view.createHTML({ currentSKU: searchParameters.sku, product });
     } finally {
       this.view.scrollToTop();
       this.view.hideLoader();
