@@ -7,6 +7,7 @@ import { Loader } from '~/components/common/loader/loader';
 import { div, h2, h3, img, p } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
+import { PRODUCT_DETAILS_TEXT, PRODUCT_TYPE } from './constants';
 import styles from './product-details.module.css';
 
 export interface ProductDetailsViewProperties {
@@ -29,7 +30,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
   private weightInputs: HTMLDivElement | null = null;
 
   public constructor() {
-    super({ className: ['PRODUCT_DETAILS', styles.productDetails], tagName: 'div' });
+    super({ className: styles.productDetails, tagName: 'div' });
 
     this.append(this.loader);
   }
@@ -105,7 +106,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
   }
 
   private createWeightInputs(properties: ProductDetailsViewProperties): HTMLDivElement | null {
-    if (properties.product.productType !== 'coffee') {
+    if (properties.product.productType !== PRODUCT_TYPE.COFFEE) {
       return null;
     }
 
@@ -113,7 +114,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
 
     const radioInputs = allVariants.map((product) => {
       const inputRadio = new InputRadio({
-        label: `${(product.weight ?? '').toString()}g`,
+        label: PRODUCT_DETAILS_TEXT.INPUT_LABEL(product.weight),
         name: 'weight',
       });
 
@@ -130,7 +131,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
 
     const inputsContainer = div(
       { className: styles.inputsContainer },
-      h3({ className: styles.weightTitle }, 'Weight:'),
+      h3({ className: styles.weightTitle }, PRODUCT_DETAILS_TEXT.WEIGHT),
       ...radioInputs,
     );
 
