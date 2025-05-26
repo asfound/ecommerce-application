@@ -85,6 +85,16 @@ export class UserPasswordChangeView extends BaseComponent implements Component {
     this.append(this.errorMessageComponent, this.formElement);
   }
 
+  public override destroy(): void {
+    for (const input of this.inputComponents) {
+      input.destroy();
+    }
+
+    this.inputComponents.length = 0;
+
+    super.destroy();
+  }
+
   public hideError(): void {
     this.errorMessageComponent.hide();
   }

@@ -40,8 +40,6 @@ export class UserAddress extends BaseComponent implements Component {
 
   private readonly countryName;
 
-  // private readonly onAddressDeletion: (payload: string) => Promise<void>;
-
   private readonly deleteButton = new Button({
     onClick: (): void => {
       this.callbacks.onAddressDeletion(this.address.addressId);
@@ -66,25 +64,15 @@ export class UserAddress extends BaseComponent implements Component {
 
   private readonly inputStreet = new InputText(STREET_PROPS);
 
-  // private readonly onAddressChange: (payload: AppChangeAddressPayload) => Promise<void>;
-
-  // private readonly onBillingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
-
-  // private readonly onShippingDefaultToggle: (payload: string, checked: boolean) => Promise<void>;
-
   private readonly submitButton = new Button({ textContent: BUTTON_TEXT.SAVE, type: 'submit' });
 
   public constructor(address: AppCustomerAddress, callbacks: AddressCallbacks) {
     super({ tagName: 'div' });
 
     this.address = address;
-    this.countryName = this.getCountryByCode();
-    // this.onAddressChange = onAddressChange;
-    // this.onAddressDeletion = onAddressDeletion;
-    // this.onBillingDefaultToggle = onBillingDefaultToggle;
-    // this.onShippingDefaultToggle = onShippingDefaultToggle;
     this.callbacks = callbacks;
 
+    this.countryName = this.getCountryByCode();
     this.storeInputs();
     this.setStyles();
     this.setupInputsState();
@@ -255,13 +243,8 @@ export class UserAddress extends BaseComponent implements Component {
   }
 
   private setupInputsState(): void {
-    if (this.address.defaultShipping) {
-      this.inputDefaultShipping.setChecked();
-    }
-
-    if (this.address.defaultBilling) {
-      this.inputDefaultBilling.setChecked();
-    }
+    this.inputDefaultShipping.setChecked(this.address.defaultShipping);
+    this.inputDefaultBilling.setChecked(this.address.defaultBilling);
 
     this.inputPostcode.addValidator(validatePostalCode(() => this.inputCountry.value));
   }

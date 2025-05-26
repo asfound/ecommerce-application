@@ -77,6 +77,16 @@ export class UserDetailsView extends BaseComponent implements Component {
     this.createBaseView();
   }
 
+  public override destroy(): void {
+    for (const input of this.inputComponents) {
+      input.destroy();
+    }
+
+    this.inputComponents.length = 0;
+
+    super.destroy();
+  }
+
   public resetInputs(): void {
     for (const input of this.inputComponents) {
       input.reset();
