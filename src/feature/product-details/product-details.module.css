@@ -32,8 +32,12 @@
 .pricesContainer {
   display: flex;
   gap: 1rem;
+
   width: max-content;
+
   font-family: var(--font-montserrat);
+  font-size: 1.6rem;
+  font-weight: 500;
 }
 
 .defaultPrice {
@@ -41,7 +45,6 @@
 }
 
 .oldPrice {
-  font-size: 1.4rem;
   text-decoration: line-through;
 }
 
