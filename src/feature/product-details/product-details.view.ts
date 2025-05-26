@@ -6,7 +6,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
 import { Loader } from '~/components/common/loader/loader';
 import { ImageSlider } from '~/components/image-slider/image-slider';
-import { div, h2, h3, p } from '~/shared/create-element/tags';
+import { div, h2, h3, img, p } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import { NOT_FOUND_MESSAGE, PRODUCT_DETAILS_TEXT, PRODUCT_TYPE } from './constants';
