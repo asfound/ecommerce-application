@@ -3,11 +3,23 @@ import type { BaseAddress } from '@commercetools/platform-sdk';
 export interface AddAddressPayload {
   address: BaseAddress;
   customerVersion: number;
+  default: boolean;
+  type: 'billing' | 'shipping';
+}
+
+export interface AddressIdentificationPayload {
+  id?: string;
+  key?: string;
 }
 
 export interface AddressPayload {
-  addressId: string;
+  addressId?: string;
+  addressKey?: string;
   customerVersion: number;
+}
+
+export interface AppChangeAddressPayload extends Omit<AddressPayload, 'customerVersion'> {
+  address: BaseAddress;
 }
 
 export interface AppChangePasswordPayload {
@@ -26,6 +38,7 @@ export interface AppCustomer {
 }
 
 export interface AppCustomerAddress {
+  addressId: string;
   city: string;
   country: string;
   defaultBilling: boolean;

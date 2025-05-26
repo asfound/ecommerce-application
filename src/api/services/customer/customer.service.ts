@@ -1,9 +1,8 @@
 import type {
-  Customer,
+  BaseAddress,
   MyCustomerChangePassword,
   MyCustomerUpdateAction,
 } from '@commercetools/platform-sdk';
-import type { ClientResponse } from '@commercetools/ts-client';
 
 import type { ApiRootGetter } from '~/api/types/types.ts';
 
@@ -19,8 +18,12 @@ import type {
 
 import {
   createAddAddressAction,
+  createAddBillingAddressIdAction,
+  createAddShippingAddressIdAction,
   createChangeAddressAction,
   createRemoveAddressAction,
+  createRemoveBillingAddressIdAction,
+  createRemoveShippingAddressIdAction,
   createSetDefaultBillingAddressAction,
   createSetDefaultShippingAddressAction,
 } from './actions/actions.ts';
@@ -44,24 +47,48 @@ export class CustomerService {
     return CustomerService.instance;
   }
 
-  public async addAddress(payload: AddAddressPayload): Promise<ClientResponse<Customer>> {
-    const actions: MyCustomerUpdateAction[] = [createAddAddressAction(payload.address)];
+  public async addAddress(payload: AddAddressPayload): Promise<AppCustomer> {
+    const key = crypto.randomUUID();
 
-    return this.apiRoot()
+    const address: BaseAddress = { ...payload.address, key };
+
+    const actions: MyCustomerUpdateAction[] = [createAddAddressAction(address)];
+
+    if (payload.type === 'billing') {
+      actions.push(createAddBillingAddressIdAction({ key }));
+    }
+
+    if (payload.type === 'shipping') {
+      actions.push(createAddShippingAddressIdAction({ key }));
+    }
+
+    if (payload.default && payload.type === 'billing') {
+      actions.push(createSetDefaultBillingAddressAction({ key }));
+    }
+
+    if (payload.default && payload.type === 'shipping') {
+      actions.push(createSetDefaultShippingAddressAction({ key }));
+    }
+
+    const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
-  public async changeAddress(payload: ChangeAddressPayload): Promise<ClientResponse<Customer>> {
+  public async changeAddress(payload: ChangeAddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [
       createChangeAddressAction({ address: payload.address, addressId: payload.addressId }),
     ];
 
-    return this.apiRoot()
+    const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
   public async changePassword(payload: AppChangePasswordPayload): Promise<AppCustomer> {
@@ -80,6 +107,7 @@ export class CustomerService {
       .execute();
 
     this.authService.logout();
+
     await this.authService.login({
       email: appCustomerData.email,
       password: payload.newPassword,
@@ -94,39 +122,69 @@ export class CustomerService {
     return mapToAppCustomer(response.body);
   }
 
-  public async removeAddress(payload: AddressPayload): Promise<ClientResponse<Customer>> {
+  public async removeAddress(payload: AddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [createRemoveAddressAction(payload.addressId)];
 
-    return this.apiRoot()
+    const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
-  public async setDefaultBillingAddress(
-    payload: AddressPayload,
-  ): Promise<ClientResponse<Customer>> {
+  public async setDefaultBillingAddress(payload: AddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [
-      createSetDefaultBillingAddressAction(payload.addressId),
+      createSetDefaultBillingAddressAction({ id: payload.addressId, key: payload.addressKey }),
     ];
 
-    return this.apiRoot()
+    const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
       .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
-  public async setDefaultShippingAddress(
-    payload: AddressPayload,
-  ): Promise<ClientResponse<Customer>> {
+  public async setDefaultShippingAddress(payload: AddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [
-      createSetDefaultShippingAddressAction(payload.addressId),
+      createSetDefaultShippingAddressAction({ id: payload.addressId, key: payload.addressKey }),
     ];
 
-    return this.apiRoot()
+    const response = await this.apiRoot()
       .me()
       .post({ body: { actions, version: payload.customerVersion } })
       .execute();
+
+    return mapToAppCustomer(response.body);
+  }
+
+  public async unsetDefaultBillingAddress(payload: AddressPayload): Promise<AppCustomer> {
+    const actions: MyCustomerUpdateAction[] = [
+      createRemoveBillingAddressIdAction(payload.addressId),
+      createAddBillingAddressIdAction({ id: payload.addressId }),
+    ];
+
+    const response = await this.apiRoot()
+      .me()
+      .post({ body: { actions, version: payload.customerVersion } })
+      .execute();
+
+    return mapToAppCustomer(response.body);
+  }
+
+  public async unsetDefaultShippingAddress(payload: AddressPayload): Promise<AppCustomer> {
+    const actions: MyCustomerUpdateAction[] = [
+      createRemoveShippingAddressIdAction(payload.addressId),
+      createAddShippingAddressIdAction({ id: payload.addressId }),
+    ];
+
+    const response = await this.apiRoot()
+      .me()
+      .post({ body: { actions, version: payload.customerVersion } })
+      .execute();
+
+    return mapToAppCustomer(response.body);
   }
 
   public async updatePersonalData(payload: PersonalDataPayload): Promise<AppCustomer> {
