@@ -3,6 +3,7 @@ import type { SignupPayload } from '~/api/services/auth/types';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
+import { rootAction } from '~/app/store/actions';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
@@ -36,9 +37,19 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
     this.authService
       .signup(payload)
       .then(() => {
+        return { email: payload.email, password: payload.password };
+      })
+      .then((credentials) => {
+        this.authService.logout();
+
+        return this.authService.login(credentials);
+      })
+      .then(() => {
         this.view.hideError();
 
-        Router.instance.navigate(ROUTE_PATH.LOGIN);
+        Router.instance.navigate(ROUTE_PATH.MAIN);
+
+        rootAction.setLoggedIn(true);
 
         showToast(REGISTRATION_FORM_TEXT.ACCOUNT_CREATED);
       })
