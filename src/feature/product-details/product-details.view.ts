@@ -12,10 +12,17 @@ export class ProductDetailsView extends BaseComponent implements Component {
     super({ className: ['PRODUCT_DETAILS', styles.productDetails], tagName: 'div' });
   }
 
-  public createHTML(product: AppProduct): void {
-    const slider = this.createImageSlider(product.images);
+  public createHTML(product: AppProduct, sku: string): void {
+    const currentProduct =
+      product.sku === sku ? product : product.variants.find((p) => p.sku === sku);
 
-    const content = this.createContent(product);
+    if (!currentProduct) {
+      return;
+    }
+
+    const slider = this.createImageSlider(currentProduct.images);
+
+    const content = this.createContent(currentProduct);
 
     this.append(slider, content);
   }
