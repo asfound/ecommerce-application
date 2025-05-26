@@ -5,7 +5,7 @@
   gap: 5rem;
   justify-content: space-between;
 
-  min-height: 24.5rem; /* TODO: idk how else align loader */
+  min-height: 41rem; /* TODO: idk how else align loader */
   margin-block: 4rem;
 }
 
@@ -82,4 +82,28 @@
   font-weight: 400;
   color: var(--color-white);
   text-transform: uppercase;
+}
+
+.notFoundWidget {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: grid;
+  gap: 1rem;
+  place-items: center;
+
+  text-align: center;
+}
+
+.notFoundDescription {
+  font-size: 1.6rem;
+  color: var(--color-accent-light);
+  white-space: pre-wrap;
+}
+
+.notFoundGif {
+  border: 1rem solid var(--color-accent-light);
+  border-radius: var(--border-radius);
 }

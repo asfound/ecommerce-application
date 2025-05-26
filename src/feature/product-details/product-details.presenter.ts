@@ -7,6 +7,8 @@ import { Presenter } from '~/shared/presenter/presenter';
 
 import type { ProductDetailsView } from './product-details.view';
 
+import { NOT_FOUND_MESSAGE } from './constants';
+
 export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
   private readonly productsService: ProductsService;
 
@@ -23,9 +25,9 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
   };
 
   private async updateView(): Promise<void> {
-    try {
-      const searchParameters = routerStore.select(routerSelector.selectSearchParameters);
+    const searchParameters = routerStore.select(routerSelector.selectSearchParameters);
 
+    try {
       this.view.showLoader();
 
       const product = await this.productsService.getByProductId(searchParameters.id);
@@ -35,6 +37,8 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
         onWeightChange: this.handleWeightChange,
         product,
       });
+    } catch {
+      this.view.showNotFoundWidget(NOT_FOUND_MESSAGE.INCORRECT_ID(searchParameters.id));
     } finally {
       this.view.scrollToTop();
       this.view.hideLoader();

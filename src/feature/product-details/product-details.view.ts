@@ -1,13 +1,14 @@
 import type { AppProduct } from '~/api/services/products/types';
 import type { Component } from '~/components/base-component/types';
 
+import huhGif from '~/assets/img/huh-cat.gif';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
 import { Loader } from '~/components/common/loader/loader';
 import { div, h2, h3, img, p } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
-import { PRODUCT_DETAILS_TEXT, PRODUCT_TYPE } from './constants';
+import { NOT_FOUND_MESSAGE, PRODUCT_DETAILS_TEXT, PRODUCT_TYPE } from './constants';
 import styles from './product-details.module.css';
 
 export interface ProductDetailsViewProperties {
@@ -22,6 +23,14 @@ export class ProductDetailsView extends BaseComponent implements Component {
   private readonly leftContainer = div({ className: styles.leftContainer });
 
   private readonly loader = new Loader({ size: 'medium' });
+
+  private readonly notFoundHeading = p({ className: styles.notFoundDescription });
+
+  private readonly notFoundWidget = div(
+    { className: styles.notFoundWidget },
+    img({ className: styles.notFoundGif, src: huhGif }),
+    this.notFoundHeading,
+  );
 
   private productData: AppProduct | undefined = undefined;
 
@@ -42,6 +51,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
         : properties.product.variants.find((p) => p.sku === properties.currentSKU);
 
     if (!this.productData) {
+      this.showNotFoundWidget(NOT_FOUND_MESSAGE.INCORRECT_SKU(properties.currentSKU));
       return;
     }
 
@@ -66,6 +76,11 @@ export class ProductDetailsView extends BaseComponent implements Component {
 
   public showLoader(): void {
     this.loader.show();
+  }
+
+  public showNotFoundWidget(message: string): void {
+    this.notFoundHeading.textContent = message;
+    this.replaceChildren(this.notFoundWidget);
   }
 
   private createContent(product: AppProduct): HTMLDivElement {
