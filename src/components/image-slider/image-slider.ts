@@ -19,7 +19,8 @@ export class ImageSlider extends BaseComponent implements Component {
   private readonly images: AppProductImage[];
 
   public constructor(images: AppProductImage[]) {
-    super({ className: 'swiper', tagName: 'div' });
+    super({ className: styles.slider, tagName: 'div' });
+
     this.images = images;
 
     this.createHTML();
@@ -37,17 +38,20 @@ export class ImageSlider extends BaseComponent implements Component {
     }
 
     const buttonPrevious = div(
-      { className: ['swiper-button-prev', styles.navigation] },
+      { className: [styles.navigationButton] },
       createSvgIcon(sliderArrowSvg, [styles.arrow, styles.previous]),
     );
 
     const buttonNext = div(
-      { className: ['swiper-button-next', styles.navigation] },
+      { className: [styles.navigationButton] },
       createSvgIcon(sliderArrowSvg, styles.arrow),
     );
-    this.append(wrapper, buttonNext, buttonPrevious);
 
-    new Swiper(this.element, {
+    const buttonsContainer = div({ className: styles.navigation }, buttonPrevious, buttonNext);
+
+    const swiper = div({ className: ['swiper', styles.swiper] }, wrapper);
+
+    new Swiper(swiper, {
       modules: [Navigation],
       navigation: {
         nextEl: buttonNext,
@@ -55,5 +59,7 @@ export class ImageSlider extends BaseComponent implements Component {
       },
       slidesPerView: 1,
     });
+
+    this.append(buttonsContainer, swiper);
   }
 }

@@ -1,14 +1,34 @@
+.slider {
+  position: relative;
+}
+
+.swiper {
+  max-width: 95%;
+}
+
 .navigation {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  right: 0;
+  left: 0;
+  transform: translateY(-50%);
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigationButton {
   width: 4rem;
   fill: color-mix(in srgb, var(--color-white) 95%, transparent);
   transition: fill var(--transition-duration);
 }
 
-.navigation::after {
+.navigationButton::after {
   display: none;
 }
 
-.navigation:hover {
+.navigationButton:hover {
   fill: var(--color-accent);
 }
 
