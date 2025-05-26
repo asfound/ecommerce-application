@@ -38,7 +38,7 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
         product,
       });
     } catch {
-      this.view.showNotFoundWidget(NOT_FOUND_MESSAGE.INCORRECT_ID(searchParameters.id));
+      this.view.showNotFoundWidget(NOT_FOUND_MESSAGE);
     } finally {
       this.view.scrollToTop();
       this.view.hideLoader();

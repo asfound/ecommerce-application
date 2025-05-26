@@ -51,7 +51,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
         : properties.product.variants.find((p) => p.sku === properties.currentSKU);
 
     if (!this.productData) {
-      this.showNotFoundWidget(NOT_FOUND_MESSAGE.INCORRECT_SKU(properties.currentSKU));
+      this.showNotFoundWidget(NOT_FOUND_MESSAGE);
       return;
     }
 

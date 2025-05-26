@@ -7,7 +7,4 @@ export const PRODUCT_TYPE = {
   COFFEE: 'coffee',
 } as const;
 
-export const NOT_FOUND_MESSAGE = {
-  INCORRECT_ID: (id: string) => `No item found with the ID "${id}".`,
-  INCORRECT_SKU: (sku: string) => `No item found with the SKU "${sku}".`,
-} as const;
+export const NOT_FOUND_MESSAGE = 'Item not found';
