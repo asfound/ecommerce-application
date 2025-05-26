@@ -3,6 +3,7 @@ import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { div, h2, img, p } from '~/shared/create-element/tags';
+import { formatPrice } from '~/shared/utils/format-price';
 
 import styles from './product-details.module.css';
 
@@ -27,9 +28,20 @@ export class ProductDetailsView extends BaseComponent implements Component {
       `${product.name}${product.weight ? `, ${product.weight}g` : ''}`,
     );
 
+    const pricesContainer = div(
+      { className: styles.pricesContainer },
+      product.price.discounted
+        ? div({ className: styles.discountedPrice }, formatPrice(product.price.discounted))
+        : null,
+      div(
+        { className: product.price.discounted ? styles.oldPrice : styles.defaultPrice },
+        formatPrice(product.price.default),
+      ),
+    );
+
     const descriptionElement = p({ className: styles.description }, product.description);
 
-    contentContainer.append(headingElement, descriptionElement);
+    contentContainer.append(headingElement, pricesContainer, descriptionElement);
 
     return contentContainer;
   }
