@@ -1,13 +1,23 @@
 .productDetails {
   position: relative;
 
-  display: grid;
-  grid-template-columns: 49.5rem 1fr;
-  gap: 10rem;
-  align-items: start;
+  display: flex;
+  gap: 5rem;
+  justify-content: space-between;
 
   min-height: 24.5rem; /* TODO: idk how else align loader */
   margin-block: 4rem;
+}
+
+.leftContainer {
+  width: 100%;
+  max-width: 49.5rem;
+}
+
+.rightContainer {
+  display: grid;
+  gap: 3rem;
+  align-content: start;
 }
 
 .sliderContainer {

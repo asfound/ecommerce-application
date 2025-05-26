@@ -15,9 +15,17 @@ export interface ProductDetailsViewProperties {
 }
 
 export class ProductDetailsView extends BaseComponent implements Component {
+  private contentContainer = div(null);
+
+  private readonly leftContainer = div({ className: styles.leftContainer });
+
   private readonly loader = new Loader({ size: 'medium' });
 
   private productData: AppProduct | undefined = undefined;
+
+  private readonly rightContainer = div({ className: styles.rightContainer });
+
+  private weightInputs: HTMLDivElement | null = null;
 
   public constructor() {
     super({ className: ['PRODUCT_DETAILS', styles.productDetails], tagName: 'div' });
@@ -35,13 +43,15 @@ export class ProductDetailsView extends BaseComponent implements Component {
       return;
     }
 
-    const slider = this.createImageSlider(this.productData.images);
+    this.leftContainer.append(this.createImageSlider(this.productData.images));
 
-    const weightButtons = this.createWeightButtons(properties.product, properties.currentSKU);
+    this.contentContainer.replaceChildren(this.createContent(this.productData));
 
-    const content = this.createContent(this.productData, weightButtons);
+    this.weightInputs = this.createWeightInputs(properties.product, properties.currentSKU);
 
-    this.append(slider, content);
+    this.rightContainer.append(this.contentContainer, this.weightInputs ?? '');
+
+    this.append(this.leftContainer, this.rightContainer);
   }
 
   public hideLoader(): void {
@@ -56,7 +66,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
     this.loader.show();
   }
 
-  private createContent(product: AppProduct, weightButtons: HTMLDivElement | null): HTMLDivElement {
+  private createContent(product: AppProduct): HTMLDivElement {
     const headingElement = h2(
       { className: styles.heading },
       `${product.name}${product.weight ? `, ${product.weight}g` : ''}`,
@@ -80,7 +90,6 @@ export class ProductDetailsView extends BaseComponent implements Component {
       headingElement,
       pricesContainer,
       descriptionElement,
-      weightButtons,
     );
 
     return contentContainer;
@@ -94,7 +103,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
     return sliderContainer;
   }
 
-  private createWeightButtons(appProduct: AppProduct, sku: string): HTMLDivElement | null {
+  private createWeightInputs(appProduct: AppProduct, sku: string): HTMLDivElement | null {
     if (appProduct.productType !== 'coffee') {
       return null;
     }
