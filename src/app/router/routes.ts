@@ -28,6 +28,7 @@ export const ROUTES: Route[] = [
     title: `${TITLE} | Login`,
   },
   {
+    canActivate: [isNotLoggedIn],
     async component(): Promise<BaseComponent> {
       const { RegistrationPage } = await import('../../pages/registration-page.ts');
       return new RegistrationPage();

@@ -57,8 +57,10 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
     Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, {
-      id: product.productId,
-      sku: product.sku,
+      searchParameters: {
+        name: product.name,
+        sku: product.sku,
+      },
     });
   };
 
