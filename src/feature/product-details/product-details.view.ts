@@ -47,7 +47,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
 
     this.contentContainer.replaceChildren(this.createContent(this.productData));
 
-    this.weightInputs = this.createWeightInputs(properties.product, properties.currentSKU);
+    this.weightInputs = this.createWeightInputs(properties);
 
     this.rightContainer.append(this.contentContainer, this.weightInputs ?? '');
 
@@ -103,12 +103,12 @@ export class ProductDetailsView extends BaseComponent implements Component {
     return sliderContainer;
   }
 
-  private createWeightInputs(appProduct: AppProduct, sku: string): HTMLDivElement | null {
-    if (appProduct.productType !== 'coffee') {
+  private createWeightInputs(properties: ProductDetailsViewProperties): HTMLDivElement | null {
+    if (properties.product.productType !== 'coffee') {
       return null;
     }
 
-    const allVariants = [appProduct, ...appProduct.variants];
+    const allVariants = [properties.product, ...properties.product.variants];
 
     const radioInputs = allVariants.map((product) => {
       const inputRadio = new InputRadio({
@@ -116,7 +116,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
         name: 'weight',
       });
 
-      inputRadio.setChecked(product.sku === sku);
+      inputRadio.setChecked(product.sku === properties.currentSKU);
 
       return inputRadio.element;
     });
