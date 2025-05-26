@@ -29,6 +29,7 @@
   border-radius: 50%;
 
   background-color: var(--color-accent);
+  box-shadow: 0 0 15px var(--color-black);
 }
 
 .icon {
