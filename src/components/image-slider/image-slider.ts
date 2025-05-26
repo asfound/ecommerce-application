@@ -38,12 +38,12 @@ export class ImageSlider extends BaseComponent implements Component {
     }
 
     const buttonPrevious = div(
-      { className: [styles.navigationButton] },
+      { className: [styles.navigationButton, 'swiper-button-prev'] },
       createSvgIcon(sliderArrowSvg, [styles.arrow, styles.previous]),
     );
 
     const buttonNext = div(
-      { className: [styles.navigationButton] },
+      { className: [styles.navigationButton, 'swiper-button-next'] },
       createSvgIcon(sliderArrowSvg, styles.arrow),
     );
 
