@@ -11,6 +11,7 @@ import styles from './product-details.module.css';
 
 export interface ProductDetailsViewProperties {
   currentSKU: string;
+  onWeightChange(sku: string): void;
   product: AppProduct;
 }
 
@@ -114,6 +115,12 @@ export class ProductDetailsView extends BaseComponent implements Component {
       const inputRadio = new InputRadio({
         label: `${(product.weight ?? '').toString()}g`,
         name: 'weight',
+      });
+
+      inputRadio.addListener('change', () => {
+        properties.onWeightChange(product.sku);
+
+        this.contentContainer.replaceChildren(this.createContent(product));
       });
 
       inputRadio.setChecked(product.sku === properties.currentSKU);
