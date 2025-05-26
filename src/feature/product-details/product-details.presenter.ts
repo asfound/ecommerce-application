@@ -19,6 +19,7 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
 
   private async updateView(): Promise<void> {
     const searchParameters = routerStore.select(routerSelector.selectSearchParameters);
+
     const product = await this.productsService.getByProductId(searchParameters.id);
 
     this.view.createHTML(product, searchParameters.sku);
