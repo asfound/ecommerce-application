@@ -5,7 +5,8 @@ import huhGif from '~/assets/img/huh-cat.gif';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
 import { Loader } from '~/components/common/loader/loader';
-import { div, h2, h3, img, p } from '~/shared/create-element/tags';
+import { ImageSlider } from '~/components/image-slider/image-slider';
+import { div, h2, h3, p } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import { NOT_FOUND_MESSAGE, PRODUCT_DETAILS_TEXT, PRODUCT_TYPE } from './constants';
@@ -115,7 +116,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
   private createImageSlider(images: AppProduct['images']): HTMLDivElement {
     const sliderContainer = div({ className: styles.sliderContainer });
 
-    sliderContainer.append(img({ className: styles.sliderImage, src: images[0].url }));
+    sliderContainer.append(new ImageSlider(images).element);
 
     return sliderContainer;
   }

@@ -1,0 +1,32 @@
+.navigation {
+  width: 4rem;
+  fill: color-mix(in srgb, var(--color-white) 95%, transparent);
+  transition: fill var(--transition-duration);
+}
+
+.navigation::after {
+  display: none;
+}
+
+.navigation:hover {
+  fill: var(--color-accent);
+}
+
+.arrow {
+  width: 4rem;
+  height: 4rem;
+}
+
+.arrow.previous {
+  transform: rotate(180deg);
+}
+
+.image {
+  display: block;
+
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}

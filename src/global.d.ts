@@ -11,3 +11,7 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// swiper.d.ts
+declare module 'swiper/css' {}
+declare module 'swiper/css/navigation' {}
