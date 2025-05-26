@@ -8,21 +8,22 @@ import { formatPrice } from '~/shared/utils/format-price';
 import styles from './product-details.module.css';
 
 export class ProductDetailsView extends BaseComponent implements Component {
+  private productData: AppProduct | undefined = undefined;
+
   public constructor() {
     super({ className: ['PRODUCT_DETAILS', styles.productDetails], tagName: 'div' });
   }
 
   public createHTML(product: AppProduct, sku: string): void {
-    const currentProduct =
-      product.sku === sku ? product : product.variants.find((p) => p.sku === sku);
+    this.productData = product.sku === sku ? product : product.variants.find((p) => p.sku === sku);
 
-    if (!currentProduct) {
+    if (!this.productData) {
       return;
     }
 
-    const slider = this.createImageSlider(currentProduct.images);
+    const slider = this.createImageSlider(this.productData.images);
 
-    const content = this.createContent(currentProduct);
+    const content = this.createContent(this.productData);
 
     this.append(slider, content);
   }
