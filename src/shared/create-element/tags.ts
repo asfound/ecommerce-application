@@ -12,6 +12,8 @@ export const h1 = createElementFactory('h1');
 
 export const h2 = createElementFactory('h2');
 
+export const h3 = createElementFactory('h3');
+
 export const header = createElementFactory('header');
 
 export const main = createElementFactory('main');

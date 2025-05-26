@@ -2,8 +2,9 @@ import type { ApiRootGetter } from '~/api/types/types';
 
 import type { AppProduct, ProductsFilterPayload } from './types';
 
+import { EXPAND_PATH } from './constants';
 import { getQueryArguments } from './helpers';
-import { mapToFlatAppProducts } from './mappers';
+import { mapToFlatAppProducts, mapVariantToAppProduct } from './mappers';
 
 export class ProductsService {
   private static instance: null | ProductsService = null;
@@ -29,5 +30,17 @@ export class ProductsService {
       .execute();
 
     return mapToFlatAppProducts(response.body.results, payload.sortField, payload.sortDirection);
+  }
+
+  public async getByProductId(id: string): Promise<AppProduct> {
+    const response = await this.apiRoot()
+      .productProjections()
+      .withId({ ID: id })
+      .get({
+        queryArgs: { expand: EXPAND_PATH.PRODUCT_TYPE },
+      })
+      .execute();
+
+    return mapVariantToAppProduct(response.body.masterVariant, response.body);
   }
 }
