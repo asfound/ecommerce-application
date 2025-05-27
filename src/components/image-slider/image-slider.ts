@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 import sliderArrowSvg from '~/assets/icons/slider-arrow.svg';
+import { modalService } from '~/services/modal/modal.service';
 import { div, img } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
@@ -33,17 +34,21 @@ export class ImageSlider extends BaseComponent implements Component {
       const slide = div({ className: 'swiper-slide' });
       const imageElement = img({ className: styles.image, src: image.url });
 
+      imageElement.addEventListener('click', () => {
+        modalService.open({ content: img({ src: image.url }) });
+      });
+
       slide.append(imageElement);
       wrapper.append(slide);
     }
 
     const buttonPrevious = div(
-      { className: [styles.navigationButton] },
+      { className: [styles.navigationButton, 'swiper-button-prev'] },
       createSvgIcon(sliderArrowSvg, [styles.arrow, styles.previous]),
     );
 
     const buttonNext = div(
-      { className: [styles.navigationButton] },
+      { className: [styles.navigationButton, 'swiper-button-next'] },
       createSvgIcon(sliderArrowSvg, styles.arrow),
     );
 

@@ -30,7 +30,7 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
     try {
       this.view.showLoader();
 
-      const product = await this.productsService.getByProductId(searchParameters.id);
+      const product = await this.productsService.getProductById(searchParameters.id);
 
       this.view.createHTML({
         currentSKU: searchParameters.sku,

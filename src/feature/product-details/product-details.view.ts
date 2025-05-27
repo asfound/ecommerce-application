@@ -6,6 +6,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
 import { Loader } from '~/components/common/loader/loader';
 import { ImageSlider } from '~/components/image-slider/image-slider';
+import { modalService } from '~/services/modal/modal.service';
 import { div, h2, h3, img, p } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
@@ -42,7 +43,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
   public constructor() {
     super({ className: styles.productDetails, tagName: 'div' });
 
-    this.append(this.loader);
+    this.append(this.loader, modalService.getView());
   }
 
   public createHTML(properties: ProductDetailsViewProperties): void {
