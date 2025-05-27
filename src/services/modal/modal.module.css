@@ -8,6 +8,7 @@
 
   visibility: hidden;
   opacity: 0;
+  background-color: color-mix(in srgb, var(--color-dark) 50%, transparent);
   backdrop-filter: blur(0.5rem);
 }
 
@@ -29,18 +30,17 @@
   translate: -50% -50%;
 
   width: 100%;
-  max-width: 64rem;
+  max-width: 60rem;
   margin-inline: auto;
-  padding: 2rem;
-  border-radius: 0.5rem;
+  padding: 1rem;
 }
 
 .button {
   cursor: pointer;
 
   position: absolute;
-  top: -1rem;
-  right: -1rem;
+  top: 2rem;
+  right: 2rem;
 
   display: flex;
   align-items: center;
