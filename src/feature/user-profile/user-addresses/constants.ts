@@ -15,3 +15,10 @@ export const USER_NOTIFICATION = {
   SET_DEFAULT: 'New default address set!',
   UNSET_DEFAULT: 'Default address removed!',
 };
+
+export const ADDRESS_TRANSITION_KEY = {
+  BILLING_FALSE: 'billing:false',
+  BILLING_TRUE: 'billing:true',
+  SHIPPING_FALSE: 'shipping:false',
+  SHIPPING_TRUE: 'shipping:true',
+} as const;

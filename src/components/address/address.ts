@@ -222,6 +222,10 @@ export class UserAddress extends BaseComponent implements Component {
           : false,
     );
 
+    inputMove.addListener('change', () => {
+      this.callbacks.onAddressTransition(this.address, inputMove.checked);
+    });
+
     return inputMove.element;
   }
 
