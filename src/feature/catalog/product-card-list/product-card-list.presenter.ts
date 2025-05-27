@@ -86,7 +86,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
     this.intersectionAnchor.show();
 
-    const products = await this.productsService.filterProducts({
+    const products = await this.productsService.getFilteredProducts({
       ...catalogStore.getState(),
       currentPage: this.currentPage,
     });
@@ -138,7 +138,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
       catalogLoadingAction.setLoading(true);
 
-      const products = await this.productsService.filterProducts({
+      const products = await this.productsService.getFilteredProducts({
         ...state,
         currentPage: this.currentPage,
       });
