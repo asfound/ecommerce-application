@@ -56,6 +56,11 @@
   transition: color var(--transition-duration);
 }
 
+.hidden {
+  transform: scale(0);
+  visibility: hidden;
+}
+
 @media (hover: hover) {
   .button:hover {
     cursor: pointer;

@@ -72,8 +72,3 @@ input {
 .noScroll {
   overflow-y: hidden;
 }
-
-.hidden {
-  transform: scale(0);
-  visibility: hidden;
-}
