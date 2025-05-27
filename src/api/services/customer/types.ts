@@ -39,11 +39,13 @@ export interface AppCustomer {
 
 export interface AppCustomerAddress {
   addressId: string;
+  billing?: boolean;
   city: string;
   country: string;
   defaultBilling: boolean;
   defaultShipping: boolean;
   postalCode: string;
+  shipping?: boolean;
   streetName: string;
 }
 

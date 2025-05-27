@@ -145,7 +145,6 @@ export class UserAddress extends BaseComponent implements Component {
 
     const addressBlock = div(
       { className: styles.details },
-
       div(
         { className: styles.detailsItem },
         span({ className: styles.fieldName }, FIELD_NAME.COUNTRY),
@@ -169,7 +168,7 @@ export class UserAddress extends BaseComponent implements Component {
       ),
       this.inputDefaultShipping.element,
       this.inputDefaultBilling.element,
-
+      this.createMoveCheckbox(),
       editButton.element,
       this.deleteButton.element,
     );
@@ -208,6 +207,14 @@ export class UserAddress extends BaseComponent implements Component {
     );
 
     this.replaceChildren(this.formElement);
+  }
+
+  private createMoveCheckbox(): HTMLElement {
+    const inputMove = new InputCheckbox({
+      label: this.address.billing ? 'Use for shipping' : 'Use for billing',
+    });
+
+    return inputMove.element;
   }
 
   private getCountryByCode(): string {
