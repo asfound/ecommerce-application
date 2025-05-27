@@ -8,3 +8,5 @@ export const PRODUCT_TYPE = {
 } as const;
 
 export const NOT_FOUND_MESSAGE = 'Item not found';
+
+export const BESTSELLER_LABEL = 'Bestseller';
