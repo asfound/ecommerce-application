@@ -30,7 +30,7 @@
   translate: -50% -50%;
 
   width: 100%;
-  max-width: 60rem;
+  max-width: 72rem;
   margin-inline: auto;
   padding: 1rem;
 }
@@ -39,6 +39,7 @@
   cursor: pointer;
 
   position: absolute;
+  z-index: 500;
   top: 2rem;
   right: 2rem;
 

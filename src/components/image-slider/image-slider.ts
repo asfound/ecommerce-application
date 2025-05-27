@@ -19,10 +19,13 @@ import styles from './image-slider.module.css';
 export class ImageSlider extends BaseComponent implements Component {
   private readonly images: AppProductImage[];
 
-  public constructor(images: AppProductImage[]) {
+  private readonly startIndex;
+
+  public constructor(images: AppProductImage[], startIndex = 0) {
     super({ className: styles.slider, tagName: 'div' });
 
     this.images = images;
+    this.startIndex = startIndex;
 
     this.createHTML();
   }
@@ -30,12 +33,12 @@ export class ImageSlider extends BaseComponent implements Component {
   public createHTML(): void {
     const wrapper = div({ className: 'swiper-wrapper' });
 
-    for (const image of this.images) {
+    for (const [index, image] of this.images.entries()) {
       const slide = div({ className: 'swiper-slide' });
       const imageElement = img({ className: styles.image, src: image.url });
 
       imageElement.addEventListener('click', () => {
-        modalService.open({ content: img({ src: image.url }) });
+        modalService.open({ content: new ImageSlider(this.images, index).element });
       });
 
       slide.append(imageElement);
@@ -56,15 +59,18 @@ export class ImageSlider extends BaseComponent implements Component {
 
     const swiper = div({ className: ['swiper', styles.swiper] }, wrapper);
 
-    new Swiper(swiper, {
-      modules: [Navigation],
-      navigation: {
-        nextEl: buttonNext,
-        prevEl: buttonPrevious,
-      },
-      slidesPerView: 1,
-    });
-
     this.append(buttonsContainer, swiper);
+
+    requestAnimationFrame(() => {
+      new Swiper(swiper, {
+        initialSlide: this.startIndex,
+        modules: [Navigation],
+        navigation: {
+          nextEl: buttonNext,
+          prevEl: buttonPrevious,
+        },
+        slidesPerView: 1,
+      });
+    });
   }
 }
