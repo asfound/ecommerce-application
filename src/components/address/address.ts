@@ -214,6 +214,14 @@ export class UserAddress extends BaseComponent implements Component {
       label: this.address.billing ? 'Use for shipping' : 'Use for billing',
     });
 
+    inputMove.setChecked(
+      this.address.billing && this.address.inShipping
+        ? true
+        : this.address.shipping && this.address.inBilling
+          ? true
+          : false,
+    );
+
     return inputMove.element;
   }
 

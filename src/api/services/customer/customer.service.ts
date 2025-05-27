@@ -116,6 +116,36 @@ export class CustomerService {
     return mapToAppCustomer(response.body);
   }
 
+  public async copyToBilling(payload: AddressPayload): Promise<AppCustomer> {
+    const actions: MyCustomerUpdateAction[] = [
+      createAddBillingAddressIdAction({
+        id: payload.addressId,
+      }),
+    ];
+
+    const response = await this.apiRoot()
+      .me()
+      .post({ body: { actions, version: payload.customerVersion } })
+      .execute();
+
+    return mapToAppCustomer(response.body);
+  }
+
+  public async copyToShipping(payload: AddressPayload): Promise<AppCustomer> {
+    const actions: MyCustomerUpdateAction[] = [
+      createAddShippingAddressIdAction({
+        id: payload.addressId,
+      }),
+    ];
+
+    const response = await this.apiRoot()
+      .me()
+      .post({ body: { actions, version: payload.customerVersion } })
+      .execute();
+
+    return mapToAppCustomer(response.body);
+  }
+
   public async getCustomer(): Promise<AppCustomer> {
     const response = await this.apiRoot().me().get().execute();
 

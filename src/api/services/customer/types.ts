@@ -44,6 +44,8 @@ export interface AppCustomerAddress {
   country: string;
   defaultBilling: boolean;
   defaultShipping: boolean;
+  inBilling?: boolean;
+  inShipping?: boolean;
   postalCode: string;
   shipping?: boolean;
   streetName: string;
