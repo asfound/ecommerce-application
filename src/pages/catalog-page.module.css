@@ -20,6 +20,7 @@
 
 .buttonToTop {
   position: fixed;
+  z-index: 999;
   right: 20px;
   bottom: 20px;
 
@@ -28,8 +29,7 @@
   border: none;
   border-radius: 50%;
 
-  background-color: var(--color-accent);
-  box-shadow: 0 0 15px var(--color-black);
+  background-color: var(--color-accent-light);
 }
 
 .icon {
