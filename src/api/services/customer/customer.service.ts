@@ -163,6 +163,32 @@ export class CustomerService {
     return mapToAppCustomer(response.body);
   }
 
+  public async removeFromBilling(payload: AddressPayload): Promise<AppCustomer> {
+    const actions: MyCustomerUpdateAction[] = [
+      createRemoveBillingAddressIdAction(payload.addressId),
+    ];
+
+    const response = await this.apiRoot()
+      .me()
+      .post({ body: { actions, version: payload.customerVersion } })
+      .execute();
+
+    return mapToAppCustomer(response.body);
+  }
+
+  public async removeFromShipping(payload: AddressPayload): Promise<AppCustomer> {
+    const actions: MyCustomerUpdateAction[] = [
+      createRemoveShippingAddressIdAction(payload.addressId),
+    ];
+
+    const response = await this.apiRoot()
+      .me()
+      .post({ body: { actions, version: payload.customerVersion } })
+      .execute();
+
+    return mapToAppCustomer(response.body);
+  }
+
   public async setDefaultBillingAddress(payload: AddressPayload): Promise<AppCustomer> {
     const actions: MyCustomerUpdateAction[] = [
       createSetDefaultBillingAddressAction({ id: payload.addressId, key: payload.addressKey }),
