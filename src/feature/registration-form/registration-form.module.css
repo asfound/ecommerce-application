@@ -50,3 +50,7 @@
 .linkContainer a:hover {
   color: var(--color-accent);
 }
+
+.hidden {
+  display: none;
+}

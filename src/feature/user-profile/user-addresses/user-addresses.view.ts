@@ -2,7 +2,7 @@ import type { AppCustomerAddress } from '~/api/services/customer/types';
 import type { AddressFormProperties } from '~/components/new-address-form/new-address-form';
 
 import { NewAddressForm } from '~/components/new-address-form/new-address-form';
-import { BUTTON_TITLE, CSS_CLASS_NAME } from '~/shared/constants/constants';
+import { BUTTON_TITLE } from '~/shared/constants/constants';
 import { button, div } from '~/shared/create-element/tags';
 
 import type { Component } from '../../../components/base-component/types';
@@ -45,8 +45,8 @@ export class UserAddressesView extends BaseComponent implements Component {
 
     const billingCol = this.createBillingAddresses(addressesData.billingAddresses, callbacks);
 
-    this.addShippingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
-    this.addBillingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
+    this.addShippingAddressButton.classList.remove(styles.hidden);
+    this.addBillingAddressButton.classList.remove(styles.hidden);
 
     const addressesContainer = div({ className: styles.addresses }, shippingCol, billingCol);
 
@@ -61,7 +61,7 @@ export class UserAddressesView extends BaseComponent implements Component {
       'click',
       () => {
         this.newShippingAddressHandler(handlerForShipping);
-        this.addShippingAddressButton.classList.add(CSS_CLASS_NAME.HIDDEN);
+        this.addShippingAddressButton.classList.add(styles.hidden);
       },
       { signal: this.abortController.signal },
     );
@@ -70,7 +70,7 @@ export class UserAddressesView extends BaseComponent implements Component {
       'click',
       () => {
         this.newBillingAddressHandler(handlerForBilling);
-        this.addBillingAddressButton.classList.add(CSS_CLASS_NAME.HIDDEN);
+        this.addBillingAddressButton.classList.add(styles.hidden);
       },
       { signal: this.abortController.signal },
     );
@@ -114,11 +114,11 @@ export class UserAddressesView extends BaseComponent implements Component {
     this.billingColHeader.after(
       new NewAddressForm({
         onCancel: (): void => {
-          this.addBillingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
+          this.addBillingAddressButton.classList.remove(styles.hidden);
         },
         onSubmit: (...arguments_): Promise<void> => {
           const result = handler(...arguments_);
-          this.addBillingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
+          this.addBillingAddressButton.classList.remove(styles.hidden);
           return result;
         },
       }).element,
@@ -129,11 +129,11 @@ export class UserAddressesView extends BaseComponent implements Component {
     this.shippingColHeader.after(
       new NewAddressForm({
         onCancel: (): void => {
-          this.addShippingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
+          this.addShippingAddressButton.classList.remove(styles.hidden);
         },
         onSubmit: (...arguments_): Promise<void> => {
           const result = handler(...arguments_);
-          this.addShippingAddressButton.classList.remove(CSS_CLASS_NAME.HIDDEN);
+          this.addShippingAddressButton.classList.remove(styles.hidden);
           return result;
         },
       }).element,
