@@ -51,6 +51,10 @@ export class ProductDetailsView extends BaseComponent implements Component {
     this.append(this.loader, modalService.getView());
   }
 
+  public appendBreadcrumbs(element: HTMLElement): void {
+    this.rightContainer.prepend(element);
+  }
+
   public createHTML(properties: ProductDetailsViewProperties): void {
     this.productData =
       properties.product.sku === properties.currentSKU
