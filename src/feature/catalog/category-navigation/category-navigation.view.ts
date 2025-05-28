@@ -32,7 +32,11 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
     this.setupListeners();
   }
 
-  public createHTML(categories: AppCategory[], onClick: CategoryNavigationItemClickHandler): void {
+  public createHTML(
+    categories: AppCategory[],
+    onClick: CategoryNavigationItemClickHandler,
+    activeCategoryId: string,
+  ): void {
     this.append(this.summaryElement);
 
     for (const category of categories) {
@@ -40,6 +44,10 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
         onClick(category);
         this.setActiveItem(categoryItem);
       });
+
+      if (category.id === activeCategoryId) {
+        this.setActiveItem(categoryItem);
+      }
 
       this.append(categoryItem);
     }

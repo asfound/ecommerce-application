@@ -26,7 +26,8 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
 
   private async initView(): Promise<void> {
     const categories = await this.categoriesService.getCategories();
+    const activeCategoryId = catalogStore.getState().categoryId;
 
-    this.view.createHTML(categories, this.handleCategoryItemClick);
+    this.view.createHTML(categories, this.handleCategoryItemClick, activeCategoryId);
   }
 }
