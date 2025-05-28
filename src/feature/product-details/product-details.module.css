@@ -1,11 +1,17 @@
-.productDetails {
+.container {
   position: relative;
 
   display: flex;
-  gap: 5rem;
+  flex-direction: column;
+  gap: 4rem;
 
   min-height: 41rem; /* TODO: idk how else align loader */
   margin-block: 4rem;
+}
+
+.productDetails {
+  display: flex;
+  gap: 5rem;
 }
 
 .leftContainer {
