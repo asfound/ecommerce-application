@@ -2,6 +2,7 @@ import type { QueryParam } from '@commercetools/platform-sdk';
 
 export interface AppProduct {
   bestSeller: boolean;
+  categories: { id: string; name: string }[];
   description: string;
   image: AppProductImage;
   images: AppProductImage[];

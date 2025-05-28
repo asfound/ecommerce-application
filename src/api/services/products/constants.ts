@@ -10,6 +10,7 @@ export const PRODUCT_ATTRIBUTE = {
 } as const;
 
 export const EXPAND_PATH = {
+  CATEGORIES: 'categories[*]',
   PRODUCT_TYPE: 'productType',
 } as const;
 
