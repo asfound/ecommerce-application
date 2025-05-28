@@ -19,6 +19,7 @@
 }
 
 .navigationButton {
+  position: initial;
   width: 4rem;
   fill: color-mix(in srgb, var(--color-white) 95%, transparent);
   transition: fill var(--transition-duration);
