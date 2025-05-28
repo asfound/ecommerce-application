@@ -1,4 +1,5 @@
 import type { ProductsService } from '~/api/services/products/products.service';
+import type { BreadcrumbItem } from '~/components/breadcrumbs/breadcrumbs';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
@@ -29,7 +30,7 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
   private getBreadcrumbs(
     categories: { id: string; name: string }[],
     productName: string,
-  ): { name: string; onClick?(): void }[] {
+  ): BreadcrumbItem[] {
     return [
       {
         name: 'Main',

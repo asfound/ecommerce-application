@@ -7,14 +7,19 @@ import styles from './breadcrumbs.module.css';
 
 const LAST_ELEMENT = 1;
 
+export interface BreadcrumbItem {
+  name: string;
+  onClick?(): void;
+}
+
 export class Breadcrumbs extends BaseComponent implements Component {
-  public constructor(items: { name: string; onClick?(): void }[]) {
+  public constructor(items: BreadcrumbItem[]) {
     super({ tagName: 'div' });
 
     this.createHTML(items);
   }
 
-  public createHTML(items: { name: string; onClick?(): void }[]): void {
+  public createHTML(items: BreadcrumbItem[]): void {
     const list = ul({ className: styles.breadcrumbs });
 
     for (const [index, item] of items.entries()) {
@@ -37,7 +42,7 @@ export class Breadcrumbs extends BaseComponent implements Component {
       }
 
       if (index < items.length - LAST_ELEMENT) {
-        const separator = span({ className: styles.separator }, '/');
+        const separator = span({ className: styles.separator }, '>');
         listItem.append(separator);
       }
 

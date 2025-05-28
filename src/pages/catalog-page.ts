@@ -4,6 +4,8 @@ import { SERVICE_HUB } from '~/api/services/service-hub';
 import iconUp from '~/assets/icons/arrow-up.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { IntersectionLoader } from '~/components/intersection-loader/intersection-loader';
+import { CatalogBreadcrumbsPresenter } from '~/feature/catalog/breadcrumbs/breadcrumbs.presenter';
+import { CatalogBreadcrumbsView } from '~/feature/catalog/breadcrumbs/breadcrumbs.view';
 import { CategoryNavigationPresenter } from '~/feature/catalog/category-navigation/category-navigation.presenter';
 import { CategoryNavigationView } from '~/feature/catalog/category-navigation/category-navigation.view';
 import { FiltersPresenter } from '~/feature/catalog/filters/filters.presenter';
@@ -23,6 +25,8 @@ const SCROLL_DEBOUNCE_MILLISECONDS = 150;
 const SCROLL_Y_OFFSET = 600;
 
 export class CatalogPage extends BaseComponent {
+  private readonly breadcrumbsPresenter: CatalogBreadcrumbsPresenter;
+
   private readonly buttonToTop = button(
     { className: [styles.buttonToTop, styles.hidden] },
     createSvgIcon(iconUp, styles.icon),
@@ -40,6 +44,11 @@ export class CatalogPage extends BaseComponent {
 
   public constructor() {
     super({ className: [CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
+
+    this.breadcrumbsPresenter = new CatalogBreadcrumbsPresenter(
+      new CatalogBreadcrumbsView(),
+      SERVICE_HUB.provideCategoriesService(),
+    );
 
     this.categoryNavigationPresenter = new CategoryNavigationPresenter(
       new CategoryNavigationView(),
@@ -65,6 +74,7 @@ export class CatalogPage extends BaseComponent {
     const mainContentElement = div(
       { className: styles.mainContentElement },
       this.searchAndSortPresenter.getView().element,
+      this.breadcrumbsPresenter.getView().element,
       this.productCardListPresenter.getView().element,
       this.intersectionAnchor.element,
     );
