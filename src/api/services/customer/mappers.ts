@@ -7,16 +7,22 @@ const mapAddresses = (
   addressIds: string[] | undefined,
   defaultBillingAddressId: string | undefined,
   defaultShippingAddressId: string | undefined,
+  allIds: { billingAddressIds: string[] | undefined; shippingAddressIds: string[] | undefined },
+  type: 'billing' | 'shipping',
 ): AppCustomerAddress[] => {
   return addresses
     .filter((address) => addressIds?.includes(address.id ?? ''))
     .map((address) => ({
       addressId: address.id ?? '',
+      billing: type === 'billing' && addressIds?.includes(address.id ?? ''),
       city: address.city ?? '',
       country: address.country,
       defaultBilling: defaultBillingAddressId === address.id,
       defaultShipping: defaultShippingAddressId === address.id,
+      inBilling: type === 'shipping' && allIds.billingAddressIds?.includes(address.id ?? ''),
+      inShipping: type === 'billing' && allIds.shippingAddressIds?.includes(address.id ?? ''),
       postalCode: address.postalCode ?? '',
+      shipping: type === 'shipping' && addressIds?.includes(address.id ?? ''),
       streetName: address.streetName ?? '',
     }));
 };
@@ -35,12 +41,17 @@ export const mapToAppCustomer = (customer: Customer): AppCustomer => {
     billingAddressIds,
     defaultBillingAddressId,
     defaultShippingAddressId,
+    { billingAddressIds, shippingAddressIds },
+    'billing',
   );
+
   const shippingAddresses = mapAddresses(
     addresses,
     shippingAddressIds,
     defaultBillingAddressId,
     defaultShippingAddressId,
+    { billingAddressIds, shippingAddressIds },
+    'shipping',
   );
 
   return {
