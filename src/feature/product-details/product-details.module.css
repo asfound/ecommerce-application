@@ -3,50 +3,27 @@
 
   display: flex;
   gap: 5rem;
-  justify-content: space-between;
 
   min-height: 41rem; /* TODO: idk how else align loader */
   margin-block: 4rem;
 }
 
+.leftContainer {
+  width: 100%;
+  max-width: 45rem;
+}
+
 @media (width <= 890px) {
   .productDetails {
+    flex-direction: column;
+    align-items: center;
     min-height: max-content;
   }
 }
 
-@media (width <= 700px) {
-  .productDetails {
-    flex-direction: column;
-  }
-}
-
-.leftContainer {
-  width: 100%;
-  max-width: 40rem;
-}
-
-@media (width <= 860px) {
+@media (width <= 480px) {
   .leftContainer {
-    max-width: 35rem;
-  }
-}
-
-@media (width <= 768px) {
-  .leftContainer {
-    max-width: 30rem;
-  }
-}
-
-@media (width <= 700px) {
-  .leftContainer {
-    max-width: 45rem;
-  }
-}
-
-@media (width <= 500px) {
-  .leftContainer {
-    max-width: 32rem;
+    max-width: 90vw;
   }
 }
 
@@ -58,12 +35,6 @@
 
 .sliderContainer {
   background-color: transparent;
-}
-
-.sliderImage {
-  height: 100%;
-  height: 49.5rem;
-  object-fit: cover;
 }
 
 .contentContainer {
@@ -79,6 +50,7 @@
 .pricesContainer {
   display: flex;
   gap: 1rem;
+  align-items: center;
 
   width: max-content;
 
@@ -143,4 +115,16 @@
 .notFoundGif {
   border: 1rem solid var(--color-accent-light);
   border-radius: var(--border-radius);
+}
+
+.bestseller {
+  max-width: 10rem;
+  padding: 0.4rem;
+  border-radius: var(--border-radius);
+
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
+
+  background-color: var(--color-label-bestseller);
 }

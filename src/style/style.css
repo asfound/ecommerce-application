@@ -24,8 +24,18 @@ body {
   font-size: 1.6rem;
 }
 
-* {
-  scrollbar-width: thin;
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: var(--color-accent-light);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-black);
 }
 
 h1,

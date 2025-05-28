@@ -10,7 +10,12 @@ import { modalService } from '~/services/modal/modal.service';
 import { div, h2, h3, img, p } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
-import { NOT_FOUND_MESSAGE, PRODUCT_DETAILS_TEXT, PRODUCT_TYPE } from './constants';
+import {
+  BESTSELLER_LABEL,
+  NOT_FOUND_MESSAGE,
+  PRODUCT_DETAILS_TEXT,
+  PRODUCT_TYPE,
+} from './constants';
 import styles from './product-details.module.css';
 
 export interface ProductDetailsViewProperties {
@@ -100,6 +105,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
         { className: product.price.discounted ? styles.oldPrice : styles.defaultPrice },
         formatPrice(product.price.default),
       ),
+      product.bestSeller ? div({ className: styles.bestseller }, BESTSELLER_LABEL) : null,
     );
 
     const descriptionElement = p({ className: styles.description }, product.description);
@@ -108,6 +114,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
       { className: styles.contentContainer },
       headingElement,
       pricesContainer,
+
       descriptionElement,
     );
 
@@ -117,7 +124,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
   private createImageSlider(images: AppProduct['images']): HTMLDivElement {
     const sliderContainer = div({ className: styles.sliderContainer });
 
-    sliderContainer.append(new ImageSlider(images).element);
+    sliderContainer.append(new ImageSlider({ images, location: 'page' }).element);
 
     return sliderContainer;
   }
