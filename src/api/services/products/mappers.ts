@@ -38,7 +38,7 @@ export const mapVariantToAppProduct = (
     bestSeller: !!bestSellerAttribute?.value,
     categories: projection.categories.map((category) => ({
       id: category.id,
-      name: category.obj?.name[APP_LOCALE] ?? 'aa',
+      name: category.obj?.name[APP_LOCALE] ?? '',
     })),
     description: projection.description?.[APP_LOCALE] ?? '',
     image: { label: variant.images?.[0]?.label ?? '', url: variant.images?.[0]?.url ?? '' },
