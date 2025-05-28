@@ -124,7 +124,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
   private createImageSlider(images: AppProduct['images']): HTMLDivElement {
     const sliderContainer = div({ className: styles.sliderContainer });
 
-    sliderContainer.append(new ImageSlider(images).element);
+    sliderContainer.append(new ImageSlider({ images, location: 'page' }).element);
 
     return sliderContainer;
   }

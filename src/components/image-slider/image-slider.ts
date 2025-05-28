@@ -16,16 +16,25 @@ import type { Component } from '../base-component/types';
 import { BaseComponent } from '../base-component/base-component';
 import styles from './image-slider.module.css';
 
+export interface ImageSliderProperties {
+  images: AppProductImage[];
+  location: 'modal' | 'page';
+  startIndex?: number;
+}
+
 export class ImageSlider extends BaseComponent implements Component {
   private readonly images: AppProductImage[];
 
+  private readonly location;
+
   private readonly startIndex;
 
-  public constructor(images: AppProductImage[], startIndex = 0) {
+  public constructor({ images, location, startIndex = 0 }: ImageSliderProperties) {
     super({ className: styles.slider, tagName: 'div' });
 
     this.images = images;
     this.startIndex = startIndex;
+    this.location = location;
 
     this.createHTML();
   }
@@ -37,9 +46,14 @@ export class ImageSlider extends BaseComponent implements Component {
       const slide = div({ className: 'swiper-slide' });
       const imageElement = img({ className: styles.image, src: image.url });
 
-      imageElement.addEventListener('click', () => {
-        modalService.open({ content: new ImageSlider(this.images, index).element });
-      });
+      if (this.location === 'page') {
+        imageElement.addEventListener('click', () => {
+          modalService.open({
+            content: new ImageSlider({ images: this.images, location: 'modal', startIndex: index })
+              .element,
+          });
+        });
+      }
 
       slide.append(imageElement);
       wrapper.append(slide);
