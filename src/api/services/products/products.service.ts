@@ -26,7 +26,7 @@ export class ProductsService {
     const response = await this.apiRoot()
       .productProjections()
       .search()
-      .get({ queryArgs: queryArguments })
+      .get({ queryArgs: { ...queryArguments, expand: [EXPAND_PATH.CATEGORIES] } })
       .execute();
 
     return mapToFlatAppProducts(response.body.results, payload.sortField, payload.sortDirection);
@@ -37,7 +37,7 @@ export class ProductsService {
       .productProjections()
       .withId({ ID: id })
       .get({
-        queryArgs: { expand: EXPAND_PATH.PRODUCT_TYPE },
+        queryArgs: { expand: [EXPAND_PATH.PRODUCT_TYPE, EXPAND_PATH.CATEGORIES] },
       })
       .execute();
 

@@ -3,6 +3,7 @@ import { ProductCard } from './product-card';
 const productCard = new ProductCard(
   {
     bestSeller: false,
+    categories: [],
     description: 'test',
     image: { label: 'test', url: 'test' },
     images: [],
