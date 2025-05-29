@@ -66,14 +66,6 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
     super.destroy();
   }
 
-  public setActiveItem(categoryItem: CategoryNavigationItem): void {
-    if (this.activeItem) {
-      this.activeItem.setActive(false);
-    }
-    this.activeItem = categoryItem;
-    this.activeItem.setActive(true);
-  }
-
   public updateActiveItem(categoryName: string): void {
     for (const [name, item] of this.categoryItems) {
       if (name === categoryName) {
@@ -86,6 +78,14 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
       this.activeItem.setActive(false);
       this.activeItem = null;
     }
+  }
+
+  private setActiveItem(categoryItem: CategoryNavigationItem): void {
+    if (this.activeItem) {
+      this.activeItem.setActive(false);
+    }
+    this.activeItem = categoryItem;
+    this.activeItem.setActive(true);
   }
 
   private setupListeners(): void {
