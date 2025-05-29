@@ -13,6 +13,7 @@
 }
 
 .current {
+  pointer-events: none;
   color: color-mix(in srgb, var(--color-accent-light) 50%, transparent);
 }
 

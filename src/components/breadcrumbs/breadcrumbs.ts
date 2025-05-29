@@ -25,8 +25,9 @@ export class Breadcrumbs extends BaseComponent implements Component {
     for (const [index, item] of items.entries()) {
       const listItem = li({ className: styles.item });
 
-      if (item.onClick) {
+      if (item.onClick && index < items.length - LAST_ELEMENT) {
         const linkSpan = span({ className: styles.link }, item.name);
+        const separator = span({ className: styles.separator }, '>');
 
         linkSpan.addEventListener(
           'click',
@@ -35,15 +36,10 @@ export class Breadcrumbs extends BaseComponent implements Component {
           },
           { signal: this.abortController.signal },
         );
-        listItem.append(linkSpan);
+        listItem.append(linkSpan, separator);
       } else {
         const currentSpan = span({ className: styles.current }, item.name);
         listItem.append(currentSpan);
-      }
-
-      if (index < items.length - LAST_ELEMENT) {
-        const separator = span({ className: styles.separator }, '>');
-        listItem.append(separator);
       }
 
       list.append(listItem);
