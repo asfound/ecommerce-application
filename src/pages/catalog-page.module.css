@@ -1,8 +1,14 @@
 .page {
   display: grid;
-  grid-template-columns: minmax(20rem, 29rem) 1fr;
+  grid-template-rows: auto 1fr;
   gap: 2rem;
   margin-block: 4rem;
+}
+
+.contentWrapper {
+  display: grid;
+  grid-template-columns: minmax(20rem, 29rem) 1fr;
+  gap: 2rem;
 }
 
 .sidebarElement {
@@ -48,7 +54,7 @@
 }
 
 @media (width <= 640px) {
-  .page {
+  .contentWrapper {
     grid-template-columns: 1fr;
   }
 

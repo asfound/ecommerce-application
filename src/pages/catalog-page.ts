@@ -74,12 +74,15 @@ export class CatalogPage extends BaseComponent {
     const mainContentElement = div(
       { className: styles.mainContentElement },
       this.searchAndSortPresenter.getView().element,
-      this.breadcrumbsPresenter.getView().element,
       this.productCardListPresenter.getView().element,
       this.intersectionAnchor.element,
     );
 
-    this.append(sidebarElement, mainContentElement, this.buttonToTop);
+    this.append(
+      this.breadcrumbsPresenter.getView().element,
+      div({ className: styles.contentWrapper }, sidebarElement, mainContentElement),
+      this.buttonToTop,
+    );
 
     this.setupListeners();
   }
