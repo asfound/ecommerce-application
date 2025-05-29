@@ -6,7 +6,8 @@ import { Presenter } from '~/shared/presenter/presenter';
 import type { CategoryNavigationView } from './category-navigation.view';
 
 import { catalogCategoryNameAction } from '../store/actions';
-import { catalogStore } from '../store/store';
+import { catalogCategoryNameSelector } from '../store/selectors';
+import { catalogCategoryNameStore, catalogStore } from '../store/store';
 
 export class CategoryNavigationPresenter extends Presenter<CategoryNavigationView> {
   private readonly categoriesService: CategoriesService;
@@ -17,6 +18,7 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
     this.categoriesService = categoriesService;
 
     this.initView();
+    this.subscribeCategoryChange();
   }
 
   private handleCategoryItemClick = (category: AppCategory): void => {
@@ -26,7 +28,20 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
 
   private async initView(): Promise<void> {
     const categories = await this.categoriesService.getCategories();
+    const activeCategoryName = catalogCategoryNameStore.getState().categoryName;
 
-    this.view.createHTML(categories, this.handleCategoryItemClick);
+    this.view.createHTML(categories, this.handleCategoryItemClick, activeCategoryName);
+  }
+
+  private subscribeCategoryChange(): void {
+    const unsubscribe = catalogCategoryNameStore.subscribe(
+      catalogCategoryNameSelector.selectCategoryName,
+      (categoryName) => {
+        this.view.updateActiveItem(categoryName);
+      },
+      { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
   }
 }

@@ -2,7 +2,7 @@ import type { QueryParam } from '@commercetools/platform-sdk';
 
 export interface AppProduct {
   bestSeller: boolean;
-  categories: { id: string; name: string }[];
+  categories: AppProductCategory[];
   description: string;
   image: AppProductImage;
   images: AppProductImage[];
@@ -13,6 +13,11 @@ export interface AppProduct {
   sku: string;
   variants: AppProduct[];
   weight: string | undefined;
+}
+
+export interface AppProductCategory {
+  id: string;
+  name: string;
 }
 
 export interface AppProductImage {

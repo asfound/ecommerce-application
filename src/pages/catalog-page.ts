@@ -4,6 +4,8 @@ import { SERVICE_HUB } from '~/api/services/service-hub';
 import iconUp from '~/assets/icons/arrow-up.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { IntersectionLoader } from '~/components/intersection-loader/intersection-loader';
+import { CatalogBreadcrumbsPresenter } from '~/feature/catalog/breadcrumbs/breadcrumbs.presenter';
+import { CatalogBreadcrumbsView } from '~/feature/catalog/breadcrumbs/breadcrumbs.view';
 import { CategoryNavigationPresenter } from '~/feature/catalog/category-navigation/category-navigation.presenter';
 import { CategoryNavigationView } from '~/feature/catalog/category-navigation/category-navigation.view';
 import { FiltersPresenter } from '~/feature/catalog/filters/filters.presenter';
@@ -12,7 +14,7 @@ import { ProductCardListPresenter } from '~/feature/catalog/product-card-list/pr
 import { ProductCardListView } from '~/feature/catalog/product-card-list/product-card-list.view';
 import { SearchAndSortPresenter } from '~/feature/catalog/search-and-sort/search-and-sort.presenter';
 import { SearchAndSortView } from '~/feature/catalog/search-and-sort/search-and-sort.view';
-import { catalogStore } from '~/feature/catalog/store/store';
+import { catalogCategoryNameStore, catalogStore } from '~/feature/catalog/store/store';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { button, div } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
@@ -23,6 +25,8 @@ const SCROLL_DEBOUNCE_MILLISECONDS = 150;
 const SCROLL_Y_OFFSET = 600;
 
 export class CatalogPage extends BaseComponent {
+  private readonly breadcrumbsPresenter: CatalogBreadcrumbsPresenter;
+
   private readonly buttonToTop = button(
     { className: [styles.buttonToTop, styles.hidden] },
     createSvgIcon(iconUp, styles.icon),
@@ -40,6 +44,11 @@ export class CatalogPage extends BaseComponent {
 
   public constructor() {
     super({ className: [CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
+
+    this.breadcrumbsPresenter = new CatalogBreadcrumbsPresenter(
+      new CatalogBreadcrumbsView(),
+      SERVICE_HUB.provideCategoriesService(),
+    );
 
     this.categoryNavigationPresenter = new CategoryNavigationPresenter(
       new CategoryNavigationView(),
@@ -69,7 +78,11 @@ export class CatalogPage extends BaseComponent {
       this.intersectionAnchor.element,
     );
 
-    this.append(sidebarElement, mainContentElement, this.buttonToTop);
+    this.append(
+      this.breadcrumbsPresenter.getView().element,
+      div({ className: styles.contentWrapper }, sidebarElement, mainContentElement),
+      this.buttonToTop,
+    );
 
     this.setupListeners();
   }
@@ -82,6 +95,7 @@ export class CatalogPage extends BaseComponent {
     this.intersectionAnchor.destroy();
 
     catalogStore.reset();
+    catalogCategoryNameStore.reset();
 
     super.destroy();
   }

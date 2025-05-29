@@ -25,6 +25,8 @@ export interface ProductDetailsViewProperties {
 }
 
 export class ProductDetailsView extends BaseComponent implements Component {
+  private readonly container = div({ className: styles.productDetails });
+
   private contentContainer = div(null);
 
   private readonly leftContainer = div({ className: styles.leftContainer });
@@ -46,9 +48,13 @@ export class ProductDetailsView extends BaseComponent implements Component {
   private weightInputs: HTMLDivElement | null = null;
 
   public constructor() {
-    super({ className: styles.productDetails, tagName: 'div' });
+    super({ className: styles.container, tagName: 'div' });
 
     this.append(this.loader, modalService.getView());
+  }
+
+  public appendBreadcrumbs(element: HTMLElement): void {
+    this.element.prepend(element);
   }
 
   public createHTML(properties: ProductDetailsViewProperties): void {
@@ -70,7 +76,8 @@ export class ProductDetailsView extends BaseComponent implements Component {
 
     this.rightContainer.append(this.contentContainer, this.weightInputs ?? '');
 
-    this.append(this.leftContainer, this.rightContainer);
+    this.container.append(this.leftContainer, this.rightContainer);
+    this.append(this.container);
   }
 
   public hideLoader(): void {

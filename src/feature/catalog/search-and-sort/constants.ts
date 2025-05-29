@@ -1,6 +1,7 @@
 export const SEARCH_SORT_TEXT = {
   ORDER: 'ORDER:',
-  SEARCH_IN: (categoryName: string) => `Search in ${categoryName}`,
+  SEARCH_IN: (categoryName: string) =>
+    categoryName.length > 0 ? `Search in ${categoryName}` : 'Search all products',
   SORT_BY: 'SORT BY:',
 } as const;
 

@@ -1,12 +1,20 @@
 import type { ProductsService } from '~/api/services/products/products.service';
+import type { AppProductCategory } from '~/api/services/products/types';
+import type { BreadcrumbItem } from '~/components/breadcrumbs/breadcrumbs';
 
+import { ROUTE_PATH } from '~/app/router/route-path';
+import { Router } from '~/app/router/router';
 import { routerAction } from '~/app/router/store/actions';
 import { routerSelector } from '~/app/router/store/selectors';
 import { routerStore } from '~/app/router/store/store';
+import { Breadcrumbs } from '~/components/breadcrumbs/breadcrumbs';
+import { PAGE_NAME } from '~/shared/constants/constants';
 import { Presenter } from '~/shared/presenter/presenter';
 
 import type { ProductDetailsView } from './product-details.view';
 
+import { catalogCategoryNameAction } from '../catalog/store/actions';
+import { catalogStore } from '../catalog/store/store';
 import { NOT_FOUND_MESSAGE } from './constants';
 
 export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
@@ -18,6 +26,38 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
     this.productsService = productsService;
 
     this.updateView();
+  }
+
+  private getBreadcrumbs(categories: AppProductCategory[], productName: string): BreadcrumbItem[] {
+    return [
+      {
+        name: PAGE_NAME.MAIN,
+        onClick: (): void => {
+          Router.instance.navigate(ROUTE_PATH.MAIN);
+        },
+      },
+      {
+        name: PAGE_NAME.CATALOG,
+        onClick: (): void => {
+          Router.instance.navigate(ROUTE_PATH.CATALOG);
+        },
+      },
+      ...categories.map((category) => ({
+        name: category.name,
+        onClick: (): void => {
+          this.handleCategoryClick(category);
+        },
+      })),
+      {
+        name: productName,
+      },
+    ];
+  }
+
+  private handleCategoryClick(category: AppProductCategory): void {
+    catalogStore.setState({ categoryId: category.id, searchTerm: '' });
+    catalogCategoryNameAction.setCategoryName(category.name);
+    Router.instance.navigate(ROUTE_PATH.CATALOG);
   }
 
   private readonly handleWeightChange = (sku: string): void => {
@@ -37,6 +77,10 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
         onWeightChange: this.handleWeightChange,
         product,
       });
+
+      const breadcrumbs = new Breadcrumbs(this.getBreadcrumbs(product.categories, product.name));
+
+      this.view.appendBreadcrumbs(breadcrumbs.element);
     } catch {
       this.view.showNotFoundWidget(NOT_FOUND_MESSAGE);
     } finally {

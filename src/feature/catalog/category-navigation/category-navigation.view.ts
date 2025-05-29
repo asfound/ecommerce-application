@@ -16,6 +16,8 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
 
   private readonly arrowIcon = createSvgIcon(iconArrowUp, styles.icon);
 
+  private readonly categoryItems = new Map<string, CategoryNavigationItem>();
+
   private readonly summaryElement = summary(
     { className: styles.summary },
     h2({ className: styles.heading }, CATEGORY_HEADING),
@@ -32,7 +34,11 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
     this.setupListeners();
   }
 
-  public createHTML(categories: AppCategory[], onClick: CategoryNavigationItemClickHandler): void {
+  public createHTML(
+    categories: AppCategory[],
+    onClick: CategoryNavigationItemClickHandler,
+    activeCategoryName: string,
+  ): void {
     this.append(this.summaryElement);
 
     for (const category of categories) {
@@ -41,7 +47,36 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
         this.setActiveItem(categoryItem);
       });
 
+      if (category.name === activeCategoryName) {
+        this.setActiveItem(categoryItem);
+      }
+
+      this.categoryItems.set(category.name, categoryItem);
       this.append(categoryItem);
+    }
+  }
+
+  public override destroy(): void {
+    for (const item of this.categoryItems.values()) {
+      item.destroy();
+    }
+
+    this.categoryItems.clear();
+
+    super.destroy();
+  }
+
+  public updateActiveItem(categoryName: string): void {
+    for (const [name, item] of this.categoryItems) {
+      if (name === categoryName) {
+        this.setActiveItem(item);
+        return;
+      }
+    }
+
+    if (this.activeItem) {
+      this.activeItem.setActive(false);
+      this.activeItem = null;
     }
   }
 
