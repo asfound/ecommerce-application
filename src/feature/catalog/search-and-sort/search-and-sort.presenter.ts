@@ -49,6 +49,8 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
 
   private setupSubscriptions(): void {
     this.subscribeCategoryNameChange();
+    this.subscribeSortFieldChange();
+    this.subscribeSortDirectionChange();
   }
 
   private subscribeCategoryNameChange(): void {
@@ -57,6 +59,30 @@ export class SearchAndSortPresenter extends Presenter<SearchAndSortView> {
       (categoryName) => {
         this.view.clearInput();
         this.view.setInputPlaceholder(categoryName);
+      },
+      { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribeSortDirectionChange(): void {
+    const unsubscribe = catalogStore.subscribe(
+      catalogSelector.selectSortDirection,
+      (sortDirection) => {
+        this.view.setSortDirection(sortDirection);
+      },
+      { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribeSortFieldChange(): void {
+    const unsubscribe = catalogStore.subscribe(
+      catalogSelector.selectSortField,
+      (sortField) => {
+        this.view.setSortField(sortField);
       },
       { isImmediate: false },
     );
