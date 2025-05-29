@@ -35,11 +35,15 @@
   border: none;
   border-radius: 50%;
 
+  visibility: visible;
+  opacity: 1;
   background-color: var(--color-accent-light);
 
   stroke: var(--color-white);
 
-  transition: stroke var(--transition-duration);
+  transition:
+    stroke var(--transition-duration),
+    opacity var(--transition-duration);
 }
 
 .icon {
@@ -48,7 +52,8 @@
 }
 
 .hidden {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
 }
 
 @media (hover: hover) {
