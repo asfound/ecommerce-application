@@ -1,17 +1,9 @@
-/* TODO: remove after sprint-2 */
-.buttonsContainer {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+/* TODO: remove after sprint-3 */
+.temp {
+  margin-bottom: 1rem;
+  padding-block: 2rem;
 
-  max-width: 128rem;
-  height: 10rem;
-  margin-block: 2rem;
-  margin-inline: auto;
-  padding-inline: 2rem;
-}
-
-.buttonsContainer button {
-  height: 100%;
-  font-weight: bold;
+  font-size: 2rem;
+  color: var(--color-accent-light);
+  white-space: pre-line;
 }
