@@ -16,6 +16,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
   font-size: 62.5%;
 }
 
