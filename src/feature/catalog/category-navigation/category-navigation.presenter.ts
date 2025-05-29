@@ -6,6 +6,7 @@ import { Presenter } from '~/shared/presenter/presenter';
 import type { CategoryNavigationView } from './category-navigation.view';
 
 import { catalogCategoryNameAction } from '../store/actions';
+import { catalogCategoryNameSelector } from '../store/selectors';
 import { catalogCategoryNameStore, catalogStore } from '../store/store';
 
 export class CategoryNavigationPresenter extends Presenter<CategoryNavigationView> {
@@ -17,6 +18,7 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
     this.categoriesService = categoriesService;
 
     this.initView();
+    this.subscribeCategoryChange();
   }
 
   private handleCategoryItemClick = (category: AppCategory): void => {
@@ -29,5 +31,17 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
     const activeCategoryName = catalogCategoryNameStore.getState().categoryName;
 
     this.view.createHTML(categories, this.handleCategoryItemClick, activeCategoryName);
+  }
+
+  private subscribeCategoryChange(): void {
+    const unsubscribe = catalogCategoryNameStore.subscribe(
+      catalogCategoryNameSelector.selectCategoryName,
+      (categoryName) => {
+        this.view.updateActiveItem(categoryName);
+      },
+      { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
   }
 }
