@@ -27,6 +27,7 @@
 .icon {
   width: 1.5rem;
   height: 1.5rem;
+  stroke: var(--color-lilac);
 }
 
 .rotated {

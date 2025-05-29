@@ -36,6 +36,10 @@
   border-radius: 50%;
 
   background-color: var(--color-accent-light);
+
+  stroke: var(--color-white);
+
+  transition: stroke var(--transition-duration);
 }
 
 .icon {
@@ -50,6 +54,7 @@
 @media (hover: hover) {
   .buttonToTop:hover {
     cursor: pointer;
+    stroke: var(--color-accent);
   }
 }
 
