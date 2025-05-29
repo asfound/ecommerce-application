@@ -73,10 +73,15 @@ export class ProductCard extends BaseComponent implements Component {
     const imageContainer = div(
       { className: styles.imageContainer },
       this.loaderComponent.element,
-      this.product.price.discounted
-        ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
-        : null,
-      this.product.bestSeller ? div({ className: styles.bestSellerLabel }, BESTSELLER_VALUE) : null,
+      div(
+        { className: styles.labels },
+        this.product.bestSeller
+          ? div({ className: styles.bestSellerLabel }, BESTSELLER_VALUE)
+          : null,
+        this.product.price.discounted
+          ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
+          : null,
+      ),
     );
 
     const image = new Image();
