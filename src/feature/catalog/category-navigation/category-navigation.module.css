@@ -4,6 +4,10 @@
   background-color: var(--color-dark);
 }
 
+.heading {
+  font-weight: 600;
+}
+
 .summary {
   position: relative;
 
@@ -27,6 +31,7 @@
 .icon {
   width: 2rem;
   height: 1rem;
+  stroke: var(--color-lilac);
 }
 
 .rotated {

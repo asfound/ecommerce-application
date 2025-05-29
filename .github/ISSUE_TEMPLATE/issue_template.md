@@ -1,7 +1,7 @@
 ---
 name: Sprint Issue
 about: Issue template for sprint tasks
-title: "[sprint_3] Issue RSS-ECOMM-3_XX: "
+title: "[sprint_4] Issue RSS-ECOMM-4_XX: "
 labels: task
 assignees: ''
 ---
