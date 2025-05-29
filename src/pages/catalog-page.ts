@@ -14,7 +14,7 @@ import { ProductCardListPresenter } from '~/feature/catalog/product-card-list/pr
 import { ProductCardListView } from '~/feature/catalog/product-card-list/product-card-list.view';
 import { SearchAndSortPresenter } from '~/feature/catalog/search-and-sort/search-and-sort.presenter';
 import { SearchAndSortView } from '~/feature/catalog/search-and-sort/search-and-sort.view';
-import { catalogStore } from '~/feature/catalog/store/store';
+import { catalogCategoryNameStore, catalogStore } from '~/feature/catalog/store/store';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { button, div } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
@@ -95,6 +95,7 @@ export class CatalogPage extends BaseComponent {
     this.intersectionAnchor.destroy();
 
     catalogStore.reset();
+    catalogCategoryNameStore.reset();
 
     super.destroy();
   }
