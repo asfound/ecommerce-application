@@ -1,4 +1,5 @@
 import type { ProductsService } from '~/api/services/products/products.service';
+import type { AppProductCategory } from '~/api/services/products/types';
 import type { BreadcrumbItem } from '~/components/breadcrumbs/breadcrumbs';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
@@ -7,6 +8,7 @@ import { routerAction } from '~/app/router/store/actions';
 import { routerSelector } from '~/app/router/store/selectors';
 import { routerStore } from '~/app/router/store/store';
 import { Breadcrumbs } from '~/components/breadcrumbs/breadcrumbs';
+import { PAGE_NAME } from '~/shared/constants/constants';
 import { Presenter } from '~/shared/presenter/presenter';
 
 import type { ProductDetailsView } from './product-details.view';
@@ -26,20 +28,16 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
     this.updateView();
   }
 
-  //TODO: remove magic strings
-  private getBreadcrumbs(
-    categories: { id: string; name: string }[],
-    productName: string,
-  ): BreadcrumbItem[] {
+  private getBreadcrumbs(categories: AppProductCategory[], productName: string): BreadcrumbItem[] {
     return [
       {
-        name: 'Main',
+        name: PAGE_NAME.MAIN,
         onClick: (): void => {
           Router.instance.navigate(ROUTE_PATH.MAIN);
         },
       },
       {
-        name: 'Catalog',
+        name: PAGE_NAME.CATALOG,
         onClick: (): void => {
           Router.instance.navigate(ROUTE_PATH.CATALOG);
         },
@@ -47,15 +45,19 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
       ...categories.map((category) => ({
         name: category.name,
         onClick: (): void => {
-          catalogStore.setState({ categoryId: category.id, searchTerm: '' });
-          catalogCategoryNameAction.setCategoryName(category.name);
-          Router.instance.navigate(ROUTE_PATH.CATALOG);
+          this.handleCategoryClick(category);
         },
       })),
       {
         name: productName,
       },
     ];
+  }
+
+  private handleCategoryClick(category: AppProductCategory): void {
+    catalogStore.setState({ categoryId: category.id, searchTerm: '' });
+    catalogCategoryNameAction.setCategoryName(category.name);
+    Router.instance.navigate(ROUTE_PATH.CATALOG);
   }
 
   private readonly handleWeightChange = (sku: string): void => {

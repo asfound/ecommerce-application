@@ -6,7 +6,7 @@ import { Presenter } from '~/shared/presenter/presenter';
 import type { CategoryNavigationView } from './category-navigation.view';
 
 import { catalogCategoryNameAction } from '../store/actions';
-import { catalogStore } from '../store/store';
+import { catalogCategoryNameStore, catalogStore } from '../store/store';
 
 export class CategoryNavigationPresenter extends Presenter<CategoryNavigationView> {
   private readonly categoriesService: CategoriesService;
@@ -26,8 +26,8 @@ export class CategoryNavigationPresenter extends Presenter<CategoryNavigationVie
 
   private async initView(): Promise<void> {
     const categories = await this.categoriesService.getCategories();
-    const activeCategoryId = catalogStore.getState().categoryId;
+    const activeCategoryName = catalogCategoryNameStore.getState().categoryName;
 
-    this.view.createHTML(categories, this.handleCategoryItemClick, activeCategoryId);
+    this.view.createHTML(categories, this.handleCategoryItemClick, activeCategoryName);
   }
 }

@@ -1,15 +1,18 @@
 import type { CategoriesService } from '~/api/services/categories/categories.service';
 import type { AppCategory } from '~/api/services/categories/types';
+import type { AppProductCategory } from '~/api/services/products/types';
 import type { BreadcrumbItem } from '~/components/breadcrumbs/breadcrumbs';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
+import { PAGE_NAME } from '~/shared/constants/constants';
 import { Presenter } from '~/shared/presenter/presenter';
+import { getBreadcrumbCategories } from '~/shared/utils/get-breadcrumb-categories';
 
 import type { CatalogBreadcrumbsView } from './breadcrumbs.view';
 
 import { catalogCategoryNameAction } from '../store/actions';
-import { catalogSelector } from '../store/selectors';
+import { catalogCategoryNameSelector } from '../store/selectors';
 import { catalogCategoryNameStore, catalogStore } from '../store/store';
 
 export class CatalogBreadcrumbsPresenter extends Presenter<CatalogBreadcrumbsView> {
@@ -21,9 +24,7 @@ export class CatalogBreadcrumbsPresenter extends Presenter<CatalogBreadcrumbsVie
     super(view);
 
     this.categoriesService = categoriesService;
-
-    this.initCategories();
-    this.subscribeCategoryChange();
+    this.init();
   }
 
   public override destroy(): void {
@@ -32,16 +33,16 @@ export class CatalogBreadcrumbsPresenter extends Presenter<CatalogBreadcrumbsVie
     super.destroy();
   }
 
-  private getBreadcrumbs(categories?: { id: string; name: string }[]): BreadcrumbItem[] {
+  private getBreadcrumbs(categories?: AppProductCategory[]): BreadcrumbItem[] {
     const baseItems: BreadcrumbItem[] = [
       {
-        name: 'Main',
+        name: PAGE_NAME.MAIN,
         onClick: (): void => {
           Router.instance.navigate(ROUTE_PATH.MAIN);
         },
       },
       {
-        name: 'Catalog',
+        name: PAGE_NAME.CATALOG,
         onClick: (): void => {
           catalogStore.reset();
           catalogCategoryNameStore.reset();
@@ -52,13 +53,22 @@ export class CatalogBreadcrumbsPresenter extends Presenter<CatalogBreadcrumbsVie
     const categoryItems: BreadcrumbItem[] = (categories ?? []).map((category) => ({
       name: category.name,
       onClick: (): void => {
-        catalogStore.setState({ categoryId: category.id, searchTerm: '' });
-        catalogCategoryNameAction.setCategoryName(category.name);
-        Router.instance.navigate(ROUTE_PATH.CATALOG);
+        this.handleCategoryClick(category);
       },
     }));
 
     return [...baseItems, ...categoryItems];
+  }
+
+  private handleCategoryClick(category: AppProductCategory): void {
+    catalogStore.setState({ categoryId: category.id, searchTerm: '' });
+    catalogCategoryNameAction.setCategoryName(category.name);
+    Router.instance.navigate(ROUTE_PATH.CATALOG);
+  }
+
+  private async init(): Promise<void> {
+    await this.initCategories();
+    this.subscribeCategoryChange();
   }
 
   private async initCategories(): Promise<void> {
@@ -66,10 +76,10 @@ export class CatalogBreadcrumbsPresenter extends Presenter<CatalogBreadcrumbsVie
   }
 
   private subscribeCategoryChange(): void {
-    const unsubscribe = catalogStore.subscribe(
-      catalogSelector.selectCategoryId,
-      (categoryId) => {
-        this.updateView(categoryId);
+    const unsubscribe = catalogCategoryNameStore.subscribe(
+      catalogCategoryNameSelector.selectCategoryName,
+      (categoryName) => {
+        this.updateView(categoryName);
       },
       { isImmediate: true },
     );
@@ -77,29 +87,11 @@ export class CatalogBreadcrumbsPresenter extends Presenter<CatalogBreadcrumbsVie
     this.storeSubscription.add(unsubscribe);
   }
 
-  private updateView(activeCategoryId: string): void {
-    this.view.createHTML(
-      this.getBreadcrumbs(getBreadcrumbCategories(activeCategoryId, this.categories)),
+  private updateView(activeCategoryName: string): void {
+    const breadcrumbItems = this.getBreadcrumbs(
+      getBreadcrumbCategories(activeCategoryName, this.categories),
     );
+
+    this.view.createHTML(breadcrumbItems);
   }
-}
-
-function getBreadcrumbCategories(
-  categoryId: string,
-  categories: AppCategory[],
-): { id: string; name: string }[] {
-  const categoriesArray = [];
-  const currentCategory = categories.find((category) => category.id === categoryId);
-
-  if (currentCategory?.ancestors.length) {
-    for (const ancestor of currentCategory.ancestors) {
-      categoriesArray.push({ id: ancestor.id, name: ancestor.name });
-    }
-  }
-
-  if (currentCategory) {
-    categoriesArray.push({ id: currentCategory.id, name: currentCategory.name });
-  }
-
-  return categoriesArray;
 }

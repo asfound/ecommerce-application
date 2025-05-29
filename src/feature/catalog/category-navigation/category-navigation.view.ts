@@ -35,7 +35,7 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
   public createHTML(
     categories: AppCategory[],
     onClick: CategoryNavigationItemClickHandler,
-    activeCategoryId: string,
+    activeCategoryName: string,
   ): void {
     this.append(this.summaryElement);
 
@@ -45,7 +45,7 @@ export class CategoryNavigationView extends BaseComponent<HTMLDetailsElement> im
         this.setActiveItem(categoryItem);
       });
 
-      if (category.id === activeCategoryId) {
+      if (category.name === activeCategoryName) {
         this.setActiveItem(categoryItem);
       }
 

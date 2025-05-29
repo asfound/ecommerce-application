@@ -63,3 +63,8 @@ export const BUTTON_TITLE = {
   BILLING: 'Add new billing address',
   SHIPPING: 'Add new shipping address',
 };
+
+export const PAGE_NAME = {
+  CATALOG: 'Catalog',
+  MAIN: 'Main',
+};
