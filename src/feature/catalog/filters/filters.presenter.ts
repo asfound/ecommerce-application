@@ -91,6 +91,9 @@ export class FiltersPresenter extends Presenter<FiltersView> {
   }
 
   private readonly onCategoryNameChange = (categoryName: string): void => {
+    this.view.hideFilter(FILTER.BRAND);
+    this.view.hideFilter(FILTER.WEIGHT);
+
     catalogStore.setState({ brand: [], weight: [] });
 
     if (categoryName === '') {
