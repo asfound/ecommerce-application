@@ -1,6 +1,6 @@
 import { APP_LOCALE } from '~/shared/constants/constants';
 
-import type { ProductsFilterPayload } from './types';
+import type { ProductsFilterPayload, WeightType } from './types';
 
 const CENTS_IN_DOLLAR = 100;
 
@@ -37,15 +37,27 @@ export const FILTER = {
 
     return `variants.price.centAmount:range (${from.toString()} to ${to.toString()})`;
   },
-  WEIGHT: (weight: ('lg' | 'md' | 'sm')[]) => {
+  WEIGHT: (weight: WeightType[]) => {
     const weights = weight.map((value) => `"${value}"`).join(',');
     return `variants.attributes.weight.key:${weights}`;
   },
 } as const;
 
 export const SORT_FIELD = {
-  NAME: (direction: ProductsFilterPayload['sortDirection']) => `name.${APP_LOCALE} ${direction}`,
-  PRICE: (direction: ProductsFilterPayload['sortDirection']) => `price ${direction}`,
+  NAME: (direction: ProductsFilterPayload['sortDirection']) =>
+    `${SORT_FIELD_TYPE.NAME}.${APP_LOCALE} ${direction}`,
+  PRICE: (direction: ProductsFilterPayload['sortDirection']) =>
+    `${SORT_FIELD_TYPE.PRICE} ${direction}`,
 } as const;
 
 export const PAGE_NUMBER_TO_OFFSET_SHIFT = 1;
+
+export const SORT_FIELD_TYPE = {
+  NAME: 'name',
+  PRICE: 'price',
+} as const;
+
+export const SORT_DIRECTION = {
+  ASC: 'asc',
+  DESC: 'desc',
+} as const;

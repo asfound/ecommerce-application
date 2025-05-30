@@ -1,5 +1,6 @@
 import type { ProductsFilterPayload } from '~/api/services/products/types';
 
+import { SORT_DIRECTION, SORT_FIELD_TYPE } from '~/api/services/products/constants';
 import { createStore } from '~/shared/store/create-store';
 
 import { PRODUCTS_PER_PAGE } from '../constants';
@@ -23,8 +24,8 @@ const initialState: CatalogState = {
   priceRange: {},
   productsPerPage: PRODUCTS_PER_PAGE,
   searchTerm: '',
-  sortDirection: 'asc',
-  sortField: 'price',
+  sortDirection: SORT_DIRECTION.ASC,
+  sortField: SORT_FIELD_TYPE.PRICE,
   weight: [],
 };
 

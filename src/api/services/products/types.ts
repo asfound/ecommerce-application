@@ -1,5 +1,7 @@
 import type { QueryParam } from '@commercetools/platform-sdk';
 
+import type { SORT_DIRECTION, SORT_FIELD_TYPE } from './constants';
+
 export interface AppProduct {
   bestSeller: boolean;
   categories: AppProductCategory[];
@@ -55,7 +57,13 @@ export interface ProductsFilterPayload {
   priceRange: { max?: number; min?: number };
   productsPerPage: number;
   searchTerm?: string;
-  sortDirection: 'asc' | 'desc';
-  sortField: 'name' | 'price';
-  weight?: ('lg' | 'md' | 'sm')[];
+  sortDirection: SortDirection;
+  sortField: SortField;
+  weight?: WeightType[];
 }
+
+export type SortDirection = (typeof SORT_DIRECTION)[keyof typeof SORT_DIRECTION];
+
+export type SortField = (typeof SORT_FIELD_TYPE)[keyof typeof SORT_FIELD_TYPE];
+
+export type WeightType = 'lg' | 'md' | 'sm';

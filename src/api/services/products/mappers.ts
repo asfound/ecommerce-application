@@ -4,7 +4,7 @@ import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppProduct, ProductsFilterPayload } from './types';
 
-import { PRODUCT_ATTRIBUTE } from './constants';
+import { PRODUCT_ATTRIBUTE, SORT_DIRECTION, SORT_FIELD_TYPE } from './constants';
 
 const isAttribute = (value: unknown): value is { key: string; label: string } => {
   return (
@@ -81,19 +81,19 @@ export const mapToFlatAppProducts = (
   });
 
   return products.sort((a, b) => {
-    if (sortField === 'price' && sortDirection === 'asc') {
+    if (sortField === SORT_FIELD_TYPE.PRICE && sortDirection === SORT_DIRECTION.ASC) {
       return a.price.default - b.price.default;
     }
 
-    if (sortField === 'price' && sortDirection === 'desc') {
+    if (sortField === SORT_FIELD_TYPE.PRICE && sortDirection === SORT_DIRECTION.DESC) {
       return b.price.default - a.price.default;
     }
 
-    if (sortField === 'name' && sortDirection === 'asc') {
+    if (sortField === SORT_FIELD_TYPE.NAME && sortDirection === SORT_DIRECTION.ASC) {
       return a.name.localeCompare(b.name);
     }
 
-    if (sortField === 'name' && sortDirection === 'desc') {
+    if (sortField === SORT_FIELD_TYPE.NAME && sortDirection === SORT_DIRECTION.DESC) {
       return b.name.localeCompare(a.name);
     }
 
