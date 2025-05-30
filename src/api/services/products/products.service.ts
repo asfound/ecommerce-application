@@ -1,10 +1,10 @@
 import type { ApiRootGetter } from '~/api/types/types';
 
-import type { AppProduct, ProductsFilterPayload } from './types';
+import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
 
 import { EXPAND_PATH } from './constants';
 import { getQueryArguments, getQueryFacets } from './helpers';
-import { mapToFlatAppProducts, mapVariantToAppProduct } from './mappers';
+import { mapToFilerOptions, mapToFlatAppProducts, mapVariantToAppProduct } from './mappers';
 
 export class ProductsService {
   private static instance: null | ProductsService = null;
@@ -20,7 +20,9 @@ export class ProductsService {
     return ProductsService.instance;
   }
 
-  public async getFilteredProducts(payload: ProductsFilterPayload): Promise<AppProduct[]> {
+  public async getFilteredProducts(
+    payload: ProductsFilterPayload,
+  ): Promise<MappedFilterOptions & { products: AppProduct[] }> {
     const queryArguments = getQueryArguments(payload);
     const facets = getQueryFacets(payload.categoryId ?? '');
 
@@ -32,7 +34,15 @@ export class ProductsService {
       })
       .execute();
 
-    return mapToFlatAppProducts(response.body.results, payload.sortField, payload.sortDirection);
+    const products = mapToFlatAppProducts(
+      response.body.results,
+      payload.sortField,
+      payload.sortDirection,
+    );
+
+    const { brandOptions, weightOptions } = mapToFilerOptions(response.body.facets ?? {});
+
+    return { brandOptions, products, weightOptions };
   }
 
   public async getProductById(id: string): Promise<AppProduct> {
