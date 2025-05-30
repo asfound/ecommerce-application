@@ -6,7 +6,7 @@
   gap: 2rem;
   align-content: start;
 
-  min-height: 30rem;
+  min-height: 100dvh;
   border-radius: var(--border-radius);
 }
 

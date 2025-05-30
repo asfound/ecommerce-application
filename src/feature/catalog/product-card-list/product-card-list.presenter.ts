@@ -24,6 +24,8 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
   private intersectionObserver: IntersectionObserver | null = null;
 
+  private loading = false;
+
   private readonly productsService: ProductsService;
 
   public constructor(
@@ -72,7 +74,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
     this.intersectionObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !this.loading) {
           this.loadNextPage();
         }
       },
@@ -137,6 +139,8 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     try {
       this.currentPage = 1;
 
+      this.loading = true;
+
       catalogLoadingAction.setLoading(true);
 
       const { brandOptions, products, weightOptions } =
@@ -157,6 +161,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       this.initIntersectionObserver();
     } finally {
       catalogLoadingAction.setLoading(false);
+      this.loading = false;
     }
   };
 }
