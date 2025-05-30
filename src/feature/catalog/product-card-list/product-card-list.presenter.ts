@@ -11,6 +11,7 @@ import { Presenter } from '~/shared/presenter/presenter';
 import type { CatalogState } from '../store/store';
 import type { ProductCardListView } from './product-card-list.view';
 
+import { filtersStore } from '../filters/store/store';
 import { catalogLoadingAction } from '../store/actions';
 import { catalogLoadingSelector } from '../store/selectors';
 import { catalogLoadingStore, catalogStore } from '../store/store';
@@ -138,10 +139,11 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
       catalogLoadingAction.setLoading(true);
 
-      const { products } = await this.productsService.getFilteredProducts({
-        ...state,
-        currentPage: this.currentPage,
-      });
+      const { brandOptions, products, weightOptions } =
+        await this.productsService.getFilteredProducts({
+          ...state,
+          currentPage: this.currentPage,
+        });
 
       if (products.length === 0) {
         this.view.showNotFoundWidget(state.searchTerm);
@@ -149,6 +151,8 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
       }
 
       this.view.createHTML(products, this.handleNavigateToDetails);
+
+      filtersStore.setState({ brandOptions, weightOptions });
 
       this.initIntersectionObserver();
     } finally {

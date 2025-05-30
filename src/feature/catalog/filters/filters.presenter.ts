@@ -16,12 +16,15 @@ import {
   FILTER_WEIGHT_PROPS,
   VALID_PRICE_LENGTH,
 } from './constants';
+import { filtersStore } from './store/store';
 
 export class FiltersPresenter extends Presenter<FiltersView> {
   public constructor(view: FiltersView) {
     super(view);
 
     this.initVIew();
+
+    this.subscribeStateChange();
 
     this.subscribeCategoryNameChange();
   }
@@ -138,6 +141,17 @@ export class FiltersPresenter extends Presenter<FiltersView> {
       catalogCategoryNameSelector.selectCategoryName,
       this.onCategoryNameChange,
       { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribeStateChange(): void {
+    const unsubscribe = filtersStore.subscribe(
+      (state) => state,
+      (state) => {
+        console.warn(state);
+      },
     );
 
     this.storeSubscription.add(unsubscribe);
