@@ -2,7 +2,7 @@ import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { ProductsFilterPayload, WeightType } from './types';
 
-const CENTS_IN_DOLLAR = 100;
+export const CENTS_IN_DOLLAR = 100;
 
 export const PRODUCT_ATTRIBUTE = {
   BEST_SELLER: 'bestSeller',

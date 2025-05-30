@@ -1,6 +1,7 @@
 import type { AppProduct } from '~/api/services/products/types';
 
 import { div } from '~/shared/create-element/tags';
+import { calculateDiscountPercent } from '~/shared/utils/calculate-discount';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import type { Component } from '../base-component/types';
@@ -9,7 +10,6 @@ import { BaseComponent } from '../base-component/base-component';
 import { Loader } from '../common/loader/loader';
 import styles from './product-card.module.css';
 
-const DISCOUNT_PERCENTAGE_VALUE = '-10%';
 const BESTSELLER_VALUE = 'Bestseller';
 
 export type ProductCardClickHandler = (product: AppProduct) => void;
@@ -79,7 +79,13 @@ export class ProductCard extends BaseComponent implements Component {
           ? div({ className: styles.bestSellerLabel }, BESTSELLER_VALUE)
           : null,
         this.product.price.discounted
-          ? div({ className: styles.discountLabel }, DISCOUNT_PERCENTAGE_VALUE)
+          ? div(
+              { className: styles.discountLabel },
+              calculateDiscountPercent(
+                this.product.price.default,
+                this.product.price.discounted ?? 0,
+              ),
+            )
           : null,
       ),
     );
