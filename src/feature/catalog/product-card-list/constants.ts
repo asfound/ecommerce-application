@@ -5,4 +5,4 @@ export const PRODUCT_CARD_LIST_TEXT = {
       : 'Huh?! No results found for your request.',
 } as const;
 
-export const VIEW_UPDATE_DELAY = 50;
+export const VIEW_UPDATE_DELAY = 200;
