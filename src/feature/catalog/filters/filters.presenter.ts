@@ -104,6 +104,7 @@ export class FiltersPresenter extends Presenter<FiltersView> {
       this.view.hideFilter(FILTER.BRAND);
       this.view.hideFilter(FILTER.WEIGHT);
       this.view.resetCheckboxes(FILTER.ALL);
+      this.view.resetInputs();
 
       return;
     }

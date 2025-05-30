@@ -89,6 +89,12 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
     }
   }
 
+  public resetInputs(): void {
+    for (const input of this.numberInputs) {
+      input.reset();
+    }
+  }
+
   public show(): void {
     this.removeClassNames(styles.hidden);
   }

@@ -62,6 +62,7 @@ export class FiltersView extends BaseComponent {
     if (filter === FILTER.ALL) {
       this.filterBrand.resetCheckboxes();
       this.filterWeight.resetCheckboxes();
+      this.filterBestSeller.resetCheckboxes();
       return;
     }
 
@@ -71,6 +72,10 @@ export class FiltersView extends BaseComponent {
     }
 
     this.filterWeight.resetCheckboxes();
+  }
+
+  public resetInputs(): void {
+    this.filterPriceRange.resetInputs();
   }
 
   public showFilter(filter: AvailableFilter): void {
