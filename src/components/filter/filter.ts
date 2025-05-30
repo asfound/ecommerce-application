@@ -13,9 +13,14 @@ import styles from './filter.module.css';
 
 export interface FilterCheckboxesProperties {
   onChange(checkedValues: CatalogState['weight'] | string[]): void;
-  options: { label: string; value: boolean | string }[];
+  options: FilterOption[];
   title: string;
   type: 'checkboxes';
+}
+
+export interface FilterOption {
+  label: string;
+  value: boolean | string;
 }
 
 export interface FilterPriceRangeProperties {

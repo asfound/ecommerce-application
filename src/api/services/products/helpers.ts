@@ -1,3 +1,5 @@
+import type { FilterOption } from '~/components/filter/filter';
+
 import type {
   AppProduct,
   FilterQueryArguments,
@@ -92,4 +94,8 @@ export const sortProducts = (
   }
 
   return 0;
+};
+
+export const sortWeightOptions = (a: FilterOption, b: FilterOption): number => {
+  return Number.parseInt(a.label) - Number.parseInt(b.label);
 };

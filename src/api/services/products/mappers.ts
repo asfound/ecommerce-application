@@ -1,11 +1,19 @@
-import type { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
+import {
+  type FacetResults,
+  FacetTypesValues,
+  type ProductProjection,
+  type ProductVariant,
+} from '@commercetools/platform-sdk';
+import { isString } from 'lodash';
+
+import type { FilterOption } from '~/components/filter/filter';
 
 import { APP_LOCALE } from '~/shared/constants/constants';
 
-import type { AppProduct, ProductsFilterPayload } from './types';
+import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
 
-import { PRODUCT_ATTRIBUTE } from './constants';
-import { sortProducts } from './helpers';
+import { FACET, PRODUCT_ATTRIBUTE } from './constants';
+import { sortProducts, sortWeightOptions } from './helpers';
 
 const isAttribute = (value: unknown): value is { key: string; label: string } => {
   return (
@@ -82,4 +90,40 @@ export const mapToFlatAppProducts = (
   });
 
   return products.sort((a, b) => sortProducts(a, b, { sortDirection, sortField }));
+};
+
+export const mapToFilerOptions = (facetResults: FacetResults): MappedFilterOptions => {
+  const facetBrand = facetResults[FACET.ATTRIBUTE_BRAND];
+  const facetWeightKey = facetResults[FACET.ATTRIBUTE_WEIGHT_KEY];
+  const facetWeightLabel = facetResults[FACET.ATTRIBUTE_WEIGHT_LABEL];
+
+  const brandOptions: FilterOption[] = [];
+  const weightOptions: FilterOption[] = [];
+
+  if (facetBrand.type === FacetTypesValues.Terms) {
+    for (const { term } of facetBrand.terms) {
+      if (isString(term)) {
+        brandOptions.push({ label: term, value: term });
+      }
+    }
+  }
+
+  if (
+    facetWeightKey.type === FacetTypesValues.Terms &&
+    facetWeightLabel.type === FacetTypesValues.Terms
+  ) {
+    for (const [index, { term }] of facetWeightKey.terms.entries()) {
+      const value: unknown = term;
+      const label: unknown = facetWeightLabel.terms[index].term;
+
+      if (isString(value) && isString(label)) {
+        weightOptions.push({ label, value });
+      }
+    }
+  }
+
+  return {
+    brandOptions,
+    weightOptions: weightOptions.sort((a, b) => sortWeightOptions(a, b)),
+  };
 };
