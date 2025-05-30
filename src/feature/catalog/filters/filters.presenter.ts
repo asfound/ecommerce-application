@@ -6,7 +6,7 @@ import type { FiltersState } from './store/store';
 
 import { USER_INPUT_DEBOUNCE_TIMEOUT } from '../constants';
 import { catalogAction } from '../store/actions';
-import { catalogCategoryNameSelector } from '../store/selectors';
+import { catalogCategoryNameSelector, catalogSelector } from '../store/selectors';
 import { catalogCategoryNameStore, type CatalogState, catalogStore } from '../store/store';
 import {
   FILTER,
@@ -121,9 +121,12 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     if (brandOptions.length > 0) {
       this.view.renderBrandFilter({
         ...FILTER_BRAND_PROPS,
+        checked: catalogStore.select(catalogSelector.selectBrand),
         onChange: this.handleBrandChange,
         options: brandOptions,
       });
+
+      console.warn(catalogStore.getState().brand);
     } else {
       this.view.resetCheckboxes(FILTER.BRAND);
       this.view.hideFilter(FILTER.BRAND);
@@ -132,9 +135,12 @@ export class FiltersPresenter extends Presenter<FiltersView> {
     if (weightOptions.length > 0) {
       this.view.renderWeightFilter({
         ...FILTER_WEIGHT_PROPS,
+        checked: catalogStore.select(catalogSelector.selectWeight),
         onChange: this.handleWeightChange,
         options: weightOptions,
       });
+
+      console.warn(catalogStore.getState().weight);
     } else {
       this.view.resetCheckboxes(FILTER.WEIGHT);
       this.view.hideFilter(FILTER.WEIGHT);

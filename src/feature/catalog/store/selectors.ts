@@ -14,11 +14,17 @@ const selectSortDirection = createSelector((state: CatalogState) => state.sortDi
 
 const selectSortField = createSelector((state: CatalogState) => state.sortField);
 
+const selectWeight = createSelector((state: CatalogState) => state.weight);
+
+const selectBrand = createSelector((state: CatalogState) => state.brand);
+
 export const catalogSelector = {
+  selectBrand,
   selectCategoryId,
   selectSearchTerm,
   selectSortDirection,
   selectSortField,
+  selectWeight,
 } as const;
 
 export const catalogCategoryNameSelector = {
