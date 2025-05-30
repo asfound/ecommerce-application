@@ -5,7 +5,7 @@ import type {
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Filter } from '~/components/filter/filter';
-import { h2 } from '~/shared/create-element/tags';
+import { div, h2 } from '~/shared/create-element/tags';
 
 import { FILTER, FILTER_VIEW_TEXT } from './constants';
 import styles from './filters.module.css';
@@ -15,11 +15,15 @@ export type AvailableFilter = (typeof FILTER)[keyof typeof FILTER];
 export class FiltersView extends BaseComponent {
   private readonly filterBestSeller = new Filter();
 
-  private readonly filterBrand = new Filter();
+  private readonly filterBrand: Filter = new Filter();
+
+  private readonly filterBrandContainer = div(null);
 
   private readonly filterPriceRange = new Filter();
 
-  private readonly filterWeight = new Filter();
+  private readonly filterWeight: Filter = new Filter();
+
+  private readonly filterWeightContainer = div(null);
 
   private readonly heading = h2({ className: styles.heading }, FILTER_VIEW_TEXT.FILTERS);
 
@@ -43,19 +47,23 @@ export class FiltersView extends BaseComponent {
     this.append(this.filterBestSeller);
   }
 
-  public initBrandFilter(properties: FilterCheckboxesProperties): void {
-    this.filterBrand.createHTML(properties);
-    this.append(this.filterBrand);
-  }
-
   public initPriceRangeFilter(properties: FilterPriceRangeProperties): void {
     this.filterPriceRange.createHTML(properties);
     this.append(this.filterPriceRange);
   }
 
-  public initWeightFilter(properties: FilterCheckboxesProperties): void {
+  public renderBrandFilter(properties: FilterCheckboxesProperties): void {
+    this.filterBrand.createHTML(properties);
+    this.filterBrand.show();
+    this.filterBrandContainer.replaceChildren(this.filterBrand.element);
+    this.append(this.filterBrandContainer);
+  }
+
+  public renderWeightFilter(properties: FilterCheckboxesProperties): void {
     this.filterWeight.createHTML(properties);
-    this.append(this.filterWeight);
+    this.filterWeight.show();
+    this.filterWeightContainer.replaceChildren(this.filterWeight.element);
+    this.append(this.filterWeightContainer);
   }
 
   public resetCheckboxes(filter: AvailableFilter): void {

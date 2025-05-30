@@ -2,13 +2,13 @@ import { Presenter } from '~/shared/presenter/presenter';
 import { debounce } from '~/shared/utils/debounce';
 
 import type { FiltersView } from './filters.view';
+import type { FiltersState } from './store/store';
 
 import { USER_INPUT_DEBOUNCE_TIMEOUT } from '../constants';
 import { catalogAction } from '../store/actions';
 import { catalogCategoryNameSelector } from '../store/selectors';
 import { catalogCategoryNameStore, type CatalogState, catalogStore } from '../store/store';
 import {
-  CATEGORY_NAME,
   FILTER,
   FILTER_BEST_SELLERS_PROPS,
   FILTER_BRAND_PROPS,
@@ -80,16 +80,6 @@ export class FiltersPresenter extends Presenter<FiltersView> {
       onChange: this.handleBestSellerChange,
     });
 
-    this.view.initWeightFilter({
-      ...FILTER_WEIGHT_PROPS,
-      onChange: this.handleWeightChange,
-    });
-
-    this.view.initBrandFilter({
-      ...FILTER_BRAND_PROPS,
-      onChange: this.handleBrandChange,
-    });
-
     this.view.hideFilter(FILTER.BRAND);
     this.view.hideFilter(FILTER.WEIGHT);
   }
@@ -101,38 +91,11 @@ export class FiltersPresenter extends Presenter<FiltersView> {
   }
 
   private readonly onCategoryNameChange = (categoryName: string): void => {
-    if (categoryName === CATEGORY_NAME.ALL) {
-      catalogStore.setState({ brand: [], weight: [] });
+    catalogStore.setState({ brand: [], weight: [] });
 
-      this.view.hideFilter(FILTER.BRAND);
-      this.view.hideFilter(FILTER.WEIGHT);
-      this.view.resetCheckboxes(FILTER.ALL);
+    if (categoryName === '') {
       this.view.resetInputs();
-
-      return;
-    }
-
-    if (
-      categoryName === CATEGORY_NAME.ACCESSORIES ||
-      categoryName === CATEGORY_NAME.GRINDERS ||
-      categoryName === CATEGORY_NAME.BREWING ||
-      categoryName === CATEGORY_NAME.DRINKWARE
-    ) {
-      catalogAction.setWeights([]);
-
-      this.view.showFilter(FILTER.BRAND);
-      this.view.hideFilter(FILTER.WEIGHT);
-      this.view.resetCheckboxes(FILTER.WEIGHT);
-
-      return;
-    } else {
-      catalogAction.setBrands([]);
-
-      this.view.showFilter(FILTER.WEIGHT);
-      this.view.hideFilter(FILTER.BRAND);
-      this.view.resetCheckboxes(FILTER.BRAND);
-
-      return;
+      this.view.resetCheckboxes(FILTER.ALL);
     }
   };
 
@@ -147,13 +110,34 @@ export class FiltersPresenter extends Presenter<FiltersView> {
   }
 
   private subscribeStateChange(): void {
-    const unsubscribe = filtersStore.subscribe(
-      (state) => state,
-      (state) => {
-        console.warn(state);
-      },
-    );
+    const unsubscribe = filtersStore.subscribe((state) => state, this.updateView, {
+      isImmediate: false,
+    });
 
     this.storeSubscription.add(unsubscribe);
   }
+
+  private readonly updateView = ({ brandOptions, weightOptions }: FiltersState): void => {
+    if (brandOptions.length > 0) {
+      this.view.renderBrandFilter({
+        ...FILTER_BRAND_PROPS,
+        onChange: this.handleBrandChange,
+        options: brandOptions,
+      });
+    } else {
+      this.view.resetCheckboxes(FILTER.BRAND);
+      this.view.hideFilter(FILTER.BRAND);
+    }
+
+    if (weightOptions.length > 0) {
+      this.view.renderWeightFilter({
+        ...FILTER_WEIGHT_PROPS,
+        onChange: this.handleWeightChange,
+        options: weightOptions,
+      });
+    } else {
+      this.view.resetCheckboxes(FILTER.WEIGHT);
+      this.view.hideFilter(FILTER.WEIGHT);
+    }
+  };
 }
