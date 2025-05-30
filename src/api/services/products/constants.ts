@@ -15,7 +15,7 @@ export const EXPAND_PATH = {
 } as const;
 
 export const QUERY_KEY = {
-  FILTER_QUERY: 'filter.query',
+  FILTER_QUERY: 'filter',
   FULL_TEXT_SEARCH: `text.${APP_LOCALE}`,
   LIMIT: 'limit',
   MATCHING_VARIANTS: 'markMatchingVariants',
@@ -60,4 +60,10 @@ export const SORT_FIELD_TYPE = {
 export const SORT_DIRECTION = {
   ASC: 'asc',
   DESC: 'desc',
+} as const;
+
+export const FACET = {
+  ATTRIBUTE_BRAND: 'variants.attributes.brand',
+  ATTRIBUTE_WEIGHT_KEY: 'variants.attributes.weight.key',
+  ATTRIBUTE_WEIGHT_LABEL: 'variants.attributes.weight.label',
 } as const;

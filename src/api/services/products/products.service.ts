@@ -3,7 +3,7 @@ import type { ApiRootGetter } from '~/api/types/types';
 import type { AppProduct, ProductsFilterPayload } from './types';
 
 import { EXPAND_PATH } from './constants';
-import { getQueryArguments } from './helpers';
+import { getQueryArguments, getQueryFacets } from './helpers';
 import { mapToFlatAppProducts, mapVariantToAppProduct } from './mappers';
 
 export class ProductsService {
@@ -22,11 +22,14 @@ export class ProductsService {
 
   public async getFilteredProducts(payload: ProductsFilterPayload): Promise<AppProduct[]> {
     const queryArguments = getQueryArguments(payload);
+    const facets = getQueryFacets(payload.categoryId ?? '');
 
     const response = await this.apiRoot()
       .productProjections()
       .search()
-      .get({ queryArgs: { ...queryArguments, expand: [EXPAND_PATH.CATEGORIES] } })
+      .get({
+        queryArgs: { ...queryArguments, expand: [EXPAND_PATH.CATEGORIES], ...facets },
+      })
       .execute();
 
     return mapToFlatAppProducts(response.body.results, payload.sortField, payload.sortDirection);

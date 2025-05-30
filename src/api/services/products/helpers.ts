@@ -1,6 +1,7 @@
 import type { FilterQueryArguments, ProductsFilterPayload } from './types';
 
 import {
+  FACET,
   FILTER,
   PAGE_NUMBER_TO_OFFSET_SHIFT,
   QUERY_KEY,
@@ -53,4 +54,11 @@ const getSortType = (payload: ProductsFilterPayload): string => {
   return payload.sortField === SORT_FIELD_TYPE.NAME
     ? SORT_FIELD.NAME(payload.sortDirection)
     : SORT_FIELD.PRICE(payload.sortDirection);
+};
+
+export const getQueryFacets = (categoryId: string): FilterQueryArguments => {
+  return {
+    facet: [FACET.ATTRIBUTE_BRAND, FACET.ATTRIBUTE_WEIGHT_KEY, FACET.ATTRIBUTE_WEIGHT_LABEL],
+    'filter.facets': [FILTER.CATEGORY_SUBTREE(categoryId)],
+  };
 };
