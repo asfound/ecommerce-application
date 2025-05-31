@@ -129,7 +129,7 @@ export class FiltersPresenter extends Presenter<FiltersView> {
         options: brandOptions,
       });
 
-      console.warn(catalogStore.getState().brand);
+      console.warn('brand', catalogStore.getState().brand);
     } else {
       this.view.resetCheckboxes(FILTER.BRAND);
       this.view.hideFilter(FILTER.BRAND);
@@ -143,7 +143,7 @@ export class FiltersPresenter extends Presenter<FiltersView> {
         options: weightOptions,
       });
 
-      console.warn(catalogStore.getState().weight);
+      console.warn('weight', catalogStore.getState().weight);
     } else {
       this.view.resetCheckboxes(FILTER.WEIGHT);
       this.view.hideFilter(FILTER.WEIGHT);

@@ -67,3 +67,9 @@ export const FACET = {
   ATTRIBUTE_WEIGHT_KEY: 'variants.attributes.weight.key',
   ATTRIBUTE_WEIGHT_LABEL: 'variants.attributes.weight.label',
 } as const;
+
+export const WEIGHT_MAP: Record<string, string> = {
+  lg: '1000',
+  md: '500',
+  sm: '250',
+};

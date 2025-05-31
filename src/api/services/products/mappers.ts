@@ -12,7 +12,7 @@ import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
 
-import { FACET, PRODUCT_ATTRIBUTE } from './constants';
+import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP } from './constants';
 import { sortProducts, sortWeightOptions } from './helpers';
 
 const isAttribute = (value: unknown): value is { key: string; label: string } => {
@@ -112,12 +112,12 @@ export const mapToFilerOptions = (facetResults: FacetResults): MappedFilterOptio
     facetWeightKey.type === FacetTypesValues.Terms &&
     facetWeightLabel.type === FacetTypesValues.Terms
   ) {
-    for (const [index, { term }] of facetWeightKey.terms.entries()) {
-      const value: unknown = term;
-      const label: unknown = facetWeightLabel.terms[index].term;
+    const keySet = new Set(facetWeightKey.terms.map(({ term }: { term: unknown }) => term));
+    const labelSet = new Set(facetWeightLabel.terms.map(({ term }: { term: unknown }) => term));
 
-      if (isString(value) && isString(label)) {
-        weightOptions.push({ label, value });
+    for (const [key, label] of Object.entries(WEIGHT_MAP)) {
+      if (keySet.has(key) && labelSet.has(label)) {
+        weightOptions.push({ label, value: key });
       }
     }
   }
