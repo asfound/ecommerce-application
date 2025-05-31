@@ -79,12 +79,14 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
 
   public override destroy(): void {
     this.destroyInputs();
-
+    this.checkedValues.clear();
     super.destroy();
   }
 
   public hide(): void {
     this.addClassNames(styles.hidden);
+
+    this.checkedValues.clear();
   }
 
   public resetCheckboxes(): void {
