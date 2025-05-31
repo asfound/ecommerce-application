@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 
 import { SERVICE_HUB } from '~/api/services/service-hub';
 import iconUp from '~/assets/icons/arrow-up.svg';
@@ -53,6 +53,8 @@ export class CatalogPage extends BaseComponent {
 
   private readonly searchAndSortPresenter: SearchAndSortPresenter;
 
+  private unsubscribeButton: null | VoidFunction = null;
+
   public constructor() {
     super({ className: [CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
 
@@ -99,6 +101,7 @@ export class CatalogPage extends BaseComponent {
     );
 
     this.setupListeners();
+    this.setupSubscriptions();
   }
 
   public override destroy(): void {
@@ -110,6 +113,8 @@ export class CatalogPage extends BaseComponent {
 
     catalogStore.reset();
     catalogCategoryNameStore.reset();
+
+    this.unsubscribeButton?.();
 
     super.destroy();
   }
@@ -133,6 +138,19 @@ export class CatalogPage extends BaseComponent {
         }
       }, SCROLL_DEBOUNCE_MILLISECONDS),
       { signal: this.abortController.signal },
+    );
+  }
+
+  private setupSubscriptions(): void {
+    this.unsubscribeButton = catalogStore.subscribe(
+      (state) => state,
+      (state) => {
+        if (isEqual(state, catalogStore.getInitialState())) {
+          this.buttonResetAll.disable();
+        } else {
+          this.buttonResetAll.enable();
+        }
+      },
     );
   }
 }
