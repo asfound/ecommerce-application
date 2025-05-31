@@ -109,4 +109,4 @@ jobs:
     secrets:
       GH_PAT: ${{ secrets.GH_PAT }}
       TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-      TG_CHAT_ID: ${{ github.base_ref == 'develop' && secrets.TG_PROD_CHAT_ID || secrets.TG_DEV_CHAT_ID }}
+      TG_CHAT_ID: ${{ secrets.TG_DEV_CHAT_ID }}

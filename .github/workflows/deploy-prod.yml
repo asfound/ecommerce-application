@@ -37,3 +37,36 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+  set-message:
+    if: always() && github.event.pull_request.merged == true
+    needs: deploy-prod
+    runs-on: ubuntu-latest
+    outputs:
+      textMessage: ${{ steps.telegram-message.outputs.textMessage }}
+      prMessage: ${{ steps.pr-message.outputs.prMessage }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set telegram message
+        env:
+          DEPLOY_URL: ${{ inputs.deployUrl }}
+          PR_TITLE: ${{ inputs.prTitle }}
+          REF_NAME: ${{ inputs.refName }}
+          SERVER_URL: ${{ inputs.serverUrl }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ inputs.runID }}
+          BUILD_RESULT: ${{ inputs.build }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        id: telegram-message
+        run: .github/scripts/format-telegram-message.sh
+
+  notify-telegram:
+    needs: set-message
+    if: always()
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: ${{ needs.set-message.outputs.textMessage }}
+    secrets:
+      TG_CHAT_ID: ${{ secrets.TG_PROD_CHAT_ID }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
