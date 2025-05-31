@@ -12,7 +12,7 @@ import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
 
-import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP, WEIGHT_ORDER } from './constants';
+import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP, WEIGHT_ORDER, WEIGHT_UNIT } from './constants';
 import { sortProducts } from './helpers';
 
 const isAttribute = (value: unknown): value is { key: string; label: string } => {
@@ -92,7 +92,7 @@ export const mapToFlatAppProducts = (
   return products.sort((a, b) => sortProducts(a, b, { sortDirection, sortField }));
 };
 
-export const mapToFilerOptions = (facetResults: FacetResults): MappedFilterOptions => {
+export const mapToFilterOptions = (facetResults: FacetResults): MappedFilterOptions => {
   const facetBrand = facetResults[FACET.ATTRIBUTE_BRAND];
   const facetWeightKey = facetResults[FACET.ATTRIBUTE_WEIGHT_KEY];
   const facetWeightLabel = facetResults[FACET.ATTRIBUTE_WEIGHT_LABEL];
@@ -119,7 +119,7 @@ export const mapToFilerOptions = (facetResults: FacetResults): MappedFilterOptio
       const label = WEIGHT_MAP[key];
 
       if (keySet.has(key) && labelSet.has(label)) {
-        weightOptions.push({ label, value: key });
+        weightOptions.push({ label: label + WEIGHT_UNIT, value: key });
       }
     }
   }

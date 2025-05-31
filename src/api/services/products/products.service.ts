@@ -4,7 +4,7 @@ import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './t
 
 import { EXPAND_PATH } from './constants';
 import { getQueryArguments, getQueryFacets } from './helpers';
-import { mapToFilerOptions, mapToFlatAppProducts, mapVariantToAppProduct } from './mappers';
+import { mapToFilterOptions, mapToFlatAppProducts, mapVariantToAppProduct } from './mappers';
 
 export class ProductsService {
   private static instance: null | ProductsService = null;
@@ -40,7 +40,7 @@ export class ProductsService {
       payload.sortDirection,
     );
 
-    const { brandOptions, weightOptions } = mapToFilerOptions(response.body.facets ?? {});
+    const { brandOptions, weightOptions } = mapToFilterOptions(response.body.facets ?? {});
 
     return { brandOptions, products, weightOptions };
   }

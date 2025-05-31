@@ -75,3 +75,5 @@ export const WEIGHT_MAP: Record<string, string> = {
 } as const;
 
 export const WEIGHT_ORDER = ['sm', 'md', 'lg'] as const;
+
+export const WEIGHT_UNIT = 'g';
