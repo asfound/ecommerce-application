@@ -12,8 +12,8 @@ import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
 
-import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP } from './constants';
-import { sortProducts, sortWeightOptions } from './helpers';
+import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP, WEIGHT_ORDER } from './constants';
+import { sortProducts } from './helpers';
 
 const isAttribute = (value: unknown): value is { key: string; label: string } => {
   return (
@@ -115,7 +115,9 @@ export const mapToFilerOptions = (facetResults: FacetResults): MappedFilterOptio
     const keySet = new Set(facetWeightKey.terms.map(({ term }: { term: unknown }) => term));
     const labelSet = new Set(facetWeightLabel.terms.map(({ term }: { term: unknown }) => term));
 
-    for (const [key, label] of Object.entries(WEIGHT_MAP)) {
+    for (const key of WEIGHT_ORDER) {
+      const label = WEIGHT_MAP[key];
+
       if (keySet.has(key) && labelSet.has(label)) {
         weightOptions.push({ label, value: key });
       }
@@ -124,6 +126,6 @@ export const mapToFilerOptions = (facetResults: FacetResults): MappedFilterOptio
 
   return {
     brandOptions,
-    weightOptions: weightOptions.sort((a, b) => sortWeightOptions(a, b)),
+    weightOptions,
   };
 };

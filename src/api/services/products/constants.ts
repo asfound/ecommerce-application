@@ -72,4 +72,6 @@ export const WEIGHT_MAP: Record<string, string> = {
   lg: '1000',
   md: '500',
   sm: '250',
-};
+} as const;
+
+export const WEIGHT_ORDER = ['sm', 'md', 'lg'] as const;
