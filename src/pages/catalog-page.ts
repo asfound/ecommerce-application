@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import { SERVICE_HUB } from '~/api/services/service-hub';
 import iconUp from '~/assets/icons/arrow-up.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
+import { Button } from '~/components/common/button/button';
 import { IntersectionLoader } from '~/components/intersection-loader/intersection-loader';
 import { CatalogBreadcrumbsPresenter } from '~/feature/catalog/breadcrumbs/breadcrumbs.presenter';
 import { CatalogBreadcrumbsView } from '~/feature/catalog/breadcrumbs/breadcrumbs.view';
@@ -23,9 +24,19 @@ import styles from './catalog-page.module.css';
 
 const SCROLL_DEBOUNCE_MILLISECONDS = 150;
 const SCROLL_Y_OFFSET = 600;
+const BUTTON_TEXT = 'Reset All';
 
 export class CatalogPage extends BaseComponent {
   private readonly breadcrumbsPresenter: CatalogBreadcrumbsPresenter;
+
+  private readonly buttonResetAll = new Button({
+    onClick: (): void => {
+      catalogStore.reset();
+      catalogCategoryNameStore.reset();
+    },
+    textContent: BUTTON_TEXT,
+    type: 'button',
+  });
 
   private readonly buttonToTop = button(
     { className: [styles.buttonToTop, styles.hidden] },
@@ -44,6 +55,8 @@ export class CatalogPage extends BaseComponent {
 
   public constructor() {
     super({ className: [CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
+
+    this.buttonResetAll.addClassNames(styles.buttonReset);
 
     this.breadcrumbsPresenter = new CatalogBreadcrumbsPresenter(
       new CatalogBreadcrumbsView(),
@@ -67,6 +80,7 @@ export class CatalogPage extends BaseComponent {
 
     const sidebarElement = div(
       { className: styles.sidebarElement },
+      this.buttonResetAll.element,
       this.categoryNavigationPresenter.getView().element,
       this.filtersPresenter.getView().element,
     );

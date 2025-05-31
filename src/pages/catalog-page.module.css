@@ -21,7 +21,7 @@
 .mainContentElement {
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .buttonToTop {
@@ -44,6 +44,10 @@
   transition:
     stroke var(--transition-duration),
     opacity var(--transition-duration);
+}
+
+.buttonReset {
+  background-color: var(--color-dark);
 }
 
 .icon {
