@@ -75,21 +75,23 @@ export const sortProducts = (
   b: AppProduct,
   { sortDirection, sortField }: { sortDirection: SortDirection; sortField: SortField },
 ): number => {
-  if (sortField === SORT_FIELD_TYPE.PRICE && sortDirection === SORT_DIRECTION.ASC) {
-    return a.price.default - b.price.default;
+  let result = 0;
+
+  switch (sortField) {
+    case SORT_FIELD_TYPE.NAME: {
+      result = a.name.localeCompare(b.name);
+      break;
+    }
+    case SORT_FIELD_TYPE.PRICE: {
+      const priceA = a.price.discounted ?? a.price.default;
+      const priceB = b.price.discounted ?? b.price.default;
+      result = priceA - priceB;
+      break;
+    }
+    default: {
+      return 0;
+    }
   }
 
-  if (sortField === SORT_FIELD_TYPE.PRICE && sortDirection === SORT_DIRECTION.DESC) {
-    return b.price.default - a.price.default;
-  }
-
-  if (sortField === SORT_FIELD_TYPE.NAME && sortDirection === SORT_DIRECTION.ASC) {
-    return a.name.localeCompare(b.name);
-  }
-
-  if (sortField === SORT_FIELD_TYPE.NAME && sortDirection === SORT_DIRECTION.DESC) {
-    return b.name.localeCompare(a.name);
-  }
-
-  return 0;
+  return sortDirection === SORT_DIRECTION.ASC ? result : -result;
 };
