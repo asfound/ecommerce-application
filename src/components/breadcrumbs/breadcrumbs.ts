@@ -4,8 +4,7 @@ import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
 import styles from './breadcrumbs.module.css';
-
-const LAST_ELEMENT = 1;
+import { DELIMITER, LAST_ELEMENT } from './constants';
 
 export interface BreadcrumbItem {
   name: string;
@@ -27,7 +26,7 @@ export class Breadcrumbs extends BaseComponent implements Component {
 
       if (item.onClick && index < items.length - LAST_ELEMENT) {
         const linkSpan = span({ className: styles.link }, item.name);
-        const separator = span({ className: styles.separator }, '>');
+        const separator = span({ className: styles.separator }, DELIMITER);
 
         linkSpan.addEventListener(
           'click',
