@@ -29,7 +29,7 @@ export class InputRadio extends InputBase {
         ),
       );
 
-      this.inputComponent.addClassNames(styles.checkbox);
+      this.inputComponent.addClassNames(styles.radio);
     }
   }
 
@@ -39,5 +39,13 @@ export class InputRadio extends InputBase {
 
   public setChecked(checked: boolean): void {
     this.inputComponent.element.checked = checked;
+  }
+
+  public setDisabled(disabled: boolean): void {
+    if (disabled) {
+      this.addClassNames(styles.disabled);
+    } else {
+      this.removeClassNames(styles.disabled);
+    }
   }
 }
