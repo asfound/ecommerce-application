@@ -1,4 +1,4 @@
-import type { AppProduct } from '~/api/services/products/types';
+import type { AppProduct, AppProductWithInCart } from '~/api/services/products/types';
 import type { Component } from '~/components/base-component/types';
 
 import huhGif from '~/assets/img/huh-cat.gif';
@@ -20,8 +20,10 @@ import styles from './product-details.module.css';
 
 export interface ProductDetailsViewProperties {
   currentSKU: string;
+  onAddToCart(product: AppProductWithInCart): Promise<void>;
+  onRemoveFromCart(product: AppProductWithInCart): Promise<void>;
   onWeightChange(sku: string): void;
-  product: AppProduct;
+  product: AppProductWithInCart;
 }
 
 export class ProductDetailsView extends BaseComponent implements Component {

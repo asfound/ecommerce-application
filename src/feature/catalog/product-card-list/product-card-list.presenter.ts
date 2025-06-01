@@ -25,6 +25,8 @@ import { catalogLoadingSelector } from '../store/selectors';
 import { catalogLoadingStore, catalogStore } from '../store/store';
 import { PRODUCT_CARD_LIST_TEXT, VIEW_UPDATE_DELAY } from './constants';
 
+const DEFAULT_QUANTITY = 1;
+
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private readonly cartService: CartService;
 
@@ -81,10 +83,9 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
         this.cartService.getProductsSkuSet(),
       ]);
 
-      const markedProducts = data.products.map((product) => ({
-        ...product,
-        inCart: skuSet.has(product.sku),
-      }));
+      const markedProducts = data.products.map((product) =>
+        this.productsService.markProductWithInCart(product, skuSet),
+      );
 
       return {
         brandOptions: data.brandOptions,
@@ -139,7 +140,11 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     const productName = formatProductName(product);
 
     try {
-      await this.cartService.addLineItem({ quantity: 1, sku: product.sku });
+      await this.cartService.addLineItem({
+        lineItemKey: product.sku,
+        quantity: DEFAULT_QUANTITY,
+        sku: product.sku,
+      });
 
       showToast(PRODUCT_CART_NOTIFICATION.ADDED_TO_CART(productName));
     } catch {

@@ -2,9 +2,9 @@ import type { Cart, ClientResponse, MyCartUpdateAction } from '@commercetools/pl
 
 import type { ApiRootGetter } from '~/api/types/types';
 
-import type { AddLineItemPayload } from './types';
+import type { AddLineItemPayload, RemoveLineItemPayload } from './types';
 
-import { createAddLineItemAction } from './actions';
+import { createAddLineItemAction, createRemoveLineItemAction } from './actions';
 import { createCartDraft } from './helpers';
 
 export class CartService {
@@ -61,5 +61,22 @@ export class CartService {
     } catch {
       return new Set();
     }
+  }
+
+  public async removeLineItem(payload: RemoveLineItemPayload): Promise<ClientResponse<Cart>> {
+    const actions: MyCartUpdateAction[] = [createRemoveLineItemAction(payload)];
+
+    const {
+      body: { id, version },
+    } = await this.getCurrentCart();
+
+    const response = await this.apiRoot()
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({ body: { actions, version } })
+      .execute();
+
+    return response;
   }
 }
