@@ -12,9 +12,13 @@ export const h1 = createElementFactory('h1');
 
 export const h2 = createElementFactory('h2');
 
+export const h3 = createElementFactory('h3');
+
 export const header = createElementFactory('header');
 
 export const main = createElementFactory('main');
+
+export const nav = createElementFactory('nav');
 
 export const p = createElementFactory('p');
 
@@ -37,3 +41,7 @@ export const label = createElementFactory('label');
 export const li = createElementFactory('li');
 
 export const ul = createElementFactory('ul');
+
+export const details = createElementFactory('details');
+
+export const summary = createElementFactory('summary');

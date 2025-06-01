@@ -1,0 +1,18 @@
+.item {
+  margin-bottom: 2rem;
+  font-weight: 500;
+  transition: color var(--transition-duration);
+}
+
+.item:last-child {
+  margin-bottom: 0;
+}
+
+.item:hover {
+  cursor: pointer;
+  color: var(--color-accent);
+}
+
+.item.active {
+  color: var(--color-accent);
+}

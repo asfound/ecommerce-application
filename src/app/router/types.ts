@@ -1,9 +1,15 @@
 import type { BaseComponent } from '~/components/base-component/base-component';
 
+import type { PUSH_STATE_MODE } from './constants';
 import type { ROUTE_PATH } from './route-path';
 import type { Router } from './router';
 
 export type Interceptor = (router: Router) => boolean;
+
+export interface NavigateOptions {
+  pushState?: (typeof PUSH_STATE_MODE)[keyof typeof PUSH_STATE_MODE];
+  searchParameters?: SearchParameters;
+}
 
 export interface Route {
   canActivate?: Interceptor[];

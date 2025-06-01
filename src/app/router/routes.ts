@@ -5,7 +5,7 @@ import { TITLE } from '~/shared/constants/constants.ts';
 import type { Route } from './types';
 
 import { WILDCARD_ROUTE } from './constants.ts';
-import { isNotLoggedIn } from './interceptors/interceptors.ts';
+import { isLoggedIn, isNotLoggedIn } from './interceptors/interceptors.ts';
 import { ROUTE_PATH } from './route-path.ts';
 
 // TODO combine page title form project title + page title
@@ -28,6 +28,7 @@ export const ROUTES: Route[] = [
     title: `${TITLE} | Login`,
   },
   {
+    canActivate: [isNotLoggedIn],
     async component(): Promise<BaseComponent> {
       const { RegistrationPage } = await import('../../pages/registration-page.ts');
       return new RegistrationPage();
@@ -42,6 +43,23 @@ export const ROUTES: Route[] = [
     },
     path: ROUTE_PATH.CATALOG,
     title: `${TITLE} | Catalog`,
+  },
+  {
+    async component(): Promise<BaseComponent> {
+      const { ProductDetailsPage } = await import('../../pages/product-details.ts');
+      return new ProductDetailsPage();
+    },
+    path: ROUTE_PATH.PRODUCT_DETAILS,
+    title: `${TITLE} | Product`,
+  },
+  {
+    canActivate: [isLoggedIn],
+    async component(): Promise<BaseComponent> {
+      const { UserProfilePage } = await import('../../pages/user-profile-page.ts');
+      return new UserProfilePage();
+    },
+    path: ROUTE_PATH.PROFILE,
+    title: `${TITLE} | Profile`,
   },
 ];
 

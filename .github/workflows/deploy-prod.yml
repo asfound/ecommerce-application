@@ -1,0 +1,72 @@
+name: Deploy Production
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
+
+jobs:
+  deploy-prod:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-modules
+
+      - name: Build
+        env:
+          VITE_CTP_API_URL: ${{ secrets.VITE_CTP_API_URL }}
+          VITE_CTP_AUTH_URL: ${{ secrets.VITE_CTP_AUTH_URL }}
+          VITE_CTP_CLIENT_ID: ${{ secrets.VITE_CTP_CLIENT_ID }}
+          VITE_CTP_CLIENT_SECRET: ${{ secrets.VITE_CTP_CLIENT_SECRET }}
+          VITE_CTP_PROJECT_KEY: ${{ secrets.VITE_CTP_PROJECT_KEY }}
+          VITE_CTP_SCOPES: ${{ secrets.VITE_CTP_SCOPES }}
+        run: npm run build
+
+      - name: Deploy to Netlify (Production)
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: ./dist
+          production-branch: develop
+          production-deploy: true
+          github-token: ${{ secrets.GH_PAT }}
+          deploy-message: 'Production deploy: ${{ github.event.pull_request.title }}'
+          enable-pull-request-comment: false
+          netlify-config-path: ./netlify.toml
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+  set-message:
+    if: always() && github.event.pull_request.merged == true
+    needs: deploy-prod
+    runs-on: ubuntu-latest
+    outputs:
+      textMessage: ${{ steps.telegram-message.outputs.textMessage }}
+      prMessage: ${{ steps.pr-message.outputs.prMessage }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set telegram message
+        env:
+          DEPLOY_URL: ${{ inputs.deployUrl }}
+          PR_TITLE: ${{ inputs.prTitle }}
+          REF_NAME: ${{ inputs.refName }}
+          SERVER_URL: ${{ inputs.serverUrl }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ inputs.runID }}
+          BUILD_RESULT: ${{ inputs.build }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        id: telegram-message
+        run: .github/scripts/format-telegram-message.sh
+
+  notify-telegram:
+    needs: set-message
+    if: always()
+    uses: ./.github/workflows/notify-telegram.yml
+    with:
+      textMessage: ${{ needs.set-message.outputs.textMessage }}
+    secrets:
+      TG_CHAT_ID: ${{ secrets.TG_PROD_CHAT_ID }}
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}

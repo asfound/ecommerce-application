@@ -1,0 +1,42 @@
+.container {
+  position: relative;
+}
+
+.input {
+  padding-right: 2.5rem;
+  border: 1px solid var(--color-white);
+  line-height: 0;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.resetButton {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  translate: 0 -50%;
+
+  width: 20px;
+  height: max-content;
+  height: 20px;
+}
+
+.resetIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (hover: hover) {
+  .resetIcon:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+}

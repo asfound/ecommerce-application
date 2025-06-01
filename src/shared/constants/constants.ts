@@ -48,3 +48,23 @@ export const CSS_CLASS_NAME = {
   NO_SCROLL: 'noScroll',
   WRAPPER: 'wrapper',
 } as const;
+
+export const APP_LOCALE = 'en-US';
+
+export const BUTTON_TEXT = {
+  ADD: 'Add',
+  CANCEL: 'Cancel',
+  DELETE: 'Delete',
+  EDIT: 'Edit',
+  SAVE: 'Save changes',
+};
+
+export const BUTTON_TITLE = {
+  BILLING: 'Add new billing address',
+  SHIPPING: 'Add new shipping address',
+};
+
+export const PAGE_NAME = {
+  CATALOG: 'Catalog',
+  MAIN: 'Main',
+};

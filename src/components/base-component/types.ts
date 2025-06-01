@@ -1,5 +1,5 @@
 export interface Component {
-  createHTML(): void;
+  createHTML(...parameters: unknown[]): void;
 }
 
 export interface Properties<T extends HTMLElement> {

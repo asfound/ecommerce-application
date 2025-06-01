@@ -32,10 +32,6 @@
   margin-bottom: 1rem;
 }
 
-.hidden {
-  display: none;
-}
-
 .linkContainer {
   display: flex;
   gap: 0.8rem;
@@ -53,4 +49,8 @@
 
 .linkContainer a:hover {
   color: var(--color-accent);
+}
+
+.hidden {
+  display: none;
 }

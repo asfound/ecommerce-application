@@ -1,0 +1,137 @@
+.container {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  min-height: 41rem; /* TODO: idk how else align loader */
+  margin-block: 4rem;
+}
+
+.productDetails {
+  display: flex;
+  gap: 5rem;
+}
+
+.leftContainer {
+  width: 100%;
+  max-width: 45rem;
+}
+
+@media (width <= 890px) {
+  .productDetails {
+    flex-direction: column;
+    align-items: center;
+    min-height: max-content;
+  }
+}
+
+@media (width <= 480px) {
+  .leftContainer {
+    max-width: 90vw;
+  }
+}
+
+.rightContainer {
+  display: grid;
+  gap: 3rem;
+  align-content: start;
+}
+
+.sliderContainer {
+  background-color: transparent;
+}
+
+.contentContainer {
+  display: grid;
+  gap: 2rem;
+}
+
+.heading {
+  font-size: 2.2rem;
+  font-weight: 500;
+}
+
+.pricesContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  width: max-content;
+
+  font-family: var(--font-montserrat);
+}
+
+.defaultPrice {
+  color: inherit;
+}
+
+.oldPrice {
+  font-size: 1.4rem;
+  color: var(--color-accent-light);
+  text-decoration: line-through;
+}
+
+.discountedPrice {
+  border-bottom: 2px solid var(--color-accent);
+  font-weight: 500;
+}
+
+.description {
+  font-family: var(--font-montserrat);
+  font-size: 1.4rem;
+  color: var(--color-accent-light);
+}
+
+.inputsContainer {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+}
+
+.weightTitle {
+  margin-right: 1rem;
+
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+
+.notFoundWidget {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: grid;
+  gap: 1rem;
+  place-items: center;
+
+  text-align: center;
+}
+
+.notFoundDescription {
+  font-size: 1.6rem;
+  color: var(--color-accent-light);
+  white-space: pre-wrap;
+}
+
+.notFoundGif {
+  border: 1rem solid var(--color-accent-light);
+  border-radius: var(--border-radius);
+}
+
+.bestseller {
+  max-width: 10rem;
+  padding: 0.4rem 1rem;
+  border-radius: var(--border-radius);
+
+  font-family: var(--font-poppins);
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
+
+  background-color: var(--color-lilac);
+}

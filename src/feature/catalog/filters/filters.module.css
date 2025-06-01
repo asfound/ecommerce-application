@@ -1,0 +1,15 @@
+.filters {
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  background-color: var(--color-dark);
+}
+
+.heading {
+  font-weight: 600;
+}
+
+@media (width <= 640px) {
+  .heading {
+    font-size: 2rem;
+  }
+}

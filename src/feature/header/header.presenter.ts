@@ -24,20 +24,24 @@ export class HeaderPresenter extends Presenter<HeaderView> {
 
   private bindViewHandlers(): void {
     this.view.bindLogoutHandler(this.handleLogout);
-
     this.view.bindLogoClickHandler(this.handleLogoClick);
+    this.view.bindProfileClickHandler(this.handleProfileClick);
   }
 
-  private handleLogoClick = (): void => {
+  private readonly handleLogoClick = (): void => {
     Router.instance.navigate(ROUTE_PATH.MAIN);
   };
 
-  private handleLogout = (): void => {
+  private readonly handleLogout = (): void => {
     this.authService.logout();
 
     Router.instance.navigate(ROUTE_PATH.LOGIN);
 
     rootAction.setLoggedIn(false);
+  };
+
+  private readonly handleProfileClick = (): void => {
+    Router.instance.navigate(ROUTE_PATH.PROFILE);
   };
 
   private setupSubscriptions(): void {
@@ -47,6 +51,7 @@ export class HeaderPresenter extends Presenter<HeaderView> {
   private subscribeLoggedIn(): void {
     const unsubscribe = rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
       this.view.setLogoutIconVisible(loggedIn);
+      this.view.setProfileIconVisible(loggedIn);
     });
 
     this.storeSubscription.add(unsubscribe);

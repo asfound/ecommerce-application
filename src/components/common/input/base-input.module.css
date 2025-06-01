@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  max-width: 40rem;
+  width: 100%;
   background-color: transparent;
 }
 

@@ -1,3 +1,4 @@
+import type { InputBaseProperties } from '~/components/common/input/input-base';
 import type { InputCheckboxProperties } from '~/components/common/input/input-checkbox/input-checkbox';
 import type { InputTextProperties } from '~/components/common/input/input-text/input-text';
 
@@ -13,6 +14,7 @@ import { COUNTRY_NAMES } from './country-codes';
 export const COUNTRY_LIST_ID = {
   BILLING: 'billing-country-list',
   SHIPPING: 'shipping-country-list',
+  UNIVERSAL: 'country-list',
 };
 
 export const EMAIL_PROPS: InputTextProperties = {
@@ -37,6 +39,16 @@ export const PASSWORD_PROPS: InputTextProperties = {
     validators.validateHasLowercase,
     validators.validateHasDigit,
   ],
+} as const;
+
+export const OLD_PASSWORD_PROPS: InputTextProperties = {
+  ...PASSWORD_PROPS,
+  placeholder: 'Old password',
+} as const;
+
+export const NEW_PASSWORD_PROPS: InputTextProperties = {
+  ...PASSWORD_PROPS,
+  placeholder: 'New password',
 } as const;
 
 export const FIRST_NAME_PROPS: InputTextProperties = {
@@ -67,18 +79,23 @@ export const DATE_OF_BIRTH_PROPS: InputTextProperties = {
   validators: [validators.validateRequired, validators.validateMinAge(REQUIRED_MIN_AGE)],
 } as const;
 
-export const SHIPPING_COUNTRY_PROPS: InputTextProperties = {
-  listId: COUNTRY_LIST_ID.SHIPPING,
-  name: 'shipping-country',
-  placeholder: 'Start typing a country...',
+export const UNIVERSAL_COUNTRY_PROPS: InputTextProperties = {
+  listId: COUNTRY_LIST_ID.UNIVERSAL,
+  name: 'country',
+  placeholder: 'Country',
   validators: [validators.validateRequired, validators.validateDatalistValue(COUNTRY_NAMES)],
 } as const;
 
+export const SHIPPING_COUNTRY_PROPS: InputTextProperties = {
+  ...UNIVERSAL_COUNTRY_PROPS,
+  listId: COUNTRY_LIST_ID.SHIPPING,
+  name: 'shipping-country',
+} as const;
+
 export const BILLING_COUNTRY_PROPS: InputTextProperties = {
+  ...UNIVERSAL_COUNTRY_PROPS,
   listId: COUNTRY_LIST_ID.BILLING,
   name: 'billing-country',
-  placeholder: 'Start typing a country...',
-  validators: [validators.validateRequired, validators.validateDatalistValue(COUNTRY_NAMES)],
 } as const;
 
 export const CITY_PROPS: InputTextProperties = {
@@ -101,16 +118,24 @@ export const STREET_PROPS: InputTextProperties = {
   ],
 } as const;
 
-export const SHIPPING_POSTAL_CODE_PROPS: InputTextProperties = {
-  name: 'shipping-postal-code',
+const BASE_POSTAL_CODE_PROPS: InputTextProperties = {
   placeholder: 'Postal Code',
   validators: [validators.validateRequired],
+};
+
+export const SHIPPING_POSTAL_CODE_PROPS: InputTextProperties = {
+  ...BASE_POSTAL_CODE_PROPS,
+  name: 'shipping-postal-code',
 } as const;
 
 export const BILLING_POSTAL_CODE_PROPS: InputTextProperties = {
+  ...BASE_POSTAL_CODE_PROPS,
   name: 'billing-postal-code',
-  placeholder: 'Postal Code',
-  validators: [validators.validateRequired],
+} as const;
+
+export const UNIVERSAL_POSTAL_CODE_PROPS: InputTextProperties = {
+  ...BASE_POSTAL_CODE_PROPS,
+  name: 'postal-code',
 } as const;
 
 export const DEFAULT_CHECKBOX_PROPS: InputCheckboxProperties = {
@@ -127,4 +152,19 @@ export const SUBSCRIPTION_EMAIL_PROPS: InputTextProperties = {
   name: 'email',
   placeholder: 'Email',
   validators: [validators.validateEmailFormat],
+} as const;
+
+export const SEARCH_PROPS: InputBaseProperties = {
+  name: 'search',
+  placeholder: 'Search all products',
+} as const;
+
+export const DEFAULT_BILLING_CHECKBOX_PROPS: InputCheckboxProperties = {
+  label: 'Default for billing',
+  name: 'default-billing-checkbox',
+} as const;
+
+export const DEFAULT_SHIPPING_CHECKBOX_PROPS: InputCheckboxProperties = {
+  label: 'Default for shipping',
+  name: 'default-shipping-checkbox',
 } as const;

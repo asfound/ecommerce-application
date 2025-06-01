@@ -1,7 +1,10 @@
+import { rootSelector } from '~/app/store/selectors';
+import { rootStore } from '~/app/store/store';
 import { BaseComponent } from '~/components/base-component/base-component';
 
 import type { RoutePath } from '../types';
 
+import { ROUTE_PATH } from '../route-path';
 import { Router } from '../router';
 import { routerSelector } from '../store/selectors';
 import { routerStore } from '../store/store';
@@ -43,13 +46,16 @@ export class RouterLink extends BaseComponent<HTMLAnchorElement> {
       }
     });
 
-    // TODO: Temporary solution. It is not clear yet how to make it better. Maybe we can come up with something better
-    // rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
-    //   if (loggedIn && this.properties.path === '/login') {
-    //     this.addClassNames(styles.disabled);
-    //   } else {
-    //     this.removeClassNames(styles.disabled);
-    //   }
-    // });
+    rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
+      if (
+        loggedIn &&
+        (this.properties.path === ROUTE_PATH.LOGIN ||
+          this.properties.path === ROUTE_PATH.REGISTRATION)
+      ) {
+        this.addClassNames(styles.hidden);
+      } else {
+        this.removeClassNames(styles.hidden);
+      }
+    });
   }
 }

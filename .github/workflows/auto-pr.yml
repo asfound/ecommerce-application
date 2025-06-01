@@ -2,6 +2,8 @@ name: Issue processed
 on:
   pull_request:
     types: [opened]
+    branches:
+      - 'sprint-*'
 
 jobs:
   move-issue:
