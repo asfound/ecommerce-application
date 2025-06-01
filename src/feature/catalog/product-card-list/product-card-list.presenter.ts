@@ -20,7 +20,7 @@ import { VIEW_UPDATE_DELAY } from './constants';
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private currentPage = 1;
 
-  private readonly intersectionAnchor: IntersectionLoader;
+  // private readonly intersectionAnchor: IntersectionLoader;
 
   private intersectionObserver: IntersectionObserver | null = null;
 
@@ -33,7 +33,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   ) {
     super(view);
 
-    this.intersectionAnchor = intersectionAnchor;
+    // this.intersectionAnchor = intersectionAnchor;
     intersectionAnchor.hide();
 
     this.productsService = productsService;
@@ -65,44 +65,44 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     });
   };
 
-  private initIntersectionObserver(): void {
-    if (this.intersectionObserver) {
-      return;
-    }
+  // private initIntersectionObserver(): void {
+  //   if (this.intersectionObserver) {
+  //     return;
+  //   }
 
-    this.intersectionObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !catalogLoadingStore.getState().loading) {
-          this.loadNextPage();
-        }
-      },
-      { root: null, threshold: 1 },
-    );
+  //   this.intersectionObserver = new IntersectionObserver(
+  //     ([entry]) => {
+  //       if (entry.isIntersecting && !catalogLoadingStore.getState().loading) {
+  //         this.loadNextPage();
+  //       }
+  //     },
+  //     { root: null, threshold: 1 },
+  //   );
 
-    this.intersectionObserver.observe(this.intersectionAnchor.element);
-  }
+  //   this.intersectionObserver.observe(this.intersectionAnchor.element);
+  // }
 
-  private async loadNextPage(): Promise<void> {
-    this.currentPage += 1;
+  // private async loadNextPage(): Promise<void> {
+  //   this.currentPage += 1;
 
-    this.intersectionAnchor.show();
+  //   this.intersectionAnchor.show();
 
-    const { products } = await this.productsService.getFilteredProducts({
-      ...catalogStore.getState(),
-      currentPage: this.currentPage,
-    });
+  //   const { products } = await this.productsService.getFilteredProducts({
+  //     ...catalogStore.getState(),
+  //     currentPage: this.currentPage,
+  //   });
 
-    if (products.length === 0) {
-      this.destroyIntersectionObserver();
-      this.intersectionAnchor.hide();
+  //   if (products.length === 0) {
+  //     this.destroyIntersectionObserver();
+  //     this.intersectionAnchor.hide();
 
-      return;
-    }
+  //     return;
+  //   }
 
-    this.intersectionAnchor.hide();
+  //   this.intersectionAnchor.hide();
 
-    this.view.appendProducts(products, this.handleNavigateToDetails);
-  }
+  //   this.view.appendProducts(products, this.handleNavigateToDetails);
+  // }
 
   private setupSubscriptions(): void {
     this.subscribeLoading();
@@ -154,7 +154,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
       filtersStore.setState({ brandOptions, weightOptions });
 
-      this.initIntersectionObserver();
+      // this.initIntersectionObserver();
     } finally {
       catalogLoadingAction.setLoading(false);
     }
