@@ -1,4 +1,4 @@
-import type { AppProduct } from '~/api/services/products/types';
+import type { AppProduct, AppProductWithInCart } from '~/api/services/products/types';
 
 import { div } from '~/shared/create-element/tags';
 import { calculateDiscountPercent } from '~/shared/utils/calculate-discount';
@@ -7,26 +7,43 @@ import { formatPrice } from '~/shared/utils/format-price';
 import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
+import { Button } from '../common/button/button';
 import { Loader } from '../common/loader/loader';
 import styles from './product-card.module.css';
 
 const BESTSELLER_VALUE = 'Bestseller';
 
+export interface ProductCardCallbacks {
+  onAddToCart(product: AppProduct): Promise<void>;
+  onNavigateToDetails: ProductCardClickHandler;
+}
+
 export type ProductCardClickHandler = (product: AppProduct) => void;
 
 export class ProductCard extends BaseComponent implements Component {
+  private readonly buttonCart = new Button({
+    onClick: (): void => {
+      this.handleAddToCartClick();
+    },
+    textContent: '',
+    type: 'button',
+  });
+
+  private readonly callbacks: ProductCardCallbacks;
+
   private readonly loaderComponent = new Loader({ size: 'small' });
 
-  private readonly onNavigateToDetails: ProductCardClickHandler;
+  private readonly product: AppProductWithInCart;
 
-  private readonly product: AppProduct;
-
-  public constructor(product: AppProduct, onNavigateToDetails: ProductCardClickHandler) {
+  public constructor(product: AppProductWithInCart, callbacks: ProductCardCallbacks) {
     super({ className: styles.card, tagName: 'li' });
 
     this.product = product;
 
-    this.onNavigateToDetails = onNavigateToDetails;
+    this.callbacks = callbacks;
+
+    this.buttonCart.addClassNames(styles.buttonCart);
+    this.updateButtonCartState();
 
     this.createHTML();
 
@@ -62,6 +79,7 @@ export class ProductCard extends BaseComponent implements Component {
       titleElement,
       descriptionElement,
       pricesContainer,
+      this.buttonCart.element,
     );
 
     this.append(imageContainer, content);
@@ -106,9 +124,54 @@ export class ProductCard extends BaseComponent implements Component {
     return imageContainer;
   }
 
+  private async handleAddToCartClick(): Promise<void> {
+    this.setProcessingState(true);
+
+    try {
+      await this.callbacks.onAddToCart(this.product);
+      this.setButtonToInCartState();
+    } catch {
+      this.setButtonToDefaultState();
+    } finally {
+      this.setProcessingState(false);
+    }
+  }
+
+  private setButtonToDefaultState(): void {
+    this.buttonCart.enable();
+    this.buttonCart.setTextContent('ADD TO CART');
+  }
+
+  private setButtonToInCartState(): void {
+    this.buttonCart.disable();
+    this.buttonCart.setTextContent('IN CART');
+  }
+
+  private setProcessingState(isProcessing: boolean): void {
+    if (isProcessing) {
+      this.addClassNames(styles.processing);
+      this.buttonCart.disable();
+      this.buttonCart.replaceChildren(this.loaderComponent.element);
+      this.loaderComponent.show();
+    } else {
+      this.removeClassNames(styles.processing);
+      this.loaderComponent.hide();
+    }
+  }
+
   private setupListeners(): void {
-    this.addListener('click', () => {
-      this.onNavigateToDetails(this.product);
+    this.addListener('click', (event) => {
+      if (event.target !== this.buttonCart.element) {
+        this.callbacks.onNavigateToDetails(this.product);
+      }
     });
+  }
+
+  private updateButtonCartState(): void {
+    if (this.product.inCart) {
+      this.setButtonToInCartState();
+    } else {
+      this.setButtonToDefaultState();
+    }
   }
 }

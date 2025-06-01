@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import { debounce, isError } from 'lodash';
 
 import type { CartService } from '~/api/services/cart/cart.service';
 import type { ProductsService } from '~/api/services/products/products.service';
@@ -12,6 +12,7 @@ import type { IntersectionLoader } from '~/components/intersection-loader/inters
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { Presenter } from '~/shared/presenter/presenter';
+import { showToast } from '~/shared/utils/show-toast';
 
 import type { CatalogState } from '../store/store';
 import type { ProductCardListView } from './product-card-list.view';
@@ -132,6 +133,16 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   //   this.view.appendProducts(products, this.handleNavigateToDetails);
   // }
 
+  private handleAddToCart = async (product: AppProduct): Promise<void> => {
+    try {
+      await this.cartService.addLineItem({ quantity: 1, sku: product.sku });
+      showToast('ADDED');
+    } catch {
+      showToast('FAILED', true);
+      throw new Error('FAILED');
+    }
+  };
+
   private readonly handleNavigateToDetails = (product: AppProduct): void => {
     Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, {
       searchParameters: {
@@ -183,11 +194,18 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
         return;
       }
 
-      this.view.createHTML(products, this.handleNavigateToDetails);
+      this.view.createHTML(products, {
+        onAddToCart: this.handleAddToCart,
+        onNavigateToDetails: this.handleNavigateToDetails,
+      });
 
       filtersStore.setState({ brandOptions, weightOptions });
 
       // this.initIntersectionObserver();
+    } catch (error: unknown) {
+      if (isError(error)) {
+        this.view.showNotFoundWidget(error.message, true);
+      }
     } finally {
       catalogLoadingAction.setLoading(false);
     }

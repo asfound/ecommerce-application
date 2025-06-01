@@ -101,6 +101,11 @@
   font-weight: 500;
 }
 
+.buttonCart {
+  position: relative;
+  min-height: 4rem;
+}
+
 @media (hover: hover) {
   .card:hover {
     cursor: pointer;
