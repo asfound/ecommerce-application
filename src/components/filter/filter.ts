@@ -12,10 +12,16 @@ import { InputNumber } from '../common/input/input-number/input-number';
 import styles from './filter.module.css';
 
 export interface FilterCheckboxesProperties {
+  checked?: string[];
   onChange(checkedValues: CatalogState['weight'] | string[]): void;
-  options: { label: string; value: boolean | string }[];
+  options: FilterOption[];
   title: string;
   type: 'checkboxes';
+}
+
+export interface FilterOption {
+  label: string;
+  value: boolean | string;
 }
 
 export interface FilterPriceRangeProperties {
@@ -59,28 +65,28 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
   public createHTML(properties: FilterProperties): void {
     this.titleElement.textContent = properties.title;
 
-    this.append(this.summaryElement);
+    this.destroyInputs();
 
     if (properties.type === 'price-range') {
-      this.createPriceRangeFilter(properties);
+      const priceRange = this.createPriceRangeFilter(properties);
+      this.replaceChildren(this.summaryElement, priceRange);
       return;
     }
 
-    this.createCheckboxesFilter(properties);
+    const checkboxes = this.createCheckboxesFilter(properties);
+    this.replaceChildren(this.summaryElement, checkboxes);
   }
 
   public override destroy(): void {
-    for (const input of this.checkboxInputs) input.destroy();
-    this.checkboxInputs.clear();
-
-    for (const input of this.numberInputs) input.destroy();
-    this.numberInputs.clear();
-
+    this.destroyInputs();
+    this.checkedValues.clear();
     super.destroy();
   }
 
   public hide(): void {
     this.addClassNames(styles.hidden);
+
+    this.checkedValues.clear();
   }
 
   public resetCheckboxes(): void {
@@ -89,11 +95,19 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
     }
   }
 
+  public resetInputs(): void {
+    for (const input of this.numberInputs) {
+      input.reset();
+    }
+  }
+
   public show(): void {
     this.removeClassNames(styles.hidden);
   }
 
-  private createCheckboxesFilter(properties: FilterCheckboxesProperties): void {
+  private createCheckboxesFilter(properties: FilterCheckboxesProperties): HTMLDivElement {
+    const container = div(null);
+
     for (const option of properties.options) {
       const inputCheckbox = new InputCheckbox({
         label: option.label,
@@ -112,11 +126,15 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
 
       this.checkboxInputs.add(inputCheckbox);
 
-      this.append(inputCheckbox);
+      inputCheckbox.setChecked(properties.checked?.includes(option.value.toString()) ?? false);
+
+      container.append(inputCheckbox.element);
     }
+
+    return container;
   }
 
-  private createPriceRangeFilter(properties: FilterPriceRangeProperties): void {
+  private createPriceRangeFilter(properties: FilterPriceRangeProperties): HTMLDivElement {
     const inputMinPrice = new InputNumber({ name: 'min-price', placeholder: '$ Min' });
 
     inputMinPrice.addListener('input', () => {
@@ -145,7 +163,15 @@ export class Filter extends BaseComponent<HTMLDetailsElement> implements Compone
 
     this.numberInputs.add(inputMinPrice).add(inputMaxPrice);
 
-    this.append(pricesContainer);
+    return pricesContainer;
+  }
+
+  private destroyInputs(): void {
+    for (const input of this.checkboxInputs) input.destroy();
+    this.checkboxInputs.clear();
+
+    for (const input of this.numberInputs) input.destroy();
+    this.numberInputs.clear();
   }
 
   private setupListeners(): void {

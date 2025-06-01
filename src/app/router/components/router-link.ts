@@ -4,6 +4,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 
 import type { RoutePath } from '../types';
 
+import { ROUTE_PATH } from '../route-path';
 import { Router } from '../router';
 import { routerSelector } from '../store/selectors';
 import { routerStore } from '../store/store';
@@ -48,7 +49,8 @@ export class RouterLink extends BaseComponent<HTMLAnchorElement> {
     rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
       if (
         loggedIn &&
-        (this.properties.path === '/login' || this.properties.path === '/registration')
+        (this.properties.path === ROUTE_PATH.LOGIN ||
+          this.properties.path === ROUTE_PATH.REGISTRATION)
       ) {
         this.addClassNames(styles.hidden);
       } else {

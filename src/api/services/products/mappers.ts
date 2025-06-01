@@ -1,10 +1,19 @@
-import type { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
+import {
+  type FacetResults,
+  FacetTypesValues,
+  type ProductProjection,
+  type ProductVariant,
+} from '@commercetools/platform-sdk';
+import { isString } from 'lodash';
+
+import type { FilterOption } from '~/components/filter/filter';
 
 import { APP_LOCALE } from '~/shared/constants/constants';
 
-import type { AppProduct, ProductsFilterPayload } from './types';
+import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
 
-import { PRODUCT_ATTRIBUTE } from './constants';
+import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP, WEIGHT_ORDER, WEIGHT_UNIT } from './constants';
+import { sortProducts } from './helpers';
 
 const isAttribute = (value: unknown): value is { key: string; label: string } => {
   return (
@@ -80,23 +89,43 @@ export const mapToFlatAppProducts = (
     return result;
   });
 
-  return products.sort((a, b) => {
-    if (sortField === 'price' && sortDirection === 'asc') {
-      return a.price.default - b.price.default;
-    }
+  return products.sort((a, b) => sortProducts(a, b, { sortDirection, sortField }));
+};
 
-    if (sortField === 'price' && sortDirection === 'desc') {
-      return b.price.default - a.price.default;
-    }
+export const mapToFilterOptions = (facetResults: FacetResults): MappedFilterOptions => {
+  const facetBrand = facetResults[FACET.ATTRIBUTE_BRAND];
+  const facetWeightKey = facetResults[FACET.ATTRIBUTE_WEIGHT_KEY];
+  const facetWeightLabel = facetResults[FACET.ATTRIBUTE_WEIGHT_LABEL];
 
-    if (sortField === 'name' && sortDirection === 'asc') {
-      return a.name.localeCompare(b.name);
-    }
+  const brandOptions: FilterOption[] = [];
+  const weightOptions: FilterOption[] = [];
 
-    if (sortField === 'name' && sortDirection === 'desc') {
-      return b.name.localeCompare(a.name);
+  if (facetBrand.type === FacetTypesValues.Terms) {
+    for (const { term } of facetBrand.terms) {
+      if (isString(term)) {
+        brandOptions.push({ label: term, value: term });
+      }
     }
+  }
 
-    return 0;
-  });
+  if (
+    facetWeightKey.type === FacetTypesValues.Terms &&
+    facetWeightLabel.type === FacetTypesValues.Terms
+  ) {
+    const keySet = new Set(facetWeightKey.terms.map(({ term }: { term: unknown }) => term));
+    const labelSet = new Set(facetWeightLabel.terms.map(({ term }: { term: unknown }) => term));
+
+    for (const key of WEIGHT_ORDER) {
+      const label = WEIGHT_MAP[key];
+
+      if (keySet.has(key) && labelSet.has(label)) {
+        weightOptions.push({ label: label + WEIGHT_UNIT, value: key });
+      }
+    }
+  }
+
+  return {
+    brandOptions,
+    weightOptions,
+  };
 };

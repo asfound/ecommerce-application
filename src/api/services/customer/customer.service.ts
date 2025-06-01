@@ -27,6 +27,7 @@ import {
   createSetDefaultBillingAddressAction,
   createSetDefaultShippingAddressAction,
 } from './actions/actions.ts';
+import { ADDRESS_TYPE } from './constants.ts';
 import { getPersonalDataUpdateActions } from './helpers/helpers.ts';
 import { mapToAppCustomer } from './mappers.ts';
 
@@ -54,19 +55,19 @@ export class CustomerService {
 
     const actions: MyCustomerUpdateAction[] = [createAddAddressAction(address)];
 
-    if (payload.type === 'billing') {
+    if (payload.type === ADDRESS_TYPE.BILLING) {
       actions.push(createAddBillingAddressIdAction({ key }));
     }
 
-    if (payload.type === 'shipping') {
+    if (payload.type === ADDRESS_TYPE.SHIPPING) {
       actions.push(createAddShippingAddressIdAction({ key }));
     }
 
-    if (payload.default && payload.type === 'billing') {
+    if (payload.default && payload.type === ADDRESS_TYPE.BILLING) {
       actions.push(createSetDefaultBillingAddressAction({ key }));
     }
 
-    if (payload.default && payload.type === 'shipping') {
+    if (payload.default && payload.type === ADDRESS_TYPE.SHIPPING) {
       actions.push(createSetDefaultShippingAddressAction({ key }));
     }
 

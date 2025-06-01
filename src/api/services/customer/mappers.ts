@@ -1,28 +1,35 @@
 import type { Customer } from '@commercetools/platform-sdk';
 
-import type { AppCustomer, AppCustomerAddress } from './types';
+import type { AppCustomer, AppCustomerAddress, MapAddressesParameters } from './types';
 
-const mapAddresses = (
-  addresses: Customer['addresses'],
-  addressIds: string[] | undefined,
-  defaultBillingAddressId: string | undefined,
-  defaultShippingAddressId: string | undefined,
-  allIds: { billingAddressIds: string[] | undefined; shippingAddressIds: string[] | undefined },
-  type: 'billing' | 'shipping',
-): AppCustomerAddress[] => {
+import { ADDRESS_TYPE } from './constants';
+
+const mapAddresses = ({
+  addresses,
+  addressIds,
+  addressType,
+  allIds,
+  defaultBillingAddressId,
+  defaultShippingAddressId,
+}: MapAddressesParameters): AppCustomerAddress[] => {
   return addresses
     .filter((address) => addressIds?.includes(address.id ?? ''))
     .map((address) => ({
       addressId: address.id ?? '',
-      billing: type === 'billing' && addressIds?.includes(address.id ?? ''),
+      billing: addressType === ADDRESS_TYPE.BILLING && addressIds?.includes(address.id ?? ''),
       city: address.city ?? '',
       country: address.country,
       defaultBilling: defaultBillingAddressId === address.id,
       defaultShipping: defaultShippingAddressId === address.id,
-      inBilling: type === 'shipping' && allIds.billingAddressIds?.includes(address.id ?? ''),
-      inShipping: type === 'billing' && allIds.shippingAddressIds?.includes(address.id ?? ''),
+
+      inBilling:
+        addressType === ADDRESS_TYPE.SHIPPING &&
+        allIds.billingAddressIds?.includes(address.id ?? ''),
+      inShipping:
+        addressType === ADDRESS_TYPE.BILLING &&
+        allIds.shippingAddressIds?.includes(address.id ?? ''),
       postalCode: address.postalCode ?? '',
-      shipping: type === 'shipping' && addressIds?.includes(address.id ?? ''),
+      shipping: addressType === ADDRESS_TYPE.SHIPPING && addressIds?.includes(address.id ?? ''),
       streetName: address.streetName ?? '',
     }));
 };
@@ -36,23 +43,23 @@ export const mapToAppCustomer = (customer: Customer): AppCustomer => {
     shippingAddressIds,
   } = customer;
 
-  const billingAddresses = mapAddresses(
+  const billingAddresses = mapAddresses({
     addresses,
-    billingAddressIds,
+    addressIds: billingAddressIds,
+    addressType: ADDRESS_TYPE.BILLING,
+    allIds: { billingAddressIds, shippingAddressIds },
     defaultBillingAddressId,
     defaultShippingAddressId,
-    { billingAddressIds, shippingAddressIds },
-    'billing',
-  );
+  });
 
-  const shippingAddresses = mapAddresses(
+  const shippingAddresses = mapAddresses({
     addresses,
-    shippingAddressIds,
+    addressIds: shippingAddressIds,
+    addressType: ADDRESS_TYPE.SHIPPING,
+    allIds: { billingAddressIds, shippingAddressIds },
     defaultBillingAddressId,
     defaultShippingAddressId,
-    { billingAddressIds, shippingAddressIds },
-    'shipping',
-  );
+  });
 
   return {
     billingAddresses,

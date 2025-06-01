@@ -1,4 +1,6 @@
-import type { BaseAddress } from '@commercetools/platform-sdk';
+import type { BaseAddress, Customer } from '@commercetools/platform-sdk';
+
+import type { ADDRESS_TYPE } from './constants';
 
 export interface AddAddressPayload {
   address: BaseAddress;
@@ -17,6 +19,8 @@ export interface AddressPayload {
   addressKey?: string;
   customerVersion: number;
 }
+
+export type AddressType = (typeof ADDRESS_TYPE)[keyof typeof ADDRESS_TYPE];
 
 export interface AppChangeAddressPayload extends Omit<AddressPayload, 'customerVersion'> {
   address: BaseAddress;
@@ -53,6 +57,18 @@ export interface AppCustomerAddress {
 
 export interface ChangeAddressPayload extends AddressPayload {
   address: BaseAddress;
+}
+
+export interface MapAddressesParameters {
+  addresses: Customer['addresses'];
+  addressIds?: string[];
+  addressType: AddressType;
+  allIds: {
+    billingAddressIds?: string[];
+    shippingAddressIds?: string[];
+  };
+  defaultBillingAddressId?: string;
+  defaultShippingAddressId?: string;
 }
 
 export interface PersonalData {

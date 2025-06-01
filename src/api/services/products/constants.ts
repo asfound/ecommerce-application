@@ -1,8 +1,8 @@
 import { APP_LOCALE } from '~/shared/constants/constants';
 
-import type { ProductsFilterPayload } from './types';
+import type { ProductsFilterPayload, WeightType } from './types';
 
-const CENTS_IN_DOLLAR = 100;
+export const CENTS_IN_DOLLAR = 100;
 
 export const PRODUCT_ATTRIBUTE = {
   BEST_SELLER: 'bestSeller',
@@ -15,7 +15,7 @@ export const EXPAND_PATH = {
 } as const;
 
 export const QUERY_KEY = {
-  FILTER_QUERY: 'filter.query',
+  FILTER_QUERY: 'filter',
   FULL_TEXT_SEARCH: `text.${APP_LOCALE}`,
   LIMIT: 'limit',
   MATCHING_VARIANTS: 'markMatchingVariants',
@@ -37,15 +37,43 @@ export const FILTER = {
 
     return `variants.price.centAmount:range (${from.toString()} to ${to.toString()})`;
   },
-  WEIGHT: (weight: ('lg' | 'md' | 'sm')[]) => {
+  WEIGHT: (weight: WeightType[]) => {
     const weights = weight.map((value) => `"${value}"`).join(',');
     return `variants.attributes.weight.key:${weights}`;
   },
 } as const;
 
 export const SORT_FIELD = {
-  NAME: (direction: ProductsFilterPayload['sortDirection']) => `name.${APP_LOCALE} ${direction}`,
-  PRICE: (direction: ProductsFilterPayload['sortDirection']) => `price ${direction}`,
+  NAME: (direction: ProductsFilterPayload['sortDirection']) =>
+    `${SORT_FIELD_TYPE.NAME}.${APP_LOCALE} ${direction}`,
+  PRICE: (direction: ProductsFilterPayload['sortDirection']) =>
+    `${SORT_FIELD_TYPE.PRICE} ${direction}`,
 } as const;
 
 export const PAGE_NUMBER_TO_OFFSET_SHIFT = 1;
+
+export const SORT_FIELD_TYPE = {
+  NAME: 'name',
+  PRICE: 'price',
+} as const;
+
+export const SORT_DIRECTION = {
+  ASC: 'asc',
+  DESC: 'desc',
+} as const;
+
+export const FACET = {
+  ATTRIBUTE_BRAND: 'variants.attributes.brand',
+  ATTRIBUTE_WEIGHT_KEY: 'variants.attributes.weight.key',
+  ATTRIBUTE_WEIGHT_LABEL: 'variants.attributes.weight.label',
+} as const;
+
+export const WEIGHT_MAP: Record<string, string> = {
+  lg: '1000',
+  md: '500',
+  sm: '250',
+} as const;
+
+export const WEIGHT_ORDER = ['sm', 'md', 'lg'] as const;
+
+export const WEIGHT_UNIT = 'g';

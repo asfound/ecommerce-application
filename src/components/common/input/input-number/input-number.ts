@@ -22,8 +22,7 @@ export class InputNumber extends InputBase {
     {
       className: styles.resetButton,
       onClick: () => {
-        this.inputComponent.element.value = '';
-        this.resetIconSvg.classList.add(styles.hidden);
+        this.reset();
         this.inputComponent.element.focus();
       },
       signal: this.abortController.signal,
@@ -45,6 +44,11 @@ export class InputNumber extends InputBase {
 
   public bindResetHandler(handler: VoidFunction): void {
     this.resetButton.addEventListener('click', handler, { signal: this.abortController.signal });
+  }
+
+  public override reset(): void {
+    this.inputComponent.element.value = '';
+    this.resetIconSvg.classList.add(styles.hidden);
   }
 
   protected override setupListeners(): void {

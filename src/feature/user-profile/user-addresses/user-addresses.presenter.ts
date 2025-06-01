@@ -9,6 +9,7 @@ import type {
 } from '~/api/services/customer/types';
 import type { NewAddressFormData } from '~/components/new-address-form/new-address-form';
 
+import { ADDRESS_TYPE } from '~/api/services/customer/constants';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
@@ -189,7 +190,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
         address: payload.address,
         customerVersion: this.customerVersion ?? 0,
         default: payload.default,
-        type: 'billing',
+        type: ADDRESS_TYPE.BILLING,
       };
 
       const updatedCustomer = await this.customerService.addAddress(addNewShippingAddressPayload);
@@ -212,7 +213,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
         address: payload.address,
         customerVersion: this.customerVersion ?? 0,
         default: payload.default,
-        type: 'shipping',
+        type: ADDRESS_TYPE.SHIPPING,
       };
 
       const updatedCustomer = await this.customerService.addAddress(addNewShippingAddressPayload);

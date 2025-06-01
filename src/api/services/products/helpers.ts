@@ -1,6 +1,20 @@
-import type { FilterQueryArguments, ProductsFilterPayload } from './types';
+import type {
+  AppProduct,
+  FilterQueryArguments,
+  ProductsFilterPayload,
+  SortDirection,
+  SortField,
+} from './types';
 
-import { FILTER, PAGE_NUMBER_TO_OFFSET_SHIFT, QUERY_KEY, SORT_FIELD } from './constants';
+import {
+  FACET,
+  FILTER,
+  PAGE_NUMBER_TO_OFFSET_SHIFT,
+  QUERY_KEY,
+  SORT_DIRECTION,
+  SORT_FIELD,
+  SORT_FIELD_TYPE,
+} from './constants';
 
 export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryArguments => {
   const filters: string[] = [];
@@ -44,7 +58,40 @@ export const getQueryArguments = (payload: ProductsFilterPayload): FilterQueryAr
 };
 
 const getSortType = (payload: ProductsFilterPayload): string => {
-  return payload.sortField === 'name'
+  return payload.sortField === SORT_FIELD_TYPE.NAME
     ? SORT_FIELD.NAME(payload.sortDirection)
     : SORT_FIELD.PRICE(payload.sortDirection);
+};
+
+export const getQueryFacets = (categoryId: string): FilterQueryArguments => {
+  return {
+    facet: [FACET.ATTRIBUTE_BRAND, FACET.ATTRIBUTE_WEIGHT_KEY, FACET.ATTRIBUTE_WEIGHT_LABEL],
+    'filter.facets': [FILTER.CATEGORY_SUBTREE(categoryId)],
+  };
+};
+
+export const sortProducts = (
+  a: AppProduct,
+  b: AppProduct,
+  { sortDirection, sortField }: { sortDirection: SortDirection; sortField: SortField },
+): number => {
+  let result = 0;
+
+  switch (sortField) {
+    case SORT_FIELD_TYPE.NAME: {
+      result = a.name.localeCompare(b.name);
+      break;
+    }
+    case SORT_FIELD_TYPE.PRICE: {
+      const priceA = a.price.discounted ?? a.price.default;
+      const priceB = b.price.discounted ?? b.price.default;
+      result = priceA - priceB;
+      break;
+    }
+    default: {
+      return 0;
+    }
+  }
+
+  return sortDirection === SORT_DIRECTION.ASC ? result : -result;
 };

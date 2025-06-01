@@ -1,5 +1,6 @@
 import type { ProductsFilterPayload } from '~/api/services/products/types';
 
+import { SORT_DIRECTION, SORT_FIELD_TYPE } from '~/api/services/products/constants';
 import iconSort from '~/assets/icons/sort.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { InputRadio } from '~/components/common/input/input-radio/input-radio';
@@ -41,7 +42,7 @@ export class SearchAndSortView extends BaseComponent {
     this.buttonDirection,
   );
 
-  private sortDirection: ProductsFilterPayload['sortDirection'] = 'asc';
+  private sortDirection: ProductsFilterPayload['sortDirection'] = SORT_DIRECTION.ASC;
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
@@ -62,13 +63,13 @@ export class SearchAndSortView extends BaseComponent {
 
   public bindSortByNameHandler(handler: SortByFieldHandler): void {
     this.inputSortName.addListener('change', () => {
-      handler('name');
+      handler(SORT_FIELD_TYPE.NAME);
     });
   }
 
   public bindSortByPriceHandler(handler: SortByFieldHandler): void {
     this.inputSortPrice.addListener('change', () => {
-      handler('price');
+      handler(SORT_FIELD_TYPE.PRICE);
     });
   }
 
@@ -76,7 +77,8 @@ export class SearchAndSortView extends BaseComponent {
     this.buttonDirection.addEventListener(
       'click',
       () => {
-        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        this.sortDirection =
+          this.sortDirection === SORT_DIRECTION.ASC ? SORT_DIRECTION.DESC : SORT_DIRECTION.ASC;
 
         handler(this.sortDirection);
       },
@@ -93,17 +95,17 @@ export class SearchAndSortView extends BaseComponent {
   }
 
   public setSortDirection(sortDirection: CatalogState['sortDirection']): void {
-    if (sortDirection === 'asc') {
-      this.sortDirection = 'asc';
+    if (sortDirection === SORT_DIRECTION.ASC) {
+      this.sortDirection = SORT_DIRECTION.ASC;
       this.sortIcon.classList.add(styles.rotated);
     } else {
-      this.sortDirection = 'desc';
+      this.sortDirection = SORT_DIRECTION.DESC;
       this.sortIcon.classList.remove(styles.rotated);
     }
   }
 
   public setSortField(sortField: CatalogState['sortField']): void {
-    if (sortField === 'name') {
+    if (sortField === SORT_FIELD_TYPE.NAME) {
       this.inputSortName.setChecked(true);
       this.inputSortPrice.setChecked(false);
     } else {
