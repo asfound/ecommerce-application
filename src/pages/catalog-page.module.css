@@ -54,7 +54,7 @@
 }
 
 .buttonReset:disabled {
-  opacity: 0.5;
+  color: var(--color-black);
   background-color: var(--color-dark);
 }
 
