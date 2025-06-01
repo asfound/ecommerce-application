@@ -74,6 +74,7 @@ export class CatalogPage extends BaseComponent {
       new ProductCardListView(),
       this.intersectionAnchor,
       SERVICE_HUB.provideProductsService(),
+      SERVICE_HUB.provideCartService(),
     );
 
     this.searchAndSortPresenter = new SearchAndSortPresenter(new SearchAndSortView());

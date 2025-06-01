@@ -1,7 +1,12 @@
 import { debounce } from 'lodash';
 
+import type { CartService } from '~/api/services/cart/cart.service';
 import type { ProductsService } from '~/api/services/products/products.service';
-import type { AppProduct } from '~/api/services/products/types';
+import type {
+  AppProduct,
+  AppProductWithInCart,
+  MappedFilterOptions,
+} from '~/api/services/products/types';
 import type { IntersectionLoader } from '~/components/intersection-loader/intersection-loader';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
@@ -18,9 +23,11 @@ import { catalogLoadingStore, catalogStore } from '../store/store';
 import { VIEW_UPDATE_DELAY } from './constants';
 
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
-  private currentPage = 1;
+  private readonly cartService: CartService;
 
   // private readonly intersectionAnchor: IntersectionLoader;
+
+  private currentPage = 1;
 
   private intersectionObserver: IntersectionObserver | null = null;
 
@@ -30,6 +37,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     view: ProductCardListView,
     intersectionAnchor: IntersectionLoader,
     productsService: ProductsService,
+    cartService: CartService,
   ) {
     super(view);
 
@@ -37,6 +45,8 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     intersectionAnchor.hide();
 
     this.productsService = productsService;
+
+    this.cartService = cartService;
 
     this.updateView(catalogStore.getState());
 
@@ -56,14 +66,32 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
     }
   }
 
-  private readonly handleNavigateToDetails = (product: AppProduct): void => {
-    Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, {
-      searchParameters: {
-        id: product.productId,
-        sku: product.sku,
-      },
-    });
-  };
+  private async getMarkedProducts(): Promise<
+    MappedFilterOptions & { products: AppProductWithInCart[] }
+  > {
+    try {
+      const [data, skuSet] = await Promise.all([
+        this.productsService.getFilteredProducts({
+          ...catalogStore.getState(),
+          currentPage: this.currentPage,
+        }),
+        this.cartService.getProductsSkuSet(),
+      ]);
+
+      const markedProducts = data.products.map((product) => ({
+        ...product,
+        inCart: skuSet.has(product.sku),
+      }));
+
+      return {
+        brandOptions: data.brandOptions,
+        products: markedProducts,
+        weightOptions: data.weightOptions,
+      };
+    } catch {
+      throw new Error('FAILED TO LOAD');
+    }
+  }
 
   // private initIntersectionObserver(): void {
   //   if (this.intersectionObserver) {
@@ -104,6 +132,15 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   //   this.view.appendProducts(products, this.handleNavigateToDetails);
   // }
 
+  private readonly handleNavigateToDetails = (product: AppProduct): void => {
+    Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, {
+      searchParameters: {
+        id: product.productId,
+        sku: product.sku,
+      },
+    });
+  };
+
   private setupSubscriptions(): void {
     this.subscribeLoading();
 
@@ -139,11 +176,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
       catalogLoadingAction.setLoading(true);
 
-      const { brandOptions, products, weightOptions } =
-        await this.productsService.getFilteredProducts({
-          ...state,
-          currentPage: this.currentPage,
-        });
+      const { brandOptions, products, weightOptions } = await this.getMarkedProducts();
 
       if (products.length === 0) {
         this.view.showNotFoundWidget(state.searchTerm);

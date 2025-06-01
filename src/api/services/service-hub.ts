@@ -2,6 +2,7 @@ import { localStorageService } from '~/services';
 
 import { getApiRoot } from '../helpers/helpers';
 import { AuthService } from './auth/auth.service';
+import { CartService } from './cart/cart.service';
 import { CategoriesService } from './categories/categories.service';
 import { CustomerService } from './customer/customer.service';
 import { ProductsService } from './products/products.service';
@@ -9,6 +10,9 @@ import { ProductsService } from './products/products.service';
 export const SERVICE_HUB = {
   provideAuthService() {
     return AuthService.getInstance(getApiRoot, localStorageService);
+  },
+  provideCartService() {
+    return CartService.getInstance(getApiRoot);
   },
   provideCategoriesService() {
     return CategoriesService.getInstance(getApiRoot);
