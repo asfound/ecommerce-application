@@ -9,6 +9,7 @@ import type { Component } from '../base-component/types';
 import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
 import { Loader } from '../common/loader/loader';
+import { BUTTON_CART_TEXT } from './constants';
 import styles from './product-card.module.css';
 
 const BESTSELLER_VALUE = 'Bestseller';
@@ -139,12 +140,12 @@ export class ProductCard extends BaseComponent implements Component {
 
   private setButtonToDefaultState(): void {
     this.buttonCart.enable();
-    this.buttonCart.setTextContent('ADD TO CART');
+    this.buttonCart.setTextContent(BUTTON_CART_TEXT.ADD_TO_CART);
   }
 
   private setButtonToInCartState(): void {
     this.buttonCart.disable();
-    this.buttonCart.setTextContent('IN CART');
+    this.buttonCart.setTextContent(BUTTON_CART_TEXT.IN_CART);
   }
 
   private setProcessingState(isProcessing: boolean): void {

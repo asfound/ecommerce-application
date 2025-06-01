@@ -12,16 +12,18 @@ import type { IntersectionLoader } from '~/components/intersection-loader/inters
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { Presenter } from '~/shared/presenter/presenter';
+import { formatProductName } from '~/shared/utils/format-product-name';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { CatalogState } from '../store/store';
 import type { ProductCardListView } from './product-card-list.view';
 
+import { PRODUCT_CART_NOTIFICATION } from '../constants';
 import { filtersStore } from '../filters/store/store';
 import { catalogLoadingAction } from '../store/actions';
 import { catalogLoadingSelector } from '../store/selectors';
 import { catalogLoadingStore, catalogStore } from '../store/store';
-import { VIEW_UPDATE_DELAY } from './constants';
+import { PRODUCT_CARD_LIST_TEXT, VIEW_UPDATE_DELAY } from './constants';
 
 export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   private readonly cartService: CartService;
@@ -90,7 +92,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
         weightOptions: data.weightOptions,
       };
     } catch {
-      throw new Error('FAILED TO LOAD');
+      throw new Error(PRODUCT_CARD_LIST_TEXT.FAILED_TO_LOAD_PRODUCTS);
     }
   }
 
@@ -134,12 +136,16 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
   // }
 
   private handleAddToCart = async (product: AppProduct): Promise<void> => {
+    const productName = formatProductName(product);
+
     try {
       await this.cartService.addLineItem({ quantity: 1, sku: product.sku });
-      showToast('ADDED');
+
+      showToast(PRODUCT_CART_NOTIFICATION.ADDED_TO_CART(productName));
     } catch {
-      showToast('FAILED', true);
-      throw new Error('FAILED');
+      showToast(PRODUCT_CART_NOTIFICATION.FAILED_ADD_TO_CART(productName), true);
+
+      throw new Error(PRODUCT_CART_NOTIFICATION.FAILED_ADD_TO_CART(productName));
     }
   };
 
