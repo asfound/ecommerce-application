@@ -6,8 +6,12 @@ import { BaseComponent } from '../base-component/base-component';
 import styles from './profile-card.module.css';
 
 export interface ProfileCardProperties {
+  avatarUrl: string;
+  bio: string;
+  contributions: string[] | undefined;
   fullname: string;
-  image: string;
+  github: { login: string; url: string };
+  roles: string[];
 }
 
 export class ProfileCard extends BaseComponent implements Component {
@@ -22,12 +26,12 @@ export class ProfileCard extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const fullnameElement = h3({ className: styles.fullname }, this.properties.fullname);
+    const fullnameElement = h3({ className: styles.fullname }, this.properties.avatarUrl);
 
     const imageElement = img({
-      alt: this.properties.fullname,
+      alt: this.properties.avatarUrl,
       className: styles.image,
-      src: this.properties.image,
+      src: this.properties.fullname,
     });
 
     const contentElement = div({ className: styles.content }, fullnameElement);
