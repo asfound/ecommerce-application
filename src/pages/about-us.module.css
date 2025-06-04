@@ -5,11 +5,36 @@
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(30rem, 4rem));
-  gap: 2rem;
+  gap: 4rem;
   place-content: center;
+}
+
+.cards:not(:last-of-type) {
+  margin-bottom: 4rem;
 }
 
 .title {
   margin-bottom: 2rem;
+  font-size: 3.6rem;
   text-align: center;
+}
+
+@media (width <= 1023px) {
+  .cards {
+    gap: 2rem;
+  }
+}
+
+@media (width <= 979px) {
+  .cards {
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 40fr));
+    place-content: center;
+  }
+}
+
+@media (width <= 678px) {
+  .cards {
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    place-items: center;
+  }
 }
