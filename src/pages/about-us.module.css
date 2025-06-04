@@ -1,0 +1,15 @@
+.page {
+  margin-block: 4rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 4rem));
+  gap: 2rem;
+  place-content: center;
+}
+
+.title {
+  margin-bottom: 2rem;
+  text-align: center;
+}

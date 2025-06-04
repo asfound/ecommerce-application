@@ -1,4 +1,4 @@
-import { div, h3, img } from '~/shared/create-element/tags';
+import { div, h3, img, li, ul } from '~/shared/create-element/tags';
 
 import type { Component } from '../base-component/types';
 
@@ -26,16 +26,21 @@ export class ProfileCard extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    const fullnameElement = h3({ className: styles.fullname }, this.properties.avatarUrl);
+    const fullnameElement = h3({ className: styles.fullname }, this.properties.fullname);
 
     const imageElement = img({
-      alt: this.properties.avatarUrl,
+      alt: this.properties.fullname,
       className: styles.image,
-      src: this.properties.fullname,
+      src: this.properties.avatarUrl,
     });
 
-    const contentElement = div({ className: styles.content }, fullnameElement);
+    const rolesElement = ul(
+      { className: styles.roles },
+      ...this.properties.roles.map((role) => li(null, role)),
+    );
 
-    this.append(imageElement, contentElement);
+    const outerContent = div({ className: styles.outerContent }, fullnameElement, rolesElement);
+
+    this.append(imageElement, outerContent);
   }
 }
