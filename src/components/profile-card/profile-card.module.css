@@ -1,0 +1,44 @@
+.card {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 50rem;
+  border-radius: var(--border-radius);
+}
+
+.image {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+
+  width: 100%;
+  border-radius: var(--border-radius);
+
+  object-fit: cover;
+  filter: brightness(0.4);
+
+  transition: filter var(--transition-duration);
+}
+
+.content {
+  z-index: 50;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  place-self: center;
+}
+
+.fullname {
+  font-weight: 500;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    cursor: pointer;
+  }
+
+  .card:hover .image {
+    filter: unset;
+  }
+
+  .card:hover .content {
+    opacity: 0;
+  }
+}

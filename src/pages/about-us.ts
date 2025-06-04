@@ -7,6 +7,7 @@ export class AboutUsPage extends BaseComponent {
     super({ className: ['ABOUT-US', CSS_CLASS_NAME.WRAPPER], tagName: 'div' });
 
     const title = h1(null, 'About us');
+
     this.append(title);
   }
 }
