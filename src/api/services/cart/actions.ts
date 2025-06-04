@@ -14,6 +14,7 @@ import type {
 
 export const createAddLineItemAction = (payload: AddLineItemPayload): MyCartAddLineItemAction => ({
   action: 'addLineItem',
+  key: payload.lineItemKey,
   quantity: payload.quantity,
   sku: payload.sku,
 });
@@ -22,7 +23,7 @@ export const createRemoveLineItemAction = (
   payload: RemoveLineItemPayload,
 ): MyCartRemoveLineItemAction => ({
   action: 'removeLineItem',
-  lineItemId: payload.lineItemId,
+  lineItemKey: payload.lineItemKey,
   quantity: payload.quantity,
 });
 

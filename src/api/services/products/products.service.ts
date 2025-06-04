@@ -1,6 +1,11 @@
 import type { ApiRootGetter } from '~/api/types/types';
 
-import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
+import type {
+  AppProduct,
+  AppProductWithInCart,
+  MappedFilterOptions,
+  ProductsFilterPayload,
+} from './types';
 
 import { EXPAND_PATH } from './constants';
 import { getQueryArguments, getQueryFacets } from './helpers';
@@ -55,5 +60,13 @@ export class ProductsService {
       .execute();
 
     return mapVariantToAppProduct(response.body.masterVariant, response.body);
+  }
+
+  public markProductWithInCart(product: AppProduct, skuSet: Set<string>): AppProductWithInCart {
+    return {
+      ...product,
+      inCart: skuSet.has(product.sku),
+      variants: product.variants.map((variant) => this.markProductWithInCart(variant, skuSet)),
+    };
   }
 }

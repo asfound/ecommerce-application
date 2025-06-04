@@ -31,6 +31,7 @@ export interface AppProductImage {
 
 export interface AppProductWithInCart extends AppProduct {
   inCart: boolean;
+  variants: AppProductWithInCart[];
 }
 
 export interface FilterQueryArguments {

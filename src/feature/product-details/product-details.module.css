@@ -135,3 +135,14 @@
 
   background-color: var(--color-lilac);
 }
+
+.buttonCart {
+  position: relative;
+  min-width: 16.5rem;
+  max-width: max-content;
+  min-height: 4.1rem;
+}
+
+.buttonCart:disabled {
+  pointer-events: none;
+}

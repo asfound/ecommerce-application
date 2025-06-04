@@ -10,6 +10,7 @@ export interface AddDiscountCodePayload {
 }
 
 export interface AddLineItemPayload {
+  lineItemKey: MyCartAddLineItemAction['key'];
   quantity: MyCartAddLineItemAction['quantity'];
   sku: MyCartAddLineItemAction['sku'];
 }
@@ -19,6 +20,6 @@ export interface RemoveDiscountCodePayload {
 }
 
 export interface RemoveLineItemPayload {
-  lineItemId: MyCartRemoveLineItemAction['lineItemId'];
+  lineItemKey: MyCartRemoveLineItemAction['lineItemKey'];
   quantity?: MyCartRemoveLineItemAction['quantity'];
 }

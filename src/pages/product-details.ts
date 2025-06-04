@@ -13,6 +13,7 @@ export class ProductDetailsPage extends BaseComponent {
     this.productDetailsPresenter = new ProductDetailsPresenter(
       new ProductDetailsView(),
       SERVICE_HUB.provideProductsService(),
+      SERVICE_HUB.provideCartService(),
     );
 
     this.append(this.productDetailsPresenter.getView());
