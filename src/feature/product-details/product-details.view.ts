@@ -235,7 +235,7 @@ export class ProductDetailsView extends BaseComponent implements Component {
         this.setButtonToInCartState();
       }
     } catch {
-      this.setButtonToDefaultState();
+      this.updateButtonCartState();
       this.productData.inCart = false;
     } finally {
       this.setProcessingState(false);
