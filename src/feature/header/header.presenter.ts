@@ -23,10 +23,15 @@ export class HeaderPresenter extends Presenter<HeaderView> {
   }
 
   private bindViewHandlers(): void {
+    this.view.bindCartClickHandler(this.handleCartClick);
     this.view.bindLogoutHandler(this.handleLogout);
     this.view.bindLogoClickHandler(this.handleLogoClick);
     this.view.bindProfileClickHandler(this.handleProfileClick);
   }
+
+  private readonly handleCartClick = (): void => {
+    Router.instance.navigate(ROUTE_PATH.CART);
+  };
 
   private readonly handleLogoClick = (): void => {
     Router.instance.navigate(ROUTE_PATH.MAIN);

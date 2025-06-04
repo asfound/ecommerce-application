@@ -46,6 +46,14 @@ export const ROUTES: Route[] = [
   },
   {
     async component(): Promise<BaseComponent> {
+      const { CartPage } = await import('../../pages/cart-page.ts');
+      return new CartPage();
+    },
+    path: ROUTE_PATH.CART,
+    title: `${TITLE} | Cart`,
+  },
+  {
+    async component(): Promise<BaseComponent> {
       const { ProductDetailsPage } = await import('../../pages/product-details.ts');
       return new ProductDetailsPage();
     },

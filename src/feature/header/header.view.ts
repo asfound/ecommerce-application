@@ -22,6 +22,12 @@ import {
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
+  private readonly cartIcon = div(
+    { className: styles.iconContainer },
+    createSvgIcon(cartSvg, styles.icon),
+    span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
+  );
+
   private isBurgerMenuOpen = false;
 
   private readonly logoLink = a({
@@ -52,6 +58,16 @@ export class HeaderView extends BaseComponent implements Component {
     this.createHTML();
 
     this.setupListeners();
+  }
+
+  public bindCartClickHandler(handler: VoidFunction): void {
+    this.cartIcon.addEventListener(
+      'click',
+      () => {
+        handler();
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public bindLogoClickHandler(handler: VoidFunction): void {
@@ -95,15 +111,9 @@ export class HeaderView extends BaseComponent implements Component {
       this.closeMenu();
     });
 
-    const cartIcon = div(
-      { className: styles.iconContainer },
-      createSvgIcon(cartSvg, styles.icon),
-      span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
-    );
-
     const iconsContainer = div(
       { className: styles.iconsContainer },
-      cartIcon,
+      this.cartIcon,
       this.profileIcon,
       this.logoutIcon,
       this.menuIcon,
