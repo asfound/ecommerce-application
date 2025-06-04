@@ -104,6 +104,11 @@
 .buttonCart {
   position: relative;
   min-height: 4rem;
+  margin-top: 1rem;
+}
+
+.buttonCart:disabled {
+  background-color: var(--color-black);
 }
 
 @media (hover: hover) {

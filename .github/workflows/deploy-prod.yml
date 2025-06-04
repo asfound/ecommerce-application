@@ -26,6 +26,7 @@ jobs:
 
       - name: Deploy to Netlify (Production)
         uses: nwtgck/actions-netlify@v2.0
+        id: netlify
         with:
           publish-dir: ./dist
           production-branch: develop
@@ -50,13 +51,13 @@ jobs:
 
       - name: Set telegram message
         env:
-          DEPLOY_URL: ${{ inputs.deployUrl }}
-          PR_TITLE: ${{ inputs.prTitle }}
-          REF_NAME: ${{ inputs.refName }}
-          SERVER_URL: ${{ inputs.serverUrl }}
+          DEPLOY_URL: ${{ needs.build.outputs.deploy-url }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          REF_NAME: ${{ github.ref_name }}
+          SERVER_URL: ${{ github.server_url }}
           REPOSITORY: ${{ github.repository }}
-          RUN_ID: ${{ inputs.runID }}
-          BUILD_RESULT: ${{ inputs.build }}
+          RUN_ID: ${{ github.run_id }}
+          BUILD_RESULT: ${{ needs.build.outputs.result }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         id: telegram-message
         run: .github/scripts/format-telegram-message.sh
