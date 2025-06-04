@@ -29,10 +29,13 @@ const BUTTON_TEXT = 'Reset All';
 export class CatalogPage extends BaseComponent {
   private readonly breadcrumbsPresenter: CatalogBreadcrumbsPresenter;
 
+  private readonly filtersPresenter: FiltersPresenter;
+
   private readonly buttonResetAll = new Button({
     onClick: (): void => {
       catalogStore.reset();
       catalogCategoryNameStore.reset();
+      this.filtersPresenter.onCategoryNameChange('');
     },
     textContent: BUTTON_TEXT,
     type: 'button',
@@ -44,8 +47,6 @@ export class CatalogPage extends BaseComponent {
   );
 
   private readonly categoryNavigationPresenter: CategoryNavigationPresenter;
-
-  private readonly filtersPresenter: FiltersPresenter;
 
   private readonly intersectionAnchor = new IntersectionLoader();
 
@@ -74,6 +75,7 @@ export class CatalogPage extends BaseComponent {
       new ProductCardListView(),
       this.intersectionAnchor,
       SERVICE_HUB.provideProductsService(),
+      SERVICE_HUB.provideCartService(),
     );
 
     this.searchAndSortPresenter = new SearchAndSortPresenter(new SearchAndSortView());

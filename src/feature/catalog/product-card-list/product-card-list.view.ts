@@ -1,6 +1,6 @@
-import type { AppProduct } from '~/api/services/products/types';
+import type { AppProductWithInCart } from '~/api/services/products/types';
 import type { Component } from '~/components/base-component/types';
-import type { ProductCardClickHandler } from '~/components/product-card/product-card';
+import type { ProductCardCallbacks } from '~/components/product-card/product-card';
 
 import huhGif from '~/assets/img/huh-cat.gif';
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -26,19 +26,14 @@ export class ProductCardListView extends BaseComponent implements Component {
     super({ className: styles.list, tagName: 'ul' });
   }
 
-  public appendProducts(
-    products: AppProduct[],
-    onNavigateToDetails: ProductCardClickHandler,
-  ): void {
+  public appendProducts(products: AppProductWithInCart[], callbacks: ProductCardCallbacks): void {
     for (const product of products) {
-      this.append(new ProductCard(product, onNavigateToDetails));
+      this.append(new ProductCard(product, callbacks));
     }
   }
 
-  public createHTML(products: AppProduct[], onNavigateToDetails: ProductCardClickHandler): void {
-    this.replaceChildren(
-      ...products.map((product) => new ProductCard(product, onNavigateToDetails)),
-    );
+  public createHTML(products: AppProductWithInCart[], callbacks: ProductCardCallbacks): void {
+    this.replaceChildren(...products.map((product) => new ProductCard(product, callbacks)));
   }
 
   public hideLoader(): void {
@@ -50,8 +45,8 @@ export class ProductCardListView extends BaseComponent implements Component {
     this.loaderComponent.show();
   }
 
-  public showNotFoundWidget(searchTerm: string): void {
-    this.notFoundHeading.textContent = PRODUCT_CARD_LIST_TEXT.NOT_FOUND(searchTerm);
+  public showNotFoundWidget(message: string, error = false): void {
+    this.notFoundHeading.textContent = error ? message : PRODUCT_CARD_LIST_TEXT.NOT_FOUND(message);
     this.replaceChildren(this.notFoundWidget);
   }
 }

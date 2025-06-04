@@ -28,6 +28,11 @@ export interface AppProductImage {
   label: string;
   url: string;
 }
+
+export interface AppProductWithInCart extends AppProduct {
+  inCart: boolean;
+}
+
 export interface FilterQueryArguments {
   [key: string]: QueryParam;
   expand?: string | string[];

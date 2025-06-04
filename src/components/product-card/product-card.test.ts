@@ -7,6 +7,7 @@ const productCard = new ProductCard(
     description: 'test',
     image: { label: 'test', url: 'test' },
     images: [],
+    inCart: true,
     name: 'test',
     price: { default: 0 },
     productId: 'test',
@@ -15,7 +16,7 @@ const productCard = new ProductCard(
     variants: [],
     weight: 'test',
   },
-  vi.fn(),
+  { onAddToCart: vi.fn(), onNavigateToDetails: vi.fn() },
 );
 
 test('productCard should be defined', () => {
