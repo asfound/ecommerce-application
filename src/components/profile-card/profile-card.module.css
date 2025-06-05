@@ -32,7 +32,21 @@
   text-align: center;
 }
 
+.modalContent {
+  display: grid;
+  gap: 2rem;
+
+  padding: 2rem;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-dark);
+}
+
 .roles {
+  background-color: transparent;
+}
+
+.contributions {
   background-color: transparent;
 }
 

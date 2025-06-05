@@ -1,6 +1,6 @@
 import type { ModalService } from '~/services/modal/modal.service';
 
-import { div, h3, img } from '~/shared/create-element/tags';
+import { div, h3, img, li, p, ul } from '~/shared/create-element/tags';
 
 import type { Component } from '../base-component/types';
 
@@ -47,9 +47,36 @@ export class ProfileCard extends BaseComponent implements Component {
     this.append(imageElement, outerContent);
   }
 
+  private createModalContent(): HTMLDivElement {
+    const fullNameElement = h3({ className: styles.fullname }, this.properties.fullname);
+
+    const rolesElement = ul(
+      { className: styles.roles },
+      ...this.properties.roles.map((role) => li(null, role)),
+    );
+
+    const rolesContainer = div(null, h3(null, 'Roles:'), rolesElement);
+
+    const bioContainer = div(null, h3(null, 'Bio:'), p(null, this.properties.bio));
+
+    return div(
+      { className: styles.modalContent },
+      fullNameElement,
+      rolesContainer,
+      bioContainer,
+      this.properties.contributions
+        ? div(
+            null,
+            h3(null, 'Contribution:'),
+            ul(null, ...this.properties.contributions.map((item) => li(null, item))),
+          )
+        : null,
+    );
+  }
+
   private setupListeners(): void {
     this.addListener('click', () => {
-      this.modalService.open({ content: div(null, 'Hello') });
+      this.modalService.open({ content: this.createModalContent() });
     });
   }
 }
