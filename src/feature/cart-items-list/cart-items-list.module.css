@@ -1,3 +1,11 @@
 .list {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.list > li:not(:last-child) {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-white);
 }

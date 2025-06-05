@@ -1,8 +1,10 @@
-import type { AppProduct } from '~/api/services/products/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
+import { CartItem } from '~/components/cart-item/cart-item';
 import { Loader } from '~/components/common/loader/loader';
+
+import type { CartProduct } from './cart-items-list.presenter';
 
 import styles from './cart-items-list.module.css';
 
@@ -13,8 +15,14 @@ export class CartItemsListView extends BaseComponent<HTMLUListElement> implement
     super({ className: styles.list, tagName: 'ul' });
   }
 
-  public createHTML(products: AppProduct[]): void {
-    console.warn(products);
+  public createHTML(products: CartProduct[]): void {
+    if (products.length > 0) {
+      for (const product of products) {
+        this.append(new CartItem(product));
+      }
+    } else {
+      console.warn('no products');
+    }
   }
 
   public hideLoader(): void {
