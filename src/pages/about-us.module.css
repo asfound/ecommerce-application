@@ -3,10 +3,12 @@
 }
 
 .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30rem, 4rem));
-  gap: 4rem;
-  place-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
+
+  /* place-content: center; */
 }
 
 .cards:not(:last-of-type) {
@@ -27,14 +29,12 @@
 
 @media (width <= 979px) {
   .cards {
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 40fr));
-    place-content: center;
+    background-color: transparent;
   }
 }
 
 @media (width <= 678px) {
   .cards {
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-    place-items: center;
+    background-color: transparent;
   }
 }
