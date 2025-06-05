@@ -6,9 +6,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 3rem;
+  place-content: center;
   justify-content: center;
-
-  /* place-content: center; */
 }
 
 .cards:not(:last-of-type) {
@@ -23,7 +22,7 @@
 
 @media (width <= 1023px) {
   .cards {
-    gap: 2rem;
+    background-color: transparent;
   }
 }
 
