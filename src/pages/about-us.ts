@@ -1,5 +1,6 @@
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProfileCard } from '~/components/profile-card/profile-card';
+import { modalService } from '~/services/modal/modal.service';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { TEAM_DATA } from '~/shared/constants/team-data';
 import { div, h2 } from '~/shared/create-element/tags';
@@ -14,16 +15,16 @@ export class AboutUsPage extends BaseComponent {
 
     const memberCards = div(
       { className: styles.cards },
-      ...TEAM_DATA.MEMBERS.map((member) => new ProfileCard(member).element),
+      ...TEAM_DATA.MEMBERS.map((member) => new ProfileCard(member, modalService).element),
     );
 
     const titleSupport = h2({ className: styles.title }, 'Special thanks');
 
     const supportCards = div(
       { className: styles.cards },
-      ...TEAM_DATA.EXTERNAL_SUPPORT.map((member) => new ProfileCard(member).element),
+      ...TEAM_DATA.EXTERNAL_SUPPORT.map((member) => new ProfileCard(member, modalService).element),
     );
 
-    this.append(titleTeam, memberCards, titleSupport, supportCards);
+    this.append(titleTeam, memberCards, titleSupport, supportCards, modalService.getView());
   }
 }

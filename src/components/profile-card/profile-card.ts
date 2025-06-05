@@ -1,3 +1,5 @@
+import type { ModalService } from '~/services/modal/modal.service';
+
 import { div, h3, img } from '~/shared/create-element/tags';
 
 import type { Component } from '../base-component/types';
@@ -15,14 +17,20 @@ export interface ProfileCardProperties {
 }
 
 export class ProfileCard extends BaseComponent implements Component {
+  private readonly modalService: ModalService;
+
   private readonly properties: ProfileCardProperties;
 
-  public constructor(properties: ProfileCardProperties) {
+  public constructor(properties: ProfileCardProperties, modalService: ModalService) {
     super({ className: styles.card, tagName: 'div' });
 
     this.properties = properties;
 
+    this.modalService = modalService;
+
     this.createHTML();
+
+    this.setupListeners();
   }
 
   public createHTML(): void {
@@ -37,5 +45,11 @@ export class ProfileCard extends BaseComponent implements Component {
     const outerContent = div({ className: styles.outerContent }, fullnameElement);
 
     this.append(imageElement, outerContent);
+  }
+
+  private setupListeners(): void {
+    this.addListener('click', () => {
+      this.modalService.open({ content: div(null, 'Hello') });
+    });
   }
 }
