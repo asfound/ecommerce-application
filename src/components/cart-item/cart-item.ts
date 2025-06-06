@@ -10,7 +10,7 @@ import type { Component } from '../base-component/types';
 import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
 import styles from './cart-item.module.css';
-import { BUTTON_TEXT, SINGLE_ITEM } from './constants';
+import { BUTTON_TEXT, BUTTON_TITLE, SINGLE_ITEM } from './constants';
 
 export class CartItem extends BaseComponent implements Component {
   private readonly addItemButton = new Button({
@@ -31,6 +31,9 @@ export class CartItem extends BaseComponent implements Component {
     super({ className: styles.item, tagName: 'li' });
 
     this.item = item;
+
+    this.addItemButton.element.title = BUTTON_TITLE.INCREASE;
+    this.decrementItemButton.element.title = BUTTON_TITLE.DECREASE;
 
     this.createHTML();
   }
@@ -58,7 +61,7 @@ export class CartItem extends BaseComponent implements Component {
     );
 
     const deleteButton = button(
-      { className: styles.deleteButton },
+      { className: styles.deleteButton, title: BUTTON_TITLE.DELETE },
       createSvgIcon(deleteIcon, styles.deleteIcon),
     );
 
