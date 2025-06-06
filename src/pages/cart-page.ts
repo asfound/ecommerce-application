@@ -1,7 +1,7 @@
 import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { CartItemsListPresenter } from '~/feature/cart-items-list/cart-items-list.presenter';
-import { CartItemsListView } from '~/feature/cart-items-list/cart-items-list.view';
+import { CartItemsListPresenter } from '~/feature/cart/cart-items-list/cart-items-list.presenter';
+import { CartItemsListView } from '~/feature/cart/cart-items-list/cart-items-list.view';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { div, h1, h2 } from '~/shared/create-element/tags';
 
@@ -15,7 +15,6 @@ export class CartPage extends BaseComponent {
     this.cartItemsListPresenter = new CartItemsListPresenter(
       new CartItemsListView(),
       SERVICE_HUB.provideCartService(),
-      SERVICE_HUB.provideProductsService(),
     );
     const title = h1({ className: styles.title }, 'Shopping cart');
     const subtitle = h2(null, 'Total');

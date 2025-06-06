@@ -1,4 +1,4 @@
-import type { CartProduct } from '~/feature/cart-items-list/cart-items-list.presenter';
+import type { AppCartProduct } from '~/api/services/products/types';
 
 import deleteIcon from '~/assets/icons/cross.svg';
 import { button, div, img, span } from '~/shared/create-element/tags';
@@ -11,10 +11,11 @@ import { BaseComponent } from '../base-component/base-component';
 import styles from './cart-item.module.css';
 
 export class CartItem extends BaseComponent implements Component {
-  private readonly item: CartProduct;
+  private readonly item: AppCartProduct;
 
-  public constructor(item: CartProduct) {
+  public constructor(item: AppCartProduct) {
     super({ className: styles.item, tagName: 'li' });
+
     this.item = item;
 
     this.createHTML();

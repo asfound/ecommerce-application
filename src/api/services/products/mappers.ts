@@ -15,7 +15,8 @@ import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './t
 import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP, WEIGHT_ORDER, WEIGHT_UNIT } from './constants';
 import { sortProducts } from './helpers';
 
-const isAttribute = (value: unknown): value is { key: string; label: string } => {
+// TODO: move to share with cart?
+export const isAttribute = (value: unknown): value is { key: string; label: string } => {
   return (
     value != null &&
     typeof value === 'object' &&
