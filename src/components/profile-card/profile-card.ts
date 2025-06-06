@@ -1,6 +1,6 @@
 import type { ModalService } from '~/services/modal/modal.service';
 
-import { div, h3, img, li, p, ul } from '~/shared/create-element/tags';
+import { a, div, h3, img, li, p, ul } from '~/shared/create-element/tags';
 
 import type { Component } from '../base-component/types';
 
@@ -17,6 +17,8 @@ export interface ProfileCardProperties {
 }
 
 export class ProfileCard extends BaseComponent implements Component {
+  private githubElement!: HTMLAnchorElement;
+
   private readonly modalService: ModalService;
 
   private readonly properties: ProfileCardProperties;
@@ -42,7 +44,16 @@ export class ProfileCard extends BaseComponent implements Component {
       src: this.properties.avatarUrl,
     });
 
-    const outerContent = div({ className: styles.outerContent }, fullnameElement);
+    this.githubElement = a(
+      { className: styles.githubLink, href: this.properties.github.url, target: '_blank' },
+      '@' + this.properties.github.login,
+    );
+
+    const outerContent = div(
+      { className: styles.outerContent },
+      fullnameElement,
+      this.githubElement,
+    );
 
     this.append(imageElement, outerContent);
   }
@@ -75,8 +86,10 @@ export class ProfileCard extends BaseComponent implements Component {
   }
 
   private setupListeners(): void {
-    this.addListener('click', () => {
-      this.modalService.open({ content: this.createModalContent() });
+    this.addListener('click', (event) => {
+      if (event.target !== this.githubElement) {
+        this.modalService.open({ content: this.createModalContent() });
+      }
     });
   }
 }
