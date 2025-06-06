@@ -8,9 +8,23 @@ import { formatPrice } from '~/shared/utils/format-price';
 import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
+import { Button } from '../common/button/button';
 import styles from './cart-item.module.css';
+import { BUTTON_TEXT, SINGLE_ITEM } from './constants';
 
 export class CartItem extends BaseComponent implements Component {
+  private readonly addItemButton = new Button({
+    className: styles.controlButton,
+    textContent: BUTTON_TEXT.INCREMENT,
+    type: 'button',
+  });
+
+  private readonly decrementItemButton = new Button({
+    className: styles.controlButton,
+    textContent: BUTTON_TEXT.DECREMENT,
+    type: 'button',
+  });
+
   private readonly item: AppCartProduct;
 
   public constructor(item: AppCartProduct) {
@@ -24,11 +38,15 @@ export class CartItem extends BaseComponent implements Component {
   public createHTML(): void {
     const itemDetails = this.createItemDetails();
 
+    if (this.item.quantity === SINGLE_ITEM) {
+      this.decrementItemButton.disable();
+    }
+
     const quantityControls = div(
       { className: styles.quantityControls },
-      button({ className: styles.controlButton }, '-'),
+      this.decrementItemButton.element,
       span({ className: styles.quantity }, this.item.quantity.toString()),
-      button({ className: styles.controlButton }, '+'),
+      this.addItemButton.element,
     );
 
     const itemTotalPrice = div(

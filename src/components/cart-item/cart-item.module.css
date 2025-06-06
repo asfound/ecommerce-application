@@ -66,25 +66,12 @@
 
 .quantityControls {
   display: flex;
-
-  padding: 0.1rem 0.6rem;
-  border: 1px solid var(--color-white);
-  border-radius: var(--border-radius);
-
+  align-items: center;
   font-size: 1.8rem;
 }
 
 .controlButton {
-  cursor: pointer;
-
-  border: none;
-
-  font-size: 2.2rem;
-  color: var(--color-white);
-
-  background-color: transparent;
-
-  transition: color var(--transition-duration);
+  padding-block: 0.5rem;
 }
 
 .controlButton:active {
@@ -92,7 +79,7 @@
 }
 
 .quantity {
-  width: 3.5rem;
+  width: 4.5rem;
   text-align: center;
 }
 
@@ -106,10 +93,6 @@
 @media (hover: hover) {
   .deleteButton:hover .deleteIcon {
     stroke: var(--color-accent);
-  }
-
-  .controlButton:hover {
-    color: var(--color-accent);
   }
 }
 

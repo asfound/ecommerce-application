@@ -3,6 +3,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import styles from './button.module.css';
 
 export interface ButtonProperties {
+  className?: string;
   onClick?(): void;
   textContent: string;
   type: HTMLButtonElement['type'];
@@ -20,6 +21,10 @@ export class Button extends BaseComponent<HTMLButtonElement> {
     });
 
     this.properties = properties;
+
+    if (this.properties.className) {
+      this.addClassNames(this.properties.className);
+    }
 
     this.setupListeners();
   }
