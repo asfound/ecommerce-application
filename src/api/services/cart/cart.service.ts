@@ -2,10 +2,12 @@ import type { Cart, ClientResponse, MyCartUpdateAction } from '@commercetools/pl
 
 import type { ApiRootGetter } from '~/api/types/types';
 
+import type { AppCartProduct } from '../products/types';
 import type { AddLineItemPayload, RemoveLineItemPayload } from './types';
 
 import { createAddLineItemAction, createRemoveLineItemAction } from './actions';
 import { createCartDraft } from './helpers';
+import { mapLineItemToAppCartProduct } from './mappers';
 
 export class CartService {
   private static instance: CartService | null;
@@ -44,6 +46,11 @@ export class CartService {
 
   public async getActiveCart(): Promise<ClientResponse<Cart>> {
     return await this.apiRoot().me().activeCart().get().execute();
+  }
+
+  public async getCartProducts(): Promise<AppCartProduct[]> {
+    const cart = await this.getCurrentCart();
+    return cart.body.lineItems.map((lineItem) => mapLineItemToAppCartProduct(lineItem));
   }
 
   public async getCurrentCart(): Promise<ClientResponse<Cart>> {
