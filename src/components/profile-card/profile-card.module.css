@@ -36,6 +36,7 @@
 
 .readMore {
   margin-top: 1rem;
+  transition: color var(--transition-duration);
 }
 
 .githubLink {
