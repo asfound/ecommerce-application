@@ -49,10 +49,13 @@ export class ProfileCard extends BaseComponent implements Component {
       '@' + this.properties.github.login,
     );
 
+    const readMoreElement = div({ className: styles.readMore }, 'Read more');
+
     const outerContent = div(
       { className: styles.outerContent },
       fullnameElement,
       this.githubElement,
+      readMoreElement,
     );
 
     this.append(imageElement, outerContent);
