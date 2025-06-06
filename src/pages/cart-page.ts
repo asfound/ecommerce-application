@@ -28,7 +28,10 @@ export class CartPage extends BaseComponent {
       this.cartItemsListPresenter.getView().element,
     );
 
-    this.cartTotalsPresenter = new CartTotalsPresenter(new CartTotalsView());
+    this.cartTotalsPresenter = new CartTotalsPresenter(
+      new CartTotalsView(),
+      SERVICE_HUB.provideCartService(),
+    );
 
     this.append(cartItemsContainer, this.cartTotalsPresenter.getView());
   }
