@@ -14,23 +14,29 @@
   background-color: var(--color-dark);
 }
 
-.itemsBlock {
+.totalBlock {
   flex-shrink: 0;
   width: 100%;
   max-width: 30.5rem;
   height: max-content;
 }
 
-.totalBlock {
+.itemsBlock {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 2rem;
 
-  min-width: 28.9rem;
+  min-width: 39.6rem;
 }
 
 .title {
   font-size: 2.4rem;
   font-weight: 600;
+}
+
+@media (width <= 640px) {
+  .itemsBlock {
+    min-width: 100%;
+  }
 }

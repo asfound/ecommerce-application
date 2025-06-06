@@ -21,30 +21,10 @@ export class CartItem extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
-    console.warn(this.item);
-
-    const itemImage = img({
-      alt: this.item.image.label,
-      className: styles.image,
-      src: this.item.image.url,
-    });
-
-    const itemInfo = div(
-      { className: styles.itemInfo },
-      div(
-        { className: styles.name },
-        `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
-      ),
-      div(
-        { className: styles.price },
-        formatPrice(this.item.price.discounted ?? this.item.price.default),
-      ),
-    );
-
-    const itemDetails = div({ className: styles.itemDetails }, itemImage, itemInfo);
+    const itemDetails = this.createItemDetails();
 
     const quantityControls = div(
-      { className: styles.controls },
+      { className: styles.quantityControls },
       button({ className: styles.controlButton }, '-'),
       span({ className: styles.quantity }, this.item.quantity.toString()),
       button({ className: styles.controlButton }, '+'),
@@ -63,6 +43,35 @@ export class CartItem extends BaseComponent implements Component {
       createSvgIcon(deleteIcon, styles.deleteIcon),
     );
 
-    this.append(itemDetails, quantityControls, itemTotalPrice, deleteButton);
+    const itemControls = div(
+      { className: styles.itemControls },
+      quantityControls,
+      itemTotalPrice,
+      deleteButton,
+    );
+
+    this.append(itemDetails, itemControls);
+  }
+
+  private createItemDetails(): HTMLDivElement {
+    const itemImage = img({
+      alt: this.item.image.label,
+      className: styles.image,
+      src: this.item.image.url,
+    });
+
+    const itemInfo = div(
+      { className: styles.itemInfo },
+      div(
+        { className: styles.name },
+        `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
+      ),
+      div(
+        { className: styles.price },
+        formatPrice(this.item.price.discounted ?? this.item.price.default),
+      ),
+    );
+
+    return div({ className: styles.itemDetails }, itemImage, itemInfo);
   }
 }

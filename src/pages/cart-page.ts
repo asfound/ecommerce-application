@@ -21,11 +21,11 @@ export class CartPage extends BaseComponent {
     const subtitle = h2(null, 'Total');
 
     const cartItemsContainer = div(
-      { className: [styles.block, styles.totalBlock] },
+      { className: [styles.block, styles.itemsBlock] },
       title,
       this.cartItemsListPresenter.getView().element,
     );
-    const cartTotalContainer = div({ className: [styles.block, styles.itemsBlock] }, subtitle);
+    const cartTotalContainer = div({ className: [styles.block, styles.totalBlock] }, subtitle);
 
     this.append(cartItemsContainer, cartTotalContainer);
   }
