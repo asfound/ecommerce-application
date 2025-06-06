@@ -1,0 +1,8 @@
+.cartTotals {
+  height: max-content;
+  padding-block: 2rem 3rem;
+  padding-inline: 3rem;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-dark);
+}
