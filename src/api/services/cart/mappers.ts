@@ -1,11 +1,11 @@
 import type { LineItem } from '@commercetools/platform-sdk';
 
+import { isAttribute } from '~/api/types/guards';
 import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppCartProduct } from '../products/types';
 
 import { PRODUCT_ATTRIBUTE } from '../products/constants';
-import { isAttribute } from '../products/mappers';
 
 export const mapLineItemToAppCartProduct = (
   lineItem: LineItem,

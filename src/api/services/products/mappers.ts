@@ -8,22 +8,13 @@ import { isString } from 'lodash';
 
 import type { FilterOption } from '~/components/filter/filter';
 
+import { isAttribute } from '~/api/types/guards';
 import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
 
 import { FACET, PRODUCT_ATTRIBUTE, WEIGHT_MAP, WEIGHT_ORDER, WEIGHT_UNIT } from './constants';
 import { sortProducts } from './helpers';
-
-// TODO: move to share with cart?
-export const isAttribute = (value: unknown): value is { key: string; label: string } => {
-  return (
-    value != null &&
-    typeof value === 'object' &&
-    Reflect.has(value, 'key') &&
-    Reflect.has(value, 'label')
-  );
-};
 
 export const mapVariantToAppProduct = (
   variant: ProductVariant,
