@@ -20,6 +20,33 @@
   text-align: center;
 }
 
+.rsLink {
+  display: block;
+
+  width: max-content;
+  margin-inline: auto;
+
+  outline: 4px solid transparent;
+
+  transition: outline var(--transition-duration);
+}
+
+.rsIcon {
+  width: 40rem;
+  height: 40rem;
+}
+
+.rsLink,
+.rsIcon {
+  border-radius: 50%;
+}
+
+@media (hover: hover) {
+  .rsLink:hover {
+    outline-color: var(--color-accent);
+  }
+}
+
 @media (width <= 1023px) {
   .cards {
     background-color: transparent;
