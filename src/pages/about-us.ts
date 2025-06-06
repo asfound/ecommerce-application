@@ -5,7 +5,7 @@ import { modalService } from '~/services/modal/modal.service';
 import { ABOUT_US_TEXT, RS_SCHOOL_LINK } from '~/shared/constants/about-us';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { TEAM_DATA } from '~/shared/constants/team-data';
-import { a, div, h2 } from '~/shared/create-element/tags';
+import { a, div, h2, p } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import styles from './about-us.module.css';
@@ -13,6 +13,13 @@ import styles from './about-us.module.css';
 export class AboutUsPage extends BaseComponent {
   public constructor() {
     super({ className: ['ABOUT-US', CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
+
+    const titleCollaboration = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_COLLABORATION);
+
+    const paragraphCollaboration = p(
+      { className: styles.paragraphCollaboration },
+      ABOUT_US_TEXT.PARAGRAPH_COLLABORATION,
+    );
 
     const titleTeam = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_TEAM);
 
@@ -36,6 +43,8 @@ export class AboutUsPage extends BaseComponent {
     );
 
     this.append(
+      titleCollaboration,
+      paragraphCollaboration,
       titleTeam,
       memberCards,
       titleSupport,
