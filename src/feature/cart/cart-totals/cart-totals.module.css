@@ -1,4 +1,8 @@
 .cartTotals {
+  flex-shrink: 0;
+
+  width: 100%;
+  max-width: 30.5rem;
   height: max-content;
   padding-block: 2rem 3rem;
   padding-inline: 3rem;
