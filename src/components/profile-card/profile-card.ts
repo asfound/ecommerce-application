@@ -5,6 +5,7 @@ import { a, div, h3, img, li, p, ul } from '~/shared/create-element/tags';
 import type { Component } from '../base-component/types';
 
 import { BaseComponent } from '../base-component/base-component';
+import { PROFILE_CARD_TEXT } from './constants';
 import styles from './profile-card.module.css';
 
 export interface ProfileCardProperties {
@@ -49,7 +50,7 @@ export class ProfileCard extends BaseComponent implements Component {
       '@' + this.properties.github.login,
     );
 
-    const readMoreElement = div({ className: styles.readMore }, 'Read more');
+    const readMoreElement = div({ className: styles.readMore }, PROFILE_CARD_TEXT.READ_MORE);
 
     const outerContent = div(
       { className: styles.outerContent },
@@ -69,9 +70,13 @@ export class ProfileCard extends BaseComponent implements Component {
       ...this.properties.roles.map((role) => li(null, role)),
     );
 
-    const rolesContainer = div(null, h3(null, 'Roles:'), rolesElement);
+    const rolesContainer = div(null, h3(null, PROFILE_CARD_TEXT.TITLE_ROLES), rolesElement);
 
-    const bioContainer = div(null, h3(null, 'Bio:'), p(null, this.properties.bio));
+    const bioContainer = div(
+      null,
+      h3(null, PROFILE_CARD_TEXT.TITLE_BIO),
+      p(null, this.properties.bio),
+    );
 
     return div(
       { className: styles.modalContent },
@@ -81,7 +86,7 @@ export class ProfileCard extends BaseComponent implements Component {
       this.properties.contributions
         ? div(
             null,
-            h3(null, 'Contribution:'),
+            h3(null, PROFILE_CARD_TEXT.TITLE_CONTRIBUTION),
             ul(null, ...this.properties.contributions.map((item) => li(null, item))),
           )
         : null,
