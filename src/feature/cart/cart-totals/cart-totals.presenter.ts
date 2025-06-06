@@ -13,5 +13,30 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
     this.cartService = cartService;
 
     console.warn(this.cartService);
+
+    this.initView();
+  }
+
+  private readonly handleApplyPromoCode = async (code: string): Promise<void> => {
+    await Promise.resolve();
+    console.warn('Apply promo code:', code);
+  };
+
+  private readonly handleRemovePromoCode = async (code: string): Promise<void> => {
+    await Promise.resolve();
+    console.warn('Remove promo code:', code);
+  };
+
+  private async initView(): Promise<void> {
+    const cart = await this.cartService.getCurrentCart();
+
+    this.view.createHTML({
+      onApplyPromoCode: this.handleApplyPromoCode,
+      onRemovePromoCode: this.handleRemovePromoCode,
+      prices: {
+        discounted: cart.body.discountOnTotalPrice?.discountedAmount.centAmount,
+        total: cart.body.totalPrice.centAmount,
+      },
+    });
   }
 }
