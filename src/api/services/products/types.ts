@@ -4,6 +4,17 @@ import type { FilterOption } from '~/components/filter/filter';
 
 import type { SORT_DIRECTION, SORT_FIELD_TYPE } from './constants';
 
+export interface AppCartProduct {
+  image: AppProductImage;
+  lineItemKey: string;
+  name: string;
+  price: { default: number; discounted?: number };
+  quantity: number;
+  sku: string;
+  totalPrice: number;
+  weight: string | undefined;
+}
+
 export interface AppProduct {
   bestSeller: boolean;
   categories: AppProductCategory[];
