@@ -33,7 +33,7 @@ export const TEAM_DATA: TeamData = {
   MEMBERS: [
     {
       avatarUrl: avatarKsyusha,
-      bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit veritatis temporibus asperiores, perspiciatis blanditiis ab similique non eum error minus praesentium veniam deserunt corrupti repellendus officiis quas tempora molestiae sit. Fugiat quae tempore atque asperiores magni id illo mollitia iste ipsam eaque deserunt in adipisci assumenda, facere neque repellendus error cumque! Officiis ducimus suscipit voluptatibus, nam quia cum harum soluta quis reiciendis illo aliquid id quasi, aliquam ipsam adipisci consectetur eum cumque doloribus perspiciatis excepturi fugiat assumenda cupiditate repellendus maxime.',
+      bio: 'Hi, I’m Shusha! I’m a former architect who first tried programming for work — and quickly got hooked. Then, almost by accident, I stumbled upon this course, and that’s how I found myself diving into frontend. Thanks to the amazing community here, the journey from the very first line of JS code to the final project felt not only easier, but genuinely fun. I feel incredibly lucky this past year — to have found this course, met incredible fellow students, and learned from the best mentor. Growing in this field has been so fast that things I thought were impossible yesterday are just part of the process today.',
       contributions: [
         'Main Page',
         'Registration page',
