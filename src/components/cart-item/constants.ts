@@ -7,6 +7,6 @@ export const SINGLE_ITEM = 1;
 
 export const BUTTON_TITLE = {
   DECREASE: 'Decrease quantity',
-  DELETE: 'Delete product',
+  DELETE: 'Remove from cart',
   INCREASE: 'Increase quantity',
 };
