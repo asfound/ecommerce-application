@@ -13,7 +13,7 @@ import styles from './cart-item.module.css';
 import { BUTTON_TEXT, BUTTON_TITLE, SINGLE_ITEM } from './constants';
 
 export interface CartItemCallbacks {
-  onRemoveItem(lineItemKey: string, quantity?: number): Promise<void>;
+  onRemoveItem(lineItemKey: string, productName: string, quantity?: number): Promise<void>;
 }
 
 export class CartItem extends BaseComponent implements Component {
@@ -36,7 +36,10 @@ export class CartItem extends BaseComponent implements Component {
   private readonly deleteButton = new Button({
     className: styles.deleteButton,
     onClick: (): void => {
-      this.callbacks.onRemoveItem(this.item.lineItemKey);
+      this.callbacks.onRemoveItem(
+        this.item.lineItemKey,
+        `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
+      );
       this.destroy();
     },
     textContent: '',
