@@ -1,3 +1,5 @@
+import { isError } from 'lodash';
+
 import type { CartService } from '~/api/services/cart/cart.service';
 import type { ProductsService } from '~/api/services/products/products.service';
 import type { AppProduct, AppProductWithInCart } from '~/api/services/products/types';
@@ -11,6 +13,7 @@ import { showToast } from '~/shared/utils/show-toast';
 import type { SliderBestsellersView } from './slider-bestsellers.view';
 
 import { PRODUCT_CART_NOTIFICATION } from '../catalog/constants';
+import { PRODUCT_QUANTITY, PRODUCTS_FILTER_PAYLOAD, SLIDER_BESTSELLER_ERROR } from './constants';
 
 export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView> {
   private readonly cartService: CartService;
@@ -40,21 +43,16 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
         onNavigateToDetails: this.handleNavigateToDetails,
       });
     } catch (error) {
-      console.warn(error);
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
     }
   }
 
   private async getMarkedProducts(): Promise<AppProductWithInCart[]> {
     try {
       const [data, skuSet] = await Promise.all([
-        this.productsService.getFilteredProducts({
-          bestSeller: true,
-          currentPage: 1,
-          priceRange: {},
-          productsPerPage: 100,
-          sortDirection: 'asc',
-          sortField: 'price',
-        }),
+        this.productsService.getFilteredProducts(PRODUCTS_FILTER_PAYLOAD),
         this.cartService.getProductsSkuSet(),
       ]);
 
@@ -62,7 +60,7 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
         this.productsService.markProductWithInCart(product, skuSet),
       );
     } catch {
-      throw new Error('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+      throw new Error(SLIDER_BESTSELLER_ERROR.FAILED_TO_LOAD);
     }
   }
 
@@ -72,7 +70,7 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
     try {
       await this.cartService.addLineItem({
         lineItemKey: product.sku,
-        quantity: 1,
+        quantity: PRODUCT_QUANTITY,
         sku: product.sku,
       });
 

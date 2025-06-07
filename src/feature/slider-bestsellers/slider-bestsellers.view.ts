@@ -1,5 +1,4 @@
 import { Swiper } from 'swiper';
-import { Navigation } from 'swiper/modules';
 
 import type { AppProductWithInCart } from '~/api/services/products/types';
 import type { Component } from '~/components/base-component/types';
@@ -15,12 +14,16 @@ import { createSvgIcon } from '~/shared/utils/create-svg';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
+import { SLIDER_BESTSELLER_TEXT, SWIPER_OPTIONS } from './constants';
 import styles from './slider-bestsellers.module.css';
 
 const PRODUCTS_TO_SLICE = 6;
 
 export class SliderBestsellersView extends BaseComponent implements Component {
-  private readonly headingElement = h2({ className: styles.heading }, 'Best sellers');
+  private readonly headingElement = h2(
+    { className: styles.heading },
+    SLIDER_BESTSELLER_TEXT.BEST_SELLERS,
+  );
 
   public constructor() {
     super({ className: [styles.slider, CSS_CLASS_NAME.WRAPPER], tagName: 'div' });
@@ -78,20 +81,7 @@ export class SliderBestsellersView extends BaseComponent implements Component {
 
     this.append(buttonsContainer, swiper);
 
-    const swiperComponent = new Swiper(swiper, {
-      init: false,
-      initialSlide: 0,
-      modules: [Navigation],
-      navigation: {
-        nextEl: buttonNext,
-        prevEl: buttonPrevious,
-      },
-      observeParents: true,
-      observer: true,
-      slidesPerGroup: 4,
-      slidesPerView: 4,
-      spaceBetween: 20,
-    });
+    const swiperComponent = new Swiper(swiper, SWIPER_OPTIONS.GET(buttonNext, buttonPrevious));
 
     requestAnimationFrame(() => {
       swiperComponent.init();
