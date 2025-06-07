@@ -4,7 +4,7 @@ import avatarAlena from '~/assets/img/alena.jpg';
 import avatarKsyusha from '~/assets/img/ksyusha.png';
 import avatarMargo from '~/assets/img/margo.jpg';
 import avatarMikhail from '~/assets/img/mikhail.png';
-import avatarYulik from '~/assets/img/yulikk.png';
+import avatarYulik from '~/assets/img/yulikk.jpg';
 
 interface TeamData {
   EXTERNAL_SUPPORT: ProfileCardProperties[];
@@ -23,7 +23,7 @@ export const TEAM_DATA: TeamData = {
     },
     {
       avatarUrl: avatarYulik,
-      bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit veritatis temporibus asperiores, perspiciatis blanditiis ab similique non eum error minus praesentium veniam deserunt corrupti repellendus officiis quas tempora molestiae sit. Fugiat quae tempore atque asperiores magni id illo mollitia iste ipsam eaque deserunt in adipisci assumenda, facere neque repellendus error cumque! Officiis ducimus suscipit voluptatibus, nam quia cum harum soluta quis reiciendis illo aliquid id quasi, aliquam ipsam adipisci consectetur eum cumque doloribus perspiciatis excepturi fugiat assumenda cupiditate repellendus maxime.',
+      bio: 'Hi! My name is Yulia. A couple of years ago, I moved from Belarus to Krakow. Before that, I worked as a 1C programmer, helping accountants and financiers solve puzzles. Over time, I got tired of creating repetitive reports and decided to dive into the world of frontend development. I absolutely love this course and am grateful to the people behind it.',
       contributions: undefined,
       fullname: '	Yuliya Kursevich',
       github: { login: 'yulikK', url: 'https://github.com/yulikK' },
@@ -31,6 +31,14 @@ export const TEAM_DATA: TeamData = {
     },
   ],
   MEMBERS: [
+    {
+      avatarUrl: avatarMikhail,
+      bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit veritatis temporibus asperiores, perspiciatis blanditiis ab similique non eum error minus praesentium veniam deserunt corrupti repellendus officiis quas tempora molestiae sit. Fugiat quae tempore atque asperiores magni id illo mollitia iste ipsam eaque deserunt in adipisci assumenda, facere neque repellendus error cumque! Officiis ducimus suscipit voluptatibus, nam quia cum harum soluta quis reiciendis illo aliquid id quasi, aliquam ipsam adipisci consectetur eum cumque doloribus perspiciatis excepturi fugiat assumenda cupiditate repellendus maxime.',
+      contributions: ['Login page', 'Catalog page', 'Product details page', 'About us page'],
+      fullname: 'Mikhail Zubenko',
+      github: { login: 'ripetchor', url: 'https://github.com/ripetchor' },
+      roles: ['UI', 'CT-SDK', 'API'],
+    },
     {
       avatarUrl: avatarKsyusha,
       bio: 'Hi, I’m Shusha! I’m a former architect who first tried programming for work — and quickly got hooked. Then, almost by accident, I stumbled upon this course, and that’s how I found myself diving into frontend. Thanks to the amazing community here, the journey from the very first line of JS code to the final project felt not only easier, but genuinely fun. I feel incredibly lucky this past year — to have found this course, met incredible fellow students, and learned from the best mentor. Growing in this field has been so fast that things I thought were impossible yesterday are just part of the process today.',
@@ -45,14 +53,6 @@ export const TEAM_DATA: TeamData = {
       fullname: 'Ksenia Gorina',
       github: { login: 'asfound', url: 'https://github.com/asfound' },
       roles: ['Team lead', 'UI', 'CT-SDK', 'API'],
-    },
-    {
-      avatarUrl: avatarMikhail,
-      bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit veritatis temporibus asperiores, perspiciatis blanditiis ab similique non eum error minus praesentium veniam deserunt corrupti repellendus officiis quas tempora molestiae sit. Fugiat quae tempore atque asperiores magni id illo mollitia iste ipsam eaque deserunt in adipisci assumenda, facere neque repellendus error cumque! Officiis ducimus suscipit voluptatibus, nam quia cum harum soluta quis reiciendis illo aliquid id quasi, aliquam ipsam adipisci consectetur eum cumque doloribus perspiciatis excepturi fugiat assumenda cupiditate repellendus maxime.',
-      contributions: ['Login page', 'Catalog page', 'Product details page', 'About us page'],
-      fullname: 'Mikhail Zubenko',
-      github: { login: 'ripetchor', url: 'https://github.com/ripetchor' },
-      roles: ['UI', 'CT-SDK', 'API'],
     },
     {
       avatarUrl: avatarAlena,
