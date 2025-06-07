@@ -17,12 +17,24 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     this.initView();
   }
 
+  private handleRemoveItem = async (lineItemKey: string, quantity?: number): Promise<void> => {
+    try {
+      await this.cartService.removeLineItem({ lineItemKey, quantity });
+
+      showToast('Product removed');
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+    }
+  };
+
   private async initView(): Promise<void> {
     try {
       this.view.showLoader();
 
       const products = await this.cartService.getCartProducts();
-      this.view.createHTML(products);
+      this.view.createHTML(products, { onRemoveItem: this.handleRemoveItem });
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);

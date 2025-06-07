@@ -1,7 +1,7 @@
 import type { AppCartProduct } from '~/api/services/products/types';
 
 import deleteIcon from '~/assets/icons/cross.svg';
-import { button, div, img, span } from '~/shared/create-element/tags';
+import { div, img, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { formatPrice } from '~/shared/utils/format-price';
 
@@ -12,12 +12,18 @@ import { Button } from '../common/button/button';
 import styles from './cart-item.module.css';
 import { BUTTON_TEXT, BUTTON_TITLE, SINGLE_ITEM } from './constants';
 
+export interface CartItemCallbacks {
+  onRemoveItem(lineItemKey: string, quantity?: number): Promise<void>;
+}
+
 export class CartItem extends BaseComponent implements Component {
   private readonly addItemButton = new Button({
     className: styles.controlButton,
     textContent: BUTTON_TEXT.INCREMENT,
     type: 'button',
   });
+
+  private readonly callbacks: CartItemCallbacks;
 
   private readonly decrementItemButton = new Button({
     className: styles.controlButton,
@@ -27,13 +33,27 @@ export class CartItem extends BaseComponent implements Component {
 
   private readonly item: AppCartProduct;
 
-  public constructor(item: AppCartProduct) {
+  private readonly deleteButton = new Button({
+    className: styles.deleteButton,
+    onClick: (): void => {
+      this.callbacks.onRemoveItem(this.item.lineItemKey);
+      this.destroy();
+    },
+    textContent: '',
+    type: 'button',
+  });
+
+  public constructor(item: AppCartProduct, callbacks: CartItemCallbacks) {
     super({ className: styles.item, tagName: 'li' });
 
     this.item = item;
+    this.callbacks = callbacks;
 
     this.addItemButton.element.title = BUTTON_TITLE.INCREASE;
     this.decrementItemButton.element.title = BUTTON_TITLE.DECREASE;
+    this.deleteButton.element.title = BUTTON_TITLE.DELETE;
+
+    this.deleteButton.append(createSvgIcon(deleteIcon, styles.deleteIcon));
 
     this.createHTML();
   }
@@ -60,16 +80,11 @@ export class CartItem extends BaseComponent implements Component {
       ),
     );
 
-    const deleteButton = button(
-      { className: styles.deleteButton, title: BUTTON_TITLE.DELETE },
-      createSvgIcon(deleteIcon, styles.deleteIcon),
-    );
-
     const itemControls = div(
       { className: styles.itemControls },
       quantityControls,
       itemTotalPrice,
-      deleteButton,
+      this.deleteButton.element,
     );
 
     this.append(itemDetails, itemControls);
