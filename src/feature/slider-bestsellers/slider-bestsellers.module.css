@@ -1,20 +1,25 @@
+.heading {
+  margin-bottom: 3rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .slider {
   position: relative;
+
   width: 100%;
   max-width: 1216px;
+  margin-block: 4rem;
   margin-inline: auto;
 }
 
 .swiper {
-  width: 800px;
-
-  /* max-width: 80%; */
+  width: 100%;
   margin-inline: auto;
 }
 
-.product {
-  height: 100px;
-  border: 1px solid red;
+.fixedWidth {
+  width: 1000px;
 }
 
 .navigation {

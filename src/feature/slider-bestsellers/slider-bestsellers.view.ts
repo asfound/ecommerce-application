@@ -9,7 +9,7 @@ import sliderArrowSvg from '~/assets/icons/slider-arrow.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProductCard } from '~/components/product-card/product-card';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { div } from '~/shared/create-element/tags';
+import { div, h2 } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import 'swiper/css';
@@ -20,15 +20,16 @@ import styles from './slider-bestsellers.module.css';
 const PRODUCTS_TO_SLICE = 6;
 
 export class SliderBestsellersView extends BaseComponent implements Component {
+  private readonly headingElement = h2({ className: styles.heading }, 'Best sellers');
+
   public constructor() {
-    super({
-      className: ['SLIDER-BESTSELLER', styles.slider, CSS_CLASS_NAME.WRAPPER],
-      tagName: 'div',
-    });
+    super({ className: [styles.slider, CSS_CLASS_NAME.WRAPPER], tagName: 'div' });
   }
 
   public createHTML(products: AppProductWithInCart[], callbacks: ProductCardCallbacks): void {
     const slicedProds = products.slice(0, PRODUCTS_TO_SLICE);
+
+    this.append(this.headingElement);
 
     this.createSlider(slicedProds, callbacks);
   }
@@ -73,24 +74,28 @@ export class SliderBestsellersView extends BaseComponent implements Component {
 
     const buttonsContainer = div({ className: styles.navigation }, buttonPrevious, buttonNext);
 
-    const swiper = div({ className: ['swiper', styles.swiper] }, wrapper);
+    const swiper = div({ className: ['swiper', styles.swiper, styles.fixedWidth] }, wrapper);
 
     this.append(buttonsContainer, swiper);
 
+    const swiperComponent = new Swiper(swiper, {
+      init: false,
+      initialSlide: 0,
+      modules: [Navigation],
+      navigation: {
+        nextEl: buttonNext,
+        prevEl: buttonPrevious,
+      },
+      observeParents: true,
+      observer: true,
+      slidesPerGroup: 4,
+      slidesPerView: 4,
+      spaceBetween: 20,
+    });
+
     requestAnimationFrame(() => {
-      new Swiper(swiper, {
-        initialSlide: 0,
-        modules: [Navigation],
-        navigation: {
-          nextEl: buttonNext,
-          prevEl: buttonPrevious,
-        },
-        observeParents: true,
-        observer: true,
-        slidesPerGroup: 4,
-        slidesPerView: 4,
-        spaceBetween: 20,
-      });
+      swiperComponent.init();
+      swiper.classList.remove(styles.fixedWidth);
     });
   }
 }
