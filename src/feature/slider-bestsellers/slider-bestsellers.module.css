@@ -1,3 +1,54 @@
 .slider {
-  background-color: transparent;
+  position: relative;
+  width: 100%;
+  max-width: 1216px;
+  margin-inline: auto;
+}
+
+.swiper {
+  width: 800px;
+
+  /* max-width: 80%; */
+  margin-inline: auto;
+}
+
+.product {
+  height: 100px;
+  border: 1px solid red;
+}
+
+.navigation {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  right: 0;
+  left: 0;
+  transform: translateY(-50%);
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigationButton {
+  position: initial;
+  width: 4rem;
+  fill: color-mix(in srgb, var(--color-white) 95%, transparent);
+  transition: fill var(--transition-duration);
+}
+
+.navigationButton::after {
+  display: none;
+}
+
+.navigationButton:hover {
+  fill: var(--color-accent);
+}
+
+.arrow {
+  width: 4rem;
+  height: 4rem;
+}
+
+.arrow.previous {
+  transform: rotate(180deg);
 }

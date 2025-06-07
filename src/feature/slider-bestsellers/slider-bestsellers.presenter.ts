@@ -12,6 +12,23 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
 
     this.productsService = productsService;
 
-    console.warn(this.productsService);
+    this.initView();
+  }
+
+  public async initView(): Promise<void> {
+    try {
+      const q = await this.productsService.getFilteredProducts({
+        bestSeller: true,
+        currentPage: 1,
+        priceRange: {},
+        productsPerPage: 100,
+        sortDirection: 'asc',
+        sortField: 'price',
+      });
+
+      this.view.createHTML(q.products);
+    } catch (error) {
+      console.warn(error);
+    }
   }
 }
