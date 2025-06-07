@@ -15,6 +15,7 @@ export class MainPage extends BaseComponent {
     this.sliderBestsellersPresenter = new SliderBestsellersPresenter(
       new SliderBestsellersView(),
       SERVICE_HUB.provideProductsService(),
+      SERVICE_HUB.provideCartService(),
     );
 
     this.append(heroBanner, this.sliderBestsellersPresenter.getView());
