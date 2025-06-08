@@ -7,6 +7,7 @@ import { button, div, form, h2 } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import styles from './cart-totals.module.css';
+import { CART_TOTALS_TEXT } from './constants';
 
 export interface CartTotalsViewProperties {
   onApplyPromoCode(code: string): Promise<void>;
@@ -18,9 +19,14 @@ export interface CartTotalsViewProperties {
 }
 
 export class CartTotalsView extends BaseComponent implements Component {
-  private readonly buttonApply = new Button({ textContent: 'Apply', type: 'submit' });
+  private readonly buttonApply = new Button({
+    textContent: CART_TOTALS_TEXT.BUTTON_APPLY,
+    type: 'submit',
+  });
 
-  private readonly inputPromoCode = new InputText({ placeholder: 'Promo' });
+  private readonly inputPromoCode = new InputText({
+    placeholder: CART_TOTALS_TEXT.INPUT_PROMO_PLACEHOLDER,
+  });
 
   private readonly priceDiscount = div(null);
 
@@ -41,7 +47,7 @@ export class CartTotalsView extends BaseComponent implements Component {
   public constructor() {
     super({ className: styles.cartTotals, tagName: 'div' });
 
-    const heading = h2({ className: styles.heading }, 'Total');
+    const heading = h2({ className: styles.heading }, CART_TOTALS_TEXT.HEADING);
 
     this.append(heading);
 
@@ -81,7 +87,7 @@ export class CartTotalsView extends BaseComponent implements Component {
               },
               signal: this.abortController.signal,
             },
-            'Remove',
+            CART_TOTALS_TEXT.BUTTON_REMOVE,
           ),
         );
 

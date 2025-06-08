@@ -8,9 +8,10 @@ import { Loader } from '~/components/common/loader/loader';
 import { h2, ul } from '~/shared/create-element/tags';
 
 import styles from './cart-items-list.module.css';
+import { CART_ITEM_LIST_TEXT } from './constants';
 
 export class CartItemsListView extends BaseComponent implements Component {
-  private readonly heading = h2({ className: styles.heading }, 'Products');
+  private readonly heading = h2({ className: styles.heading }, CART_ITEM_LIST_TEXT.HEADING);
 
   private readonly listElement = ul({ className: styles.list });
 
