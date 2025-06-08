@@ -61,3 +61,6 @@ export const SWIPER_OPTIONS = {
     spaceBetween: 20,
   }),
 } as const;
+
+// Добавить ссылку see all products
+// Добавить эллипсис на название
