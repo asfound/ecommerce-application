@@ -13,6 +13,7 @@ import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 import { SLIDER_BESTSELLER_TEXT, SWIPER_OPTIONS } from './constants';
 import styles from './slider-bestsellers.module.css';
@@ -73,11 +74,20 @@ export class SliderBestsellersView extends BaseComponent implements Component {
 
     const buttonsContainer = div({ className: styles.navigation }, buttonPrevious, buttonNext);
 
-    const swiper = div({ className: ['swiper', styles.swiper, styles.fixedWidth] }, wrapper);
+    const pagination = div({ className: 'swiper-pagination' });
+
+    const swiper = div(
+      { className: ['swiper', styles.swiper, styles.fixedWidth] },
+      wrapper,
+      pagination,
+    );
 
     this.append(buttonsContainer, swiper);
 
-    const swiperComponent = new Swiper(swiper, SWIPER_OPTIONS.GET(buttonNext, buttonPrevious));
+    const swiperComponent = new Swiper(
+      swiper,
+      SWIPER_OPTIONS.GET(buttonNext, buttonPrevious, pagination),
+    );
 
     requestAnimationFrame(() => {
       swiperComponent.init();

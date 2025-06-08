@@ -6,9 +6,9 @@
 
 .slider {
   position: relative;
-
   width: 100%;
-  max-width: 1216px;
+
+  /* max-width: 1216px; */
   margin-block: 4rem;
   margin-inline: auto;
 }
