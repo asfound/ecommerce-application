@@ -12,3 +12,7 @@ export const IMAGE_POSITION = {
   LEFT: 'left',
   RIGHT: 'right',
 } as const;
+
+export const DISCOUNT_CODE_NOTIFICATION = {
+  CODE_COPIED: (code: string): string => `Discount code "${code}" copied to clipboard`,
+} as const;

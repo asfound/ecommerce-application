@@ -34,6 +34,10 @@
 }
 
 .code {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+
   width: max-content;
   padding: 2rem;
   border-radius: var(--border-radius);
@@ -43,6 +47,11 @@
   text-transform: uppercase;
 
   background-color: var(--color-accent-dark);
+}
+
+.icon {
+  width: 4rem;
+  height: 4rem;
 }
 
 .left {
@@ -101,5 +110,11 @@
   .code {
     padding: 1rem;
     font-size: 2rem;
+  }
+}
+
+@media (hover: hover) {
+  .icon:hover {
+    cursor: copy;
   }
 }
