@@ -1,9 +1,4 @@
-import type {
-  Cart,
-  ClientResponse,
-  DiscountCodePagedQueryResponse,
-  MyCartUpdateAction,
-} from '@commercetools/platform-sdk';
+import type { Cart, ClientResponse, MyCartUpdateAction } from '@commercetools/platform-sdk';
 
 import type { ApiRootGetter } from '~/api/types/types';
 
@@ -64,10 +59,6 @@ export class CartService {
     } catch {
       return await this.createCart();
     }
-  }
-
-  public async getDiscountCodes(): Promise<ClientResponse<DiscountCodePagedQueryResponse>> {
-    return await this.apiRoot().discountCodes().get().execute();
   }
 
   public async getProductsSkuSet(): Promise<Set<string>> {
