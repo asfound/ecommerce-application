@@ -43,7 +43,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       this.cartTotalsPresenter?.updateTotals(result.body);
 
-      cartAction.setItemsCount(result.body.lineItems.length);
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
 
       const item = result.body.lineItems.find((item) => item.key === lineItemKey);
       return item ? mapLineItemToAppCartProduct(item) : null;
@@ -67,7 +67,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       this.cartTotalsPresenter?.updateTotals(result.body);
 
-      cartAction.setItemsCount(result.body.lineItems.length);
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
 
       const item = result.body.lineItems.find((item) => item.key === sku);
       return item ? mapLineItemToAppCartProduct(item) : null;
@@ -86,7 +86,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       this.cartTotalsPresenter?.updateTotals(result.body);
 
-      cartAction.setItemsCount(result.body.lineItems.length);
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);

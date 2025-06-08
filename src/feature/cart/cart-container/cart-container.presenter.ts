@@ -11,6 +11,8 @@ import { CartItemsListView } from '../cart-items-list/cart-items-list.view';
 import { CartTotalsPresenter } from '../cart-totals/cart-totals.presenter';
 import { CartTotalsView } from '../cart-totals/cart-totals.view';
 import { cartAction } from '../store/actions';
+import { cartSelector } from '../store/selectors';
+import { cartStore } from '../store/store';
 
 export class CartContainerPresenter extends Presenter<CartContainerView> {
   private readonly cartItemsListPresenter: CartItemsListPresenter;
@@ -29,6 +31,7 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
 
     this.cartItemsListPresenter.setTotalsPresenter(this.cartTotalsPresenter);
 
+    this.subscribeItemsCount();
     this.init();
   }
 
@@ -66,4 +69,20 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
   private readonly navigateToCatalog = (): void => {
     Router.instance.navigate(ROUTE_PATH.CATALOG);
   };
+
+  private subscribeItemsCount(): void {
+    const unsubscribe = cartStore.subscribe(
+      cartSelector.selectItemCount,
+      (count) => {
+        if (count === 0) {
+          this.cartTotalsPresenter.destroy();
+          this.cartItemsListPresenter.destroy();
+          this.view.showEmptyCart(this.navigateToCatalog);
+        }
+      },
+      { isImmediate: false },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
 }

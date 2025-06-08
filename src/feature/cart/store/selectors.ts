@@ -4,6 +4,6 @@ import type { CartState } from './store';
 
 const selectItemCount = createSelector((state: CartState) => state.itemCount);
 
-export const catalogSelector = {
+export const cartSelector = {
   selectItemCount,
 } as const;
