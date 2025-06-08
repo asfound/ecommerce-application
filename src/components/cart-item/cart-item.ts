@@ -57,7 +57,9 @@ export class CartItem extends BaseComponent implements Component {
     type: 'button',
   });
 
-  private readonly itemTotalPrice = div({ className: styles.totalPrice });
+  private readonly individualPriceContainer = div({ className: styles.pricesContainer });
+
+  private readonly itemTotalPriceContainer = div({ className: styles.totalPrice });
 
   private readonly quantityLabel = span({ className: styles.quantity });
 
@@ -77,6 +79,7 @@ export class CartItem extends BaseComponent implements Component {
   }
 
   public createHTML(): void {
+    this.createIndividualPrice();
     this.updateItemElements();
 
     const itemDetails = this.createItemDetails();
@@ -91,11 +94,35 @@ export class CartItem extends BaseComponent implements Component {
     const itemControls = div(
       { className: styles.itemControls },
       quantityControls,
-      this.itemTotalPrice,
+      this.itemTotalPriceContainer,
       this.deleteButton.element,
     );
 
     this.append(itemDetails, itemControls);
+  }
+
+  private createIndividualPrice(): void {
+    this.individualPriceContainer.replaceChildren();
+
+    const { price } = this.item;
+    const basePrice = price.default;
+    const promoPrice = this.item.discountedPrice;
+    const internalSalePrice = price.discounted;
+
+    const currentPrice = promoPrice ?? internalSalePrice ?? basePrice;
+    const isPromoApplied = promoPrice !== undefined;
+
+    const currentPriceElement = div(
+      { className: isPromoApplied ? styles.discountedPrice : styles.defaultPrice },
+      formatPrice(currentPrice),
+    );
+
+    this.individualPriceContainer.append(currentPriceElement);
+
+    if (currentPrice < basePrice) {
+      const oldPriceElement = div({ className: styles.oldPrice }, formatPrice(basePrice));
+      this.individualPriceContainer.append(oldPriceElement);
+    }
   }
 
   private createItemDetails(): HTMLDivElement {
@@ -105,24 +132,13 @@ export class CartItem extends BaseComponent implements Component {
       src: this.item.image.url,
     });
 
-    const individualPrice = div(
-      { className: styles.pricesContainer },
-      this.item.price.discounted
-        ? div({ className: styles.discountedPrice }, formatPrice(this.item.price.discounted))
-        : null,
-      div(
-        { className: this.item.price.discounted ? styles.oldPrice : styles.defaultPrice },
-        formatPrice(this.item.price.default),
-      ),
-    );
-
     const itemInfo = div(
       { className: styles.itemInfo },
       div(
         { className: styles.name },
         `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
       ),
-      individualPrice,
+      this.individualPriceContainer,
     );
 
     return div({ className: styles.itemDetails }, itemImage, itemInfo);
@@ -146,6 +162,6 @@ export class CartItem extends BaseComponent implements Component {
     this.decrementItemButton.element.disabled = this.item.quantity === SINGLE_ITEM;
 
     this.quantityLabel.replaceChildren(this.item.quantity.toString());
-    this.itemTotalPrice.replaceChildren(formatPrice(this.item.totalPrice));
+    this.itemTotalPriceContainer.replaceChildren(formatPrice(this.item.totalPrice));
   }
 }

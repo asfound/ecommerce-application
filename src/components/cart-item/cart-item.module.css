@@ -116,6 +116,10 @@
   font-weight: 400;
 }
 
+.discountedPrice {
+  color: var(--color-accent);
+}
+
 .defaultPrice {
   color: inherit;
 }
