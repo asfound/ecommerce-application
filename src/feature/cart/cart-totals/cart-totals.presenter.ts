@@ -1,4 +1,5 @@
 import type { CartService } from '~/api/services/cart/cart.service';
+import type { AppCartData } from '~/api/services/products/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
 
@@ -12,7 +13,18 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
 
     this.cartService = cartService;
 
-    this.initView();
+    console.warn(this.cartService);
+  }
+
+  public initView(totalPrice: AppCartData['totalPrice']): void {
+    this.view.createHTML({
+      onApplyPromoCode: this.handleApplyPromoCode,
+      onRemovePromoCode: this.handleRemovePromoCode,
+      prices: {
+        discounted: totalPrice.discounted,
+        total: totalPrice.default,
+      },
+    });
   }
 
   private readonly handleApplyPromoCode = async (code: string): Promise<void> => {
@@ -24,17 +36,4 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
     await Promise.resolve();
     console.warn('Remove promo code:', code);
   };
-
-  private async initView(): Promise<void> {
-    const cart = await this.cartService.getCurrentCart();
-
-    this.view.createHTML({
-      onApplyPromoCode: this.handleApplyPromoCode,
-      onRemovePromoCode: this.handleRemovePromoCode,
-      prices: {
-        discounted: cart.body.discountOnTotalPrice?.discountedAmount.centAmount,
-        total: cart.body.totalPrice.centAmount,
-      },
-    });
-  }
 }

@@ -41,9 +41,9 @@ export class CartTotalsView extends BaseComponent implements Component {
   public constructor() {
     super({ className: styles.cartTotals, tagName: 'div' });
 
-    const titleElement = h2(null, 'Total');
+    const heading = h2({ className: styles.heading }, 'Total');
 
-    this.append(titleElement);
+    this.append(heading);
 
     this.setupListeners();
   }

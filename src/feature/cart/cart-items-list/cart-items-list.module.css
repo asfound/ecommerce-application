@@ -1,3 +1,13 @@
+.container {
+  width: 100%;
+  padding: 2rem;
+  background-color: var(--color-dark);
+}
+
+.heading {
+  margin-bottom: 2rem;
+}
+
 .list {
   position: relative;
   display: flex;

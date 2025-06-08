@@ -1,4 +1,9 @@
 .container {
+  display: flex;
+  gap: 2rem;
+  align-items: start;
+  justify-content: space-between;
+
   border: 1px solid red;
 }
 

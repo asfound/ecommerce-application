@@ -4,11 +4,14 @@
   width: 100%;
   max-width: 30.5rem;
   height: max-content;
-  padding-block: 2rem 3rem;
-  padding-inline: 3rem;
+  padding: 2rem;
   border-radius: var(--border-radius);
 
   background-color: var(--color-dark);
+}
+
+.heading {
+  margin-bottom: 2rem;
 }
 
 .promoCodesContainer {

@@ -17,8 +17,14 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     super(view);
 
     this.cartService = cartService;
+  }
 
-    this.updateView();
+  public initView(products: AppCartProduct[]): void {
+    this.view.createHTML(products, {
+      onDecrementItem: this.handleDecrementItem,
+      onIncrementItem: this.handleIncrementItem,
+      onRemoveItem: this.handleRemoveItem,
+    });
   }
 
   private handleDecrementItem = async (
@@ -71,26 +77,4 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       }
     }
   };
-
-  private async updateView(): Promise<void> {
-    try {
-      this.view.showLoader();
-
-      const cartData = await this.cartService.getCartData();
-
-      cartAction.setItemsCount(cartData.items.length);
-
-      this.view.createHTML(cartData.items, {
-        onDecrementItem: this.handleDecrementItem,
-        onIncrementItem: this.handleIncrementItem,
-        onRemoveItem: this.handleRemoveItem,
-      });
-    } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
-    } finally {
-      this.view.hideLoader();
-    }
-  }
 }

@@ -10,6 +10,7 @@ import { CartItemsListPresenter } from '../cart-items-list/cart-items-list.prese
 import { CartItemsListView } from '../cart-items-list/cart-items-list.view';
 import { CartTotalsPresenter } from '../cart-totals/cart-totals.presenter';
 import { CartTotalsView } from '../cart-totals/cart-totals.view';
+import { cartAction } from '../store/actions';
 
 export class CartContainerPresenter extends Presenter<CartContainerView> {
   private readonly cartItemsListPresenter: CartItemsListPresenter;
@@ -38,11 +39,23 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
 
   public async init(): Promise<void> {
     try {
-      const { items } = await this.cartService.getCartData();
+      const { items, totalPrice } = await this.cartService.getCartData();
 
       if (items.length === 0) {
         this.view.showEmptyCart(this.navigateToCatalog);
+
+        return;
       }
+
+      cartAction.setItemsCount(items.length);
+
+      this.cartItemsListPresenter.initView(items);
+      this.cartTotalsPresenter.initView(totalPrice);
+
+      this.view.showCartData(
+        this.cartItemsListPresenter.getView().element,
+        this.cartTotalsPresenter.getView().element,
+      );
     } catch {
       console.warn('error');
     }

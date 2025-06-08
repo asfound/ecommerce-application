@@ -29,6 +29,10 @@ export class CartContainerView extends BaseComponent {
     super.destroy();
   }
 
+  public showCartData(productsBlock: HTMLElement, pricesBlock: HTMLElement): void {
+    this.replaceChildren(productsBlock, pricesBlock);
+  }
+
   public showEmptyCart(navigateHandler: VoidFunction): void {
     this.buttonCatalog.addListener('click', navigateHandler);
 
