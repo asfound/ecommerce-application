@@ -22,7 +22,10 @@ export class MainPage extends BaseComponent {
       SERVICE_HUB.provideCartService(),
     );
 
-    this.discountCodesPresenter = new DiscountCodesPresenter(new DiscountCodesView());
+    this.discountCodesPresenter = new DiscountCodesPresenter(
+      new DiscountCodesView(),
+      SERVICE_HUB.provideDiscountCodesService(),
+    );
 
     this.append(
       heroBanner,
