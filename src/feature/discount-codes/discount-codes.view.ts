@@ -13,7 +13,7 @@ type ImagePosition = (typeof IMAGE_POSITION)[keyof typeof IMAGE_POSITION];
 export class DiscountCodesView extends BaseComponent implements Component {
   public constructor() {
     super({
-      className: ['DISCOUNT-CODES', CSS_CLASS_NAME.WRAPPER],
+      className: [styles.container, CSS_CLASS_NAME.WRAPPER],
       tagName: 'div',
     });
   }
