@@ -8,6 +8,8 @@ import { showToast } from '~/shared/utils/show-toast';
 
 import type { CartItemsListView } from './cart-items-list.view';
 
+import { cartAction } from '../store/actions';
+
 export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   private readonly cartService: CartService;
 
@@ -25,8 +27,9 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   ): Promise<AppCartProduct | null> => {
     try {
       const result = await this.cartService.removeLineItem({ lineItemKey, quantity });
-      const item = result.body.lineItems.find((item) => item.key === lineItemKey);
+      cartAction.setItemsCount(result.body.lineItems.length);
 
+      const item = result.body.lineItems.find((item) => item.key === lineItemKey);
       return item ? mapLineItemToAppCartProduct(item) : null;
     } catch (error: unknown) {
       if (isError(error)) {
@@ -45,8 +48,9 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       const key = crypto.randomUUID();
 
       const result = await this.cartService.addLineItem({ lineItemKey: key, quantity, sku });
-      const item = result.body.lineItems.find((item) => item.key === sku);
+      cartAction.setItemsCount(result.body.lineItems.length);
 
+      const item = result.body.lineItems.find((item) => item.key === sku);
       return item ? mapLineItemToAppCartProduct(item) : null;
     } catch (error: unknown) {
       if (isError(error)) {
@@ -59,7 +63,8 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
   private handleRemoveItem = async (lineItemKey: string): Promise<void> => {
     try {
-      await this.cartService.removeLineItem({ lineItemKey });
+      const result = await this.cartService.removeLineItem({ lineItemKey });
+      cartAction.setItemsCount(result.body.lineItems.length);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -71,9 +76,11 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     try {
       this.view.showLoader();
 
-      const products = await this.cartService.getCartData();
+      const cartData = await this.cartService.getCartData();
 
-      this.view.createHTML(products, {
+      cartAction.setItemsCount(cartData.items.length);
+
+      this.view.createHTML(cartData.items, {
         onDecrementItem: this.handleDecrementItem,
         onIncrementItem: this.handleIncrementItem,
         onRemoveItem: this.handleRemoveItem,

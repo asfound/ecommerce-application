@@ -2,7 +2,7 @@ import type { Cart, ClientResponse, MyCartUpdateAction } from '@commercetools/pl
 
 import type { ApiRootGetter } from '~/api/types/types';
 
-import type { AppCartProduct } from '../products/types';
+import type { AppCartData } from '../products/types';
 import type { AddLineItemPayload, RemoveLineItemPayload } from './types';
 
 import { createAddLineItemAction, createRemoveLineItemAction } from './actions';
@@ -48,9 +48,11 @@ export class CartService {
     return await this.apiRoot().me().activeCart().get().execute();
   }
 
-  public async getCartData(): Promise<AppCartProduct[]> {
+  public async getCartData(): Promise<AppCartData> {
     const cart = await this.getCurrentCart();
-    return cart.body.lineItems.map((lineItem) => mapLineItemToAppCartProduct(lineItem));
+    const items = cart.body.lineItems.map((lineItem) => mapLineItemToAppCartProduct(lineItem));
+
+    return { items, totalPrice: { default: cart.body.totalPrice.centAmount } };
   }
 
   public async getCurrentCart(): Promise<ClientResponse<Cart>> {

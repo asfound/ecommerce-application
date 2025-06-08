@@ -4,6 +4,11 @@ import type { FilterOption } from '~/components/filter/filter';
 
 import type { SORT_DIRECTION, SORT_FIELD_TYPE } from './constants';
 
+export interface AppCartData {
+  items: AppCartProduct[];
+  totalPrice: { default: number; discounted?: number };
+}
+
 export interface AppCartProduct {
   image: AppProductImage;
   lineItemKey: string;
@@ -14,11 +19,6 @@ export interface AppCartProduct {
   sku: string;
   totalPrice: number;
   weight: string | undefined;
-}
-
-export interface AppCartState {
-  items: AppCartProduct[];
-  totalPrice: { default: number; discounted?: number };
 }
 
 export interface AppProduct {
