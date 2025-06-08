@@ -19,7 +19,6 @@ export const mapLineItemToAppCartProduct = (
   const weightLabel = isAttribute(weightValue) ? weightValue.label : '';
 
   return {
-    discountedPrice: lineItem.discountedPricePerQuantity[0]?.discountedPrice.value.centAmount,
     image: {
       label: lineItem.variant.images?.[0]?.label ?? '',
       url: lineItem.variant.images?.[0]?.url ?? '',
@@ -30,6 +29,7 @@ export const mapLineItemToAppCartProduct = (
       default: lineItem.price.value.centAmount,
       discounted: lineItem.price.discounted?.value.centAmount,
     },
+    promoCodePrice: lineItem.discountedPricePerQuantity[0]?.discountedPrice.value.centAmount,
     quantity: lineItem.quantity,
     sku: lineItem.variant.sku ?? '',
     totalPrice: lineItem.totalPrice.centAmount,

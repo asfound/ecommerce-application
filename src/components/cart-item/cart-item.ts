@@ -75,7 +75,7 @@ export class CartItem extends BaseComponent implements Component {
   public createHTML(): void {
     this.initButtons();
     this.createIndividualPrice();
-    this.updateItemElements();
+    this.updateTotalPriceAndQuantityControls();
 
     const itemDetails = this.createItemDetails();
 
@@ -101,7 +101,7 @@ export class CartItem extends BaseComponent implements Component {
 
     const { price } = this.item;
     const basePrice = price.default;
-    const promoPrice = this.item.discountedPrice;
+    const promoPrice = this.item.promoCodePrice;
     const internalSalePrice = price.discounted;
 
     const currentPrice = promoPrice ?? internalSalePrice ?? basePrice;
@@ -157,14 +157,14 @@ export class CartItem extends BaseComponent implements Component {
       this.item = item;
     }
 
-    this.updateItemElements();
+    this.updateTotalPriceAndQuantityControls();
   }
 
-  private updateItemElements(): void {
+  private updateTotalPriceAndQuantityControls(): void {
     this.incrementItemButton.enable();
     this.decrementItemButton.element.disabled = this.item.quantity === SINGLE_ITEM;
-
     this.quantityLabel.replaceChildren(this.item.quantity.toString());
+
     this.itemTotalPriceContainer.replaceChildren(formatPrice(this.item.totalPrice));
   }
 }
