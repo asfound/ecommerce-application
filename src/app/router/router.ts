@@ -25,7 +25,7 @@ export class Router {
 
   private readonly routeMatchers: RouteMatcher[];
 
-  private readonly routerOutlet = new BaseComponent({ className: 'router-outlet', tagName: 'div' });
+  private readonly routerOutlet = new BaseComponent({ className: 'routerOutlet', tagName: 'div' });
 
   private constructor(routes: Route[], fallbackRoute: Route) {
     this.routeMatchers = routes.map((route) => createRouteMatcher(route));

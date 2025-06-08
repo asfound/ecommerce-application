@@ -83,3 +83,7 @@ input {
 .noScroll {
   overflow-y: hidden;
 }
+
+.routerOutlet {
+  flex-grow: 1;
+}
