@@ -1,10 +1,11 @@
+import type { AppDiscountCode } from '~/api/services/discount-codes/types';
 import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { h2 } from '~/shared/create-element/tags';
+import { div, h2, h3, img, p } from '~/shared/create-element/tags';
 
-import { DISCOUNT_CODES_TEXT } from './constants';
+import { DISCOUNT_CODE_IMAGE_MAP, DISCOUNT_CODES_TEXT } from './constants';
 import styles from './discount-codes.module.css';
 
 export class DiscountCodesView extends BaseComponent implements Component {
@@ -17,7 +18,31 @@ export class DiscountCodesView extends BaseComponent implements Component {
     });
   }
 
-  public createHTML(): void {
+  public createHTML(codes: AppDiscountCode[]): void {
     this.append(this.headingElement);
+
+    for (const code of codes) {
+      this.append(this.createDiscountCodeCart(code));
+    }
+  }
+
+  private createDiscountCodeCart(code: AppDiscountCode): HTMLDivElement {
+    const nameElement = h3({ className: styles.name }, code.name);
+
+    const descriptionElement = p({ className: styles.description }, code.description);
+
+    const imageElement = img({
+      alt: code.name,
+      className: styles.image,
+      src: DISCOUNT_CODE_IMAGE_MAP.get(code.code),
+    });
+
+    return div(
+      { className: styles.cardContainer },
+      imageElement,
+      nameElement,
+      descriptionElement,
+      code.code,
+    );
   }
 }

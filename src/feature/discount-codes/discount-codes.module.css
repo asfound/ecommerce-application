@@ -6,3 +6,23 @@
   text-align: center;
   text-transform: uppercase;
 }
+
+.cardContainer {
+  background-color: transparent;
+}
+
+.name {
+  background-color: transparent;
+}
+
+.description {
+  background-color: transparent;
+}
+
+.image {
+  border-radius: 8px;
+}
+
+.code {
+  background-color: transparent;
+}
