@@ -48,7 +48,7 @@ export class CartService {
     return await this.apiRoot().me().activeCart().get().execute();
   }
 
-  public async getCartProducts(): Promise<AppCartProduct[]> {
+  public async getCartData(): Promise<AppCartProduct[]> {
     const cart = await this.getCurrentCart();
     return cart.body.lineItems.map((lineItem) => mapLineItemToAppCartProduct(lineItem));
   }

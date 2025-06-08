@@ -16,6 +16,11 @@ export interface AppCartProduct {
   weight: string | undefined;
 }
 
+export interface AppCartState {
+  items: AppCartProduct[];
+  totalPrice: { default: number; discounted?: number };
+}
+
 export interface AppProduct {
   bestSeller: boolean;
   categories: AppProductCategory[];

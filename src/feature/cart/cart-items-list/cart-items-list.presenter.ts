@@ -16,7 +16,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
     this.cartService = cartService;
 
-    this.initView();
+    this.updateView();
   }
 
   private handleDecrementItem = async (
@@ -67,11 +67,12 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     }
   };
 
-  private async initView(): Promise<void> {
+  private async updateView(): Promise<void> {
     try {
       this.view.showLoader();
 
-      const products = await this.cartService.getCartProducts();
+      const products = await this.cartService.getCartData();
+
       this.view.createHTML(products, {
         onDecrementItem: this.handleDecrementItem,
         onIncrementItem: this.handleIncrementItem,
