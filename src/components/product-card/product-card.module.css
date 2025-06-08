@@ -61,7 +61,14 @@
 }
 
 .title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+
   font-weight: 500;
+
   transition: color var(--transition-duration);
 }
 
