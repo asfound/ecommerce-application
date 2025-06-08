@@ -19,6 +19,7 @@ export const mapLineItemToAppCartProduct = (
   const weightLabel = isAttribute(weightValue) ? weightValue.label : '';
 
   return {
+    discountedPrice: lineItem.discountedPricePerQuantity[0]?.discountedPrice.value.centAmount,
     image: {
       label: lineItem.variant.images?.[0]?.label ?? '',
       url: lineItem.variant.images?.[0]?.url ?? '',
