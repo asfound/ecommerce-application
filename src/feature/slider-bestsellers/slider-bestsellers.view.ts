@@ -17,8 +17,6 @@ import 'swiper/css/navigation';
 import { SLIDER_BESTSELLER_TEXT, SWIPER_OPTIONS } from './constants';
 import styles from './slider-bestsellers.module.css';
 
-const PRODUCTS_TO_SLICE = 6;
-
 export class SliderBestsellersView extends BaseComponent implements Component {
   private readonly headingElement = h2(
     { className: styles.heading },
@@ -30,11 +28,9 @@ export class SliderBestsellersView extends BaseComponent implements Component {
   }
 
   public createHTML(products: AppProductWithInCart[], callbacks: ProductCardCallbacks): void {
-    const slicedProds = products.slice(0, PRODUCTS_TO_SLICE);
-
     this.append(this.headingElement);
 
-    this.createSlider(slicedProds, callbacks);
+    this.createSlider(products, callbacks);
   }
 
   private createProductSlide(
