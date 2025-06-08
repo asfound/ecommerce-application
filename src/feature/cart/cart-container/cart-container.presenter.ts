@@ -27,6 +27,8 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
     this.cartItemsListPresenter = new CartItemsListPresenter(new CartItemsListView(), cartService);
     this.cartTotalsPresenter = new CartTotalsPresenter(new CartTotalsView(), cartService);
 
+    this.cartItemsListPresenter.setTotalsPresenter(this.cartTotalsPresenter);
+
     this.init();
   }
 

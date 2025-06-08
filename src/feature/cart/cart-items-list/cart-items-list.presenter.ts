@@ -6,12 +6,15 @@ import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
 
+import type { CartTotalsPresenter } from '../cart-totals/cart-totals.presenter';
 import type { CartItemsListView } from './cart-items-list.view';
 
 import { cartAction } from '../store/actions';
 
 export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   private readonly cartService: CartService;
+
+  private cartTotalsPresenter: CartTotalsPresenter | null = null;
 
   public constructor(view: CartItemsListView, cartService: CartService) {
     super(view);
@@ -27,12 +30,19 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     });
   }
 
+  public setTotalsPresenter(presenter: CartTotalsPresenter): void {
+    this.cartTotalsPresenter = presenter;
+  }
+
   private handleDecrementItem = async (
     lineItemKey: string,
     quantity: number,
   ): Promise<AppCartProduct | null> => {
     try {
       const result = await this.cartService.removeLineItem({ lineItemKey, quantity });
+
+      this.cartTotalsPresenter?.updateTotals(result.body);
+
       cartAction.setItemsCount(result.body.lineItems.length);
 
       const item = result.body.lineItems.find((item) => item.key === lineItemKey);
@@ -54,6 +64,9 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       const key = crypto.randomUUID();
 
       const result = await this.cartService.addLineItem({ lineItemKey: key, quantity, sku });
+
+      this.cartTotalsPresenter?.updateTotals(result.body);
+
       cartAction.setItemsCount(result.body.lineItems.length);
 
       const item = result.body.lineItems.find((item) => item.key === sku);
@@ -70,6 +83,9 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   private handleRemoveItem = async (lineItemKey: string): Promise<void> => {
     try {
       const result = await this.cartService.removeLineItem({ lineItemKey });
+
+      this.cartTotalsPresenter?.updateTotals(result.body);
+
       cartAction.setItemsCount(result.body.lineItems.length);
     } catch (error: unknown) {
       if (isError(error)) {

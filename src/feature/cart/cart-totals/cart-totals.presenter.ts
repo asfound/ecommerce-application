@@ -1,9 +1,11 @@
+import type { Cart } from '@commercetools/platform-sdk';
+
 import type { CartService } from '~/api/services/cart/cart.service';
 import type { AppCartData } from '~/api/services/products/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
 
-import type { CartTotalsView } from './cart-totals.view';
+import type { CartTotalsView, CartTotalsViewProperties } from './cart-totals.view';
 
 export class CartTotalsPresenter extends Presenter<CartTotalsView> {
   private readonly cartService: CartService;
@@ -25,6 +27,14 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
         total: totalPrice.default,
       },
     });
+  }
+
+  public updateTotals(cart: Cart): void {
+    this.view.updateTotals(this.calculateTotals(cart));
+  }
+
+  private calculateTotals(cart: Cart): CartTotalsViewProperties['prices'] {
+    return { total: cart.totalPrice.centAmount };
   }
 
   private readonly handleApplyPromoCode = async (code: string): Promise<void> => {

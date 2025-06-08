@@ -67,6 +67,13 @@ export class CartTotalsView extends BaseComponent implements Component {
     this.append(this.promoCodesContainer, this.pricesContainer);
   }
 
+  public updateTotals(totalPrice: CartTotalsViewProperties['prices']): void {
+    this.priceTotal.textContent = formatPrice(totalPrice.total);
+    this.priceDiscount.textContent = totalPrice.discounted
+      ? formatPrice(totalPrice.discounted)
+      : '';
+  }
+
   private setupListeners(): void {
     this.promoCodesForm.addEventListener(
       'submit',
