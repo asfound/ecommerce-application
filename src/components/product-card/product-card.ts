@@ -3,6 +3,7 @@ import type { AppProduct, AppProductWithInCart } from '~/api/services/products/t
 import { div } from '~/shared/create-element/tags';
 import { calculateDiscountPercent } from '~/shared/utils/calculate-discount';
 import { formatPrice } from '~/shared/utils/format-price';
+import { formatProductName } from '~/shared/utils/format-product-name';
 
 import type { Component } from '../base-component/types';
 
@@ -55,8 +56,8 @@ export class ProductCard extends BaseComponent implements Component {
     const imageContainer = this.createImageContainer();
 
     const titleElement = div(
-      { className: styles.title },
-      `${this.product.name}${this.product.weight ? `, ${this.product.weight}g` : ''}`,
+      { className: styles.title, title: formatProductName(this.product) },
+      formatProductName(this.product),
     );
 
     const descriptionElement = div(

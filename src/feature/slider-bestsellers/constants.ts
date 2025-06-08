@@ -30,7 +30,7 @@ export const SWIPER_OPTIONS = {
     buttonPrevious: HTMLDivElement,
     pagination: HTMLDivElement,
   ): SwiperOptions => ({
-    autoplay: true,
+    autoplay: { delay: 5000 },
     breakpoints: {
       389: {
         slidesPerGroup: 1,
