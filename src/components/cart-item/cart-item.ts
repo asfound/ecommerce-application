@@ -69,16 +69,11 @@ export class CartItem extends BaseComponent implements Component {
     this.item = item;
     this.callbacks = callbacks;
 
-    this.incrementItemButton.element.title = BUTTON_TITLE.INCREASE;
-    this.decrementItemButton.element.title = BUTTON_TITLE.DECREASE;
-    this.deleteButton.element.title = BUTTON_TITLE.DELETE;
-
-    this.deleteButton.append(createSvgIcon(deleteIcon, styles.deleteIcon));
-
     this.createHTML();
   }
 
   public createHTML(): void {
+    this.initButtons();
     this.createIndividualPrice();
     this.updateItemElements();
 
@@ -147,6 +142,14 @@ export class CartItem extends BaseComponent implements Component {
   private disableQuantityControls(): void {
     this.incrementItemButton.disable();
     this.decrementItemButton.disable();
+  }
+
+  private initButtons(): void {
+    this.incrementItemButton.element.title = BUTTON_TITLE.INCREASE;
+    this.decrementItemButton.element.title = BUTTON_TITLE.DECREASE;
+    this.deleteButton.element.title = BUTTON_TITLE.DELETE;
+
+    this.deleteButton.append(createSvgIcon(deleteIcon, styles.deleteIcon));
   }
 
   private updateItem(item: AppCartProduct | null): void {
