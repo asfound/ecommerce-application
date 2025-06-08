@@ -12,8 +12,6 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
 
     this.cartService = cartService;
 
-    console.warn(this.cartService);
-
     this.initView();
   }
 

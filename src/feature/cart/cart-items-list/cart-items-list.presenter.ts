@@ -1,6 +1,7 @@
 import type { CartService } from '~/api/services/cart/cart.service';
+import type { AppCartProduct } from '~/api/services/products/types';
 
-import { PRODUCT_CART_NOTIFICATION } from '~/feature/catalog/constants';
+import { mapLineItemToAppCartProduct } from '~/api/services/cart/mappers';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
@@ -18,15 +19,26 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     this.initView();
   }
 
-  private handleRemoveItem = async (
-    lineItemKey: string,
-    productName: string,
-    quantity?: number,
-  ): Promise<void> => {
+  private handleAddItem = async (quantity: number, sku: string): Promise<AppCartProduct | null> => {
     try {
-      await this.cartService.removeLineItem({ lineItemKey, quantity });
+      const key = crypto.randomUUID();
 
-      showToast(PRODUCT_CART_NOTIFICATION.REMOVED_FROM_CART(productName));
+      const result = await this.cartService.addLineItem({ lineItemKey: key, quantity, sku });
+      const item = result.body.lineItems.find((item) => item.key === sku);
+
+      return item ? mapLineItemToAppCartProduct(item) : null;
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+
+      return null;
+    }
+  };
+
+  private handleRemoveItem = async (lineItemKey: string): Promise<void> => {
+    try {
+      await this.cartService.removeLineItem({ lineItemKey });
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -39,7 +51,10 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       this.view.showLoader();
 
       const products = await this.cartService.getCartProducts();
-      this.view.createHTML(products, { onRemoveItem: this.handleRemoveItem });
+      this.view.createHTML(products, {
+        onIncrementItem: this.handleAddItem,
+        onRemoveItem: this.handleRemoveItem,
+      });
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
