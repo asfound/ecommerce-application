@@ -10,9 +10,10 @@ import type { Component } from '../base-component/types';
 import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
 import styles from './cart-item.module.css';
-import { BUTTON_TEXT, BUTTON_TITLE, CART_ITEM_INCREMENT, SINGLE_ITEM } from './constants';
+import { BUTTON_TEXT, BUTTON_TITLE, QUANTITY_STEP, SINGLE_ITEM } from './constants';
 
 export interface CartItemCallbacks {
+  onDecrementItem(lineItemKey: string, quantity: number): Promise<AppCartProduct | null>;
   onIncrementItem(quantity: number, sku: string): Promise<AppCartProduct | null>;
   onRemoveItem(lineItemKey: string): Promise<void>;
 }
@@ -20,13 +21,19 @@ export interface CartItemCallbacks {
 export class CartItem extends BaseComponent implements Component {
   private readonly callbacks: CartItemCallbacks;
 
+  private item: AppCartProduct;
+
   private readonly decrementItemButton = new Button({
     className: styles.controlButton,
+    onClick: (): void => {
+      this.disableQuantityControls();
+      this.callbacks.onDecrementItem(this.item.lineItemKey, QUANTITY_STEP).then((result) => {
+        this.updateItem(result);
+      });
+    },
     textContent: BUTTON_TEXT.DECREMENT,
     type: 'button',
   });
-
-  private item: AppCartProduct;
 
   private readonly deleteButton = new Button({
     className: styles.deleteButton,
@@ -42,7 +49,7 @@ export class CartItem extends BaseComponent implements Component {
     className: styles.controlButton,
     onClick: (): void => {
       this.disableQuantityControls();
-      this.callbacks.onIncrementItem(CART_ITEM_INCREMENT, this.item.sku).then((result) => {
+      this.callbacks.onIncrementItem(QUANTITY_STEP, this.item.sku).then((result) => {
         this.updateItem(result);
       });
     },

@@ -19,7 +19,28 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     this.initView();
   }
 
-  private handleAddItem = async (quantity: number, sku: string): Promise<AppCartProduct | null> => {
+  private handleDecrementItem = async (
+    lineItemKey: string,
+    quantity: number,
+  ): Promise<AppCartProduct | null> => {
+    try {
+      const result = await this.cartService.removeLineItem({ lineItemKey, quantity });
+      const item = result.body.lineItems.find((item) => item.key === lineItemKey);
+
+      return item ? mapLineItemToAppCartProduct(item) : null;
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+
+      return null;
+    }
+  };
+
+  private handleIncrementItem = async (
+    quantity: number,
+    sku: string,
+  ): Promise<AppCartProduct | null> => {
     try {
       const key = crypto.randomUUID();
 
@@ -52,7 +73,8 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       const products = await this.cartService.getCartProducts();
       this.view.createHTML(products, {
-        onIncrementItem: this.handleAddItem,
+        onDecrementItem: this.handleDecrementItem,
+        onIncrementItem: this.handleIncrementItem,
         onRemoveItem: this.handleRemoveItem,
       });
     } catch (error: unknown) {

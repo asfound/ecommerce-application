@@ -11,5 +11,4 @@ export const BUTTON_TITLE = {
   INCREASE: 'Increase quantity',
 };
 
-export const CART_ITEM_INCREMENT = 1;
-export const CART_ITEM_DECREMENT = -1;
+export const QUANTITY_STEP = 1;
