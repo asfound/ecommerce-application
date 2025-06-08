@@ -69,6 +69,14 @@ export const ROUTES: Route[] = [
     path: ROUTE_PATH.PROFILE,
     title: `${TITLE} | Profile`,
   },
+  {
+    async component(): Promise<BaseComponent> {
+      const { AboutUsPage } = await import('../../pages/about-us.ts');
+      return new AboutUsPage();
+    },
+    path: ROUTE_PATH.ABOUT,
+    title: `${TITLE} | About`,
+  },
 ];
 
 export const FALLBACK_ROUTE: Route = {

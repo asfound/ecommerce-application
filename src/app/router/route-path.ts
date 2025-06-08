@@ -1,4 +1,5 @@
 export const ROUTE_PATH = {
+  ABOUT: '/about',
   CART: '/cart',
   CATALOG: '/catalog',
   LOGIN: '/login',
