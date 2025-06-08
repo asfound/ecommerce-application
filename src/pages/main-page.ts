@@ -29,8 +29,8 @@ export class MainPage extends BaseComponent {
 
     this.append(
       heroBanner,
-      this.discountCodesPresenter.getView(),
       this.sliderBestsellersPresenter.getView(),
+      this.discountCodesPresenter.getView(),
     );
   }
 

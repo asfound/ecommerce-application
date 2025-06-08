@@ -3,19 +3,14 @@ import type { Component } from '~/components/base-component/types';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { div, h2, h3, img, p } from '~/shared/create-element/tags';
+import { div, h3, img, p } from '~/shared/create-element/tags';
 
-import {
-  DISCOUNT_CODE_IMAGE_MAP,
-  DISCOUNT_CODES_TEXT,
-  EVEN_CHECK_MODULO,
-  IMAGE_POSITION,
-} from './constants';
+import { DISCOUNT_CODE_IMAGE_MAP, EVEN_CHECK_MODULO, IMAGE_POSITION } from './constants';
 import styles from './discount-codes.module.css';
 
-export class DiscountCodesView extends BaseComponent implements Component {
-  private readonly headingElement = h2({ className: styles.heading }, DISCOUNT_CODES_TEXT.HEADING);
+type ImagePosition = (typeof IMAGE_POSITION)[keyof typeof IMAGE_POSITION];
 
+export class DiscountCodesView extends BaseComponent implements Component {
   public constructor() {
     super({
       className: ['DISCOUNT-CODES', CSS_CLASS_NAME.WRAPPER],
@@ -24,8 +19,6 @@ export class DiscountCodesView extends BaseComponent implements Component {
   }
 
   public createHTML(codes: AppDiscountCode[]): void {
-    this.append(this.headingElement);
-
     for (const [index, code] of Object.entries(codes)) {
       this.append(
         this.createDiscountCodeCart(
@@ -40,7 +33,7 @@ export class DiscountCodesView extends BaseComponent implements Component {
 
   private createDiscountCodeCart(
     code: AppDiscountCode,
-    imagePosition: 'left' | 'right',
+    imagePosition: ImagePosition,
   ): HTMLDivElement {
     const nameElement = h3({ className: styles.name }, code.name);
 
