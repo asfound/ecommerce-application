@@ -8,7 +8,7 @@ import sliderArrowSvg from '~/assets/icons/slider-arrow.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProductCard } from '~/components/product-card/product-card';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { div, h2 } from '~/shared/create-element/tags';
+import { a, div, h2 } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import 'swiper/css';
@@ -19,13 +19,31 @@ import { SLIDER_BESTSELLER_TEXT, SWIPER_OPTIONS } from './constants';
 import styles from './slider-bestsellers.module.css';
 
 export class SliderBestsellersView extends BaseComponent implements Component {
+  private readonly linkSeeAll = a(
+    { className: styles.seeAll },
+    SLIDER_BESTSELLER_TEXT.LINK_SEE_ALL,
+  );
+
   private readonly headingElement = h2(
     { className: styles.heading },
     SLIDER_BESTSELLER_TEXT.BEST_SELLERS,
+    this.linkSeeAll,
   );
 
   public constructor() {
     super({ className: [styles.slider, CSS_CLASS_NAME.WRAPPER], tagName: 'div' });
+  }
+
+  public bindSeeAllHandler(handler: VoidFunction, href: string): void {
+    this.linkSeeAll.setAttribute('href', href);
+
+    this.linkSeeAll.addEventListener(
+      'click',
+      () => {
+        handler();
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public createHTML(products: AppProductWithInCart[], callbacks: ProductCardCallbacks): void {

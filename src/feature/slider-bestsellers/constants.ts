@@ -19,6 +19,7 @@ export const SLIDER_BESTSELLER_ERROR = {
 
 export const SLIDER_BESTSELLER_TEXT = {
   BEST_SELLERS: 'Best sellers',
+  LINK_SEE_ALL: 'See all products',
 } as const;
 
 export const PRODUCT_QUANTITY = 1;

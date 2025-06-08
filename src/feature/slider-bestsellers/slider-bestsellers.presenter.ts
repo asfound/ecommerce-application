@@ -42,6 +42,8 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
         onAddToCart: this.handleAddToCart,
         onNavigateToDetails: this.handleNavigateToDetails,
       });
+
+      this.view.bindSeeAllHandler(this.handleSeeAllClick, ROUTE_PATH.CATALOG);
     } catch (error) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -88,5 +90,9 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
         sku: product.sku,
       },
     });
+  };
+
+  private readonly handleSeeAllClick = (): void => {
+    Router.instance.navigate(ROUTE_PATH.CATALOG);
   };
 }

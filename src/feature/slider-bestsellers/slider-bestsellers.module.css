@@ -1,14 +1,22 @@
 .heading {
+  display: grid;
   margin-bottom: 3rem;
   text-align: center;
   text-transform: uppercase;
 }
 
+.heading .seeAll {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--color-accent-light);
+  text-transform: none;
+
+  transition: color var(--transition-duration);
+}
+
 .slider {
   position: relative;
   width: 100%;
-
-  /* max-width: 1216px; */
   margin-block: 4rem;
   margin-inline: auto;
 }
@@ -56,4 +64,10 @@
 
 .arrow.previous {
   transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .seeAll:hover {
+    color: var(--color-accent);
+  }
 }
