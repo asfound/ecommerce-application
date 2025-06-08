@@ -16,10 +16,15 @@ export const TEAM_DATA: TeamData = {
     {
       avatarUrl: avatarMargo,
       bio: 'Hi! I’m Meg. What began as a personal curiosity has grown into a deep passion - not just for front-end development, but for the people who make the journey meaningful. Becoming a developer, and being part of this course, first as a student, now as a mentor and curator, has shown me how powerful a supportive community can be. Watching others grow, overcome challenges, and discover their own love for coding is just as fulfilling as building something myself. I’m excited to keep learning, creating, and helping others do the same.',
-      contributions: ['Code reviews', 'Invaluable advices', 'Warmth and support on tough days'],
+      contributions: [
+        'Code reviews',
+        'Invaluable advices',
+        'Sanity checks',
+        'Warmth and support on tough days',
+      ],
       fullname: 'Meg Golubeva',
       github: { login: 'stardustmeg', url: 'https://github.com/stardustmeg' },
-      roles: ['😎 Mentor', '🤝 Helping hand', '🦉 Wise Owl'],
+      roles: ['😎 Mentor', '🍯 Honey supplier', '🤝 Helping hand', '🦉 Wise Owl'],
     },
     {
       avatarUrl: avatarYulik,
@@ -38,10 +43,16 @@ export const TEAM_DATA: TeamData = {
     {
       avatarUrl: avatarMikhail,
       bio: "Hello! I'm Grim. Currently learning web development, focusing on HTML, CSS, JS, TS. I've always been interested in technology, and now I'm building projects to improve my coding skills. I'm especially excited about creating interactive and responsive websites. My goal is to become a front-end developer and work on real-world applications.",
-      contributions: ['Login page', 'Catalog page', 'Product details page', 'About us page'],
+      contributions: [
+        'Main Page',
+        'Login page',
+        'Catalog page',
+        'Product details page',
+        'About us page',
+      ],
       fullname: 'Mikhail Zubenko',
       github: { login: 'ripetchor', url: 'https://github.com/ripetchor' },
-      roles: ['🎨 UI', '🔮 CT-SDK', '🛠️ API'],
+      roles: ['🎨 UI-dev', '🔮 CT-SDK', '🛠️ API'],
     },
     {
       avatarUrl: avatarKsyusha,
@@ -56,7 +67,7 @@ export const TEAM_DATA: TeamData = {
       ],
       fullname: 'Ksenia Gorina',
       github: { login: 'asfound', url: 'https://github.com/asfound' },
-      roles: ['👑 Team lead', '🎨 UI', '🔮 CT-SDK', '🛠️ API'],
+      roles: ['👑 Team lead', '🎨 UI-dev', '🔮 CT-SDK', '🛠️ API'],
     },
     {
       avatarUrl: avatarAlena,
