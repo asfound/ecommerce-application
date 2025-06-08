@@ -8,6 +8,7 @@
 }
 
 .cardContainer {
+  display: flex;
   background-color: transparent;
 }
 
@@ -25,4 +26,12 @@
 
 .code {
   background-color: transparent;
+}
+
+.left {
+  flex-direction: row;
+}
+
+.right {
+  flex-direction: row-reverse;
 }
