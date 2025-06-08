@@ -1,5 +1,6 @@
 import type { AppCartProduct } from '~/api/services/products/types';
 import type { Component } from '~/components/base-component/types';
+import type { CartItemCallbacks } from '~/components/cart-item/cart-item';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CartItem } from '~/components/cart-item/cart-item';
@@ -14,10 +15,10 @@ export class CartItemsListView extends BaseComponent<HTMLUListElement> implement
     super({ className: styles.list, tagName: 'ul' });
   }
 
-  public createHTML(products: AppCartProduct[]): void {
+  public createHTML(products: AppCartProduct[], callbacks: CartItemCallbacks): void {
     if (products.length > 0) {
       for (const product of products) {
-        this.append(new CartItem(product));
+        this.append(new CartItem(product, callbacks));
       }
     } else {
       console.warn('no products');

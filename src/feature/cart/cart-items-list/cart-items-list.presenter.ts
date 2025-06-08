@@ -1,5 +1,6 @@
 import type { CartService } from '~/api/services/cart/cart.service';
 
+import { PRODUCT_CART_NOTIFICATION } from '~/feature/catalog/constants';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
@@ -17,12 +18,28 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     this.initView();
   }
 
+  private handleRemoveItem = async (
+    lineItemKey: string,
+    productName: string,
+    quantity?: number,
+  ): Promise<void> => {
+    try {
+      await this.cartService.removeLineItem({ lineItemKey, quantity });
+
+      showToast(PRODUCT_CART_NOTIFICATION.REMOVED_FROM_CART(productName));
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+    }
+  };
+
   private async initView(): Promise<void> {
     try {
       this.view.showLoader();
 
       const products = await this.cartService.getCartProducts();
-      this.view.createHTML(products);
+      this.view.createHTML(products, { onRemoveItem: this.handleRemoveItem });
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);

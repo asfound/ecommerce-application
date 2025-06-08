@@ -51,6 +51,10 @@
   background-color: transparent;
 }
 
+.deleteButton:hover {
+  background-color: inherit;
+}
+
 .deleteIcon {
   display: flex;
   align-items: center;
