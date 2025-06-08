@@ -39,6 +39,15 @@ export class DiscountCodesView extends BaseComponent implements Component {
 
     const descriptionElement = p({ className: styles.description }, code.description);
 
+    const codeElement = div({ className: styles.code }, code.code);
+
+    const cardContent = div(
+      { className: styles.cardContent },
+      nameElement,
+      descriptionElement,
+      codeElement,
+    );
+
     const imageElement = img({
       alt: code.name,
       className: styles.image,
@@ -48,9 +57,7 @@ export class DiscountCodesView extends BaseComponent implements Component {
     return div(
       { className: [styles.cardContainer, styles[imagePosition]] },
       imageElement,
-      nameElement,
-      descriptionElement,
-      code.code,
+      cardContent,
     );
   }
 }

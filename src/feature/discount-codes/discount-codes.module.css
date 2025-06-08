@@ -2,22 +2,26 @@
   background-color: transparent;
 }
 
-.heading {
-  text-align: center;
-  text-transform: uppercase;
-}
-
 .cardContainer {
   display: flex;
+  gap: 2rem;
+  align-items: center;
   background-color: transparent;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 }
 
 .name {
-  background-color: transparent;
+  font-size: 5.4rem;
+  font-weight: 500;
 }
 
 .description {
-  background-color: transparent;
+  color: var(--color-accent-light);
 }
 
 .image {
@@ -25,7 +29,15 @@
 }
 
 .code {
-  background-color: transparent;
+  width: max-content;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+
+  font-size: 3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  background-color: var(--color-accent-dark);
 }
 
 .left {
