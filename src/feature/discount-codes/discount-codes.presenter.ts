@@ -18,7 +18,7 @@ export class DiscountCodesPresenter extends Presenter<DiscountCodesView> {
   private async initView(): Promise<void> {
     try {
       const response = await this.discountCodesService.getDiscountCodes();
-      console.warn(response.body);
+      console.warn(response);
 
       this.view.createHTML();
     } catch {
