@@ -57,7 +57,7 @@ export class CartItem extends BaseComponent implements Component {
     type: 'button',
   });
 
-  private readonly individualPriceContainer = div({ className: styles.pricesContainer });
+  private readonly individualPriceContainer = div({ className: styles.individualPrice });
 
   private readonly itemTotalPriceContainer = div({ className: styles.totalPrice });
 
@@ -75,7 +75,8 @@ export class CartItem extends BaseComponent implements Component {
   public createHTML(): void {
     this.initButtons();
     this.createIndividualPrice();
-    this.updateTotalPriceAndQuantityControls();
+    this.updateQuantityControls();
+    this.updateTotalPrice();
 
     const itemDetails = this.createItemDetails();
 
@@ -157,14 +158,35 @@ export class CartItem extends BaseComponent implements Component {
       this.item = item;
     }
 
-    this.updateTotalPriceAndQuantityControls();
+    this.updateQuantityControls();
+    this.updateTotalPrice();
   }
 
-  private updateTotalPriceAndQuantityControls(): void {
+  private updateQuantityControls(): void {
     this.incrementItemButton.enable();
     this.decrementItemButton.element.disabled = this.item.quantity === SINGLE_ITEM;
     this.quantityLabel.replaceChildren(this.item.quantity.toString());
+  }
 
-    this.itemTotalPriceContainer.replaceChildren(formatPrice(this.item.totalPrice));
+  private updateTotalPrice(): void {
+    this.itemTotalPriceContainer.replaceChildren();
+
+    if (this.item.promoCodePrice === undefined) {
+      this.itemTotalPriceContainer.append(
+        div({ className: styles.defaultPrice }, formatPrice(this.item.totalPrice)),
+      );
+    } else {
+      const discountedPriceElement = div(
+        { className: styles.discountedPrice },
+        formatPrice(this.item.totalPrice),
+      );
+
+      const originalPriceElement = div(
+        { className: styles.oldPrice },
+        formatPrice(this.item.price.default * this.item.quantity),
+      );
+
+      this.itemTotalPriceContainer.append(discountedPriceElement, originalPriceElement);
+    }
   }
 }
