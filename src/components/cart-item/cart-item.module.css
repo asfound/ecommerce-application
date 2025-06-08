@@ -76,6 +76,10 @@
   transform: scale(0.9);
 }
 
+.controlButton:disabled {
+  background-color: var(--color-accent);
+}
+
 .quantity {
   width: 4.25rem;
   text-align: center;

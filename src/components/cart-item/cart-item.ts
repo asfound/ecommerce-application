@@ -41,6 +41,7 @@ export class CartItem extends BaseComponent implements Component {
   private readonly incrementItemButton = new Button({
     className: styles.controlButton,
     onClick: (): void => {
+      this.disableQuantityControls();
       this.callbacks.onIncrementItem(CART_ITEM_INCREMENT, this.item.sku).then((result) => {
         this.updateItem(result);
       });
@@ -120,17 +121,22 @@ export class CartItem extends BaseComponent implements Component {
     return div({ className: styles.itemDetails }, itemImage, itemInfo);
   }
 
-  private updateItem(item: AppCartProduct | null): void {
-    if (!item) return;
+  private disableQuantityControls(): void {
+    this.incrementItemButton.disable();
+    this.decrementItemButton.disable();
+  }
 
-    this.item = item;
+  private updateItem(item: AppCartProduct | null): void {
+    if (item) {
+      this.item = item;
+    }
+
     this.updateItemElements();
   }
 
   private updateItemElements(): void {
-    if (this.item.quantity === SINGLE_ITEM) {
-      this.decrementItemButton.disable();
-    }
+    this.incrementItemButton.enable();
+    this.decrementItemButton.element.disabled = this.item.quantity === SINGLE_ITEM;
 
     this.quantityLabel.replaceChildren(this.item.quantity.toString());
     this.itemTotalPrice.replaceChildren(formatPrice(this.item.totalPrice));
