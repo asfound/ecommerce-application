@@ -1,7 +1,9 @@
 .container {
   width: 100%;
-  padding: 2rem;
+  padding-block: 2rem 3rem;
+  padding-inline: 3rem;
   border-radius: var(--border-radius);
+
   background-color: var(--color-dark);
 }
 
@@ -19,4 +21,10 @@
 .list > li:not(:last-child) {
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--color-white);
+}
+
+@media (width <= 768px) {
+  .container {
+    min-width: 100%;
+  }
 }

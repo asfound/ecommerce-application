@@ -4,7 +4,8 @@
   width: 100%;
   max-width: 30.5rem;
   height: max-content;
-  padding: 2rem;
+  padding-block: 2rem 3rem;
+  padding-inline: 3rem;
   border-radius: var(--border-radius);
 
   background-color: var(--color-dark);
@@ -31,4 +32,11 @@
 
 .pricesContainer {
   background-color: transparent;
+}
+
+@media (width <= 768px) {
+  .cartTotals {
+    order: -1;
+    max-width: 100%;
+  }
 }
