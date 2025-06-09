@@ -51,12 +51,21 @@ export class HeaderPresenter extends Presenter<HeaderView> {
 
   private setupSubscriptions(): void {
     this.subscribeLoggedIn();
+    this.subscribeProductsCount();
   }
 
   private subscribeLoggedIn(): void {
     const unsubscribe = rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
       this.view.setLogoutIconVisible(loggedIn);
       this.view.setProfileIconVisible(loggedIn);
+    });
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribeProductsCount(): void {
+    const unsubscribe = rootStore.subscribe(rootSelector.selectProductsCount, (productsCount) => {
+      this.view.setCartProductsCount(productsCount);
     });
 
     this.storeSubscription.add(unsubscribe);

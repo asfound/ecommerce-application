@@ -22,10 +22,13 @@ import {
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
+  private readonly cartProductsCount = div(null, '0');
+
   private readonly cartIcon = div(
     { className: styles.iconContainer },
     createSvgIcon(cartSvg, styles.icon),
     span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
+    this.cartProductsCount,
   );
 
   private isBurgerMenuOpen = false;
@@ -127,6 +130,10 @@ export class HeaderView extends BaseComponent implements Component {
     );
 
     this.append(wrapperElement);
+  }
+
+  public setCartProductsCount(productsCount: number): void {
+    this.cartProductsCount.textContent = productsCount.toString();
   }
 
   public setLogoutIconVisible(isVisible: boolean): void {
