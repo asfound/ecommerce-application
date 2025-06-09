@@ -1,5 +1,6 @@
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
+import { Loader } from '~/components/common/loader/loader';
 import { div, p } from '~/shared/create-element/tags';
 
 import styles from './cart-container.module.css';
@@ -19,6 +20,8 @@ export class CartContainerView extends BaseComponent {
     this.buttonCatalog.element,
   );
 
+  private readonly loaderComponent = new Loader({ size: 'small' });
+
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
   }
@@ -29,6 +32,10 @@ export class CartContainerView extends BaseComponent {
     super.destroy();
   }
 
+  public hideLoader(): void {
+    this.loaderComponent.hide();
+  }
+
   public showCartData(productsBlock: HTMLElement, pricesBlock: HTMLElement): void {
     this.replaceChildren(productsBlock, pricesBlock);
   }
@@ -37,5 +44,10 @@ export class CartContainerView extends BaseComponent {
     this.buttonCatalog.addListener('click', navigateHandler);
 
     this.replaceChildren(this.emptyCartElement);
+  }
+
+  public showLoader(): void {
+    this.replaceChildren(this.loaderComponent);
+    this.loaderComponent.show();
   }
 }

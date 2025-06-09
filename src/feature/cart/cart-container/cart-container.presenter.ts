@@ -44,6 +44,8 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
 
   public async init(): Promise<void> {
     try {
+      this.view.showLoader();
+
       const { items, totalLineItemQuantity, totalPrice } = await this.cartService.getCartData();
 
       if (totalLineItemQuantity === 0) {
@@ -63,6 +65,8 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
       );
     } catch {
       console.warn('error');
+    } finally {
+      this.view.hideLoader();
     }
   }
 

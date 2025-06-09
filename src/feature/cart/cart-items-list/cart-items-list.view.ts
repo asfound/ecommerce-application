@@ -4,7 +4,6 @@ import type { CartItemCallbacks } from '~/components/cart-item/cart-item';
 
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CartItem } from '~/components/cart-item/cart-item';
-import { Loader } from '~/components/common/loader/loader';
 import { h2, ul } from '~/shared/create-element/tags';
 
 import styles from './cart-items-list.module.css';
@@ -14,8 +13,6 @@ export class CartItemsListView extends BaseComponent implements Component {
   private readonly heading = h2({ className: styles.heading }, CART_ITEM_LIST_TEXT.HEADING);
 
   private readonly listElement = ul({ className: styles.list });
-
-  private readonly loaderComponent = new Loader({ size: 'small' });
 
   public constructor() {
     super({ className: styles.container, tagName: 'div' });
@@ -27,14 +24,5 @@ export class CartItemsListView extends BaseComponent implements Component {
     }
 
     this.replaceChildren(this.heading, this.listElement);
-  }
-
-  public hideLoader(): void {
-    this.loaderComponent.hide();
-  }
-
-  public showLoader(): void {
-    this.replaceChildren(this.loaderComponent);
-    this.loaderComponent.show();
   }
 }

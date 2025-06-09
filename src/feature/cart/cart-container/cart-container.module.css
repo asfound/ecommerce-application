@@ -1,4 +1,6 @@
 .container {
+  position: relative;
+
   display: flex;
   gap: 2rem;
   align-items: start;
