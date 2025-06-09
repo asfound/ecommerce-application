@@ -1,8 +1,11 @@
 import type { DiscountCodesService } from '~/api/services/discount-codes/discount-codes.service';
 
 import { Presenter } from '~/shared/presenter/presenter';
+import { showToast } from '~/shared/utils/show-toast';
 
 import type { DiscountCodesView } from './discount-codes.view';
+
+import { DISCOUNT_CODE_ERROR } from './constants';
 
 export class DiscountCodesPresenter extends Presenter<DiscountCodesView> {
   private readonly discountCodesService: DiscountCodesService;
@@ -21,7 +24,7 @@ export class DiscountCodesPresenter extends Presenter<DiscountCodesView> {
 
       this.view.createHTML(response);
     } catch {
-      console.warn('error');
+      showToast(DISCOUNT_CODE_ERROR.FAILED, true);
     }
   }
 }
