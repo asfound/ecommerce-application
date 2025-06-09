@@ -3,13 +3,15 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { InputText } from '~/components/common/input/input-text/input-text';
-import { button, div, form, h2 } from '~/shared/create-element/tags';
+import { PromoCode } from '~/components/promo-code/promo-code';
+import { div, form, h2 } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import styles from './cart-totals.module.css';
 import { CART_TOTALS_TEXT } from './constants';
 
 export interface CartTotalsViewProperties {
+  discountCodes: string[];
   onApplyPromoCode(code: string): Promise<void>;
   onRemovePromoCode(code: string): Promise<void>;
   prices: {
@@ -57,12 +59,20 @@ export class CartTotalsView extends BaseComponent implements Component {
   public createHTML(properties: CartTotalsViewProperties): void {
     this.properties = properties;
 
+    this.updateTotals(properties.prices);
+
     this.promoCodesForm.append(this.inputPromoCode.element, this.buttonApply.element);
 
-    this.priceTotal.textContent = formatPrice(properties.prices.total);
-    this.priceDiscount.textContent = properties.prices.discounted
-      ? formatPrice(properties.prices.discounted)
-      : '';
+    this.promoCodesContainer.replaceChildren(
+      this.promoCodesForm,
+      ...properties.discountCodes.map(
+        (discountCode) =>
+          new PromoCode({
+            code: discountCode,
+            onRemove: (code): Promise<void> => properties.onRemovePromoCode(code),
+          }).element,
+      ),
+    );
 
     this.append(this.promoCodesContainer, this.pricesContainer);
   }
@@ -74,35 +84,32 @@ export class CartTotalsView extends BaseComponent implements Component {
       : '';
   }
 
+  private async handleDiscountCodeApply(event: SubmitEvent): Promise<void> {
+    event.preventDefault();
+
+    try {
+      const promoCode = this.inputPromoCode.value.trim();
+
+      await this.properties.onApplyPromoCode(promoCode);
+
+      const discountCode = new PromoCode({
+        code: promoCode,
+        onRemove: (code): Promise<void> => this.properties.onRemovePromoCode(code),
+      });
+
+      this.inputPromoCode.reset();
+
+      this.promoCodesContainer.append(discountCode.element);
+    } catch {
+      this.inputPromoCode.setErrorMessage('');
+    }
+  }
+
   private setupListeners(): void {
     this.promoCodesForm.addEventListener(
       'submit',
       (event) => {
-        event.preventDefault();
-
-        const promoCode = this.inputPromoCode.value.trim();
-
-        const promoCodeElement = div(
-          { className: styles.promoCodeElement },
-          promoCode,
-          button(
-            {
-              onClick: () => {
-                this.properties.onRemovePromoCode(promoCode);
-
-                promoCodeElement.remove();
-              },
-              signal: this.abortController.signal,
-            },
-            CART_TOTALS_TEXT.BUTTON_REMOVE,
-          ),
-        );
-
-        this.properties.onApplyPromoCode(this.inputPromoCode.value.trim());
-
-        this.inputPromoCode.reset();
-
-        this.promoCodesContainer.append(promoCodeElement);
+        this.handleDiscountCodeApply(event);
       },
       { signal: this.abortController.signal },
     );

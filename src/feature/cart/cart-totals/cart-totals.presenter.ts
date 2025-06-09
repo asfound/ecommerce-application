@@ -18,13 +18,14 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
     console.warn(this.cartService);
   }
 
-  public initView(totalPrice: AppCartData['totalPrice']): void {
+  public initView(cartData: Omit<AppCartData, 'items' | 'totalLineItemQuantity'>): void {
     this.view.createHTML({
+      discountCodes: cartData.discountCodes,
       onApplyPromoCode: this.handleApplyPromoCode,
       onRemovePromoCode: this.handleRemovePromoCode,
       prices: {
-        discounted: totalPrice.discounted,
-        total: totalPrice.default,
+        discounted: cartData.totalPrice.discounted,
+        total: cartData.totalPrice.default,
       },
     });
   }

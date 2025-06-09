@@ -5,6 +5,7 @@ import type { FilterOption } from '~/components/filter/filter';
 import type { SORT_DIRECTION, SORT_FIELD_TYPE } from './constants';
 
 export interface AppCartData {
+  discountCodes: string[];
   items: AppCartProduct[];
   totalLineItemQuantity: number;
   totalPrice: { default: number; discounted?: number };

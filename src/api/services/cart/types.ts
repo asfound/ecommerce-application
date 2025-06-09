@@ -15,6 +15,10 @@ export interface AddLineItemPayload {
   sku: MyCartAddLineItemAction['sku'];
 }
 
+export interface DiscountCodePayload {
+  code: MyCartAddDiscountCodeAction['code'];
+}
+
 export interface RemoveDiscountCodePayload {
   discountCode: MyCartRemoveDiscountCodeAction['discountCode'];
 }
