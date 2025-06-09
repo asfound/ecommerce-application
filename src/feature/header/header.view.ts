@@ -133,6 +133,12 @@ export class HeaderView extends BaseComponent implements Component {
   }
 
   public setCartProductsCount(productsCount: number): void {
+    if (productsCount === 0) {
+      this.cartProductsCount.classList.add(styles.hidden);
+      return;
+    }
+
+    this.cartProductsCount.classList.remove(styles.hidden);
     this.cartProductsCount.textContent = productsCount.toString();
   }
 
