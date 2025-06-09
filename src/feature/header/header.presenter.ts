@@ -2,6 +2,8 @@ import type { AuthService } from '~/api/services/auth/auth.service';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
+import { routerSelector } from '~/app/router/store/selectors';
+import { routerStore } from '~/app/router/store/store';
 import { rootAction } from '~/app/store/actions';
 import { rootSelector } from '~/app/store/selectors';
 import { rootStore } from '~/app/store/store';
@@ -52,12 +54,21 @@ export class HeaderPresenter extends Presenter<HeaderView> {
   private setupSubscriptions(): void {
     this.subscribeLoggedIn();
     this.subscribeProductsCount();
+    this.subscribePathname();
   }
 
   private subscribeLoggedIn(): void {
     const unsubscribe = rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
       this.view.setLogoutIconVisible(loggedIn);
       this.view.setProfileIconVisible(loggedIn);
+    });
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribePathname(): void {
+    const unsubscribe = routerStore.subscribe(routerSelector.selectPathname, (pathname) => {
+      this.view.highlight(pathname);
     });
 
     this.storeSubscription.add(unsubscribe);

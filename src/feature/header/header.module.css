@@ -106,6 +106,14 @@
   transform: translateY(-50%) rotate(225deg);
 }
 
+.highlight {
+  color: var(--color-accent);
+}
+
+.highlight svg {
+  stroke: var(--color-accent);
+}
+
 @media (hover: hover) {
   .iconContainer:hover {
     cursor: pointer;

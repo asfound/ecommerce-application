@@ -31,6 +31,14 @@ export class HeaderView extends BaseComponent implements Component {
     this.cartProductsCount,
   );
 
+  private readonly profileIcon = div(
+    { className: styles.iconContainer },
+    createSvgIcon(accountSvg, styles.icon),
+    span({ className: styles.iconText }, HEADER_ICON_TEXT.PROFILE),
+  );
+
+  private readonly iconContainers = new Set([this.cartIcon, this.profileIcon]);
+
   private isBurgerMenuOpen = false;
 
   private readonly logoLink = a({
@@ -49,18 +57,15 @@ export class HeaderView extends BaseComponent implements Component {
 
   private readonly navigation = new Navigation(ROUTER_LINKS);
 
-  private readonly profileIcon = div(
-    { className: styles.iconContainer },
-    createSvgIcon(accountSvg, styles.icon),
-    span({ className: styles.iconText }, HEADER_ICON_TEXT.PROFILE),
-  );
-
   public constructor() {
     super({ className: styles.header, tagName: 'header' });
 
     this.createHTML();
 
     this.setupListeners();
+
+    this.cartIcon.dataset.route = ROUTE_PATH.CART;
+    this.profileIcon.dataset.route = ROUTE_PATH.PROFILE;
   }
 
   public bindCartClickHandler(handler: VoidFunction): void {
@@ -130,6 +135,22 @@ export class HeaderView extends BaseComponent implements Component {
     );
 
     this.append(wrapperElement);
+  }
+
+  public override destroy(): void {
+    this.iconContainers.clear();
+
+    super.destroy();
+  }
+
+  public highlight(routePath: string): void {
+    for (const iconContainer of this.iconContainers) {
+      if (iconContainer.dataset.route === routePath) {
+        iconContainer.classList.add(styles.highlight);
+      } else {
+        iconContainer.classList.remove(styles.highlight);
+      }
+    }
   }
 
   public setCartProductsCount(productsCount: number): void {
