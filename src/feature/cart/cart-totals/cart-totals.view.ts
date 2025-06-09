@@ -4,7 +4,7 @@ import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { InputText } from '~/components/common/input/input-text/input-text';
 import { PromoCode } from '~/components/promo-code/promo-code';
-import { div, form, h2 } from '~/shared/create-element/tags';
+import { div, form } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import styles from './cart-totals.module.css';
@@ -26,18 +26,39 @@ export class CartTotalsView extends BaseComponent implements Component {
     type: 'submit',
   });
 
+  private readonly cartDiscount = div(null);
+
+  private readonly cartDiscountContainer = div(
+    { className: styles.cartPriceContainer },
+    'Discount: ',
+    this.cartDiscount,
+  );
+
+  private readonly cartSubtotal = div(null);
+
+  private readonly cartSubtotalContainer = div(
+    { className: styles.cartPriceContainer },
+    'Subtotal: ',
+    this.cartSubtotal,
+  );
+
+  private readonly cartTotal = div(null);
+
+  private readonly cartTotalContainer = div(
+    { className: styles.cartPriceContainer },
+    'Total: ',
+    this.cartTotal,
+  );
+
   private readonly inputPromoCode = new InputText({
     placeholder: CART_TOTALS_TEXT.INPUT_PROMO_PLACEHOLDER,
   });
 
-  private readonly priceDiscount = div(null);
-
-  private readonly priceTotal = div(null);
-
   private readonly pricesContainer = div(
     { className: styles.pricesContainer },
-    this.priceDiscount,
-    this.priceTotal,
+    this.cartSubtotalContainer,
+    this.cartDiscountContainer,
+    this.cartTotalContainer,
   );
 
   private readonly promoCodesForm = form({ className: styles.form });
@@ -48,10 +69,6 @@ export class CartTotalsView extends BaseComponent implements Component {
 
   public constructor() {
     super({ className: styles.cartTotals, tagName: 'div' });
-
-    const heading = h2({ className: styles.heading }, CART_TOTALS_TEXT.HEADING);
-
-    this.append(heading);
 
     this.setupListeners();
   }
@@ -78,10 +95,8 @@ export class CartTotalsView extends BaseComponent implements Component {
   }
 
   public updateTotals(totalPrice: CartTotalsViewProperties['prices']): void {
-    this.priceTotal.textContent = formatPrice(totalPrice.total);
-    this.priceDiscount.textContent = totalPrice.discounted
-      ? formatPrice(totalPrice.discounted)
-      : '';
+    this.cartTotal.textContent = formatPrice(totalPrice.total);
+    this.cartDiscount.textContent = totalPrice.discounted ? formatPrice(totalPrice.discounted) : '';
   }
 
   private async handleDiscountCodeApply(event: SubmitEvent): Promise<void> {
