@@ -6,6 +6,7 @@ import type { AppProduct, AppProductWithInCart } from '~/api/services/products/t
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
+import { rootAction } from '~/app/store/actions';
 import { Presenter } from '~/shared/presenter/presenter';
 import { formatProductName } from '~/shared/utils/format-product-name';
 import { showToast } from '~/shared/utils/show-toast';
@@ -70,11 +71,13 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
     const productName = formatProductName(product);
 
     try {
-      await this.cartService.addLineItem({
+      const result = await this.cartService.addLineItem({
         lineItemKey: product.sku,
         quantity: PRODUCT_QUANTITY,
         sku: product.sku,
       });
+
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
 
       showToast(PRODUCT_CART_NOTIFICATION.ADDED_TO_CART(productName));
     } catch {

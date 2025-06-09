@@ -6,6 +6,7 @@ import type { AppCartProduct } from '~/api/services/products/types';
 import { mapLineItemToAppCartProduct } from '~/api/services/cart/mappers';
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
+import { rootAction } from '~/app/store/actions';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
@@ -46,6 +47,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     try {
       const result = await this.cartService.removeLineItem({ lineItemKey, quantity });
 
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
 
       this.updateTotals(result.body);
@@ -70,6 +72,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       const result = await this.cartService.addLineItem({ lineItemKey: key, quantity, sku });
 
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
 
       this.updateTotals(result.body);
@@ -98,6 +101,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     try {
       const result = await this.cartService.removeLineItem({ lineItemKey });
 
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
 
       this.updateTotals(result.body);

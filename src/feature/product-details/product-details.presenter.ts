@@ -8,6 +8,7 @@ import { Router } from '~/app/router/router';
 import { routerAction } from '~/app/router/store/actions';
 import { routerSelector } from '~/app/router/store/selectors';
 import { routerStore } from '~/app/router/store/store';
+import { rootAction } from '~/app/store/actions';
 import { Breadcrumbs } from '~/components/breadcrumbs/breadcrumbs';
 import { PAGE_NAME } from '~/shared/constants/constants';
 import { Presenter } from '~/shared/presenter/presenter';
@@ -86,11 +87,13 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
     const productName = formatProductName(product);
 
     try {
-      await this.cartService.addLineItem({
+      const result = await this.cartService.addLineItem({
         lineItemKey: product.sku,
         quantity: DEFAULT_QUANTITY,
         sku: product.sku,
       });
+
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
 
       showToast(PRODUCT_CART_NOTIFICATION.ADDED_TO_CART(productName));
     } catch {
@@ -109,7 +112,9 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
     const productName = formatProductName(product);
 
     try {
-      await this.cartService.removeLineItem({ lineItemKey: product.sku });
+      const result = await this.cartService.removeLineItem({ lineItemKey: product.sku });
+
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
 
       showToast(PRODUCT_CART_NOTIFICATION.REMOVED_FROM_CART(productName));
     } catch {
