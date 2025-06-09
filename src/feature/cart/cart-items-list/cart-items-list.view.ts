@@ -19,9 +19,13 @@ export class CartItemsListView extends BaseComponent implements Component {
   }
 
   public createHTML(products: AppCartProduct[], callbacks: CartItemCallbacks): void {
+    const fragment = document.createDocumentFragment();
+
     for (const product of products) {
-      this.listElement.append(new CartItem(product, callbacks).element);
+      fragment.append(new CartItem(product, callbacks).element);
     }
+
+    this.listElement.replaceChildren(fragment);
 
     this.replaceChildren(this.heading, this.listElement);
   }

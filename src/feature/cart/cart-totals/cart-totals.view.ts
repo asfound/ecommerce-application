@@ -3,17 +3,20 @@ import type { Component } from '~/components/base-component/types';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
 import { InputText } from '~/components/common/input/input-text/input-text';
-import { button, div, form, h2 } from '~/shared/create-element/tags';
+import { PromoCode } from '~/components/promo-code/promo-code';
+import { div, form } from '~/shared/create-element/tags';
 import { formatPrice } from '~/shared/utils/format-price';
 
 import styles from './cart-totals.module.css';
 import { CART_TOTALS_TEXT } from './constants';
 
 export interface CartTotalsViewProperties {
+  discountCodes: string[];
   onApplyPromoCode(code: string): Promise<void>;
   onRemovePromoCode(code: string): Promise<void>;
   prices: {
-    discounted?: number;
+    discount?: number;
+    subtotal?: number;
     total: number;
   };
 }
@@ -24,32 +27,52 @@ export class CartTotalsView extends BaseComponent implements Component {
     type: 'submit',
   });
 
+  private readonly cartDiscount = div(null);
+
+  private readonly cartDiscountContainer = div(
+    { className: [styles.cartPriceContainer, styles.discount] },
+    'Discount: ',
+    this.cartDiscount,
+  );
+
+  private readonly cartSubtotal = div(null);
+
+  private readonly cartSubtotalContainer = div(
+    { className: styles.cartPriceContainer },
+    'Subtotal: ',
+    this.cartSubtotal,
+  );
+
+  private readonly cartTotal = div(null);
+
+  private readonly cartTotalContainer = div(
+    { className: [styles.cartPriceContainer, styles.total] },
+    'Total: ',
+    this.cartTotal,
+  );
+
   private readonly inputPromoCode = new InputText({
     placeholder: CART_TOTALS_TEXT.INPUT_PROMO_PLACEHOLDER,
   });
 
-  private readonly priceDiscount = div(null);
-
-  private readonly priceTotal = div(null);
-
   private readonly pricesContainer = div(
     { className: styles.pricesContainer },
-    this.priceDiscount,
-    this.priceTotal,
+    this.cartSubtotalContainer,
+    this.cartDiscountContainer,
+    this.cartTotalContainer,
   );
 
   private readonly promoCodesForm = form({ className: styles.form });
 
-  private readonly promoCodesContainer = div(null, this.promoCodesForm);
+  private readonly promoCodesContainer = div(
+    { className: styles.promoCodesContainer },
+    this.promoCodesForm,
+  );
 
   private properties!: CartTotalsViewProperties;
 
   public constructor() {
     super({ className: styles.cartTotals, tagName: 'div' });
-
-    const heading = h2({ className: styles.heading }, CART_TOTALS_TEXT.HEADING);
-
-    this.append(heading);
 
     this.setupListeners();
   }
@@ -57,52 +80,78 @@ export class CartTotalsView extends BaseComponent implements Component {
   public createHTML(properties: CartTotalsViewProperties): void {
     this.properties = properties;
 
+    this.updateTotals(properties.prices);
+
     this.promoCodesForm.append(this.inputPromoCode.element, this.buttonApply.element);
 
-    this.priceTotal.textContent = formatPrice(properties.prices.total);
-    this.priceDiscount.textContent = properties.prices.discounted
-      ? formatPrice(properties.prices.discounted)
-      : '';
+    this.promoCodesContainer.replaceChildren(
+      this.promoCodesForm,
+      ...properties.discountCodes.map(
+        (discountCode) =>
+          new PromoCode({
+            code: discountCode,
+            onRemove: (code): Promise<void> => properties.onRemovePromoCode(code),
+          }).element,
+      ),
+    );
 
     this.append(this.promoCodesContainer, this.pricesContainer);
   }
 
+  public disableForm(): void {
+    this.inputPromoCode.setDisabled(true);
+    this.buttonApply.disable();
+  }
+
+  public enableForm(): void {
+    this.inputPromoCode.setDisabled(false);
+    this.buttonApply.enable();
+  }
+
   public updateTotals(totalPrice: CartTotalsViewProperties['prices']): void {
-    this.priceTotal.textContent = formatPrice(totalPrice.total);
-    this.priceDiscount.textContent = totalPrice.discounted
-      ? formatPrice(totalPrice.discounted)
-      : '';
+    if (totalPrice.discount) {
+      this.cartDiscountContainer.classList.remove(styles.hidden);
+      this.cartDiscount.textContent = '- ' + formatPrice(totalPrice.discount);
+    } else {
+      this.cartDiscountContainer.classList.add(styles.hidden);
+    }
+
+    if (totalPrice.subtotal) {
+      this.cartSubtotalContainer.classList.remove(styles.hidden);
+      this.cartSubtotal.textContent = formatPrice(totalPrice.subtotal);
+    } else {
+      this.cartSubtotalContainer.classList.add(styles.hidden);
+    }
+
+    this.cartTotal.textContent = formatPrice(totalPrice.total);
+  }
+
+  private async handleDiscountCodeApply(event: SubmitEvent): Promise<void> {
+    event.preventDefault();
+
+    try {
+      const promoCode = this.inputPromoCode.value.trim();
+
+      await this.properties.onApplyPromoCode(promoCode);
+
+      const discountCode = new PromoCode({
+        code: promoCode,
+        onRemove: (code): Promise<void> => this.properties.onRemovePromoCode(code),
+      });
+
+      this.inputPromoCode.reset();
+
+      this.promoCodesContainer.append(discountCode.element);
+    } catch {
+      this.inputPromoCode.setErrorMessage('');
+    }
   }
 
   private setupListeners(): void {
     this.promoCodesForm.addEventListener(
       'submit',
       (event) => {
-        event.preventDefault();
-
-        const promoCode = this.inputPromoCode.value.trim();
-
-        const promoCodeElement = div(
-          { className: styles.promoCodeElement },
-          promoCode,
-          button(
-            {
-              onClick: () => {
-                this.properties.onRemovePromoCode(promoCode);
-
-                promoCodeElement.remove();
-              },
-              signal: this.abortController.signal,
-            },
-            CART_TOTALS_TEXT.BUTTON_REMOVE,
-          ),
-        );
-
-        this.properties.onApplyPromoCode(this.inputPromoCode.value.trim());
-
-        this.inputPromoCode.reset();
-
-        this.promoCodesContainer.append(promoCodeElement);
+        this.handleDiscountCodeApply(event);
       },
       { signal: this.abortController.signal },
     );

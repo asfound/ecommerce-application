@@ -1,3 +1,5 @@
+import type { Cart } from '@commercetools/platform-sdk';
+
 import type { CartService } from '~/api/services/cart/cart.service';
 import type { AppCartProduct } from '~/api/services/products/types';
 
@@ -44,9 +46,9 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     try {
       const result = await this.cartService.removeLineItem({ lineItemKey, quantity });
 
-      this.cartTotalsPresenter?.updateTotals(result.body);
-
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+
+      this.updateTotals(result.body);
 
       const item = result.body.lineItems.find((item) => item.key === lineItemKey);
       return item ? mapLineItemToAppCartProduct(item) : null;
@@ -68,9 +70,9 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       const result = await this.cartService.addLineItem({ lineItemKey: key, quantity, sku });
 
-      this.cartTotalsPresenter?.updateTotals(result.body);
-
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+
+      this.updateTotals(result.body);
 
       const item = result.body.lineItems.find((item) => item.key === sku);
       return item ? mapLineItemToAppCartProduct(item) : null;
@@ -96,13 +98,17 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     try {
       const result = await this.cartService.removeLineItem({ lineItemKey });
 
-      this.cartTotalsPresenter?.updateTotals(result.body);
-
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+
+      this.updateTotals(result.body);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
       }
     }
   };
+
+  private updateTotals(cart: Cart): void {
+    this.cartTotalsPresenter?.updateTotals(cart);
+  }
 }

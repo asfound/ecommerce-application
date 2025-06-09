@@ -30,6 +30,7 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
     this.cartTotalsPresenter = new CartTotalsPresenter(new CartTotalsView(), cartService);
 
     this.cartItemsListPresenter.setTotalsPresenter(this.cartTotalsPresenter);
+    this.cartTotalsPresenter.setCartItemsListPresenter(this.cartItemsListPresenter);
 
     this.subscribeItemsCount();
     this.init();
@@ -46,7 +47,8 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
     try {
       this.view.showLoader();
 
-      const { items, totalLineItemQuantity, totalPrice } = await this.cartService.getCartData();
+      const { cart, discountCodes, items, totalLineItemQuantity, totalPrice } =
+        await this.cartService.getCartData();
 
       if (totalLineItemQuantity === 0) {
         this.view.showEmptyCart(this.navigateToCatalog);
@@ -57,7 +59,7 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
       cartAction.setItemsCount(totalLineItemQuantity);
 
       this.cartItemsListPresenter.initView(items);
-      this.cartTotalsPresenter.initView(totalPrice);
+      this.cartTotalsPresenter.initView({ discountCodes, totalPrice }, cart);
 
       this.view.showCartData(
         this.cartItemsListPresenter.getView().element,
