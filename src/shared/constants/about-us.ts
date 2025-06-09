@@ -10,7 +10,7 @@ export const RS_SCHOOL_LINK = 'https://rs.school/';
 export const COLLABORATION = [
   {
     paragraph:
-      'Our team maintained strong and consistent communication throughout the project by utilizing a dedicated Discord 💬 server. We stayed in touch daily, shared updates through structured daily reports, and held quick voice calls whenever we encountered roadblocks. According to our Statbot metrics, each team member spent at least 10 hours in voice channels — a testament to our willingness to collaborate closely, engage in pair programming, and make fast, informed decisions together.',
+      'Our team maintained strong and consistent communication throughout the project by utilizing a dedicated Discord 💬 server. We stayed in touch daily, shared updates through structured daily reports, and held quick voice calls whenever we encountered roadblocks. According to our Statbot metrics, each team member spent at least 10 hours per week in voice channels — a testament to our willingness to collaborate closely, engage in pair programming, and make fast, informed decisions together.',
   },
   {
     paragraph:
@@ -18,7 +18,7 @@ export const COLLABORATION = [
   },
   {
     paragraph:
-      'Our CI/CD ⚙️ pipeline also played a crucial role in streamlining our workflow. Every pull request is automatically formatted, and contributors only need to provide a changelog summary. Previews are built instantly, related issues are moved to the "In Review" column automatically, and the issue closes when the branch is squashed and merged. Real-time notifications in our Telegram 📲 channels ensure that every team member is promptly informed about updates in production, development environments, and pull requests.',
+      'Our CI/CD ⚙️ pipeline also played a crucial role in streamlining our workflow. Every pull request is automatically formatted, and contributors only need to provide a changelog summary. Previews are built instantly, related issues are moved to the "In Review" column of our project board automatically, and the issue closes when the branch is squashed and merged. Real-time notifications in our Telegram 📲 channels ensure that every team member is promptly informed about updates in production, development environments, and pull requests.',
   },
   {
     paragraph:
