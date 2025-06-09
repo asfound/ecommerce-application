@@ -36,12 +36,27 @@
 }
 
 .pricesContainer {
-  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .cartPriceContainer {
   display: flex;
   justify-content: space-between;
+}
+
+.hidden {
+  display: none;
+}
+
+.total {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.discount {
+  color: var(--color-accent);
 }
 
 @media (width <= 768px) {

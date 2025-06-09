@@ -30,7 +30,7 @@ export class CartTotalsView extends BaseComponent implements Component {
   private readonly cartDiscount = div(null);
 
   private readonly cartDiscountContainer = div(
-    { className: styles.cartPriceContainer },
+    { className: [styles.cartPriceContainer, styles.discount] },
     'Discount: ',
     this.cartDiscount,
   );
@@ -46,7 +46,7 @@ export class CartTotalsView extends BaseComponent implements Component {
   private readonly cartTotal = div(null);
 
   private readonly cartTotalContainer = div(
-    { className: styles.cartPriceContainer },
+    { className: [styles.cartPriceContainer, styles.total] },
     'Total: ',
     this.cartTotal,
   );
@@ -100,10 +100,10 @@ export class CartTotalsView extends BaseComponent implements Component {
 
   public updateTotals(totalPrice: CartTotalsViewProperties['prices']): void {
     if (totalPrice.discount) {
-      this.cartDiscountContainer.hidden = false;
-      this.cartDiscount.textContent = formatPrice(totalPrice.discount);
+      this.cartDiscountContainer.classList.remove(styles.hidden);
+      this.cartDiscount.textContent = '- ' + formatPrice(totalPrice.discount);
     } else {
-      this.cartDiscountContainer.hidden = true;
+      this.cartDiscountContainer.classList.add(styles.hidden);
     }
 
     this.cartSubtotal.textContent = formatPrice(totalPrice.subtotal);
