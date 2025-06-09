@@ -15,8 +15,11 @@ export class CartContainerView extends BaseComponent {
 
   private readonly emptyCartElement = div(
     { className: styles.emptyCart },
-    p(null, CART_CONTAINER_TEXT.CART_EMPTY),
-    p(null, CART_CONTAINER_TEXT.CART_EXPLORE),
+    div(
+      null,
+      p({ className: styles.heading }, CART_CONTAINER_TEXT.CART_EMPTY),
+      p(null, CART_CONTAINER_TEXT.CART_EXPLORE),
+    ),
     this.buttonCatalog.element,
   );
 
