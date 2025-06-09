@@ -9,7 +9,7 @@ export class CartPage extends BaseComponent {
   private readonly cartContainerPresenter: CartContainerPresenter;
 
   public constructor() {
-    super({ className: [CSS_CLASS_NAME.WRAPPER, styles.container], tagName: 'div' });
+    super({ className: [CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
 
     this.cartContainerPresenter = new CartContainerPresenter(
       new CartContainerView(),
