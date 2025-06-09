@@ -77,6 +77,12 @@ export class CartTotalsView extends BaseComponent implements Component {
     this.setupListeners();
   }
 
+  public checkValidity(): void {
+    const formValid = this.inputPromoCode.value.length > 0;
+
+    this.buttonApply[formValid ? 'enable' : 'disable']();
+  }
+
   public createHTML(properties: CartTotalsViewProperties): void {
     this.properties = properties;
 
@@ -94,6 +100,8 @@ export class CartTotalsView extends BaseComponent implements Component {
           }).element,
       ),
     );
+
+    this.buttonApply.disable();
 
     this.append(this.promoCodesContainer, this.pricesContainer);
   }
@@ -140,10 +148,12 @@ export class CartTotalsView extends BaseComponent implements Component {
       });
 
       this.inputPromoCode.reset();
+      this.buttonApply.disable();
 
       this.promoCodesContainer.append(discountCode.element);
     } catch {
       this.inputPromoCode.setErrorMessage('');
+      this.inputPromoCode.focus();
     }
   }
 
@@ -155,5 +165,9 @@ export class CartTotalsView extends BaseComponent implements Component {
       },
       { signal: this.abortController.signal },
     );
+
+    this.inputPromoCode.addListener('input', () => {
+      this.checkValidity();
+    });
   }
 }
