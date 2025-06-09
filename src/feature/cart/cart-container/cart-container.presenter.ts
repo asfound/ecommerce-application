@@ -30,6 +30,7 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
     this.cartTotalsPresenter = new CartTotalsPresenter(new CartTotalsView(), cartService);
 
     this.cartItemsListPresenter.setTotalsPresenter(this.cartTotalsPresenter);
+    this.cartTotalsPresenter.setCartItemsListPresenter(this.cartItemsListPresenter);
 
     this.subscribeItemsCount();
     this.init();
