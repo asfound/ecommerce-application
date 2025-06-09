@@ -91,6 +91,7 @@ export class CartService {
     );
 
     return {
+      cart: cart.body,
       discountCodes,
       items,
       totalLineItemQuantity: cart.body.totalLineItemQuantity ?? 0,

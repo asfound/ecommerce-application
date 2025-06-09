@@ -1,10 +1,11 @@
-import type { QueryParam } from '@commercetools/platform-sdk';
+import type { Cart, QueryParam } from '@commercetools/platform-sdk';
 
 import type { FilterOption } from '~/components/filter/filter';
 
 import type { SORT_DIRECTION, SORT_FIELD_TYPE } from './constants';
 
 export interface AppCartData {
+  cart: Cart;
   discountCodes: string[];
   items: AppCartProduct[];
   totalLineItemQuantity: number;

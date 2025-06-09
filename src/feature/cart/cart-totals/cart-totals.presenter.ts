@@ -24,15 +24,15 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
     console.warn(this.cartService);
   }
 
-  public initView(cartData: Omit<AppCartData, 'items' | 'totalLineItemQuantity'>): void {
+  public initView(
+    cartData: Omit<AppCartData, 'cart' | 'items' | 'totalLineItemQuantity'>,
+    cart: Cart,
+  ): void {
     this.view.createHTML({
       discountCodes: cartData.discountCodes,
       onApplyPromoCode: this.handleApplyPromoCode,
       onRemovePromoCode: this.handleRemovePromoCode,
-      prices: {
-        discounted: cartData.totalPrice.discounted,
-        total: cartData.totalPrice.default,
-      },
+      prices: this.calculateTotals(cart),
     });
   }
 
@@ -41,7 +41,18 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
   }
 
   private calculateTotals(cart: Cart): CartTotalsViewProperties['prices'] {
-    return { total: cart.totalPrice.centAmount };
+    let subtotal = 0;
+
+    for (const item of cart.lineItems) {
+      const itemPrice = item.price.discounted?.value.centAmount ?? item.price.value.centAmount;
+      subtotal += itemPrice * item.quantity;
+    }
+
+    const total = cart.totalPrice.centAmount;
+
+    const discount = subtotal - total;
+
+    return discount === 0 ? { subtotal, total } : { discount, subtotal, total };
   }
 
   private readonly handleApplyPromoCode = async (code: string): Promise<void> => {

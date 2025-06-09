@@ -15,7 +15,8 @@ export interface CartTotalsViewProperties {
   onApplyPromoCode(code: string): Promise<void>;
   onRemovePromoCode(code: string): Promise<void>;
   prices: {
-    discounted?: number;
+    discount?: number;
+    subtotal: number;
     total: number;
   };
 }
@@ -98,8 +99,15 @@ export class CartTotalsView extends BaseComponent implements Component {
   }
 
   public updateTotals(totalPrice: CartTotalsViewProperties['prices']): void {
+    if (totalPrice.discount) {
+      this.cartDiscountContainer.hidden = false;
+      this.cartDiscount.textContent = formatPrice(totalPrice.discount);
+    } else {
+      this.cartDiscountContainer.hidden = true;
+    }
+
+    this.cartSubtotal.textContent = formatPrice(totalPrice.subtotal);
     this.cartTotal.textContent = formatPrice(totalPrice.total);
-    this.cartDiscount.textContent = totalPrice.discounted ? formatPrice(totalPrice.discounted) : '';
   }
 
   private async handleDiscountCodeApply(event: SubmitEvent): Promise<void> {
