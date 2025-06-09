@@ -29,6 +29,7 @@ export const mapLineItemToAppCartProduct = (
       default: lineItem.price.value.centAmount,
       discounted: lineItem.price.discounted?.value.centAmount,
     },
+    productId: lineItem.productId,
     promoCodePrice: lineItem.discountedPricePerQuantity[0]?.discountedPrice.value.centAmount,
     quantity: lineItem.quantity,
     sku: lineItem.variant.sku ?? '',

@@ -2,6 +2,8 @@ import type { CartService } from '~/api/services/cart/cart.service';
 import type { AppCartProduct } from '~/api/services/products/types';
 
 import { mapLineItemToAppCartProduct } from '~/api/services/cart/mappers';
+import { ROUTE_PATH } from '~/app/router/route-path';
+import { Router } from '~/app/router/router';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
@@ -26,6 +28,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     this.view.createHTML(products, {
       onDecrementItem: this.handleDecrementItem,
       onIncrementItem: this.handleIncrementItem,
+      onNavigateToDetails: this.handleNavigateToDetails,
       onRemoveItem: this.handleRemoveItem,
     });
   }
@@ -78,6 +81,15 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       return null;
     }
+  };
+
+  private readonly handleNavigateToDetails = (product: AppCartProduct): void => {
+    Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, {
+      searchParameters: {
+        id: product.productId,
+        sku: product.sku,
+      },
+    });
   };
 
   private handleRemoveItem = async (lineItemKey: string): Promise<void> => {

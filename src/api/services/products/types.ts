@@ -15,6 +15,7 @@ export interface AppCartProduct {
   lineItemKey: string;
   name: string;
   price: { default: number; discounted?: number };
+  productId: string;
   promoCodePrice?: number;
   quantity: number;
   sku: string;

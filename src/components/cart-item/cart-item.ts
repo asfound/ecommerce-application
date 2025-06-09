@@ -1,7 +1,7 @@
 import type { AppCartProduct } from '~/api/services/products/types';
 
 import deleteIcon from '~/assets/icons/cross.svg';
-import { div, img, span } from '~/shared/create-element/tags';
+import { a, div, img, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { formatPrice } from '~/shared/utils/format-price';
 
@@ -15,8 +15,11 @@ import { BUTTON_TEXT, BUTTON_TITLE, QUANTITY_STEP, SINGLE_ITEM } from './constan
 export interface CartItemCallbacks {
   onDecrementItem(lineItemKey: string, quantity: number): Promise<AppCartProduct | null>;
   onIncrementItem(quantity: number, sku: string): Promise<AppCartProduct | null>;
+  onNavigateToDetails: ProductCardClickHandler;
   onRemoveItem(lineItemKey: string): Promise<void>;
 }
+
+export type ProductCardClickHandler = (product: AppCartProduct) => void;
 
 export class CartItem extends BaseComponent implements Component {
   private readonly callbacks: CartItemCallbacks;
@@ -128,14 +131,28 @@ export class CartItem extends BaseComponent implements Component {
       src: this.item.image.url,
     });
 
-    const itemInfo = div(
-      { className: styles.itemInfo },
-      div(
-        { className: styles.name },
-        `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
-      ),
-      this.individualPriceContainer,
+    const itemName = a(
+      { className: styles.name },
+      `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
     );
+
+    itemImage.addEventListener(
+      'click',
+      () => {
+        this.callbacks.onNavigateToDetails(this.item);
+      },
+      { signal: this.abortController.signal },
+    );
+
+    itemName.addEventListener(
+      'click',
+      () => {
+        this.callbacks.onNavigateToDetails(this.item);
+      },
+      { signal: this.abortController.signal },
+    );
+
+    const itemInfo = div({ className: styles.itemInfo }, itemName, this.individualPriceContainer);
 
     return div({ className: styles.itemDetails }, itemImage, itemInfo);
   }

@@ -26,12 +26,16 @@
 }
 
 .image {
+  cursor: pointer;
   aspect-ratio: 1 / 1;
   max-width: 10.5rem;
+  border-radius: var(--border-radius);
 }
 
 .name {
+  cursor: pointer;
   font-weight: 500;
+  transition: color var(--transition-duration);
 }
 
 .deleteButton {
@@ -43,10 +47,6 @@
   border: none;
 
   background-color: transparent;
-}
-
-.deleteButton:hover {
-  background-color: inherit;
 }
 
 .deleteIcon {
@@ -81,18 +81,6 @@
   text-align: center;
 }
 
-@media (hover: hover) {
-  .deleteButton:hover .deleteIcon {
-    stroke: var(--color-accent);
-  }
-}
-
-@media (width <= 1140px) {
-  .itemControls {
-    flex: 0 0 100%;
-  }
-}
-
 .individualPrice {
   display: flex;
   gap: 1rem;
@@ -125,4 +113,24 @@
   line-height: normal;
   color: var(--color-accent-light);
   text-decoration: line-through;
+}
+
+@media (hover: hover) {
+  .deleteButton:hover .deleteIcon {
+    stroke: var(--color-accent);
+  }
+
+  .deleteButton:hover {
+    background-color: inherit;
+  }
+
+  .name:hover {
+    color: var(--color-accent);
+  }
+}
+
+@media (width <= 1140px) {
+  .itemControls {
+    flex: 0 0 100%;
+  }
 }
