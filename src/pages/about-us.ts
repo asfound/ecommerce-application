@@ -5,7 +5,7 @@ import { modalService } from '~/services/modal/modal.service';
 import { ABOUT_US_TEXT, RS_SCHOOL_LINK } from '~/shared/constants/about-us';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { TEAM_DATA } from '~/shared/constants/team-data';
-import { a, div, h2, p } from '~/shared/create-element/tags';
+import { a, div, h2, p, section } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import styles from './about-us.module.css';
@@ -21,12 +21,16 @@ export class AboutUsPage extends BaseComponent {
       ABOUT_US_TEXT.PARAGRAPH_COLLABORATION,
     );
 
+    const collaborationSection = section(null, titleCollaboration, paragraphCollaboration);
+
     const titleTeam = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_TEAM);
 
     const memberCards = div(
       { className: styles.cards },
       ...TEAM_DATA.MEMBERS.map((member) => new ProfileCard(member, modalService).element),
     );
+
+    const teamSection = section(null, titleTeam, memberCards);
 
     const titleSupport = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_THANKS);
 
@@ -35,6 +39,8 @@ export class AboutUsPage extends BaseComponent {
       ...TEAM_DATA.EXTERNAL_SUPPORT.map((member) => new ProfileCard(member, modalService).element),
     );
 
+    const supportSection = section(null, titleSupport, supportCards);
+
     const titleRSSchool = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_RS);
 
     const rsschoolLink = a(
@@ -42,16 +48,14 @@ export class AboutUsPage extends BaseComponent {
       createSvgIcon(iconRS, styles.rsIcon),
     );
 
+    const schoolSection = section(null, titleRSSchool, rsschoolLink);
+
     this.append(
-      titleCollaboration,
-      paragraphCollaboration,
-      titleTeam,
-      memberCards,
-      titleSupport,
-      supportCards,
+      collaborationSection,
+      teamSection,
+      supportSection,
       modalService.getView(),
-      titleRSSchool,
-      rsschoolLink,
+      schoolSection,
     );
   }
 }
