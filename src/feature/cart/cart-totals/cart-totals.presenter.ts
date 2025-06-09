@@ -87,8 +87,6 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
 
   private readonly handleRemovePromoCode = async (code: string): Promise<void> => {
     try {
-      this.view.disableForm();
-
       const { body } = await this.cartService.removeDiscountCode({ code });
 
       this.updateTotals(body);
@@ -100,8 +98,6 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
       if (isError(error)) {
         showToast(error.message, true);
       }
-    } finally {
-      this.view.enableForm();
     }
   };
 
