@@ -68,3 +68,10 @@
     background-color: transparent;
   }
 }
+
+@media (width <= 480px) {
+  .rsIcon {
+    width: 30rem;
+    height: 30rem;
+  }
+}
