@@ -1,7 +1,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 5rem;
   margin-block: 5rem;
 }
 
@@ -42,6 +42,10 @@
 .rsIcon {
   border-radius: 50%;
   line-height: 0;
+}
+
+.paragraphCollaboration {
+  font-family: var(--font-montserrat);
 }
 
 @media (hover: hover) {

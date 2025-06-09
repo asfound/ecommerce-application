@@ -51,8 +51,9 @@ export class AboutUsPage extends BaseComponent {
     const schoolSection = section(null, titleRSSchool, rsschoolLink);
 
     this.append(
-      collaborationSection,
       teamSection,
+      collaborationSection,
+
       supportSection,
       modalService.getView(),
       schoolSection,
