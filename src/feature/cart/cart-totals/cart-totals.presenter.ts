@@ -65,6 +65,8 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
 
   private readonly handleApplyPromoCode = async (code: string): Promise<void> => {
     try {
+      this.view.disableForm();
+
       const { body } = await this.cartService.applyDiscountCode({ code });
 
       this.updateTotals(body);
@@ -78,11 +80,15 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
       }
 
       throw new Error(CART_ERROR_MESSAGE.CODE_ALREADY_APPLIED(code));
+    } finally {
+      this.view.enableForm();
     }
   };
 
   private readonly handleRemovePromoCode = async (code: string): Promise<void> => {
     try {
+      this.view.disableForm();
+
       const { body } = await this.cartService.removeDiscountCode({ code });
 
       this.updateTotals(body);
@@ -94,6 +100,8 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
       if (isError(error)) {
         showToast(error.message, true);
       }
+    } finally {
+      this.view.enableForm();
     }
   };
 

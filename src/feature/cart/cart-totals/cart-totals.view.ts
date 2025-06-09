@@ -98,6 +98,16 @@ export class CartTotalsView extends BaseComponent implements Component {
     this.append(this.promoCodesContainer, this.pricesContainer);
   }
 
+  public disableForm(): void {
+    this.inputPromoCode.setDisabled(true);
+    this.buttonApply.disable();
+  }
+
+  public enableForm(): void {
+    this.inputPromoCode.setDisabled(false);
+    this.buttonApply.enable();
+  }
+
   public updateTotals(totalPrice: CartTotalsViewProperties['prices']): void {
     if (totalPrice.discount) {
       this.cartDiscountContainer.classList.remove(styles.hidden);
