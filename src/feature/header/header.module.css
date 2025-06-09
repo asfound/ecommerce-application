@@ -19,6 +19,8 @@
 }
 
 .iconContainer {
+  position: relative;
+
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -37,6 +39,26 @@
   height: 2.4rem;
   stroke: var(--color-white);
   transition: stroke var(--transition-duration);
+}
+
+.cartProductsCount {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+
+  font-size: 1.2rem;
+  line-height: normal;
+  color: var(--color-white);
+
+  background-color: var(--color-accent);
 }
 
 .burger {

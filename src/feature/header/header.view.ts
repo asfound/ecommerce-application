@@ -22,7 +22,7 @@ import {
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
-  private readonly cartProductsCount = div(null, '0');
+  private readonly cartProductsCount = div({ className: styles.cartProductsCount }, '0');
 
   private readonly cartIcon = div(
     { className: styles.iconContainer },
