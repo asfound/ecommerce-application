@@ -11,7 +11,7 @@ import {
   createRemoveDiscountCodeAction,
   createRemoveLineItemAction,
 } from './actions';
-import { EXPAND_PATH } from './constants';
+import { CART_ERROR_MESSAGE, EXPAND_PATH } from './constants';
 import { createCartDraft } from './helpers';
 import { mapLineItemToAppCartProduct } from './mappers';
 
@@ -58,7 +58,7 @@ export class CartService {
     );
 
     if (discountCodeReference) {
-      throw new Error('AAAAAAAAAAAAAAAAAAAAA');
+      throw new Error(CART_ERROR_MESSAGE.CODE_ALREADY_APPLIED(payload.code));
     }
 
     const response = await this.apiRoot()
@@ -125,7 +125,7 @@ export class CartService {
     );
 
     if (!discountCodeReference) {
-      throw new Error('Discount code not found');
+      throw new Error(CART_ERROR_MESSAGE.CODE_NOT_APPLIED(payload.code));
     }
 
     const actions = [createRemoveDiscountCodeAction(discountCodeReference)];
