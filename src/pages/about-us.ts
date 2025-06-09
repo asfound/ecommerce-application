@@ -2,7 +2,7 @@ import iconRS from '~/assets/icons/rss-logo.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProfileCard } from '~/components/profile-card/profile-card';
 import { modalService } from '~/services/modal/modal.service';
-import { ABOUT_US_TEXT, RS_SCHOOL_LINK } from '~/shared/constants/about-us';
+import { ABOUT_US_TEXT, COLLABORATION, RS_SCHOOL_LINK } from '~/shared/constants/about-us';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { TEAM_DATA } from '~/shared/constants/team-data';
 import { a, div, h2, p, section } from '~/shared/create-element/tags';
@@ -16,12 +16,12 @@ export class AboutUsPage extends BaseComponent {
 
     const titleCollaboration = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_COLLABORATION);
 
-    const paragraphCollaboration = p(
-      { className: styles.paragraphCollaboration },
-      ABOUT_US_TEXT.PARAGRAPH_COLLABORATION,
+    const collaborationText = div(
+      { className: styles.collaborationText },
+      ...COLLABORATION.map((paragraph) => p(null, paragraph.paragraph)),
     );
 
-    const collaborationSection = section(null, titleCollaboration, paragraphCollaboration);
+    const collaborationSection = section(null, titleCollaboration, collaborationText);
 
     const titleTeam = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_TEAM);
 
