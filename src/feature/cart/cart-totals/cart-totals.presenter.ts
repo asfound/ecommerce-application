@@ -60,7 +60,7 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
 
     const discount = subtotal - total;
 
-    return discount === 0 ? { subtotal, total } : { discount, subtotal, total };
+    return discount === 0 ? { total } : { discount, subtotal, total };
   }
 
   private readonly handleApplyPromoCode = async (code: string): Promise<void> => {

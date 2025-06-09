@@ -16,7 +16,7 @@ export interface CartTotalsViewProperties {
   onRemovePromoCode(code: string): Promise<void>;
   prices: {
     discount?: number;
-    subtotal: number;
+    subtotal?: number;
     total: number;
   };
 }
@@ -116,7 +116,13 @@ export class CartTotalsView extends BaseComponent implements Component {
       this.cartDiscountContainer.classList.add(styles.hidden);
     }
 
-    this.cartSubtotal.textContent = formatPrice(totalPrice.subtotal);
+    if (totalPrice.subtotal) {
+      this.cartSubtotalContainer.classList.remove(styles.hidden);
+      this.cartSubtotal.textContent = formatPrice(totalPrice.subtotal);
+    } else {
+      this.cartSubtotalContainer.classList.add(styles.hidden);
+    }
+
     this.cartTotal.textContent = formatPrice(totalPrice.total);
   }
 
