@@ -1,0 +1,42 @@
+.cartTotals {
+  flex-shrink: 0;
+
+  width: 100%;
+  max-width: 30.5rem;
+  height: max-content;
+  padding-block: 2rem 3rem;
+  padding-inline: 3rem;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-dark);
+}
+
+.heading {
+  margin-bottom: 2rem;
+}
+
+.promoCodesContainer {
+  background-color: transparent;
+}
+
+.promoCodeElement {
+  display: flex;
+  gap: 1rem;
+  text-transform: uppercase;
+}
+
+.form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pricesContainer {
+  background-color: transparent;
+}
+
+@media (width <= 768px) {
+  .cartTotals {
+    order: -1;
+    max-width: 100%;
+  }
+}

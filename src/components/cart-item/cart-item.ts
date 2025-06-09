@@ -1,7 +1,7 @@
 import type { AppCartProduct } from '~/api/services/products/types';
 
 import deleteIcon from '~/assets/icons/cross.svg';
-import { div, img, span } from '~/shared/create-element/tags';
+import { a, div, img, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { formatPrice } from '~/shared/utils/format-price';
 
@@ -10,41 +10,61 @@ import type { Component } from '../base-component/types';
 import { BaseComponent } from '../base-component/base-component';
 import { Button } from '../common/button/button';
 import styles from './cart-item.module.css';
-import { BUTTON_TEXT, BUTTON_TITLE, SINGLE_ITEM } from './constants';
+import { BUTTON_TEXT, BUTTON_TITLE, QUANTITY_STEP, SINGLE_ITEM } from './constants';
 
 export interface CartItemCallbacks {
-  onRemoveItem(lineItemKey: string, productName: string, quantity?: number): Promise<void>;
+  onDecrementItem(lineItemKey: string, quantity: number): Promise<AppCartProduct | null>;
+  onIncrementItem(quantity: number, sku: string): Promise<AppCartProduct | null>;
+  onNavigateToDetails: ProductCardClickHandler;
+  onRemoveItem(lineItemKey: string): Promise<void>;
 }
 
-export class CartItem extends BaseComponent implements Component {
-  private readonly addItemButton = new Button({
-    className: styles.controlButton,
-    textContent: BUTTON_TEXT.INCREMENT,
-    type: 'button',
-  });
+export type ProductCardClickHandler = (product: AppCartProduct) => void;
 
+export class CartItem extends BaseComponent implements Component {
   private readonly callbacks: CartItemCallbacks;
+
+  private item: AppCartProduct;
 
   private readonly decrementItemButton = new Button({
     className: styles.controlButton,
+    onClick: (): void => {
+      this.disableQuantityControls();
+      this.callbacks.onDecrementItem(this.item.lineItemKey, QUANTITY_STEP).then((result) => {
+        this.updateItem(result);
+      });
+    },
     textContent: BUTTON_TEXT.DECREMENT,
     type: 'button',
   });
 
-  private readonly item: AppCartProduct;
-
   private readonly deleteButton = new Button({
     className: styles.deleteButton,
     onClick: (): void => {
-      this.callbacks.onRemoveItem(
-        this.item.lineItemKey,
-        `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
-      );
+      this.callbacks.onRemoveItem(this.item.lineItemKey);
       this.destroy();
     },
     textContent: '',
     type: 'button',
   });
+
+  private readonly incrementItemButton = new Button({
+    className: styles.controlButton,
+    onClick: (): void => {
+      this.disableQuantityControls();
+      this.callbacks.onIncrementItem(QUANTITY_STEP, this.item.sku).then((result) => {
+        this.updateItem(result);
+      });
+    },
+    textContent: BUTTON_TEXT.INCREMENT,
+    type: 'button',
+  });
+
+  private readonly individualPriceContainer = div({ className: styles.individualPrice });
+
+  private readonly itemTotalPriceContainer = div({ className: styles.totalPrice });
+
+  private readonly quantityLabel = span({ className: styles.quantity });
 
   public constructor(item: AppCartProduct, callbacks: CartItemCallbacks) {
     super({ className: styles.item, tagName: 'li' });
@@ -52,45 +72,56 @@ export class CartItem extends BaseComponent implements Component {
     this.item = item;
     this.callbacks = callbacks;
 
-    this.addItemButton.element.title = BUTTON_TITLE.INCREASE;
-    this.decrementItemButton.element.title = BUTTON_TITLE.DECREASE;
-    this.deleteButton.element.title = BUTTON_TITLE.DELETE;
-
-    this.deleteButton.append(createSvgIcon(deleteIcon, styles.deleteIcon));
-
     this.createHTML();
   }
 
   public createHTML(): void {
-    const itemDetails = this.createItemDetails();
+    this.initButtons();
+    this.createIndividualPrice();
+    this.updateQuantityControls();
+    this.updateTotalPrice();
 
-    if (this.item.quantity === SINGLE_ITEM) {
-      this.decrementItemButton.disable();
-    }
+    const itemDetails = this.createItemDetails();
 
     const quantityControls = div(
       { className: styles.quantityControls },
       this.decrementItemButton.element,
-      span({ className: styles.quantity }, this.item.quantity.toString()),
-      this.addItemButton.element,
-    );
-
-    const itemTotalPrice = div(
-      { className: styles.totalPrice },
-      span(
-        null,
-        formatPrice((this.item.price.discounted ?? this.item.price.default) * this.item.quantity),
-      ),
+      this.quantityLabel,
+      this.incrementItemButton.element,
     );
 
     const itemControls = div(
       { className: styles.itemControls },
       quantityControls,
-      itemTotalPrice,
+      this.itemTotalPriceContainer,
       this.deleteButton.element,
     );
 
     this.append(itemDetails, itemControls);
+  }
+
+  private createIndividualPrice(): void {
+    this.individualPriceContainer.replaceChildren();
+
+    const { price } = this.item;
+    const basePrice = price.default;
+    const promoPrice = this.item.promoCodePrice;
+    const internalSalePrice = price.discounted;
+
+    const currentPrice = promoPrice ?? internalSalePrice ?? basePrice;
+    const isPromoApplied = promoPrice !== undefined;
+
+    const currentPriceElement = div(
+      { className: isPromoApplied ? styles.discountedPrice : styles.defaultPrice },
+      formatPrice(currentPrice),
+    );
+
+    this.individualPriceContainer.append(currentPriceElement);
+
+    if (currentPrice < basePrice) {
+      const oldPriceElement = div({ className: styles.oldPrice }, formatPrice(basePrice));
+      this.individualPriceContainer.append(oldPriceElement);
+    }
   }
 
   private createItemDetails(): HTMLDivElement {
@@ -100,18 +131,79 @@ export class CartItem extends BaseComponent implements Component {
       src: this.item.image.url,
     });
 
-    const itemInfo = div(
-      { className: styles.itemInfo },
-      div(
-        { className: styles.name },
-        `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
-      ),
-      div(
-        { className: styles.price },
-        formatPrice(this.item.price.discounted ?? this.item.price.default),
-      ),
+    const itemName = a(
+      { className: styles.name },
+      `${this.item.name}${this.item.weight ? `, ${this.item.weight}g` : ''}`,
     );
 
+    itemImage.addEventListener(
+      'click',
+      () => {
+        this.callbacks.onNavigateToDetails(this.item);
+      },
+      { signal: this.abortController.signal },
+    );
+
+    itemName.addEventListener(
+      'click',
+      () => {
+        this.callbacks.onNavigateToDetails(this.item);
+      },
+      { signal: this.abortController.signal },
+    );
+
+    const itemInfo = div({ className: styles.itemInfo }, itemName, this.individualPriceContainer);
+
     return div({ className: styles.itemDetails }, itemImage, itemInfo);
+  }
+
+  private disableQuantityControls(): void {
+    this.incrementItemButton.disable();
+    this.decrementItemButton.disable();
+  }
+
+  private initButtons(): void {
+    this.incrementItemButton.element.title = BUTTON_TITLE.INCREASE;
+    this.decrementItemButton.element.title = BUTTON_TITLE.DECREASE;
+    this.deleteButton.element.title = BUTTON_TITLE.DELETE;
+
+    this.deleteButton.append(createSvgIcon(deleteIcon, styles.deleteIcon));
+  }
+
+  private updateItem(item: AppCartProduct | null): void {
+    if (item) {
+      this.item = item;
+    }
+
+    this.updateQuantityControls();
+    this.updateTotalPrice();
+  }
+
+  private updateQuantityControls(): void {
+    this.incrementItemButton.enable();
+    this.decrementItemButton.element.disabled = this.item.quantity === SINGLE_ITEM;
+    this.quantityLabel.replaceChildren(this.item.quantity.toString());
+  }
+
+  private updateTotalPrice(): void {
+    this.itemTotalPriceContainer.replaceChildren();
+
+    if (this.item.promoCodePrice === undefined) {
+      this.itemTotalPriceContainer.append(
+        div({ className: styles.defaultPrice }, formatPrice(this.item.totalPrice)),
+      );
+    } else {
+      const discountedPriceElement = div(
+        { className: styles.discountedPrice },
+        formatPrice(this.item.totalPrice),
+      );
+
+      const originalPriceElement = div(
+        { className: styles.oldPrice },
+        formatPrice(this.item.price.default * this.item.quantity),
+      );
+
+      this.itemTotalPriceContainer.append(discountedPriceElement, originalPriceElement);
+    }
   }
 }

@@ -1,51 +1,108 @@
 import type { CartService } from '~/api/services/cart/cart.service';
+import type { AppCartProduct } from '~/api/services/products/types';
 
-import { PRODUCT_CART_NOTIFICATION } from '~/feature/catalog/constants';
+import { mapLineItemToAppCartProduct } from '~/api/services/cart/mappers';
+import { ROUTE_PATH } from '~/app/router/route-path';
+import { Router } from '~/app/router/router';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 import { showToast } from '~/shared/utils/show-toast';
 
+import type { CartTotalsPresenter } from '../cart-totals/cart-totals.presenter';
 import type { CartItemsListView } from './cart-items-list.view';
+
+import { cartAction } from '../store/actions';
 
 export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   private readonly cartService: CartService;
+
+  private cartTotalsPresenter: CartTotalsPresenter | null = null;
 
   public constructor(view: CartItemsListView, cartService: CartService) {
     super(view);
 
     this.cartService = cartService;
-
-    this.initView();
   }
 
-  private handleRemoveItem = async (
-    lineItemKey: string,
-    productName: string,
-    quantity?: number,
-  ): Promise<void> => {
-    try {
-      await this.cartService.removeLineItem({ lineItemKey, quantity });
+  public initView(products: AppCartProduct[]): void {
+    this.view.createHTML(products, {
+      onDecrementItem: this.handleDecrementItem,
+      onIncrementItem: this.handleIncrementItem,
+      onNavigateToDetails: this.handleNavigateToDetails,
+      onRemoveItem: this.handleRemoveItem,
+    });
+  }
 
-      showToast(PRODUCT_CART_NOTIFICATION.REMOVED_FROM_CART(productName));
+  public setTotalsPresenter(presenter: CartTotalsPresenter): void {
+    this.cartTotalsPresenter = presenter;
+  }
+
+  private handleDecrementItem = async (
+    lineItemKey: string,
+    quantity: number,
+  ): Promise<AppCartProduct | null> => {
+    try {
+      const result = await this.cartService.removeLineItem({ lineItemKey, quantity });
+
+      this.cartTotalsPresenter?.updateTotals(result.body);
+
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+
+      const item = result.body.lineItems.find((item) => item.key === lineItemKey);
+      return item ? mapLineItemToAppCartProduct(item) : null;
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+
+      return null;
+    }
+  };
+
+  private handleIncrementItem = async (
+    quantity: number,
+    sku: string,
+  ): Promise<AppCartProduct | null> => {
+    try {
+      const key = crypto.randomUUID();
+
+      const result = await this.cartService.addLineItem({ lineItemKey: key, quantity, sku });
+
+      this.cartTotalsPresenter?.updateTotals(result.body);
+
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+
+      const item = result.body.lineItems.find((item) => item.key === sku);
+      return item ? mapLineItemToAppCartProduct(item) : null;
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+
+      return null;
+    }
+  };
+
+  private readonly handleNavigateToDetails = (product: AppCartProduct): void => {
+    Router.instance.navigate(ROUTE_PATH.PRODUCT_DETAILS, {
+      searchParameters: {
+        id: product.productId,
+        sku: product.sku,
+      },
+    });
+  };
+
+  private handleRemoveItem = async (lineItemKey: string): Promise<void> => {
+    try {
+      const result = await this.cartService.removeLineItem({ lineItemKey });
+
+      this.cartTotalsPresenter?.updateTotals(result.body);
+
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
       }
     }
   };
-
-  private async initView(): Promise<void> {
-    try {
-      this.view.showLoader();
-
-      const products = await this.cartService.getCartProducts();
-      this.view.createHTML(products, { onRemoveItem: this.handleRemoveItem });
-    } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
-    } finally {
-      this.view.hideLoader();
-    }
-  }
 }

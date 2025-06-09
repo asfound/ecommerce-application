@@ -26,18 +26,16 @@
 }
 
 .image {
+  cursor: pointer;
   aspect-ratio: 1 / 1;
   max-width: 10.5rem;
+  border-radius: var(--border-radius);
 }
 
 .name {
+  cursor: pointer;
   font-weight: 500;
-}
-
-.price {
-  font-family: var(--font-montserrat);
-  font-size: 1.4rem;
-  font-weight: 400;
+  transition: color var(--transition-duration);
 }
 
 .deleteButton {
@@ -49,10 +47,6 @@
   border: none;
 
   background-color: transparent;
-}
-
-.deleteButton:hover {
-  background-color: inherit;
 }
 
 .deleteIcon {
@@ -87,6 +81,18 @@
   text-align: center;
 }
 
+.individualPrice {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  width: max-content;
+
+  font-family: var(--font-montserrat);
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
 .totalPrice {
   min-width: 7rem;
   font-size: 1.6rem;
@@ -94,9 +100,32 @@
   text-align: center;
 }
 
+.discountedPrice {
+  color: var(--color-accent);
+}
+
+.defaultPrice {
+  color: inherit;
+}
+
+.oldPrice {
+  font-size: 0.9em;
+  line-height: normal;
+  color: var(--color-accent-light);
+  text-decoration: line-through;
+}
+
 @media (hover: hover) {
   .deleteButton:hover .deleteIcon {
     stroke: var(--color-accent);
+  }
+
+  .deleteButton:hover {
+    background-color: inherit;
+  }
+
+  .name:hover {
+    color: var(--color-accent);
   }
 }
 

@@ -1,31 +1,27 @@
 import { SERVICE_HUB } from '~/api/services/service-hub';
 import { BaseComponent } from '~/components/base-component/base-component';
-import { CartItemsListPresenter } from '~/feature/cart/cart-items-list/cart-items-list.presenter';
-import { CartItemsListView } from '~/feature/cart/cart-items-list/cart-items-list.view';
+import { CartContainerPresenter } from '~/feature/cart/cart-container/cart-container.presenter';
+import { CartContainerView } from '~/feature/cart/cart-container/cart-container.view';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { div, h1, h2 } from '~/shared/create-element/tags';
 
 import styles from './cart-page.module.css';
 export class CartPage extends BaseComponent {
-  private readonly cartItemsListPresenter: CartItemsListPresenter;
+  private readonly cartContainerPresenter: CartContainerPresenter;
 
   public constructor() {
-    super({ className: [CSS_CLASS_NAME.WRAPPER, styles.container], tagName: 'div' });
+    super({ className: [CSS_CLASS_NAME.WRAPPER, styles.page], tagName: 'div' });
 
-    this.cartItemsListPresenter = new CartItemsListPresenter(
-      new CartItemsListView(),
+    this.cartContainerPresenter = new CartContainerPresenter(
+      new CartContainerView(),
       SERVICE_HUB.provideCartService(),
     );
-    const title = h1({ className: styles.title }, 'Shopping cart');
-    const subtitle = h2(null, 'Total');
 
-    const cartItemsContainer = div(
-      { className: [styles.block, styles.itemsBlock] },
-      title,
-      this.cartItemsListPresenter.getView().element,
-    );
-    const cartTotalContainer = div({ className: [styles.block, styles.totalBlock] }, subtitle);
+    this.append(this.cartContainerPresenter.getView());
+  }
 
-    this.append(cartItemsContainer, cartTotalContainer);
+  public override destroy(): void {
+    this.cartContainerPresenter.destroy();
+
+    super.destroy();
   }
 }

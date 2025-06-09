@@ -10,3 +10,5 @@ export const BUTTON_TITLE = {
   DELETE: 'Remove from cart',
   INCREASE: 'Increase quantity',
 };
+
+export const QUANTITY_STEP = 1;
