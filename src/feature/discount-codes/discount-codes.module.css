@@ -43,7 +43,6 @@
   border-radius: var(--border-radius);
 
   font-size: 3rem;
-  font-weight: bold;
   text-transform: uppercase;
 
   background-color: var(--color-accent-dark);
