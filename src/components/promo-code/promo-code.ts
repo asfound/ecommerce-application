@@ -1,4 +1,6 @@
+import iconCross from '~/assets/icons/cross.svg';
 import { button } from '~/shared/create-element/tags';
+import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import { BaseComponent } from '../base-component/base-component';
 import styles from './promo-code.module.css';
@@ -9,7 +11,9 @@ export interface PromoCodeProperties {
 }
 
 export class PromoCode extends BaseComponent {
-  private readonly buttonRemove = button(null, 'Remove');
+  private readonly deleteIcon = createSvgIcon(iconCross, styles.deleteIcon);
+
+  private readonly buttonRemove = button({ className: styles.deleteButton }, this.deleteIcon);
 
   private readonly properties: PromoCodeProperties;
 

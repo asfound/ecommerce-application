@@ -63,7 +63,10 @@ export class CartTotalsView extends BaseComponent implements Component {
 
   private readonly promoCodesForm = form({ className: styles.form });
 
-  private readonly promoCodesContainer = div(null, this.promoCodesForm);
+  private readonly promoCodesContainer = div(
+    { className: styles.promoCodesContainer },
+    this.promoCodesForm,
+  );
 
   private properties!: CartTotalsViewProperties;
 

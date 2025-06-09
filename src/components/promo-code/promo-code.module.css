@@ -1,4 +1,46 @@
 .promoCode {
+  display: flex;
+  justify-content: space-between;
+
   padding: 1rem;
-  border: 1px solid red;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--border-radius);
+}
+
+.deleteButton {
+  cursor: pointer;
+
+  display: block;
+
+  max-height: max-content;
+  border: none;
+
+  background-color: transparent;
+}
+
+.deleteIcon {
+  display: flex;
+  align-items: center;
+
+  width: 2rem;
+  height: 2rem;
+
+  stroke: var(--color-white);
+  stroke-width: 2;
+
+  transition: stroke var(--transition-duration);
+}
+
+@media (hover: hover) {
+  .deleteButton:hover .deleteIcon {
+    stroke: var(--color-accent);
+  }
+
+  .deleteButton:hover {
+    background-color: inherit;
+  }
+
+  .name:hover {
+    color: var(--color-accent);
+  }
 }
