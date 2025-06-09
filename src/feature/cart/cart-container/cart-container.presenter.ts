@@ -44,15 +44,15 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
 
   public async init(): Promise<void> {
     try {
-      const { items, totalPrice } = await this.cartService.getCartData();
+      const { items, totalLineItemQuantity, totalPrice } = await this.cartService.getCartData();
 
-      if (items.length === 0) {
+      if (totalLineItemQuantity === 0) {
         this.view.showEmptyCart(this.navigateToCatalog);
 
         return;
       }
 
-      cartAction.setItemsCount(items.length);
+      cartAction.setItemsCount(totalLineItemQuantity);
 
       this.cartItemsListPresenter.initView(items);
       this.cartTotalsPresenter.initView(totalPrice);

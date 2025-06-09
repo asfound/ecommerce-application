@@ -52,7 +52,11 @@ export class CartService {
     const cart = await this.getCurrentCart();
     const items = cart.body.lineItems.map((lineItem) => mapLineItemToAppCartProduct(lineItem));
 
-    return { items, totalPrice: { default: cart.body.totalPrice.centAmount } };
+    return {
+      items,
+      totalLineItemQuantity: cart.body.totalLineItemQuantity ?? 0,
+      totalPrice: { default: cart.body.totalPrice.centAmount },
+    };
   }
 
   public async getCurrentCart(): Promise<ClientResponse<Cart>> {
