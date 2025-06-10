@@ -198,9 +198,11 @@ export class CartItem extends BaseComponent implements Component {
         formatPrice(this.item.totalPrice),
       );
 
+      const originalPrice = this.item.price.discounted ?? this.item.price.default;
+
       const originalPriceElement = div(
         { className: styles.oldPrice },
-        formatPrice(this.item.price.default * this.item.quantity),
+        formatPrice(originalPrice * this.item.quantity),
       );
 
       this.itemTotalPriceContainer.append(discountedPriceElement, originalPriceElement);

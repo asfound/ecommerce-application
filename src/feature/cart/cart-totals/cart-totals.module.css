@@ -55,7 +55,7 @@
 }
 
 .discount {
-  color: var(--color-accent);
+  color: var(--color-accent-bright);
 }
 
 @media (width <= 768px) {
