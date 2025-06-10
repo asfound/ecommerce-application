@@ -7,7 +7,6 @@ import type { ProductCardCallbacks } from '~/components/product-card/product-car
 import sliderArrowSvg from '~/assets/icons/slider-arrow.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProductCard } from '~/components/product-card/product-card';
-import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div, h2 } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
@@ -31,7 +30,7 @@ export class SliderBestsellersView extends BaseComponent implements Component {
   );
 
   public constructor() {
-    super({ className: [styles.slider, CSS_CLASS_NAME.WRAPPER], tagName: 'div' });
+    super({ className: [styles.slider], tagName: 'div' });
   }
 
   public bindSeeAllHandler(handler: VoidFunction, href: string): void {
@@ -94,11 +93,7 @@ export class SliderBestsellersView extends BaseComponent implements Component {
 
     const pagination = div({ className: 'swiper-pagination' });
 
-    const swiper = div(
-      { className: ['swiper', styles.swiper, styles.fixedWidth] },
-      wrapper,
-      pagination,
-    );
+    const swiper = div({ className: ['swiper', styles.swiper] }, wrapper, pagination);
 
     this.append(buttonsContainer, swiper);
 
@@ -109,7 +104,6 @@ export class SliderBestsellersView extends BaseComponent implements Component {
 
     requestAnimationFrame(() => {
       swiperComponent.init();
-      swiper.classList.remove(styles.fixedWidth);
     });
   }
 }

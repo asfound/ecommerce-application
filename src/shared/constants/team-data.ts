@@ -72,7 +72,7 @@ export const TEAM_DATA: TeamData = {
     },
     {
       avatarUrl: avatarAlena,
-      bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit veritatis temporibus asperiores, perspiciatis blanditiis ab similique non eum error minus praesentium veniam deserunt corrupti repellendus officiis quas tempora molestiae sit. Fugiat quae tempore atque asperiores magni id illo mollitia iste ipsam eaque deserunt in adipisci assumenda, facere neque repellendus error cumque! Officiis ducimus suscipit voluptatibus, nam quia cum harum soluta quis reiciendis illo aliquid id quasi, aliquam ipsam adipisci consectetur eum cumque doloribus perspiciatis excepturi fugiat assumenda cupiditate repellendus maxime.',
+      bio: "I'm a passionate front-end developer who has been deeply focused on learning for over a year. Every single day I push myself forward — exploring new tools, solving challenges, and turning ideas into projects. Today, I'm confident working with vanilla JavaScript, have solid TypeScript skills, and I'm currently diving into Angular. Over the past year, I've built numerous practical projects and tackled lots of coding tasks — and every one of them helped me grow.",
       contributions: ['CI/CD'],
       fullname: 'Alena Radomskaia',
       github: { login: 'radomskaia', url: 'https://github.com/radomskaia' },

@@ -1,56 +1,85 @@
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 6rem;
-  margin-block: 4rem;
+  margin-block: 8rem;
 }
 
 .cardContainer {
   display: flex;
   gap: 2rem;
-  align-items: center;
+  align-items: stretch;
+
+  min-height: 45rem;
+
   background-color: transparent;
 }
 
 .cardContent {
   display: flex;
+  flex: 0 0 calc(50% - 1rem);
   flex-direction: column;
-  gap: 4rem;
+  gap: 3rem;
+  justify-content: center;
 }
 
 .name {
-  font-size: 5.4rem;
+  font-size: 3.6rem;
   font-weight: 500;
 }
 
 .description {
+  font-family: var(--font-montserrat);
+  font-weight: 400;
+  line-height: 169%;
   color: var(--color-accent-light);
 }
 
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 calc(50% - 1rem);
+  border-radius: 6px;
+}
+
 .image {
-  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+
   width: 100%;
-  border-radius: 8px;
+  height: 100%;
+
+  object-fit: cover;
 }
 
 .code {
+  display: inline-block;
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
+  justify-content: center;
 
-  width: max-content;
-  padding: 2rem;
+  width: 100%;
+  padding: 1rem;
   border-radius: var(--border-radius);
 
-  font-size: 3rem;
-  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 600;
 
-  background-color: var(--color-accent-dark);
+  background-color: var(--color-dark);
 }
 
 .icon {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.hint {
+  margin-right: 0.5rem;
+  font-weight: 300;
+  color: var(--color-accent-light);
+  text-transform: uppercase;
 }
 
 .left {
@@ -61,59 +90,39 @@
   flex-direction: row-reverse;
 }
 
-@media (width <= 1024px) {
-  .container {
-    gap: 4rem;
-  }
-
-  .image {
-    max-width: 50rem;
-  }
-
-  .cardContent {
-    gap: 2rem;
-  }
-
-  .code {
-    font-size: 2.5rem;
-  }
-}
-
-@media (width <= 980px) {
-  .cardContainer {
-    flex-direction: column;
-  }
-
-  .image {
-    max-width: unset;
-    max-height: 40rem;
-    object-fit: cover;
+@media (hover: hover) {
+  .icon:hover {
+    cursor: copy;
   }
 }
 
 @media (width <= 768px) {
+  .container {
+    gap: 4rem;
+    margin-block: 6rem;
+  }
+
+  .cardContainer {
+    flex-direction: column;
+    gap: 0;
+    min-height: auto;
+  }
+
+  .imageContainer {
+    flex: 0 0 auto;
+    order: -1;
+    width: 100%;
+    height: 20rem;
+  }
+
   .cardContent {
-    gap: 1rem;
+    flex: 1 1 auto;
+    gap: 2rem;
+    width: 100%;
+    padding: 1.5rem;
   }
 
   .name {
-    font-size: 4rem;
-  }
-
-  .code {
-    padding: 1.5rem;
-  }
-}
-
-@media (width <= 680px) {
-  .code {
-    padding: 1rem;
-    font-size: 2rem;
-  }
-}
-
-@media (hover: hover) {
-  .icon:hover {
-    cursor: copy;
+    font-size: 3rem;
   }
 }

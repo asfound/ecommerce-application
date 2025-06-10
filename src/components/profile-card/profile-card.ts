@@ -1,6 +1,6 @@
 import type { ModalService } from '~/services/modal/modal.service';
 
-import { a, div, h3, img, li, p, ul } from '~/shared/create-element/tags';
+import { a, div, h3, h4, img, li, p, ul } from '~/shared/create-element/tags';
 
 import type { Component } from '../base-component/types';
 
@@ -70,11 +70,15 @@ export class ProfileCard extends BaseComponent implements Component {
       ...this.properties.roles.map((role) => li(null, role)),
     );
 
-    const rolesContainer = div(null, h3(null, PROFILE_CARD_TEXT.TITLE_ROLES), rolesElement);
+    const rolesContainer = div(
+      null,
+      h4({ className: styles.modalHeading }, PROFILE_CARD_TEXT.TITLE_ROLES),
+      rolesElement,
+    );
 
     const bioContainer = div(
       null,
-      h3(null, PROFILE_CARD_TEXT.TITLE_BIO),
+      h4({ className: styles.modalHeading }, PROFILE_CARD_TEXT.TITLE_BIO),
       p(null, this.properties.bio),
     );
 
@@ -86,7 +90,7 @@ export class ProfileCard extends BaseComponent implements Component {
       this.properties.contributions
         ? div(
             null,
-            h3(null, PROFILE_CARD_TEXT.TITLE_CONTRIBUTION),
+            h4({ className: styles.modalHeading }, PROFILE_CARD_TEXT.TITLE_CONTRIBUTION),
             ul(null, ...this.properties.contributions.map((item) => li(null, item))),
           )
         : null,
