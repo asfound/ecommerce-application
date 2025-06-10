@@ -4,11 +4,12 @@ import type { Component } from '~/components/base-component/types';
 import iconCopy from '~/assets/icons/copy.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { div, h3, img, p } from '~/shared/create-element/tags';
+import { div, h3, img, p, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { showToast } from '~/shared/utils/show-toast';
 
 import {
+  CODE_HINT,
   DISCOUNT_CODE_IMAGE_MAP,
   DISCOUNT_CODE_NOTIFICATION,
   EVEN_CHECK_MODULO,
@@ -58,7 +59,12 @@ export class DiscountCodesView extends BaseComponent implements Component {
       { signal: this.abortController.signal },
     );
 
-    const codeElement = div({ className: styles.code }, code.code, copyElement);
+    const codeElement = div(
+      { className: styles.code },
+      span({ className: styles.hint }, CODE_HINT),
+      code.code,
+      copyElement,
+    );
 
     const cardContent = div(
       { className: styles.cardContent },
@@ -75,7 +81,7 @@ export class DiscountCodesView extends BaseComponent implements Component {
 
     return div(
       { className: [styles.cardContainer, styles[imagePosition]] },
-      imageElement,
+      div({ className: styles.imageContainer }, imageElement),
       cardContent,
     );
   }

@@ -10,7 +10,7 @@
 
 .image {
   width: 100%;
-  height: 360px;
+  height: 34rem;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 
@@ -20,7 +20,7 @@
 .outerContent {
   z-index: 50;
 
-  padding: 1rem;
+  padding: var(--padding-card);
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
 
@@ -31,16 +31,38 @@
 
 .fullname {
   font-size: 2.2rem;
+  font-weight: 500;
   text-align: center;
 }
 
 .readMore {
-  margin-top: 1rem;
+  position: relative;
+  margin-top: 2rem;
+  color: var(--color-accent-light);
   transition: color var(--transition-duration);
 }
 
+.readMore::after {
+  content: '';
+
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: block;
+
+  width: 35%;
+  height: 1px;
+
+  background-color: var(--color-accent-light);
+
+  transition: background-color var(--transition-duration);
+}
+
 .githubLink {
-  color: var(--color-accent-light);
+  font-family: var(--font-montserrat);
+  font-weight: 400;
   transition: color var(--transition-duration);
 }
 
@@ -48,18 +70,20 @@
   display: grid;
   gap: 2rem;
 
-  padding: 2rem;
+  padding: 2rem 3rem 3rem;
   border-radius: var(--border-radius);
 
-  background-color: var(--color-dark);
+  font-family: var(--font-montserrat);
+
+  background-color: var(--color-black);
 }
 
-.roles {
-  background-color: transparent;
+.modalContent .fullname {
+  font-family: var(--font-poppins);
 }
 
-.contributions {
-  background-color: transparent;
+.modalHeading {
+  color: var(--color-accent-light);
 }
 
 @media (hover: hover) {
@@ -74,5 +98,9 @@
 
   .card:hover .readMore {
     color: var(--color-accent);
+  }
+
+  .card:hover .readMore::after {
+    background-color: var(--color-accent);
   }
 }

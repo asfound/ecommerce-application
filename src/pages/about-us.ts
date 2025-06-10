@@ -2,10 +2,10 @@ import iconRS from '~/assets/icons/rss-logo.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProfileCard } from '~/components/profile-card/profile-card';
 import { modalService } from '~/services/modal/modal.service';
-import { ABOUT_US_TEXT, RS_SCHOOL_LINK } from '~/shared/constants/about-us';
+import { ABOUT_US_TEXT, COLLABORATION, RS_SCHOOL_LINK } from '~/shared/constants/about-us';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { TEAM_DATA } from '~/shared/constants/team-data';
-import { a, div, h2, p } from '~/shared/create-element/tags';
+import { a, div, h2, p, section } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import styles from './about-us.module.css';
@@ -16,10 +16,12 @@ export class AboutUsPage extends BaseComponent {
 
     const titleCollaboration = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_COLLABORATION);
 
-    const paragraphCollaboration = p(
-      { className: styles.paragraphCollaboration },
-      ABOUT_US_TEXT.PARAGRAPH_COLLABORATION,
+    const collaborationText = div(
+      { className: styles.collaborationText },
+      ...COLLABORATION.map((paragraph) => p(null, paragraph.paragraph)),
     );
+
+    const collaborationSection = section(null, titleCollaboration, collaborationText);
 
     const titleTeam = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_TEAM);
 
@@ -28,12 +30,16 @@ export class AboutUsPage extends BaseComponent {
       ...TEAM_DATA.MEMBERS.map((member) => new ProfileCard(member, modalService).element),
     );
 
+    const teamSection = section(null, titleTeam, memberCards);
+
     const titleSupport = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_THANKS);
 
     const supportCards = div(
       { className: styles.cards },
       ...TEAM_DATA.EXTERNAL_SUPPORT.map((member) => new ProfileCard(member, modalService).element),
     );
+
+    const supportSection = section(null, titleSupport, supportCards);
 
     const titleRSSchool = h2({ className: styles.title }, ABOUT_US_TEXT.TITLE_RS);
 
@@ -42,16 +48,15 @@ export class AboutUsPage extends BaseComponent {
       createSvgIcon(iconRS, styles.rsIcon),
     );
 
+    const schoolSection = section(null, titleRSSchool, rsschoolLink);
+
     this.append(
-      titleCollaboration,
-      paragraphCollaboration,
-      titleTeam,
-      memberCards,
-      titleSupport,
-      supportCards,
+      teamSection,
+      collaborationSection,
+
+      supportSection,
       modalService.getView(),
-      titleRSSchool,
-      rsschoolLink,
+      schoolSection,
     );
   }
 }

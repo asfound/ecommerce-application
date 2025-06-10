@@ -1,5 +1,8 @@
 .page {
-  margin-block: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  margin-block: 5rem;
 }
 
 .cards {
@@ -10,18 +13,13 @@
   justify-content: center;
 }
 
-.cards:not(:last-of-type) {
-  margin-bottom: 4rem;
-}
-
 .title {
   margin-bottom: 2rem;
-  font-size: 3.6rem;
-  text-align: center;
-}
 
-.paragraphCollaboration {
-  margin-bottom: 3rem;
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .rsLink {
@@ -43,29 +41,19 @@
 .rsLink,
 .rsIcon {
   border-radius: 50%;
+  line-height: 0;
+}
+
+.collaborationText {
+  padding-inline: 4rem;
+  font-family: var(--font-montserrat);
+  text-align: justify;
+  text-indent: 2em;
 }
 
 @media (hover: hover) {
   .rsLink:hover {
     outline-color: var(--color-accent);
-  }
-}
-
-@media (width <= 1023px) {
-  .cards {
-    background-color: transparent;
-  }
-}
-
-@media (width <= 979px) {
-  .cards {
-    background-color: transparent;
-  }
-}
-
-@media (width <= 678px) {
-  .cards {
-    background-color: transparent;
   }
 }
 
