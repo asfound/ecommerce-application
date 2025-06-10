@@ -3,6 +3,7 @@ import type { CartService } from '~/api/services/cart/cart.service';
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { Presenter } from '~/shared/presenter/presenter';
+import { showToast } from '~/shared/utils/show-toast';
 
 import type { CartContainerView } from './cart-container.view';
 
@@ -13,6 +14,7 @@ import { CartTotalsView } from '../cart-totals/cart-totals.view';
 import { cartAction } from '../store/actions';
 import { cartSelector } from '../store/selectors';
 import { cartStore } from '../store/store';
+import { CART_ERROR } from './constants';
 
 export class CartContainerPresenter extends Presenter<CartContainerView> {
   private readonly cartItemsListPresenter: CartItemsListPresenter;
@@ -66,7 +68,7 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
         this.cartTotalsPresenter.getView().element,
       );
     } catch {
-      console.warn('error');
+      showToast(CART_ERROR.FAILED, true);
     } finally {
       this.view.hideLoader();
     }

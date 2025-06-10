@@ -26,6 +26,10 @@ export class InputText extends InputBase {
     }
   }
 
+  public focus(): void {
+    this.inputComponent.element.focus();
+  }
+
   public setDisabled(disabled: boolean): void {
     if (disabled) {
       this.inputComponent.setAttributes({ disabled });
