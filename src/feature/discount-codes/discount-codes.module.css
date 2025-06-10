@@ -1,8 +1,32 @@
+.section {
+  margin-block: 8rem;
+}
+
+.heading {
+  display: grid;
+  margin-bottom: 3rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.heading .link {
+  display: block;
+
+  width: max-content;
+  margin-inline: auto;
+
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--color-accent-light);
+  text-transform: none;
+
+  transition: color var(--transition-duration);
+}
+
 .container {
   display: flex;
   flex-direction: column-reverse;
   gap: 6rem;
-  margin-block: 8rem;
 }
 
 .cardContainer {
@@ -97,9 +121,12 @@
 }
 
 @media (width <= 768px) {
+  .section {
+    margin-block: 6rem;
+  }
+
   .container {
     gap: 4rem;
-    margin-block: 6rem;
   }
 
   .cardContainer {
