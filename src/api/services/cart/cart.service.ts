@@ -71,6 +71,28 @@ export class CartService {
     return response;
   }
 
+  public async clearCart(): Promise<ClientResponse<Cart>> {
+    const { body: cart } = await this.getCurrentCart();
+
+    const actions: MyCartUpdateAction[] = cart.lineItems.map((item) =>
+      createRemoveLineItemAction({
+        lineItemKey: item.key,
+      }),
+    );
+
+    return this.apiRoot()
+      .me()
+      .carts()
+      .withId({ ID: cart.id })
+      .post({
+        body: {
+          actions,
+          version: cart.version,
+        },
+      })
+      .execute();
+  }
+
   public async createCart(): Promise<ClientResponse<Cart>> {
     return await this.apiRoot().me().carts().post({ body: createCartDraft() }).execute();
   }

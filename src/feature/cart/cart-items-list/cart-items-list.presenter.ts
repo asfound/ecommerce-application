@@ -29,6 +29,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     this.cartService = cartService;
 
     this.setupSubscriptions();
+    this.bindViewHandlers();
   }
 
   public initView(products: AppCartProduct[]): void {
@@ -43,6 +44,23 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   public setTotalsPresenter(presenter: CartTotalsPresenter): void {
     this.cartTotalsPresenter = presenter;
   }
+
+  private bindViewHandlers(): void {
+    this.view.bindClearCartHandler(this.handleClearCartClick);
+  }
+
+  private handleClearCartClick = async (): Promise<void> => {
+    try {
+      const result = await this.cartService.clearCart();
+
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+    }
+  };
 
   private handleDecrementItem = async (
     lineItemKey: string,

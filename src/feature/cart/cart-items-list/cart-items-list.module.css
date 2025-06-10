@@ -8,11 +8,52 @@
 }
 
 .header {
+  position: relative;
   margin-bottom: 2rem;
 }
 
+.heading {
+  margin-bottom: 1rem;
+}
+
+.cartInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button {
+  cursor: pointer;
+
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  max-height: max-content;
+  padding: 0 1rem;
+  border: none;
+
+  color: var(--color-accent-light);
+
+  background-color: transparent;
+
+  transition: color var(--transition-duration);
+}
+
+.deleteIcon {
+  display: flex;
+  align-items: center;
+
+  width: 2rem;
+  height: 2rem;
+
+  stroke: var(--color-accent-light);
+  stroke-width: 2;
+
+  transition: stroke var(--transition-duration);
+}
+
 .list {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -25,6 +66,17 @@
 
 .count {
   color: var(--color-accent-light);
+}
+
+@media (hover: hover) {
+  .button:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+
+  .button:hover .deleteIcon {
+    stroke: var(--color-accent);
+  }
 }
 
 @media (width <= 768px) {
