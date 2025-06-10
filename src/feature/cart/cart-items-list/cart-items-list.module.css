@@ -7,7 +7,7 @@
   background-color: var(--color-dark);
 }
 
-.heading {
+.header {
   margin-bottom: 2rem;
 }
 
@@ -21,6 +21,10 @@
 .list > li:not(:last-child) {
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--color-white);
+}
+
+.count {
+  color: var(--color-accent-light);
 }
 
 @media (width <= 768px) {

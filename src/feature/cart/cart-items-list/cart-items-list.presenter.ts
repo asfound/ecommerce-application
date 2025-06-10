@@ -15,6 +15,8 @@ import type { CartTotalsPresenter } from '../cart-totals/cart-totals.presenter';
 import type { CartItemsListView } from './cart-items-list.view';
 
 import { cartAction } from '../store/actions';
+import { cartSelector } from '../store/selectors';
+import { cartStore } from '../store/store';
 
 export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   private readonly cartService: CartService;
@@ -25,6 +27,8 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     super(view);
 
     this.cartService = cartService;
+
+    this.setupSubscriptions();
   }
 
   public initView(products: AppCartProduct[]): void {
@@ -111,6 +115,22 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       }
     }
   };
+
+  private setupSubscriptions(): void {
+    this.subscribeItemsCount();
+  }
+
+  private subscribeItemsCount(): void {
+    const unsubscribe = cartStore.subscribe(
+      cartSelector.selectItemCount,
+      (count) => {
+        this.view.updateProductsCount(count);
+      },
+      { isImmediate: true },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
 
   private updateTotals(cart: Cart): void {
     this.cartTotalsPresenter?.updateTotals(cart);

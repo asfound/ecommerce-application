@@ -1,3 +1,3 @@
 export const CART_ITEM_LIST_TEXT = {
-  HEADING: 'Products',
+  HEADING: 'Shopping cart',
 } as const;
