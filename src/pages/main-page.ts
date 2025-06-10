@@ -5,6 +5,8 @@ import { DiscountCodesView } from '~/feature/discount-codes/discount-codes.view'
 import { HeroBanner } from '~/feature/hero-banner/hero-banner';
 import { SliderBestsellersPresenter } from '~/feature/slider-bestsellers/slider-bestsellers.presenter';
 import { SliderBestsellersView } from '~/feature/slider-bestsellers/slider-bestsellers.view';
+import { CSS_CLASS_NAME } from '~/shared/constants/constants';
+import { div } from '~/shared/create-element/tags';
 
 export class MainPage extends BaseComponent {
   private readonly discountCodesPresenter: DiscountCodesPresenter;
@@ -30,7 +32,7 @@ export class MainPage extends BaseComponent {
     this.append(
       heroBanner,
       this.discountCodesPresenter.getView(),
-      this.sliderBestsellersPresenter.getView(),
+      div({ className: CSS_CLASS_NAME.WRAPPER }, this.sliderBestsellersPresenter.getView().element),
     );
   }
 
