@@ -26,7 +26,6 @@
 .name {
   font-size: 3.6rem;
   font-weight: 500;
-  line-height: 5rem;
 }
 
 .description {
@@ -55,23 +54,32 @@
 }
 
 .code {
+  display: inline-block;
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
+  justify-content: center;
 
-  width: max-content;
-  padding: 2rem;
+  width: 100%;
+  padding: 1rem;
   border-radius: var(--border-radius);
 
-  font-size: 3rem;
-  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 600;
 
-  background-color: var(--color-accent-dark);
+  background-color: var(--color-dark);
 }
 
 .icon {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.hint {
+  margin-right: 0.5rem;
+  font-weight: 300;
+  color: var(--color-accent-light);
+  text-transform: uppercase;
 }
 
 .left {
@@ -104,6 +112,7 @@
 
   .cardContent {
     flex: 1 1 auto;
+    gap: 2rem;
     width: 100%;
     padding: 1.5rem;
   }
