@@ -97,6 +97,11 @@
 }
 
 @media (width <= 768px) {
+  .container {
+    gap: 4rem;
+    margin-block: 6rem;
+  }
+
   .cardContainer {
     flex-direction: column;
     gap: 0;
@@ -115,5 +120,9 @@
     gap: 2rem;
     width: 100%;
     padding: 1.5rem;
+  }
+
+  .name {
+    font-size: 3rem;
   }
 }

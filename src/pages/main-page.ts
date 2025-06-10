@@ -31,8 +31,9 @@ export class MainPage extends BaseComponent {
 
     this.append(
       heroBanner,
-      this.discountCodesPresenter.getView(),
+
       div({ className: CSS_CLASS_NAME.WRAPPER }, this.sliderBestsellersPresenter.getView().element),
+      this.discountCodesPresenter.getView(),
     );
   }
 

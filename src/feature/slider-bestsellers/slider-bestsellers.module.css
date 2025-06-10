@@ -69,3 +69,9 @@
     color: var(--color-accent);
   }
 }
+
+@media (width <= 768px) {
+  .slider {
+    margin-block: 4rem 8rem;
+  }
+}
