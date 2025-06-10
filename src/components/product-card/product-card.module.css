@@ -115,13 +115,14 @@
 }
 
 .buttonCart:disabled {
+  opacity: 0.5;
   background-color: var(--color-black);
 }
 
 @media (hover: hover) {
   .card:hover {
     cursor: pointer;
-    transform: scale(1.02);
+    outline-color: var(--color-accent);
   }
 
   .card:hover .title {

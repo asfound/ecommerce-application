@@ -4,7 +4,7 @@ import type { Component } from '~/components/base-component/types';
 import iconCopy from '~/assets/icons/copy.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
-import { div, h3, img, p, span } from '~/shared/create-element/tags';
+import { a, div, h2, h3, img, p, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { showToast } from '~/shared/utils/show-toast';
 
@@ -13,23 +13,41 @@ import {
   DISCOUNT_CODE_IMAGE_MAP,
   DISCOUNT_CODE_NOTIFICATION,
   EVEN_CHECK_MODULO,
+  HEADING_TEXT,
   IMAGE_POSITION,
+  LINK_TEXT,
 } from './constants';
 import styles from './discount-codes.module.css';
 
 type ImagePosition = (typeof IMAGE_POSITION)[keyof typeof IMAGE_POSITION];
 
 export class DiscountCodesView extends BaseComponent implements Component {
+  private readonly linkGoToCart = a({ className: styles.link }, LINK_TEXT);
+
   public constructor() {
     super({
-      className: [styles.container, CSS_CLASS_NAME.WRAPPER],
-      tagName: 'div',
+      className: [CSS_CLASS_NAME.WRAPPER, styles.section],
+      tagName: 'section',
     });
   }
 
+  public bindGoToCartClick(handler: VoidFunction, href: string): void {
+    this.linkGoToCart.setAttribute('href', href);
+
+    this.linkGoToCart.addEventListener(
+      'click',
+      () => {
+        handler();
+      },
+      { signal: this.abortController.signal },
+    );
+  }
+
   public createHTML(codes: AppDiscountCode[]): void {
+    const container = div({ className: styles.container });
+
     for (const [index, code] of Object.entries(codes)) {
-      this.append(
+      container.append(
         this.createDiscountCodeCart(
           code,
           Number.parseInt(index) % EVEN_CHECK_MODULO === 0
@@ -38,6 +56,7 @@ export class DiscountCodesView extends BaseComponent implements Component {
         ),
       );
     }
+    this.append(h2({ className: styles.heading }, HEADING_TEXT, this.linkGoToCart), container);
   }
 
   private createDiscountCodeCart(

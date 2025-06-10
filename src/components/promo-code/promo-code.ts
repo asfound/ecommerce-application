@@ -3,6 +3,7 @@ import { button } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 
 import { BaseComponent } from '../base-component/base-component';
+import { BUTTON_TITLE } from './constants';
 import styles from './promo-code.module.css';
 
 export interface PromoCodeProperties {
@@ -13,7 +14,10 @@ export interface PromoCodeProperties {
 export class PromoCode extends BaseComponent {
   private readonly deleteIcon = createSvgIcon(iconCross, styles.deleteIcon);
 
-  private readonly buttonRemove = button({ className: styles.deleteButton }, this.deleteIcon);
+  private readonly buttonRemove = button(
+    { className: styles.deleteButton, title: BUTTON_TITLE.REMOVE },
+    this.deleteIcon,
+  );
 
   private readonly properties: PromoCodeProperties;
 

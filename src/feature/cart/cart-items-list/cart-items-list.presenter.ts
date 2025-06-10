@@ -15,6 +15,8 @@ import type { CartTotalsPresenter } from '../cart-totals/cart-totals.presenter';
 import type { CartItemsListView } from './cart-items-list.view';
 
 import { cartAction } from '../store/actions';
+import { cartSelector } from '../store/selectors';
+import { cartStore } from '../store/store';
 
 export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   private readonly cartService: CartService;
@@ -25,6 +27,9 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
     super(view);
 
     this.cartService = cartService;
+
+    this.setupSubscriptions();
+    this.bindViewHandlers();
   }
 
   public initView(products: AppCartProduct[]): void {
@@ -39,6 +44,23 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   public setTotalsPresenter(presenter: CartTotalsPresenter): void {
     this.cartTotalsPresenter = presenter;
   }
+
+  private bindViewHandlers(): void {
+    this.view.bindClearCartHandler(this.handleClearCartClick);
+  }
+
+  private handleClearCartClick = async (): Promise<void> => {
+    try {
+      const result = await this.cartService.clearCart();
+
+      rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
+      cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+    } catch (error: unknown) {
+      if (isError(error)) {
+        showToast(error.message, true);
+      }
+    }
+  };
 
   private handleDecrementItem = async (
     lineItemKey: string,
@@ -111,6 +133,22 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       }
     }
   };
+
+  private setupSubscriptions(): void {
+    this.subscribeItemsCount();
+  }
+
+  private subscribeItemsCount(): void {
+    const unsubscribe = cartStore.subscribe(
+      cartSelector.selectItemCount,
+      (count) => {
+        this.view.updateProductsCount(count);
+      },
+      { isImmediate: true },
+    );
+
+    this.storeSubscription.add(unsubscribe);
+  }
 
   private updateTotals(cart: Cart): void {
     this.cartTotalsPresenter?.updateTotals(cart);
