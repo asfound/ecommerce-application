@@ -75,7 +75,7 @@ export class DiscountCodesView extends BaseComponent implements Component {
 
     return div(
       { className: [styles.cardContainer, styles[imagePosition]] },
-      imageElement,
+      div({ className: styles.imageContainer }, imageElement),
       cardContent,
     );
   }
