@@ -22,3 +22,7 @@ export const DISCOUNT_CODE_ERROR = {
 } as const;
 
 export const CODE_HINT = 'use code:';
+
+export const HEADING_TEXT = 'Promo Codes';
+
+export const LINK_TEXT = 'Go to shopping cart';

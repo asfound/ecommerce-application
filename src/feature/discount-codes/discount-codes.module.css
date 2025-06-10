@@ -118,6 +118,10 @@
   .icon:hover {
     cursor: copy;
   }
+
+  .link:hover {
+    color: var(--color-accent);
+  }
 }
 
 @media (width <= 768px) {

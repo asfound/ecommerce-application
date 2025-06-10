@@ -13,14 +13,16 @@ import {
   DISCOUNT_CODE_IMAGE_MAP,
   DISCOUNT_CODE_NOTIFICATION,
   EVEN_CHECK_MODULO,
+  HEADING_TEXT,
   IMAGE_POSITION,
+  LINK_TEXT,
 } from './constants';
 import styles from './discount-codes.module.css';
 
 type ImagePosition = (typeof IMAGE_POSITION)[keyof typeof IMAGE_POSITION];
 
 export class DiscountCodesView extends BaseComponent implements Component {
-  private readonly linkGoToCart = a({ className: styles.link }, 'Go to cart');
+  private readonly linkGoToCart = a({ className: styles.link }, LINK_TEXT);
 
   public constructor() {
     super({
@@ -54,7 +56,7 @@ export class DiscountCodesView extends BaseComponent implements Component {
         ),
       );
     }
-    this.append(h2({ className: styles.heading }, 'Promo Codes', this.linkGoToCart), container);
+    this.append(h2({ className: styles.heading }, HEADING_TEXT, this.linkGoToCart), container);
   }
 
   private createDiscountCodeCart(
