@@ -60,7 +60,16 @@ This project is the final task for the _JavaScript/Front-end 2024Q4_ course at [
 
 - Install dependencies: `npm install`
 
-- Create a `.env` file in the root directory and add your environment variables (e.g. CommerceTools credentials)
+- Create a `.env` file in the root directory and add your environment variables (CommerceTools credentials):
+
+```
+VITE_CTP_PROJECT_KEY=<project key>
+VITE_CTP_CLIENT_SECRET=<client secret>
+VITE_CTP_CLIENT_ID=<client id>
+VITE_CTP_AUTH_URL=<auth url>
+VITE_CTP_API_URL=<api url>
+VITE_CTP_SCOPES=<scopes>
+```
 
 - Run the project: `npm run dev`
 
