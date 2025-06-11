@@ -4,7 +4,6 @@ import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { routerSelector } from '~/app/router/store/selectors';
 import { routerStore } from '~/app/router/store/store';
-import { rootAction } from '~/app/store/actions';
 import { rootSelector } from '~/app/store/selectors';
 import { rootStore } from '~/app/store/store';
 import { Presenter } from '~/shared/presenter/presenter';
@@ -44,7 +43,7 @@ export class HeaderPresenter extends Presenter<HeaderView> {
 
     Router.instance.navigate(ROUTE_PATH.LOGIN);
 
-    rootAction.setLoggedIn(false);
+    rootStore.setState({ loggedIn: false, productsCount: 0 });
   };
 
   private readonly handleProfileClick = (): void => {
