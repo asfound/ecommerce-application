@@ -1,5 +1,6 @@
+import { debounce } from 'lodash';
+
 import { Presenter } from '~/shared/presenter/presenter';
-import { debounce } from '~/shared/utils/debounce';
 
 import type { FiltersView } from './filters.view';
 import type { FiltersState } from './store/store';

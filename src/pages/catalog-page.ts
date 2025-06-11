@@ -1,6 +1,6 @@
 import { debounce, isEqual } from 'lodash';
 
-import { SERVICE_HUB } from '~/api/services/service-hub';
+import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import iconUp from '~/assets/icons/arrow-up.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
@@ -63,19 +63,19 @@ export class CatalogPage extends BaseComponent {
 
     this.breadcrumbsPresenter = new CatalogBreadcrumbsPresenter(
       new CatalogBreadcrumbsView(),
-      SERVICE_HUB.provideCategoriesService(),
+      SERVICE_PROVIDER.provideCategoriesService(),
     );
 
     this.categoryNavigationPresenter = new CategoryNavigationPresenter(
       new CategoryNavigationView(),
-      SERVICE_HUB.provideCategoriesService(),
+      SERVICE_PROVIDER.provideCategoriesService(),
     );
 
     this.productCardListPresenter = new ProductCardListPresenter(
       new ProductCardListView(),
       this.intersectionAnchor,
-      SERVICE_HUB.provideProductsService(),
-      SERVICE_HUB.provideCartService(),
+      SERVICE_PROVIDER.provideProductsService(),
+      SERVICE_PROVIDER.provideCartService(),
     );
 
     this.searchAndSortPresenter = new SearchAndSortPresenter(new SearchAndSortView());

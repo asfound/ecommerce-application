@@ -1,3 +1,5 @@
+import { debounce } from 'lodash';
+
 import type { Component } from '~/components/base-component/types';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
@@ -12,7 +14,6 @@ import navigationStyles from '~/components/navigation/navigation.module.css';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
-import { debounce } from '~/shared/utils/debounce';
 
 import {
   BURGER_DEBOUNCE_THRESHOLD,

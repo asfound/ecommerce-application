@@ -1,3 +1,5 @@
+import { debounce } from 'lodash';
+
 import type { ProductsFilterPayload } from '~/api/services/products/types';
 
 import { SORT_DIRECTION, SORT_FIELD_TYPE } from '~/api/services/products/constants';
@@ -8,7 +10,6 @@ import { InputSearch } from '~/components/common/input/input-search/input-search
 import { SEARCH_PROPS } from '~/shared/constants/input-properties';
 import { button, div } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
-import { debounce } from '~/shared/utils/debounce';
 
 import type { CatalogState } from '../store/store';
 
