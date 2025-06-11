@@ -15,6 +15,7 @@ export const IMAGE_POSITION = {
 
 export const DISCOUNT_CODE_NOTIFICATION = {
   CODE_COPIED: (code: string): string => `Discount code "${code}" copied to clipboard`,
+  CODE_COPY_FAILED: (code: string): string => `Failed to copy "${code}" discount code`,
 } as const;
 
 export const DISCOUNT_CODE_ERROR = {

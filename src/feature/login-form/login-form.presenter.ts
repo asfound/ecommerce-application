@@ -3,7 +3,7 @@ import type { LoginPayload } from '~/api/services/auth/types';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
-import { rootAction } from '~/app/store/actions';
+import { rootStore } from '~/app/store/store';
 import { Presenter } from '~/shared/presenter/presenter';
 import { isError } from '~/shared/type-predicates/type-predicates';
 
@@ -29,12 +29,15 @@ export class LoginFormPresenter extends Presenter<LoginFormView> {
   private handleLogin = (payload: LoginPayload): void => {
     this.authService
       .login(payload)
-      .then(() => {
+      .then(({ body }) => {
         this.view.hideError();
 
         Router.instance.navigate(ROUTE_PATH.MAIN);
 
-        rootAction.setLoggedIn(true);
+        rootStore.setState({
+          loggedIn: true,
+          productsCount: body.cart?.totalLineItemQuantity ?? 0,
+        });
       })
       .catch((error: unknown) => {
         if (isError(error)) {
