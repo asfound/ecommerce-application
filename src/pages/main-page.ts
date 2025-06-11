@@ -1,4 +1,4 @@
-import { SERVICE_HUB } from '~/api/services/service-hub';
+import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { DiscountCodesPresenter } from '~/feature/discount-codes/discount-codes.presenter';
 import { DiscountCodesView } from '~/feature/discount-codes/discount-codes.view';
@@ -20,13 +20,13 @@ export class MainPage extends BaseComponent {
 
     this.sliderBestsellersPresenter = new SliderBestsellersPresenter(
       new SliderBestsellersView(),
-      SERVICE_HUB.provideProductsService(),
-      SERVICE_HUB.provideCartService(),
+      SERVICE_PROVIDER.provideProductsService(),
+      SERVICE_PROVIDER.provideCartService(),
     );
 
     this.discountCodesPresenter = new DiscountCodesPresenter(
       new DiscountCodesView(),
-      SERVICE_HUB.provideDiscountCodesService(),
+      SERVICE_PROVIDER.provideDiscountCodesService(),
     );
 
     this.append(

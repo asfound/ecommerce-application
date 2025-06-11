@@ -8,7 +8,7 @@ import { CustomerService } from './customer/customer.service';
 import { DiscountCodesService } from './discount-codes/discount-codes.service';
 import { ProductsService } from './products/products.service';
 
-export const SERVICE_HUB = {
+export const SERVICE_PROVIDER = {
   provideAuthService() {
     return AuthService.getInstance(getApiRoot, localStorageService);
   },
@@ -19,7 +19,7 @@ export const SERVICE_HUB = {
     return CategoriesService.getInstance(getApiRoot);
   },
   provideCustomerService() {
-    return CustomerService.getInstance(getApiRoot, SERVICE_HUB.provideAuthService());
+    return CustomerService.getInstance(getApiRoot, SERVICE_PROVIDER.provideAuthService());
   },
   provideDiscountCodesService() {
     return DiscountCodesService.getInstance(getApiRoot);

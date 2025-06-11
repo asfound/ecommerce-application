@@ -1,4 +1,4 @@
-import { SERVICE_HUB } from '~/api/services/service-hub';
+import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { ProductDetailsPresenter } from '~/feature/product-details/product-details.presenter';
 import { ProductDetailsView } from '~/feature/product-details/product-details.view';
@@ -12,8 +12,8 @@ export class ProductDetailsPage extends BaseComponent {
 
     this.productDetailsPresenter = new ProductDetailsPresenter(
       new ProductDetailsView(),
-      SERVICE_HUB.provideProductsService(),
-      SERVICE_HUB.provideCartService(),
+      SERVICE_PROVIDER.provideProductsService(),
+      SERVICE_PROVIDER.provideCartService(),
     );
 
     this.append(this.productDetailsPresenter.getView());

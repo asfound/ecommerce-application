@@ -1,7 +1,7 @@
 import { isError } from 'lodash';
 
 import { ApiBuilder } from '~/api/client/api-builder';
-import { SERVICE_HUB } from '~/api/services/service-hub';
+import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Footer } from '~/feature/footer/footer';
 import { HeaderPresenter } from '~/feature/header/header.presenter';
@@ -20,8 +20,8 @@ export class App {
     Router.initialize(ROUTES, FALLBACK_ROUTE);
     ApiBuilder.instance.initialize();
 
-    const authService = SERVICE_HUB.provideAuthService();
-    const cartService = SERVICE_HUB.provideCartService();
+    const authService = SERVICE_PROVIDER.provideAuthService();
+    const cartService = SERVICE_PROVIDER.provideCartService();
 
     cartService.getCurrentCart().then(
       ({ body }) => {

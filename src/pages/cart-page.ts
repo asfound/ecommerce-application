@@ -1,4 +1,4 @@
-import { SERVICE_HUB } from '~/api/services/service-hub';
+import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CartContainerPresenter } from '~/feature/cart/cart-container/cart-container.presenter';
 import { CartContainerView } from '~/feature/cart/cart-container/cart-container.view';
@@ -13,7 +13,7 @@ export class CartPage extends BaseComponent {
 
     this.cartContainerPresenter = new CartContainerPresenter(
       new CartContainerView(),
-      SERVICE_HUB.provideCartService(),
+      SERVICE_PROVIDER.provideCartService(),
     );
 
     this.append(this.cartContainerPresenter.getView());
