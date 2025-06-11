@@ -39,14 +39,18 @@ This project is the final task for the _JavaScript/Front-end 2024Q4_ course at [
 ## Technical Stack
 
 - **Frontend**: Developed with [TypeScript](https://www.typescriptlang.org/), [HTML](https://www.w3schools.com/html/), [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS), and [modern-normalize](https://github.com/sindresorhus/modern-normalize) — delivering a responsive, clean, and consistent UI 🎨
+  - **UI Utilities**: Enhanced with [Swiper](https://swiperjs.com/) for touch sliders and [toastify-js](https://github.com/apvarun/toastify-js/) for elegant notifications ✨
+  - **Utility Library**: [Lodash](https://lodash.com/) for modern JavaScript utilities 📚
 
 - **Backend Integration**: Powered by [CommerceTools](https://commercetools.com/), a leading provider of commerce solutions for B2C and B2B enterprises 🌐
+  - **Validation**: [Postcode validator](https://www.npmjs.com/package/postcode-validator) for address validation 📮
 
 - **Bundler**: Uses [Vite](https://vitejs.dev/) for lightning-fast builds, HMR, and a modern development workflow ⚡
 
 - **Testing**: Ensures reliability with [Vitest](https://vitest.dev/) 🧪
 
 - **Code Quality**: Maintained through tools like [ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [Stylelint](https://stylelint.io/), [Perfectionist](https://eslint-plugin-perfectionist.azat.io/), [EditorConfig](https://editorconfig.org/), and [Husky](https://typicode.github.io/husky/) ✅
+  - **Git Hooks**: [validate-branch-name](https://www.npmjs.com/package/validate-branch-name) for consistent branch naming 🌿
 
 - **CI/CD & Deployment**: Automations handled with [GitHub Actions](https://github.com/features/actions), and live deployment on [Netlify](https://www.netlify.com/) 🚀
 
