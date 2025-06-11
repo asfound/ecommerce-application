@@ -48,7 +48,11 @@
   padding-inline: 4rem;
   font-family: var(--font-montserrat);
   text-align: justify;
-  text-indent: 2em;
+  text-indent: 1em;
+}
+
+.collaborationText p:not(:last-child) {
+  margin-bottom: 2rem;
 }
 
 @media (hover: hover) {
