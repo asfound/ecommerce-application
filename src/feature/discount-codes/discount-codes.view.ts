@@ -72,8 +72,7 @@ export class DiscountCodesView extends BaseComponent implements Component {
     copyElement.addEventListener(
       'click',
       () => {
-        globalThis.navigator.clipboard.writeText(code.code);
-        showToast(DISCOUNT_CODE_NOTIFICATION.CODE_COPIED(code.code));
+        this.handlePromoCodeCopy(code.code);
       },
       { signal: this.abortController.signal },
     );
@@ -103,5 +102,14 @@ export class DiscountCodesView extends BaseComponent implements Component {
       div({ className: styles.imageContainer }, imageElement),
       cardContent,
     );
+  }
+
+  private async handlePromoCodeCopy(code: string): Promise<void> {
+    try {
+      await globalThis.navigator.clipboard.writeText(code);
+      showToast(DISCOUNT_CODE_NOTIFICATION.CODE_COPIED(code));
+    } catch {
+      showToast(DISCOUNT_CODE_NOTIFICATION.CODE_COPY_FAILED(code));
+    }
   }
 }
