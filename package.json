@@ -55,7 +55,6 @@
   "dependencies": {
     "@commercetools/platform-sdk": "^8.8.0",
     "@commercetools/ts-client": "^3.3.0",
-    "dotenv": "^16.5.0",
     "lodash": "^4.17.21",
     "modern-normalize": "^3.0.1",
     "postcode-validator": "^3.10.3",
