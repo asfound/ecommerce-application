@@ -88,14 +88,12 @@ export class CartItemsListView extends BaseComponent implements Component {
 
     const modalText = p({ className: styles.message }, CART_MODAL_TITLE);
 
-    const modalContent = div(
+    return div(
       { className: styles.modalContent },
       modalText,
       buttonCancel.element,
       buttonConfirm.element,
     );
-
-    return modalContent;
   }
 
   private handleClearCart(handler: () => Promise<void>): void {
