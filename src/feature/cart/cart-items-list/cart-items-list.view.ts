@@ -1,6 +1,7 @@
 import type { AppCartProduct } from '~/api/services/products/types';
 import type { Component } from '~/components/base-component/types';
 import type { CartItemCallbacks } from '~/components/cart-item/cart-item';
+import type { ModalService } from '~/services/modal/modal.service';
 
 import deleteIcon from '~/assets/icons/cross.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -21,10 +22,14 @@ export class CartItemsListView extends BaseComponent implements Component {
 
   private readonly listElement = ul({ className: styles.list });
 
+  private readonly modalService: ModalService;
+
   private readonly productsCount = div({ className: styles.count });
 
-  public constructor() {
+  public constructor(modalService: ModalService) {
     super({ className: styles.container, tagName: 'div' });
+
+    this.modalService = modalService;
   }
 
   public bindClearCartHandler(handler: () => Promise<void>): void {
@@ -32,6 +37,8 @@ export class CartItemsListView extends BaseComponent implements Component {
       'click',
       () => {
         handler();
+
+        this.modalService.open({ content: this.createModalContent() });
       },
       { signal: this.abortController.signal },
     );
@@ -57,5 +64,11 @@ export class CartItemsListView extends BaseComponent implements Component {
 
   public updateProductsCount(count: number): void {
     this.productsCount.replaceChildren(formatItemsCount(count));
+  }
+
+  private createModalContent(): HTMLDivElement {
+    const modalContent = div({ className: styles.modalContent }, 'modal content');
+
+    return modalContent;
   }
 }
