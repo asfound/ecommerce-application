@@ -68,6 +68,12 @@
   color: var(--color-accent-light);
 }
 
+.modalContent {
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  background-color: var(--color-black);
+}
+
 @media (hover: hover) {
   .button:hover {
     cursor: pointer;
