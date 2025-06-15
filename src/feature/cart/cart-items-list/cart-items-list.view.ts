@@ -12,7 +12,7 @@ import { createSvgIcon } from '~/shared/utils/create-svg';
 import { formatItemsCount } from '~/shared/utils/format-items-count';
 
 import styles from './cart-items-list.module.css';
-import { BUTTON_TEXT, BUTTON_TITLE, CART_ITEM_LIST_TEXT } from './constants';
+import { BUTTON_TEXT, BUTTON_TITLE, CART_ITEM_LIST_TEXT, CART_MODAL_TITLE } from './constants';
 
 export class CartItemsListView extends BaseComponent implements Component {
   private readonly clearCartButton = button(
@@ -71,7 +71,7 @@ export class CartItemsListView extends BaseComponent implements Component {
     const buttonCancel = new Button({
       className: styles.modalButton,
       onClick: onCancel,
-      textContent: 'Cancel',
+      textContent: BUTTON_TEXT.CANCEL,
       type: 'button',
     });
 
@@ -81,14 +81,11 @@ export class CartItemsListView extends BaseComponent implements Component {
         buttonConfirm.disable();
         onConfirm();
       },
-      textContent: 'Confirm',
+      textContent: BUTTON_TEXT.CONFIRM,
       type: 'button',
     });
 
-    const modalText = p(
-      { className: styles.message },
-      "You're about to clear your cart. Continue?",
-    );
+    const modalText = p({ className: styles.message }, CART_MODAL_TITLE);
 
     const modalContent = div(
       { className: styles.modalContent },
