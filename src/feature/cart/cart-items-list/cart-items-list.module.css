@@ -69,9 +69,25 @@
 }
 
 .modalContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+
   padding: 2rem;
   border-radius: var(--border-radius);
+
   background-color: var(--color-black);
+}
+
+.modalButton {
+  flex: 1 0 calc(50% - 2rem);
+}
+
+.message {
+  flex-basis: 100%;
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 @media (hover: hover) {

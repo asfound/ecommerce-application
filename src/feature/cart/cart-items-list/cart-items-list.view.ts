@@ -6,7 +6,8 @@ import type { ModalService } from '~/services/modal/modal.service';
 import deleteIcon from '~/assets/icons/cross.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { CartItem } from '~/components/cart-item/cart-item';
-import { button, div, h2, ul } from '~/shared/create-element/tags';
+import { Button } from '~/components/common/button/button';
+import { button, div, h2, p, ul } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { formatItemsCount } from '~/shared/utils/format-items-count';
 
@@ -36,11 +37,11 @@ export class CartItemsListView extends BaseComponent implements Component {
     this.clearCartButton.addEventListener(
       'click',
       () => {
-        handler();
-
-        this.modalService.open({ content: this.createModalContent() });
+        this.handleClearCart(handler);
       },
-      { signal: this.abortController.signal },
+      {
+        signal: this.abortController.signal,
+      },
     );
   }
 
@@ -66,9 +67,51 @@ export class CartItemsListView extends BaseComponent implements Component {
     this.productsCount.replaceChildren(formatItemsCount(count));
   }
 
-  private createModalContent(): HTMLDivElement {
-    const modalContent = div({ className: styles.modalContent }, 'modal content');
+  private createModalContent(onConfirm: VoidFunction, onCancel: VoidFunction): HTMLDivElement {
+    const buttonConfirm = new Button({
+      className: styles.modalButton,
+      onClick: (): void => {
+        buttonConfirm.disable();
+        onConfirm();
+      },
+      textContent: 'Confirm',
+      type: 'button',
+    });
+
+    const buttonCancel = new Button({
+      className: styles.modalButton,
+      onClick: onCancel,
+      textContent: 'Cancel',
+      type: 'button',
+    });
+
+    const modalText = p(
+      { className: styles.message },
+      "You're about to clear your cart. Continue?",
+    );
+
+    const modalContent = div(
+      { className: styles.modalContent },
+      modalText,
+      buttonConfirm.element,
+      buttonCancel.element,
+    );
 
     return modalContent;
+  }
+
+  private handleClearCart(handler: () => Promise<void>): void {
+    this.modalService.open({
+      content: this.createModalContent(
+        () => {
+          handler().finally(() => {
+            this.modalService.close();
+          });
+        },
+        () => {
+          this.modalService.close();
+        },
+      ),
+    });
   }
 }
