@@ -20,4 +20,8 @@
     cursor: pointer;
     background-color: var(--color-accent-dark);
   }
+
+  .button:hover:disabled {
+    background-color: var(--color-accent-light);
+  }
 }
