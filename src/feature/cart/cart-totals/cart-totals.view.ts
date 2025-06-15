@@ -31,7 +31,7 @@ export class CartTotalsView extends BaseComponent implements Component {
 
   private readonly cartDiscountContainer = div(
     { className: [styles.cartPriceContainer, styles.discount] },
-    'Discount: ',
+    CART_TOTALS_TEXT.DISCOUNT,
     this.cartDiscount,
   );
 
@@ -39,7 +39,7 @@ export class CartTotalsView extends BaseComponent implements Component {
 
   private readonly cartSubtotalContainer = div(
     { className: styles.cartPriceContainer },
-    'Subtotal: ',
+    CART_TOTALS_TEXT.SUBTOTAL,
     this.cartSubtotal,
   );
 
@@ -47,7 +47,7 @@ export class CartTotalsView extends BaseComponent implements Component {
 
   private readonly cartTotalContainer = div(
     { className: [styles.cartPriceContainer, styles.total] },
-    'Total: ',
+    CART_TOTALS_TEXT.TOTAL,
     this.cartTotal,
   );
 
