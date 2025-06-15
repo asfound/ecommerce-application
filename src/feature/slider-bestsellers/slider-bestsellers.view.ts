@@ -91,16 +91,11 @@ export class SliderBestsellersView extends BaseComponent implements Component {
 
     const buttonsContainer = div({ className: styles.navigation }, buttonPrevious, buttonNext);
 
-    const pagination = div({ className: 'swiper-pagination' });
-
-    const swiper = div({ className: ['swiper', styles.swiper] }, wrapper, pagination);
+    const swiper = div({ className: ['swiper', styles.swiper] }, wrapper);
 
     this.append(buttonsContainer, swiper);
 
-    const swiperComponent = new Swiper(
-      swiper,
-      SWIPER_OPTIONS.GET(buttonNext, buttonPrevious, pagination),
-    );
+    const swiperComponent = new Swiper(swiper, SWIPER_OPTIONS.GET(buttonNext, buttonPrevious));
 
     requestAnimationFrame(() => {
       swiperComponent.init();
