@@ -9,3 +9,8 @@ export const BUTTON_TEXT = {
 export const BUTTON_TITLE = {
   CLEAR: 'Remove all items form the cart',
 } as const;
+
+export const CART_NOTIFICATION = {
+  CART_EMPTIED: 'Cart has been emptied',
+  PRODUCT_REMOVED: 'Product removed from cart',
+} as const;
