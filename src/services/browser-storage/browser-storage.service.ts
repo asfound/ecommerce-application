@@ -41,6 +41,6 @@ export class BrowserStorageService<TData> {
 }
 
 export const localStorageService = new BrowserStorageService<LocalStorageData>({
-  keyPrefix: 'fdbc6ce7-ff70-43ce-83a1-23be984b7f72',
+  keyPrefix: 'HUH-46d41a30-0cd4-40c9-a99c-6fd912a97ecf',
   storageType: 'local',
 });

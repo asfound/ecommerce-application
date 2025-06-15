@@ -1,6 +1,6 @@
 import type { ProfileNavigationItemProperties } from '~/feature/user-profile/profile-navigation/profile-navigation.view';
 
-import { SERVICE_HUB } from '~/api/services/service-hub';
+import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Loader } from '~/components/common/loader/loader';
 import { HEADING, PROFILE_NAVIGATION_ITEMS } from '~/feature/user-profile/constants';
@@ -56,7 +56,7 @@ export class UserProfilePage extends BaseComponent {
   public constructor() {
     super({ className: [CSS_CLASS_NAME.WRAPPER, styles.container], tagName: 'div' });
 
-    const customerService = SERVICE_HUB.provideCustomerService();
+    const customerService = SERVICE_PROVIDER.provideCustomerService();
 
     this.profileNavigationPresenter = new ProfileNavigationPresenter(
       new ProfileNavigationView(this.navigationItems),

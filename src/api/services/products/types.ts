@@ -1,8 +1,29 @@
-import type { QueryParam } from '@commercetools/platform-sdk';
+import type { Cart, QueryParam } from '@commercetools/platform-sdk';
 
 import type { FilterOption } from '~/components/filter/filter';
 
 import type { SORT_DIRECTION, SORT_FIELD_TYPE } from './constants';
+
+export interface AppCartData {
+  cart: Cart;
+  discountCodes: string[];
+  items: AppCartProduct[];
+  totalLineItemQuantity: number;
+  totalPrice: { default: number; discounted?: number };
+}
+
+export interface AppCartProduct {
+  image: AppProductImage;
+  lineItemKey: string;
+  name: string;
+  price: { default: number; discounted?: number };
+  productId: string;
+  promoCodePrice?: number;
+  quantity: number;
+  sku: string;
+  totalPrice: number;
+  weight: string | undefined;
+}
 
 export interface AppProduct {
   bestSeller: boolean;
@@ -28,6 +49,12 @@ export interface AppProductImage {
   label: string;
   url: string;
 }
+
+export interface AppProductWithInCart extends AppProduct {
+  inCart: boolean;
+  variants: AppProductWithInCart[];
+}
+
 export interface FilterQueryArguments {
   [key: string]: QueryParam;
   expand?: string | string[];

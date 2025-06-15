@@ -1,0 +1,69 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  margin-block: 5rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  place-content: center;
+  justify-content: center;
+}
+
+.title {
+  margin-bottom: 2rem;
+
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rsLink {
+  display: block;
+
+  width: max-content;
+  margin-inline: auto;
+
+  outline: 4px solid transparent;
+
+  transition: outline var(--transition-duration);
+}
+
+.rsIcon {
+  width: 40rem;
+  height: 40rem;
+}
+
+.rsLink,
+.rsIcon {
+  border-radius: 50%;
+  line-height: 0;
+}
+
+.collaborationText {
+  padding-inline: 4rem;
+  font-family: var(--font-montserrat);
+  text-align: justify;
+  text-indent: 1em;
+}
+
+.collaborationText p:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+@media (hover: hover) {
+  .rsLink:hover {
+    outline-color: var(--color-accent);
+  }
+}
+
+@media (width <= 480px) {
+  .rsIcon {
+    width: 30rem;
+    height: 30rem;
+  }
+}

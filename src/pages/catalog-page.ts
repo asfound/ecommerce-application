@@ -1,6 +1,6 @@
 import { debounce, isEqual } from 'lodash';
 
-import { SERVICE_HUB } from '~/api/services/service-hub';
+import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import iconUp from '~/assets/icons/arrow-up.svg';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Button } from '~/components/common/button/button';
@@ -29,10 +29,13 @@ const BUTTON_TEXT = 'Reset All';
 export class CatalogPage extends BaseComponent {
   private readonly breadcrumbsPresenter: CatalogBreadcrumbsPresenter;
 
+  private readonly filtersPresenter: FiltersPresenter;
+
   private readonly buttonResetAll = new Button({
     onClick: (): void => {
       catalogStore.reset();
       catalogCategoryNameStore.reset();
+      this.filtersPresenter.onCategoryNameChange('');
     },
     textContent: BUTTON_TEXT,
     type: 'button',
@@ -44,8 +47,6 @@ export class CatalogPage extends BaseComponent {
   );
 
   private readonly categoryNavigationPresenter: CategoryNavigationPresenter;
-
-  private readonly filtersPresenter: FiltersPresenter;
 
   private readonly intersectionAnchor = new IntersectionLoader();
 
@@ -62,18 +63,19 @@ export class CatalogPage extends BaseComponent {
 
     this.breadcrumbsPresenter = new CatalogBreadcrumbsPresenter(
       new CatalogBreadcrumbsView(),
-      SERVICE_HUB.provideCategoriesService(),
+      SERVICE_PROVIDER.provideCategoriesService(),
     );
 
     this.categoryNavigationPresenter = new CategoryNavigationPresenter(
       new CategoryNavigationView(),
-      SERVICE_HUB.provideCategoriesService(),
+      SERVICE_PROVIDER.provideCategoriesService(),
     );
 
     this.productCardListPresenter = new ProductCardListPresenter(
       new ProductCardListView(),
       this.intersectionAnchor,
-      SERVICE_HUB.provideProductsService(),
+      SERVICE_PROVIDER.provideProductsService(),
+      SERVICE_PROVIDER.provideCartService(),
     );
 
     this.searchAndSortPresenter = new SearchAndSortPresenter(new SearchAndSortView());

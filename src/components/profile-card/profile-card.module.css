@@ -1,0 +1,106 @@
+.card {
+  width: 100%;
+  max-width: 30rem;
+  border-radius: var(--border-radius);
+
+  outline: 4px solid transparent;
+
+  transition: outline-color var(--transition-duration);
+}
+
+.image {
+  width: 100%;
+  height: 34rem;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+
+  object-fit: cover;
+}
+
+.outerContent {
+  z-index: 50;
+
+  padding: var(--padding-card);
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+
+  text-align: center;
+
+  background-color: var(--color-dark);
+}
+
+.fullname {
+  font-size: 2.2rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.readMore {
+  position: relative;
+  margin-top: 2rem;
+  color: var(--color-accent-light);
+  transition: color var(--transition-duration);
+}
+
+.readMore::after {
+  content: '';
+
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: block;
+
+  width: 35%;
+  height: 1px;
+
+  background-color: var(--color-accent-light);
+
+  transition: background-color var(--transition-duration);
+}
+
+.githubLink {
+  font-family: var(--font-montserrat);
+  font-weight: 400;
+  transition: color var(--transition-duration);
+}
+
+.modalContent {
+  display: grid;
+  gap: 2rem;
+
+  padding: 2rem 3rem 3rem;
+  border-radius: var(--border-radius);
+
+  font-family: var(--font-montserrat);
+
+  background-color: var(--color-black);
+}
+
+.modalContent .fullname {
+  font-family: var(--font-poppins);
+}
+
+.modalHeading {
+  color: var(--color-accent-light);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    cursor: pointer;
+    outline-color: var(--color-accent);
+  }
+
+  .githubLink:hover {
+    color: var(--color-accent);
+  }
+
+  .card:hover .readMore {
+    color: var(--color-accent);
+  }
+
+  .card:hover .readMore::after {
+    background-color: var(--color-accent);
+  }
+}

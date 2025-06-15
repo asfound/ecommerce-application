@@ -1,5 +1,6 @@
+import { debounce } from 'lodash';
+
 import { Presenter } from '~/shared/presenter/presenter';
-import { debounce } from '~/shared/utils/debounce';
 
 import type { FiltersView } from './filters.view';
 import type { FiltersState } from './store/store';
@@ -28,6 +29,19 @@ export class FiltersPresenter extends Presenter<FiltersView> {
 
     this.subscribeCategoryNameChange();
   }
+
+  public readonly onCategoryNameChange = (categoryName: string): void => {
+    this.view.hideFilter(FILTER.BRAND);
+    this.view.hideFilter(FILTER.WEIGHT);
+
+    catalogStore.setState({ brand: [], weight: [] });
+
+    if (categoryName === '') {
+      this.view.resetInputs();
+      this.view.resetCheckboxes(FILTER.ALL);
+      catalogStore.setState({ brand: [], priceRange: {}, weight: [] });
+    }
+  };
 
   private readonly handleBestSellerChange = (checkedValues: string[]): void => {
     catalogAction.setBestSeller(checkedValues.length > 0);
@@ -89,18 +103,6 @@ export class FiltersPresenter extends Presenter<FiltersView> {
       ? Number.parseFloat(price)
       : undefined;
   }
-
-  private readonly onCategoryNameChange = (categoryName: string): void => {
-    this.view.hideFilter(FILTER.BRAND);
-    this.view.hideFilter(FILTER.WEIGHT);
-
-    catalogStore.setState({ brand: [], weight: [] });
-
-    if (categoryName === '') {
-      this.view.resetInputs();
-      this.view.resetCheckboxes(FILTER.ALL);
-    }
-  };
 
   private subscribeCategoryNameChange(): void {
     const unsubscribe = catalogCategoryNameStore.subscribe(

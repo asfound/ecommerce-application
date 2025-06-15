@@ -61,7 +61,14 @@
 }
 
 .title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+
   font-weight: 500;
+
   transition: color var(--transition-duration);
 }
 
@@ -101,10 +108,21 @@
   font-weight: 500;
 }
 
+.buttonCart {
+  position: relative;
+  min-height: 4rem;
+  margin-top: 1rem;
+}
+
+.buttonCart:disabled {
+  opacity: 0.5;
+  background-color: var(--color-black);
+}
+
 @media (hover: hover) {
   .card:hover {
     cursor: pointer;
-    transform: scale(1.02);
+    outline-color: var(--color-accent);
   }
 
   .card:hover .title {

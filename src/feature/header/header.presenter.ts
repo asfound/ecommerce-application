@@ -2,7 +2,8 @@ import type { AuthService } from '~/api/services/auth/auth.service';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
-import { rootAction } from '~/app/store/actions';
+import { routerSelector } from '~/app/router/store/selectors';
+import { routerStore } from '~/app/router/store/store';
 import { rootSelector } from '~/app/store/selectors';
 import { rootStore } from '~/app/store/store';
 import { Presenter } from '~/shared/presenter/presenter';
@@ -23,10 +24,15 @@ export class HeaderPresenter extends Presenter<HeaderView> {
   }
 
   private bindViewHandlers(): void {
+    this.view.bindCartClickHandler(this.handleCartClick);
     this.view.bindLogoutHandler(this.handleLogout);
     this.view.bindLogoClickHandler(this.handleLogoClick);
     this.view.bindProfileClickHandler(this.handleProfileClick);
   }
+
+  private readonly handleCartClick = (): void => {
+    Router.instance.navigate(ROUTE_PATH.CART);
+  };
 
   private readonly handleLogoClick = (): void => {
     Router.instance.navigate(ROUTE_PATH.MAIN);
@@ -37,7 +43,7 @@ export class HeaderPresenter extends Presenter<HeaderView> {
 
     Router.instance.navigate(ROUTE_PATH.LOGIN);
 
-    rootAction.setLoggedIn(false);
+    rootStore.setState({ loggedIn: false, productsCount: 0 });
   };
 
   private readonly handleProfileClick = (): void => {
@@ -46,12 +52,30 @@ export class HeaderPresenter extends Presenter<HeaderView> {
 
   private setupSubscriptions(): void {
     this.subscribeLoggedIn();
+    this.subscribeProductsCount();
+    this.subscribePathname();
   }
 
   private subscribeLoggedIn(): void {
     const unsubscribe = rootStore.subscribe(rootSelector.selectLoggedIn, (loggedIn) => {
       this.view.setLogoutIconVisible(loggedIn);
       this.view.setProfileIconVisible(loggedIn);
+    });
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribePathname(): void {
+    const unsubscribe = routerStore.subscribe(routerSelector.selectPathname, (pathname) => {
+      this.view.highlight(pathname);
+    });
+
+    this.storeSubscription.add(unsubscribe);
+  }
+
+  private subscribeProductsCount(): void {
+    const unsubscribe = rootStore.subscribe(rootSelector.selectProductsCount, (productsCount) => {
+      this.view.setCartProductsCount(productsCount);
     });
 
     this.storeSubscription.add(unsubscribe);

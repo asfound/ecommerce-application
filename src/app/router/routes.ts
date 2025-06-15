@@ -46,6 +46,14 @@ export const ROUTES: Route[] = [
   },
   {
     async component(): Promise<BaseComponent> {
+      const { CartPage } = await import('../../pages/cart-page.ts');
+      return new CartPage();
+    },
+    path: ROUTE_PATH.CART,
+    title: `${TITLE} | Cart`,
+  },
+  {
+    async component(): Promise<BaseComponent> {
       const { ProductDetailsPage } = await import('../../pages/product-details.ts');
       return new ProductDetailsPage();
     },
@@ -60,6 +68,14 @@ export const ROUTES: Route[] = [
     },
     path: ROUTE_PATH.PROFILE,
     title: `${TITLE} | Profile`,
+  },
+  {
+    async component(): Promise<BaseComponent> {
+      const { AboutUsPage } = await import('../../pages/about-us.ts');
+      return new AboutUsPage();
+    },
+    path: ROUTE_PATH.ABOUT,
+    title: `${TITLE} | About`,
   },
 ];
 

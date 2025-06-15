@@ -1,3 +1,5 @@
+import { debounce } from 'lodash';
+
 import type { Component } from '~/components/base-component/types';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
@@ -12,7 +14,6 @@ import navigationStyles from '~/components/navigation/navigation.module.css';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { a, div, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
-import { debounce } from '~/shared/utils/debounce';
 
 import {
   BURGER_DEBOUNCE_THRESHOLD,
@@ -22,6 +23,23 @@ import {
 import styles from './header.module.css';
 
 export class HeaderView extends BaseComponent implements Component {
+  private readonly cartProductsCount = div({ className: styles.cartProductsCount }, '0');
+
+  private readonly cartIcon = div(
+    { className: styles.iconContainer },
+    createSvgIcon(cartSvg, styles.icon),
+    span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
+    this.cartProductsCount,
+  );
+
+  private readonly profileIcon = div(
+    { className: styles.iconContainer },
+    createSvgIcon(accountSvg, styles.icon),
+    span({ className: styles.iconText }, HEADER_ICON_TEXT.PROFILE),
+  );
+
+  private readonly iconContainers = new Set([this.cartIcon, this.profileIcon]);
+
   private isBurgerMenuOpen = false;
 
   private readonly logoLink = a({
@@ -40,18 +58,25 @@ export class HeaderView extends BaseComponent implements Component {
 
   private readonly navigation = new Navigation(ROUTER_LINKS);
 
-  private readonly profileIcon = div(
-    { className: styles.iconContainer },
-    createSvgIcon(accountSvg, styles.icon),
-    span({ className: styles.iconText }, HEADER_ICON_TEXT.PROFILE),
-  );
-
   public constructor() {
     super({ className: styles.header, tagName: 'header' });
 
     this.createHTML();
 
     this.setupListeners();
+
+    this.cartIcon.dataset.route = ROUTE_PATH.CART;
+    this.profileIcon.dataset.route = ROUTE_PATH.PROFILE;
+  }
+
+  public bindCartClickHandler(handler: VoidFunction): void {
+    this.cartIcon.addEventListener(
+      'click',
+      () => {
+        handler();
+      },
+      { signal: this.abortController.signal },
+    );
   }
 
   public bindLogoClickHandler(handler: VoidFunction): void {
@@ -95,15 +120,9 @@ export class HeaderView extends BaseComponent implements Component {
       this.closeMenu();
     });
 
-    const cartIcon = div(
-      { className: styles.iconContainer },
-      createSvgIcon(cartSvg, styles.icon),
-      span({ className: styles.iconText }, HEADER_ICON_TEXT.CART),
-    );
-
     const iconsContainer = div(
       { className: styles.iconsContainer },
-      cartIcon,
+      this.cartIcon,
       this.profileIcon,
       this.logoutIcon,
       this.menuIcon,
@@ -117,6 +136,32 @@ export class HeaderView extends BaseComponent implements Component {
     );
 
     this.append(wrapperElement);
+  }
+
+  public override destroy(): void {
+    this.iconContainers.clear();
+
+    super.destroy();
+  }
+
+  public highlight(routePath: string): void {
+    for (const iconContainer of this.iconContainers) {
+      if (iconContainer.dataset.route === routePath) {
+        iconContainer.classList.add(styles.highlight);
+      } else {
+        iconContainer.classList.remove(styles.highlight);
+      }
+    }
+  }
+
+  public setCartProductsCount(productsCount: number): void {
+    if (productsCount === 0) {
+      this.cartProductsCount.classList.add(styles.hidden);
+      return;
+    }
+
+    this.cartProductsCount.classList.remove(styles.hidden);
+    this.cartProductsCount.textContent = productsCount.toString();
   }
 
   public setLogoutIconVisible(isVisible: boolean): void {

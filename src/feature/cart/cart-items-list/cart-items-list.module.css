@@ -1,0 +1,86 @@
+.container {
+  width: 100%;
+  padding-block: 2rem 3rem;
+  padding-inline: 3rem;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-dark);
+}
+
+.header {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.heading {
+  margin-bottom: 1rem;
+}
+
+.cartInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button {
+  cursor: pointer;
+
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  max-height: max-content;
+  padding: 0 1rem;
+  border: none;
+
+  color: var(--color-accent-light);
+
+  background-color: transparent;
+
+  transition: color var(--transition-duration);
+}
+
+.deleteIcon {
+  display: flex;
+  align-items: center;
+
+  width: 2rem;
+  height: 2rem;
+
+  stroke: var(--color-accent-light);
+  stroke-width: 2;
+
+  transition: stroke var(--transition-duration);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.list > li:not(:last-child) {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-white);
+}
+
+.count {
+  color: var(--color-accent-light);
+}
+
+@media (hover: hover) {
+  .button:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+
+  .button:hover .deleteIcon {
+    stroke: var(--color-accent);
+  }
+}
+
+@media (width <= 768px) {
+  .container {
+    min-width: 100%;
+  }
+}
