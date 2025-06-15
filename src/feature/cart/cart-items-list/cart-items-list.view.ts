@@ -79,6 +79,7 @@ export class CartItemsListView extends BaseComponent implements Component {
       className: styles.modalButton,
       onClick: (): void => {
         buttonConfirm.disable();
+        buttonCancel.disable();
         onConfirm();
       },
       textContent: BUTTON_TEXT.CONFIRM,
