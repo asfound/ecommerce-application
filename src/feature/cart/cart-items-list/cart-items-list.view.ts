@@ -68,6 +68,13 @@ export class CartItemsListView extends BaseComponent implements Component {
   }
 
   private createModalContent(onConfirm: VoidFunction, onCancel: VoidFunction): HTMLDivElement {
+    const buttonCancel = new Button({
+      className: styles.modalButton,
+      onClick: onCancel,
+      textContent: 'Cancel',
+      type: 'button',
+    });
+
     const buttonConfirm = new Button({
       className: styles.modalButton,
       onClick: (): void => {
@@ -75,13 +82,6 @@ export class CartItemsListView extends BaseComponent implements Component {
         onConfirm();
       },
       textContent: 'Confirm',
-      type: 'button',
-    });
-
-    const buttonCancel = new Button({
-      className: styles.modalButton,
-      onClick: onCancel,
-      textContent: 'Cancel',
       type: 'button',
     });
 
@@ -93,8 +93,8 @@ export class CartItemsListView extends BaseComponent implements Component {
     const modalContent = div(
       { className: styles.modalContent },
       modalText,
-      buttonConfirm.element,
       buttonCancel.element,
+      buttonConfirm.element,
     );
 
     return modalContent;
