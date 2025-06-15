@@ -17,6 +17,7 @@ import type { CartItemsListView } from './cart-items-list.view';
 import { cartAction } from '../store/actions';
 import { cartSelector } from '../store/selectors';
 import { cartStore } from '../store/store';
+import { CART_NOTIFICATION } from './constants';
 
 export class CartItemsListPresenter extends Presenter<CartItemsListView> {
   private readonly cartService: CartService;
@@ -55,6 +56,8 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       rootAction.setProductsCount(result.body.totalLineItemQuantity ?? 0);
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
+
+      showToast(CART_NOTIFICATION.CART_EMPTIED);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
@@ -127,6 +130,8 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       cartAction.setItemsCount(result.body.totalLineItemQuantity ?? 0);
 
       this.updateTotals(result.body);
+
+      showToast(CART_NOTIFICATION.PRODUCT_REMOVED);
     } catch (error: unknown) {
       if (isError(error)) {
         showToast(error.message, true);
