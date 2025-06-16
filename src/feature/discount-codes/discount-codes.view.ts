@@ -36,8 +36,10 @@ export class DiscountCodesView extends BaseComponent implements Component {
 
     this.linkGoToCart.addEventListener(
       'click',
-      () => {
+      (event) => {
+        event.preventDefault();
         handler();
+        window.scrollTo({ behavior: 'instant', top: 0 });
       },
       { signal: this.abortController.signal },
     );
