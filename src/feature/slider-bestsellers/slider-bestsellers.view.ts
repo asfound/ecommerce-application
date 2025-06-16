@@ -38,8 +38,10 @@ export class SliderBestsellersView extends BaseComponent implements Component {
 
     this.linkSeeAll.addEventListener(
       'click',
-      () => {
+      (event) => {
+        event.preventDefault();
         handler();
+        window.scrollTo({ behavior: 'instant', top: 0 });
       },
       { signal: this.abortController.signal },
     );
