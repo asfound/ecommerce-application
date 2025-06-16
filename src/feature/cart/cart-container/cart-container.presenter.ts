@@ -2,6 +2,7 @@ import type { CartService } from '~/api/services/cart/cart.service';
 
 import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
+import { modalService } from '~/services/modal/modal.service';
 import { Presenter } from '~/shared/presenter/presenter';
 import { showToast } from '~/shared/utils/show-toast';
 
@@ -28,7 +29,10 @@ export class CartContainerPresenter extends Presenter<CartContainerView> {
 
     this.cartService = cartService;
 
-    this.cartItemsListPresenter = new CartItemsListPresenter(new CartItemsListView(), cartService);
+    this.cartItemsListPresenter = new CartItemsListPresenter(
+      new CartItemsListView(modalService),
+      cartService,
+    );
     this.cartTotalsPresenter = new CartTotalsPresenter(new CartTotalsView(), cartService);
 
     this.cartItemsListPresenter.setTotalsPresenter(this.cartTotalsPresenter);

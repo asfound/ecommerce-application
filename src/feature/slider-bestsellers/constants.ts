@@ -1,6 +1,6 @@
 import type { SwiperOptions } from 'swiper/types';
 
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Autoplay, Navigation } from 'swiper/modules';
 
 import type { ProductsFilterPayload } from '~/api/services/products/types';
 
@@ -25,11 +25,7 @@ export const SLIDER_BESTSELLER_TEXT = {
 export const PRODUCT_QUANTITY = 1;
 
 export const SWIPER_OPTIONS = {
-  GET: (
-    buttonNext: HTMLDivElement,
-    buttonPrevious: HTMLDivElement,
-    pagination: HTMLDivElement,
-  ): SwiperOptions => ({
+  GET: (buttonNext: HTMLDivElement, buttonPrevious: HTMLDivElement): SwiperOptions => ({
     autoplay: { delay: 5000 },
     breakpoints: {
       389: {
@@ -51,12 +47,11 @@ export const SWIPER_OPTIONS = {
     },
     init: false,
     initialSlide: 0,
-    modules: [Navigation, Pagination, Autoplay],
+    modules: [Navigation, Autoplay],
     navigation: {
       nextEl: buttonNext,
       prevEl: buttonPrevious,
     },
-    pagination: { el: pagination, type: 'progressbar' },
     slidesPerGroup: 1,
     slidesPerView: 1,
     spaceBetween: 20,
