@@ -128,6 +128,7 @@ export class ProductCard extends BaseComponent implements Component {
 
   private async handleAddToCartClick(): Promise<void> {
     this.setProcessingState(true);
+    this.addClassNames(styles.cartDisabled);
 
     try {
       await this.callbacks.onAddToCart(this.product);
@@ -136,6 +137,7 @@ export class ProductCard extends BaseComponent implements Component {
       this.setButtonToDefaultState();
     } finally {
       this.setProcessingState(false);
+      this.removeClassNames(styles.cartDisabled);
     }
   }
 
