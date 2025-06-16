@@ -7,6 +7,11 @@
     outline-color var(--transition-duration);
 }
 
+.processing {
+  pointer-events: none;
+  opacity: 0.9;
+}
+
 .imageContainer {
   position: relative;
   height: 29rem;
