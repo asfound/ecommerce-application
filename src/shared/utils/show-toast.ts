@@ -6,7 +6,7 @@ export function showToast(message: string, isError = false): void {
   const backgroundColor = isError ? '#403738' : '#383c3c';
   Toastify({
     close: false,
-    duration: 3000,
+    duration: 4000,
     gravity: 'bottom',
     position: 'right',
     stopOnFocus: true,
