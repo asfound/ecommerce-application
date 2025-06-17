@@ -35,6 +35,11 @@
   padding: 1rem;
 }
 
+.content {
+  overflow: auto;
+  max-height: 85dvh;
+}
+
 .button {
   cursor: pointer;
 

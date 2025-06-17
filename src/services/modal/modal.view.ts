@@ -39,7 +39,9 @@ export class ModalView extends BaseComponent implements Component {
 
   public createHTML(): void {
     if (this.properties) {
-      this.containerElement.replaceChildren(this.properties.content);
+      this.containerElement.replaceChildren(
+        div({ className: styles.content }, this.properties.content),
+      );
     }
 
     this.replaceChildren(this.closeButton, this.containerElement);
