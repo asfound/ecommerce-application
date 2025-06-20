@@ -1,13 +1,13 @@
 import type { Customer, MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 
-import type { PersonalData } from '../types.ts';
+import type { PersonalData } from './types.ts';
 
 import {
   createChangeEmailAction,
   createSetDateOfBirthAction,
   createSetFirstNameAction,
   createSetLastNameAction,
-} from '../actions/actions.ts';
+} from './actions.ts';
 
 export const isUpdated = <TField extends keyof Omit<Customer, 'addresses'>>(
   sourceField: Customer[TField],

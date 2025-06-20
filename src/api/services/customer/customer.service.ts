@@ -26,9 +26,9 @@ import {
   createRemoveShippingAddressIdAction,
   createSetDefaultBillingAddressAction,
   createSetDefaultShippingAddressAction,
-} from './actions/actions.ts';
+} from './actions.ts';
 import { ADDRESS_TYPE } from './constants.ts';
-import { getPersonalDataUpdateActions } from './helpers/helpers.ts';
+import { getPersonalDataUpdateActions } from './helpers.ts';
 import { mapToAppCustomer } from './mappers.ts';
 
 export class CustomerService {

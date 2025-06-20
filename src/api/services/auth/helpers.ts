@@ -1,6 +1,6 @@
 import type { BaseAddress } from '@commercetools/platform-sdk';
 
-import type { AppCustomerDraft, SignupPayload } from '../types';
+import type { AppCustomerDraft, SignupPayload } from './types';
 
 export const createCustomerDraft = (payload: SignupPayload): AppCustomerDraft => {
   const { dateOfBirth, email, firstName, lastName, password } = payload;

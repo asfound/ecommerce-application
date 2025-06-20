@@ -16,7 +16,7 @@ import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
 
 import type { LoginPayload, SignupPayload } from './types';
 
-import { createCustomerDraft } from './helpers/helpers';
+import { createCustomerDraft } from './helpers';
 
 export class AuthService {
   private static instance: AuthService | null = null;

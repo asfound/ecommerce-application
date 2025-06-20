@@ -15,7 +15,7 @@ import type {
   MyCustomerSetLastNameAction,
 } from '@commercetools/platform-sdk';
 
-import type { AddressIdentificationPayload } from '../types';
+import type { AddressIdentificationPayload } from './types';
 
 export const createSetFirstNameAction = (firstName: string): MyCustomerSetFirstNameAction => ({
   action: 'setFirstName',
