@@ -1,0 +1,10 @@
+.fallback {
+  display: grid;
+  place-content: center;
+  height: 100dvh;
+}
+
+.gif {
+  display: block;
+  margin-inline: auto;
+}
