@@ -5,7 +5,7 @@ import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { rootStore } from '~/app/store/store';
 import { Presenter } from '~/shared/presenter/presenter';
-import { isError } from '~/shared/type-predicates/type-predicates';
+import { normalizeError } from '~/shared/utils/normalize-error';
 
 import type { LoginFormView } from './login-form.view';
 
@@ -40,9 +40,7 @@ export class LoginFormPresenter extends Presenter<LoginFormView> {
         });
       })
       .catch((error: unknown) => {
-        if (isError(error)) {
-          this.view.showError(error.message);
-        }
+        this.view.showError(normalizeError(error).message);
       });
   };
 

@@ -1,4 +1,4 @@
-import { debounce, isError } from 'lodash';
+import { debounce } from 'lodash';
 
 import type { CartService } from '~/api/services/cart/cart.service';
 import type { ProductsService } from '~/api/services/products/products.service';
@@ -14,6 +14,7 @@ import { Router } from '~/app/router/router';
 import { rootAction } from '~/app/store/actions';
 import { Presenter } from '~/shared/presenter/presenter';
 import { formatProductName } from '~/shared/utils/format-product-name';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { CatalogState } from '../store/store';
@@ -166,9 +167,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
         onNavigateToDetails: this.handleNavigateToDetails,
       });
     } catch (error: unknown) {
-      if (isError(error)) {
-        this.view.showNotFoundWidget(error.message, true);
-      }
+      this.view.showNotFoundWidget(normalizeError(error).message, true);
     }
   }
 
@@ -223,9 +222,7 @@ export class ProductCardListPresenter extends Presenter<ProductCardListView> {
 
       this.initIntersectionObserver();
     } catch (error: unknown) {
-      if (isError(error)) {
-        this.view.showNotFoundWidget(error.message, true);
-      }
+      this.view.showNotFoundWidget(normalizeError(error).message, true);
     } finally {
       catalogLoadingAction.setLoading(false);
     }

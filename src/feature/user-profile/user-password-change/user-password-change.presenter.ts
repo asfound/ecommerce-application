@@ -1,9 +1,8 @@
-import { isError } from 'lodash';
-
 import type { CustomerService } from '~/api/services/customer/customer.service';
 import type { AppChangePasswordPayload } from '~/api/services/customer/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { UserPasswordChangeView } from './user-password-change.view';
@@ -39,9 +38,7 @@ export class UserPasswordChangePresenter extends Presenter<UserPasswordChangeVie
 
       showToast(USER_NOTIFICATION.PASSWORD_SUCCESS);
     } catch (error: unknown) {
-      if (isError(error)) {
-        this.view.showError(error.message);
-      }
+      this.view.showError(normalizeError(error).message);
     } finally {
       window.scrollTo({ top: 0 });
     }

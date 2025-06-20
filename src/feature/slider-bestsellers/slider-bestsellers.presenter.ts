@@ -1,5 +1,3 @@
-import { isError } from 'lodash';
-
 import type { CartService } from '~/api/services/cart/cart.service';
 import type { ProductsService } from '~/api/services/products/products.service';
 import type { AppProduct, AppProductWithInCart } from '~/api/services/products/types';
@@ -9,6 +7,7 @@ import { Router } from '~/app/router/router';
 import { rootAction } from '~/app/store/actions';
 import { Presenter } from '~/shared/presenter/presenter';
 import { formatProductName } from '~/shared/utils/format-product-name';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { SliderBestsellersView } from './slider-bestsellers.view';
@@ -46,9 +45,7 @@ export class SliderBestsellersPresenter extends Presenter<SliderBestsellersView>
 
       this.view.bindSeeAllHandler(this.handleSeeAllClick, ROUTE_PATH.CATALOG);
     } catch (error) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   }
 

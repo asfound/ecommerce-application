@@ -1,11 +1,10 @@
-import { isError } from 'lodash';
-
 import { ApiBuilder } from '~/api/client/api-builder';
 import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import { BaseComponent } from '~/components/base-component/base-component';
 import { Footer } from '~/feature/footer/footer';
 import { HeaderPresenter } from '~/feature/header/header.presenter';
 import { HeaderView } from '~/feature/header/header.view';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import styles from './app.module.css';
@@ -28,9 +27,7 @@ export class App {
         rootAction.setProductsCount(body.totalLineItemQuantity ?? 0);
       },
       (error: unknown) => {
-        if (isError(error)) {
-          showToast(error.message, true);
-        }
+        showToast(normalizeError(error).message, true);
       },
     );
 
