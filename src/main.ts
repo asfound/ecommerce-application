@@ -7,6 +7,7 @@ import './style/style.css';
 const app = new App();
 
 try {
+  app.initializeListeners();
   await app.initialize();
   app.mount(document.body);
 } catch (error) {

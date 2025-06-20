@@ -1,3 +1,5 @@
+import { isString } from 'lodash';
+
 import { ApiBuilder } from '~/api/client/api-builder';
 import { SERVICE_PROVIDER } from '~/api/services/service-provider';
 import { BaseComponent } from '~/components/base-component/base-component';
@@ -39,6 +41,14 @@ export class App {
 
       throw new Error(APP_ERROR_MESSAGE.FAILED_TO_INITIALIZE);
     }
+  }
+
+  public initializeListeners(): void {
+    globalThis.addEventListener('unhandledrejection', (event) => {
+      event.preventDefault();
+      const message = isString(event.reason) ? event.reason : normalizeError(event.reason).message;
+      showToast(message, true);
+    });
   }
 
   public mount(parent: HTMLElement): void {
