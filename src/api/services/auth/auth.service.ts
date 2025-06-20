@@ -75,8 +75,6 @@ export class AuthService {
         password: payload.password,
         username: payload.email,
       });
-
-      await this.apiRoot().me().get().execute();
     }
 
     return response;
