@@ -34,9 +34,7 @@ export class ProductsService {
     const response = await this.apiRoot()
       .productProjections()
       .search()
-      .get({
-        queryArgs: { ...queryArguments, expand: [EXPAND_PATH.CATEGORIES], ...facets },
-      })
+      .get({ queryArgs: { ...queryArguments, expand: [EXPAND_PATH.CATEGORIES], ...facets } })
       .execute();
 
     const products = mapToFlatAppProducts(
@@ -54,9 +52,7 @@ export class ProductsService {
     const response = await this.apiRoot()
       .productProjections()
       .withId({ ID: id })
-      .get({
-        queryArgs: { expand: [EXPAND_PATH.PRODUCT_TYPE, EXPAND_PATH.CATEGORIES] },
-      })
+      .get({ queryArgs: { expand: [EXPAND_PATH.PRODUCT_TYPE, EXPAND_PATH.CATEGORIES] } })
       .execute();
 
     return mapVariantToAppProduct(response.body.masterVariant, response.body);

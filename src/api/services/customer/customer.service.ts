@@ -252,9 +252,7 @@ export class CustomerService {
 
     const response = await this.apiRoot()
       .me()
-      .post({
-        body: { actions, version: payload.sourceCustomer.version },
-      })
+      .post({ body: { actions, version: payload.sourceCustomer.version } })
       .execute();
 
     return mapToAppCustomer(response.body);

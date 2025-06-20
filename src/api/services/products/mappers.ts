@@ -116,8 +116,5 @@ export const mapToFilterOptions = (facetResults: FacetResults): MappedFilterOpti
     }
   }
 
-  return {
-    brandOptions,
-    weightOptions,
-  };
+  return { brandOptions, weightOptions };
 };

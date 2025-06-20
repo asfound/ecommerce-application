@@ -47,7 +47,6 @@ export class AuthService {
     localStorageService: BrowserStorageService<LocalStorageData>,
   ): AuthService {
     AuthService.instance ??= new AuthService(apiRoot, localStorageService);
-
     return AuthService.instance;
   }
 
