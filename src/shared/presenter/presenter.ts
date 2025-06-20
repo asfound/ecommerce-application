@@ -16,7 +16,7 @@ export abstract class Presenter<T extends BaseComponent = BaseComponent> {
 
     this.storeSubscription.clear();
 
-    this.view.destroy(); // TODO: maybe remove for prevent double call
+    this.view.destroy();
   }
 
   public getView(): BaseComponent {

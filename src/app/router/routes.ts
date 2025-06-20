@@ -8,7 +8,6 @@ import { WILDCARD_ROUTE } from './constants.ts';
 import { isLoggedIn, isNotLoggedIn } from './interceptors/interceptors.ts';
 import { ROUTE_PATH } from './route-path.ts';
 
-// TODO combine page title form project title + page title
 export const ROUTES: Route[] = [
   {
     async component(): Promise<BaseComponent> {

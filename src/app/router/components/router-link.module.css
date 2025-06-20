@@ -14,8 +14,6 @@
 
 .disabled {
   pointer-events: none;
-
-  /* TODO: maybe change to some other color */
   color: var(--color-accent-light);
 }
 

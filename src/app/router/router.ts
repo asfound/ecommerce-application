@@ -34,7 +34,6 @@ export class Router {
 
     this.fallbackRoute = fallbackRoute;
 
-    // TODO: if we don't use the router state, then we can add these handlers in the loop
     globalThis.addEventListener('popstate', () => {
       this.handleRouteChange({ path: globalThis.location.href, pushState: PUSH_STATE_MODE.NONE });
     });
