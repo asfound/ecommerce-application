@@ -119,7 +119,7 @@ export class RegistrationFormView extends BaseComponent implements Component {
     );
   }
 
-  public bindSubmitHandler(handler: (payload: SignupPayload) => void): void {
+  public bindSubmitHandler(handler: (payload: SignupPayload) => Promise<void> | void): void {
     this.formElement.addEventListener(
       'submit',
       (event) => {

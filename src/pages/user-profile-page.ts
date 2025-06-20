@@ -14,6 +14,8 @@ import { UserPasswordChangePresenter } from '~/feature/user-profile/user-passwor
 import { UserPasswordChangeView } from '~/feature/user-profile/user-password-change/user-password-change.view';
 import { CSS_CLASS_NAME } from '~/shared/constants/constants';
 import { div, h1 } from '~/shared/create-element/tags';
+import { normalizeError } from '~/shared/utils/normalize-error';
+import { showToast } from '~/shared/utils/show-toast';
 
 import styles from './user-page.module.css';
 
@@ -94,21 +96,22 @@ export class UserProfilePage extends BaseComponent {
     super.destroy();
   }
 
-  private showAddressesBlock(): void {
+  private async showAddressesBlock(): Promise<void> {
     this.contentBlock.replaceChildren(this.loader.element);
     this.loader.show();
 
-    this.userAddressesPresenter
-      .init()
-      .then(() => {
-        this.contentBlock.replaceChildren(
-          div({ className: styles.title }, PROFILE_NAVIGATION_ITEMS.ADDRESSES),
-          this.userAddressesPresenter.getView().element,
-        );
-      })
-      .finally(() => {
-        this.loader.hide();
-      });
+    try {
+      await this.userAddressesPresenter.init();
+
+      this.contentBlock.replaceChildren(
+        div({ className: styles.title }, PROFILE_NAVIGATION_ITEMS.ADDRESSES),
+        this.userAddressesPresenter.getView().element,
+      );
+    } catch (error) {
+      showToast(normalizeError(error).message, true);
+    } finally {
+      this.loader.hide();
+    }
   }
 
   private showInfoBlock(): void {

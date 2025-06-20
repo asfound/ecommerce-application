@@ -4,6 +4,8 @@ import deleteIcon from '~/assets/icons/cross.svg';
 import { a, div, img, span } from '~/shared/create-element/tags';
 import { createSvgIcon } from '~/shared/utils/create-svg';
 import { formatPrice } from '~/shared/utils/format-price';
+import { normalizeError } from '~/shared/utils/normalize-error';
+import { showToast } from '~/shared/utils/show-toast';
 
 import type { Component } from '../base-component/types';
 
@@ -24,19 +26,24 @@ export type ProductCardClickHandler = (product: AppCartProduct) => void;
 export class CartItem extends BaseComponent implements Component {
   private readonly callbacks: CartItemCallbacks;
 
-  private item: AppCartProduct;
-
   private readonly decrementItemButton = new Button({
     className: styles.controlButton,
-    onClick: (): void => {
-      this.disableQuantityControls();
-      this.callbacks.onDecrementItem(this.item.lineItemKey, QUANTITY_STEP).then((result) => {
+    onClick: async (): Promise<void> => {
+      try {
+        this.disableQuantityControls();
+
+        const result = await this.callbacks.onDecrementItem(this.item.lineItemKey, QUANTITY_STEP);
+
         this.updateItem(result);
-      });
+      } catch (error) {
+        showToast(normalizeError(error).message, true);
+      }
     },
     textContent: BUTTON_TEXT.DECREMENT,
     type: 'button',
   });
+
+  private item: AppCartProduct;
 
   private readonly deleteButton = new Button({
     className: styles.deleteButton,
@@ -50,11 +57,16 @@ export class CartItem extends BaseComponent implements Component {
 
   private readonly incrementItemButton = new Button({
     className: styles.controlButton,
-    onClick: (): void => {
-      this.disableQuantityControls();
-      this.callbacks.onIncrementItem(QUANTITY_STEP, this.item.sku).then((result) => {
+    onClick: async (): Promise<void> => {
+      try {
+        this.disableQuantityControls();
+
+        const result = await this.callbacks.onIncrementItem(QUANTITY_STEP, this.item.sku);
+
         this.updateItem(result);
-      });
+      } catch (error) {
+        showToast(normalizeError(error).message, true);
+      }
     },
     textContent: BUTTON_TEXT.INCREMENT,
     type: 'button',

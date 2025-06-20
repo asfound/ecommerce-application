@@ -26,22 +26,21 @@ export class LoginFormPresenter extends Presenter<LoginFormView> {
     this.view.bindRegistrationLinkHandler(this.handleRegistrationLinkClick);
   }
 
-  private handleLogin = (payload: LoginPayload): void => {
-    this.authService
-      .login(payload)
-      .then(({ body }) => {
-        this.view.hideError();
+  private handleLogin = async (payload: LoginPayload): Promise<void> => {
+    try {
+      const { body } = await this.authService.login(payload);
 
-        Router.instance.navigate(ROUTE_PATH.MAIN);
+      this.view.hideError();
 
-        rootStore.setState({
-          loggedIn: true,
-          productsCount: body.cart?.totalLineItemQuantity ?? 0,
-        });
-      })
-      .catch((error: unknown) => {
-        this.view.showError(normalizeError(error).message);
+      rootStore.setState({
+        loggedIn: true,
+        productsCount: body.cart?.totalLineItemQuantity ?? 0,
       });
+
+      Router.instance.navigate(ROUTE_PATH.MAIN);
+    } catch (error) {
+      this.view.showError(normalizeError(error).message);
+    }
   };
 
   private handleRegistrationLinkClick = (): void => {
