@@ -1,7 +1,7 @@
 import type { AppProduct, AppProductWithInCart } from '~/api/services/products/types';
 
 import { div } from '~/shared/create-element/tags';
-import { calculateDiscountPercent } from '~/shared/utils/calculate-discount';
+import { getDiscountPercent } from '~/shared/utils/calculate-discount';
 import { formatPrice } from '~/shared/utils/format-price';
 import { formatProductName } from '~/shared/utils/format-product-name';
 
@@ -101,10 +101,7 @@ export class ProductCard extends BaseComponent implements Component {
         this.product.price.discounted
           ? div(
               { className: styles.discountLabel },
-              calculateDiscountPercent(
-                this.product.price.default,
-                this.product.price.discounted ?? 0,
-              ),
+              getDiscountPercent(this.product.price.default, this.product.price.discounted ?? 0),
             )
           : null,
       ),
