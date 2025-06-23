@@ -21,7 +21,6 @@ const mapAddresses = ({
       country: address.country,
       defaultBilling: defaultBillingAddressId === address.id,
       defaultShipping: defaultShippingAddressId === address.id,
-
       inBilling:
         addressType === ADDRESS_TYPE.SHIPPING &&
         allIds.billingAddressIds?.includes(address.id ?? ''),

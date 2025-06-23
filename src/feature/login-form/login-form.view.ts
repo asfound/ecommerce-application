@@ -54,7 +54,7 @@ export class LoginFormView extends BaseComponent implements Component {
     );
   }
 
-  public bindSubmitHandler(handler: (payload: LoginPayload) => void): void {
+  public bindSubmitHandler(handler: (payload: LoginPayload) => Promise<void> | void): void {
     this.formElement.addEventListener(
       'submit',
       (event) => {

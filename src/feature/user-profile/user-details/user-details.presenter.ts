@@ -1,9 +1,8 @@
-import { isError } from 'lodash';
-
 import type { CustomerService } from '~/api/services/customer/customer.service';
 import type { AppCustomer, PersonalDataPayload } from '~/api/services/customer/types';
 
 import { Presenter } from '~/shared/presenter/presenter';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { UserDetailsView } from './user-details.view';
@@ -42,9 +41,7 @@ export class UserDetailsPresenter extends Presenter<UserDetailsView> {
 
       showToast(USER_NOTIFICATION.INFORMATION_SUCCESS);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     } finally {
       window.scrollTo({ top: 0 });
     }

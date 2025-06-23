@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: 2rem;
 
-  min-height: 41rem; /* TODO: idk how else align loader */
+  min-height: 41rem;
   margin-block: 4rem;
 }
 

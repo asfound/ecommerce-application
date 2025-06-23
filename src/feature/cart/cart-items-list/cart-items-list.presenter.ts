@@ -8,7 +8,7 @@ import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { rootAction } from '~/app/store/actions';
 import { Presenter } from '~/shared/presenter/presenter';
-import { isError } from '~/shared/type-predicates/type-predicates';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { CartTotalsPresenter } from '../cart-totals/cart-totals.presenter';
@@ -59,9 +59,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       showToast(CART_NOTIFICATION.CART_EMPTIED);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 
@@ -80,9 +78,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       const item = result.body.lineItems.find((item) => item.key === lineItemKey);
       return item ? mapLineItemToAppCartProduct(item) : null;
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
 
       return null;
     }
@@ -105,9 +101,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
       const item = result.body.lineItems.find((item) => item.key === sku);
       return item ? mapLineItemToAppCartProduct(item) : null;
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
 
       return null;
     }
@@ -133,9 +127,7 @@ export class CartItemsListPresenter extends Presenter<CartItemsListView> {
 
       showToast(CART_NOTIFICATION.PRODUCT_REMOVED);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 

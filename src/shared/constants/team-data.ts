@@ -1,10 +1,10 @@
 import type { ProfileCardProperties } from '~/components/profile-card/profile-card';
 
-import avatarAlena from '~/assets/img/alena.jpg';
-import avatarKsyusha from '~/assets/img/ksyusha.png';
-import avatarMargo from '~/assets/img/margo.jpg';
-import avatarMikhail from '~/assets/img/mikhail.png';
-import avatarYulik from '~/assets/img/yulikk.png';
+import avatarAlena from '~/assets/img/alena.webp';
+import avatarKsyusha from '~/assets/img/ksyusha.webp';
+import avatarMargo from '~/assets/img/margo.webp';
+import avatarMikhail from '~/assets/img/mikhail.webp';
+import avatarYulik from '~/assets/img/yulikk.webp';
 
 interface TeamData {
   EXTERNAL_SUPPORT: ProfileCardProperties[];

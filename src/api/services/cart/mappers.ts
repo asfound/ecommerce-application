@@ -1,6 +1,6 @@
 import type { LineItem } from '@commercetools/platform-sdk';
 
-import { isAttribute } from '~/api/types/guards';
+import { isAttribute } from '~/api/type-predicates/type-predicates';
 import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppCartProduct } from '../products/types';

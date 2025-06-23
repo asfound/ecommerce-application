@@ -1,7 +1,8 @@
-import type {
-  ClientResponse,
-  CustomerSignInResult,
-  MyCustomerSignin,
+import {
+  AnonymousCartSignInModeValues,
+  type ClientResponse,
+  type CustomerSignInResult,
+  type MyCustomerSignin,
 } from '@commercetools/platform-sdk';
 
 import type { ApiRootGetter } from '~/api/types/types';
@@ -10,13 +11,12 @@ import type { LocalStorageData } from '~/services/browser-storage/types';
 
 import { ApiBuilder } from '~/api/client/api-builder';
 import { ClientTokenCache } from '~/api/client/token-cache';
-import { ACTIVE_CART_SIGNIN_MODE } from '~/api/constants/constants';
 import { isSuccessResponse } from '~/api/helpers/helpers';
 import { LOCAL_STORAGE_KEY } from '~/services/browser-storage/constants';
 
 import type { LoginPayload, SignupPayload } from './types';
 
-import { createCustomerDraft } from './helpers/helpers';
+import { createCustomerDraft } from './helpers';
 
 export class AuthService {
   private static instance: AuthService | null = null;
@@ -47,7 +47,6 @@ export class AuthService {
     localStorageService: BrowserStorageService<LocalStorageData>,
   ): AuthService {
     AuthService.instance ??= new AuthService(apiRoot, localStorageService);
-
     return AuthService.instance;
   }
 
@@ -57,7 +56,7 @@ export class AuthService {
 
   public async login(payload: LoginPayload): Promise<ClientResponse<CustomerSignInResult>> {
     const body: MyCustomerSignin = {
-      activeCartSignInMode: ACTIVE_CART_SIGNIN_MODE.MERGE_WITH_EXISTING,
+      activeCartSignInMode: AnonymousCartSignInModeValues.MergeWithExistingCustomerCart,
       email: payload.email,
       password: payload.password,
     };
@@ -75,8 +74,6 @@ export class AuthService {
         password: payload.password,
         username: payload.email,
       });
-
-      await this.apiRoot().me().get().execute();
     }
 
     return response;

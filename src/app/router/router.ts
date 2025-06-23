@@ -1,4 +1,6 @@
 import { BaseComponent } from '~/components/base-component/base-component';
+import { normalizeError } from '~/shared/utils/normalize-error';
+import { showToast } from '~/shared/utils/show-toast';
 
 import type { NavigateOptions, Route, RouteMatcher, SearchParameters } from './types';
 
@@ -32,7 +34,6 @@ export class Router {
 
     this.fallbackRoute = fallbackRoute;
 
-    // TODO: if we don't use the router state, then we can add these handlers in the loop
     globalThis.addEventListener('popstate', () => {
       this.handleRouteChange({ path: globalThis.location.href, pushState: PUSH_STATE_MODE.NONE });
     });
@@ -141,14 +142,16 @@ export class Router {
     return { pathname, searchParameters: Object.fromEntries(searchParameters) };
   }
 
-  private updatePage(payload: { route: Route }): void {
-    payload.route
-      .component()
-      .then((page) => {
-        document.title = '';
-        document.title = payload.route.title;
-        this.routerOutlet.replaceChildren(page);
-      })
-      .catch(console.warn);
+  private async updatePage(payload: { route: Route }): Promise<void> {
+    try {
+      const page = await payload.route.component();
+
+      document.title = '';
+      document.title = payload.route.title;
+
+      this.routerOutlet.replaceChildren(page);
+    } catch (error) {
+      showToast(normalizeError(error).message, true);
+    }
   }
 }

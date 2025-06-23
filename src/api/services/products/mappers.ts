@@ -8,7 +8,7 @@ import { isString } from 'lodash';
 
 import type { FilterOption } from '~/components/filter/filter';
 
-import { isAttribute } from '~/api/types/guards';
+import { isAttribute } from '~/api/type-predicates/type-predicates';
 import { APP_LOCALE } from '~/shared/constants/constants';
 
 import type { AppProduct, MappedFilterOptions, ProductsFilterPayload } from './types';
@@ -116,8 +116,5 @@ export const mapToFilterOptions = (facetResults: FacetResults): MappedFilterOpti
     }
   }
 
-  return {
-    brandOptions,
-    weightOptions,
-  };
+  return { brandOptions, weightOptions };
 };

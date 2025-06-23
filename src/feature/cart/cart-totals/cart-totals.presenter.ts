@@ -1,13 +1,12 @@
 import type { Cart, LineItem } from '@commercetools/platform-sdk';
 
-import { isError } from 'lodash';
-
 import type { CartService } from '~/api/services/cart/cart.service';
 import type { AppCartData } from '~/api/services/products/types';
 
 import { CART_ERROR_MESSAGE } from '~/api/services/cart/constants';
 import { mapLineItemToAppCartProduct } from '~/api/services/cart/mappers';
 import { Presenter } from '~/shared/presenter/presenter';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { CartItemsListPresenter } from '../cart-items-list/cart-items-list.presenter';
@@ -73,9 +72,7 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
 
       showToast(CART_NOTIFICATION.CODE_APPLIED(code));
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
 
       throw new Error(CART_ERROR_MESSAGE.CODE_ALREADY_APPLIED(code));
     } finally {
@@ -93,9 +90,7 @@ export class CartTotalsPresenter extends Presenter<CartTotalsView> {
 
       showToast(CART_NOTIFICATION.CODE_REMOVED(code));
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 

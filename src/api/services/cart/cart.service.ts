@@ -84,12 +84,7 @@ export class CartService {
       .me()
       .carts()
       .withId({ ID: cart.id })
-      .post({
-        body: {
-          actions,
-          version: cart.version,
-        },
-      })
+      .post({ body: { actions, version: cart.version } })
       .execute();
   }
 

@@ -1,6 +1,8 @@
 import type { BaseAddress } from '@commercetools/platform-sdk';
 
-import type { AppCustomerDraft, SignupPayload } from '../types';
+import type { AppCustomerDraft, SignupPayload } from './types';
+
+import { DEFAULT_ADDRESS_INDEX } from './constants';
 
 export const createCustomerDraft = (payload: SignupPayload): AppCustomerDraft => {
   const { dateOfBirth, email, firstName, lastName, password } = payload;
@@ -13,24 +15,21 @@ export const createCustomerDraft = (payload: SignupPayload): AppCustomerDraft =>
     addresses.push(billingAddress);
   }
 
-  const DEFAULT_SHIPPING_ADDRESS_INDEX = 0;
-  const DEFAULT_BILLING_ADDRESS_INDEX = 1;
-
   return {
     addresses,
     billingAddresses: shippingAsBilling
-      ? [DEFAULT_SHIPPING_ADDRESS_INDEX]
+      ? [DEFAULT_ADDRESS_INDEX.SHIPPING]
       : billingAddress
-        ? [DEFAULT_BILLING_ADDRESS_INDEX]
+        ? [DEFAULT_ADDRESS_INDEX.BILLING]
         : undefined,
     dateOfBirth,
     defaultBillingAddress:
-      !shippingAsBilling && billingAddress?.default ? DEFAULT_BILLING_ADDRESS_INDEX : undefined,
-    defaultShippingAddress: shippingAddress.default ? DEFAULT_SHIPPING_ADDRESS_INDEX : undefined,
+      !shippingAsBilling && billingAddress?.default ? DEFAULT_ADDRESS_INDEX.BILLING : undefined,
+    defaultShippingAddress: shippingAddress.default ? DEFAULT_ADDRESS_INDEX.SHIPPING : undefined,
     email,
     firstName,
     lastName,
     password,
-    shippingAddresses: [DEFAULT_SHIPPING_ADDRESS_INDEX],
+    shippingAddresses: [DEFAULT_ADDRESS_INDEX.SHIPPING],
   };
 };

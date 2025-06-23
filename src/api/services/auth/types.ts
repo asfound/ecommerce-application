@@ -24,7 +24,7 @@ export interface SignupPayload {
     shippingAddress: CustomerAddress;
     shippingAsBilling: boolean;
   };
-  dateOfBirth: string; // TODO: maybe change
+  dateOfBirth: string;
   email: string;
   firstName: string;
   lastName: string;

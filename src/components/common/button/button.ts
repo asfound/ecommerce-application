@@ -4,7 +4,7 @@ import styles from './button.module.css';
 
 export interface ButtonProperties {
   className?: string;
-  onClick?(): void;
+  onClick?(): Promise<void> | void;
   textContent: string;
   type: HTMLButtonElement['type'];
 }

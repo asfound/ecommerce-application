@@ -12,8 +12,8 @@ import { rootAction } from '~/app/store/actions';
 import { Breadcrumbs } from '~/components/breadcrumbs/breadcrumbs';
 import { PAGE_NAME } from '~/shared/constants/constants';
 import { Presenter } from '~/shared/presenter/presenter';
-import { isError } from '~/shared/type-predicates/type-predicates';
 import { formatProductName } from '~/shared/utils/format-product-name';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { ProductDetailsView } from './product-details.view';
@@ -148,9 +148,7 @@ export class ProductDetailsPresenter extends Presenter<ProductDetailsView> {
 
       this.view.appendBreadcrumbs(breadcrumbs.element);
     } catch (error: unknown) {
-      if (isError(error)) {
-        this.view.showNotFoundWidget(error.message);
-      }
+      this.view.showNotFoundWidget(normalizeError(error).message);
     } finally {
       this.view.scrollToTop();
       this.view.hideLoader();

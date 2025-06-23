@@ -11,7 +11,7 @@ import type { NewAddressFormData } from '~/components/new-address-form/new-addre
 
 import { ADDRESS_TYPE } from '~/api/services/customer/constants';
 import { Presenter } from '~/shared/presenter/presenter';
-import { isError } from '~/shared/type-predicates/type-predicates';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { AddressTransitionKey } from './types';
@@ -100,9 +100,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       this.updateView(updatedCustomer);
       showToast(USER_NOTIFICATION.CHANGE);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 
@@ -117,9 +115,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       this.updateView(updatedCustomer);
       showToast(USER_NOTIFICATION.DELETE);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 
@@ -148,9 +144,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       this.updateCustomerVersion(updatedCustomer.version);
       this.updateView(updatedCustomer);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 
@@ -178,9 +172,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
         showToast(USER_NOTIFICATION.UNSET_DEFAULT);
       }
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 
@@ -199,9 +191,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       this.updateView(updatedCustomer);
       showToast(USER_NOTIFICATION.NEW);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 
@@ -222,9 +212,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
       this.updateView(updatedCustomer);
       showToast(USER_NOTIFICATION.NEW);
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 
@@ -252,9 +240,7 @@ export class UserAddressesPresenter extends Presenter<UserAddressesView> {
         showToast(USER_NOTIFICATION.UNSET_DEFAULT);
       }
     } catch (error: unknown) {
-      if (isError(error)) {
-        showToast(error.message, true);
-      }
+      showToast(normalizeError(error).message, true);
     }
   };
 

@@ -5,7 +5,7 @@ import { ROUTE_PATH } from '~/app/router/route-path';
 import { Router } from '~/app/router/router';
 import { rootAction } from '~/app/store/actions';
 import { Presenter } from '~/shared/presenter/presenter';
-import { isError } from '~/shared/type-predicates/type-predicates';
+import { normalizeError } from '~/shared/utils/normalize-error';
 import { showToast } from '~/shared/utils/show-toast';
 
 import type { RegistrationFormView } from './registration-form.view';
@@ -33,33 +33,25 @@ export class RegistrationFormPresenter extends Presenter<RegistrationFormView> {
     window.scrollTo({ top: 0 });
   };
 
-  private readonly handleSignUp = (payload: SignupPayload): void => {
-    this.authService
-      .signup(payload)
-      .then(() => {
-        return { email: payload.email, password: payload.password };
-      })
-      .then((credentials) => {
-        this.authService.logout();
+  private readonly handleSignUp = async (payload: SignupPayload): Promise<void> => {
+    try {
+      await this.authService.signup(payload);
 
-        return this.authService.login(credentials);
-      })
-      .then(() => {
-        this.view.hideError();
+      this.authService.logout();
 
-        Router.instance.navigate(ROUTE_PATH.MAIN);
+      await this.authService.login({ email: payload.email, password: payload.password });
 
-        rootAction.setLoggedIn(true);
+      this.view.hideError();
 
-        showToast(REGISTRATION_FORM_TEXT.ACCOUNT_CREATED);
-      })
-      .catch((error: unknown) => {
-        if (isError(error)) {
-          this.view.showError(error.message);
-        }
-      })
-      .finally(() => {
-        window.scrollTo({ top: 0 });
-      });
+      Router.instance.navigate(ROUTE_PATH.MAIN);
+
+      rootAction.setLoggedIn(true);
+
+      showToast(REGISTRATION_FORM_TEXT.ACCOUNT_CREATED);
+    } catch (error) {
+      this.view.showError(normalizeError(error).message);
+    } finally {
+      window.scrollTo({ top: 0 });
+    }
   };
 }

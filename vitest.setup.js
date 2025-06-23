@@ -1,7 +1,3 @@
-import { afterAll, afterEach, beforeAll } from 'vitest';
-
-import { server } from './src/api/msw-mocks/node.ts';
-
 import { vi } from 'vitest';
 
 vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
@@ -36,16 +32,3 @@ const localStorageMock = {
 
 vi.stubGlobal('localStorage', localStorageMock);
 vi.stubGlobal('sessionStorage', localStorageMock);
-
-beforeAll(() => {
-  server.listen();
-});
-
-afterEach(() => {
-  server.resetHandlers();
-  vi.restoreAllMocks();
-});
-
-afterAll(() => {
-  server.close();
-});
