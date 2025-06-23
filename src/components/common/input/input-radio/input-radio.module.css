@@ -1,0 +1,29 @@
+.radio {
+  width: auto;
+}
+
+.label {
+  cursor: pointer;
+
+  display: flex;
+  gap: 0.5rem;
+
+  width: max-content;
+
+  color: var(--color-accent-light);
+
+  transition: color var(--transition-duration);
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.disabled input {
+  accent-color: var(--color-dark);
+}
+
+.label:hover {
+  color: var(--color-accent);
+}

@@ -1,0 +1,159 @@
+.section {
+  margin-block: 8rem;
+}
+
+.heading {
+  display: grid;
+  margin-bottom: 3rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.heading .link {
+  display: block;
+
+  width: max-content;
+  margin-inline: auto;
+
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--color-accent-light);
+  text-transform: none;
+
+  transition: color var(--transition-duration);
+}
+
+.container {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6rem;
+}
+
+.cardContainer {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+
+  min-height: 45rem;
+
+  background-color: transparent;
+}
+
+.cardContent {
+  display: flex;
+  flex: 0 0 calc(50% - 1rem);
+  flex-direction: column;
+  gap: 3rem;
+  justify-content: center;
+}
+
+.name {
+  font-size: 3.6rem;
+  font-weight: 500;
+}
+
+.description {
+  font-family: var(--font-montserrat);
+  font-weight: 400;
+  line-height: 169%;
+  color: var(--color-accent-light);
+}
+
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 calc(50% - 1rem);
+  border-radius: 6px;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.code {
+  display: inline-block;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+
+  font-size: 2rem;
+  font-weight: 600;
+
+  background-color: var(--color-dark);
+}
+
+.icon {
+  width: 3rem;
+  height: 3rem;
+}
+
+.hint {
+  margin-right: 0.5rem;
+  font-weight: 300;
+  color: var(--color-accent-light);
+  text-transform: uppercase;
+}
+
+.left {
+  flex-direction: row;
+}
+
+.right {
+  flex-direction: row-reverse;
+}
+
+@media (hover: hover) {
+  .icon:hover {
+    cursor: copy;
+  }
+
+  .link:hover {
+    color: var(--color-accent);
+  }
+}
+
+@media (width <= 768px) {
+  .section {
+    margin-block: 6rem;
+  }
+
+  .container {
+    gap: 4rem;
+  }
+
+  .cardContainer {
+    flex-direction: column;
+    gap: 0;
+    min-height: auto;
+  }
+
+  .imageContainer {
+    flex: 0 0 auto;
+    order: -1;
+    width: 100%;
+    height: 20rem;
+  }
+
+  .cardContent {
+    flex: 1 1 auto;
+    gap: 2rem;
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .name {
+    font-size: 3rem;
+  }
+}

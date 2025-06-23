@@ -1,0 +1,36 @@
+.item {
+  font-weight: 400;
+  color: var(--color-accent-light);
+  background-color: transparent;
+  transition: color var(--transition-duration);
+}
+
+.item:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.rootCategory {
+  font-weight: 500;
+}
+
+.subcategory {
+  padding-left: 1rem;
+}
+
+.active {
+  pointer-events: none;
+  color: var(--color-accent);
+}
+
+@media (width <= 640px) {
+  .item:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (hover: hover) {
+  .item:hover {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+}

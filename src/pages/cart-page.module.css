@@ -1,0 +1,9 @@
+.page {
+  height: 100%;
+  margin-block: 4rem;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 600;
+}

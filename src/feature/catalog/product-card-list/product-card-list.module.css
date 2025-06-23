@@ -1,0 +1,41 @@
+.list {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(29rem, 1fr));
+  gap: 2rem;
+  align-content: start;
+
+  min-height: 100dvh;
+  border-radius: var(--border-radius);
+}
+
+.notFoundWidget {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  display: grid;
+  gap: 1rem;
+  place-items: center;
+
+  text-align: center;
+}
+
+.notFoundDescription {
+  font-size: 1.6rem;
+  color: var(--color-accent-light);
+  white-space: pre-wrap;
+}
+
+.notFoundGif {
+  border: 1rem solid var(--color-accent-light);
+  border-radius: var(--border-radius);
+}
+
+@media (width <= 640px) {
+  .list {
+    gap: 1rem;
+  }
+}

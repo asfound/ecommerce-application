@@ -1,0 +1,86 @@
+.backdrop {
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  visibility: hidden;
+  opacity: 0;
+  background-color: color-mix(in srgb, var(--color-dark) 50%, transparent);
+  backdrop-filter: blur(0.5rem);
+}
+
+.backdrop.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.container {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 1rem;
+}
+
+.content {
+  overflow: auto;
+  max-height: 85dvh;
+}
+
+.button {
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 500;
+  top: 2rem;
+  right: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2rem;
+  height: 2rem;
+  border: none;
+
+  background: none;
+}
+
+.button::before,
+.button::after {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+
+  display: block;
+
+  width: 2rem;
+  height: 2.5px;
+  border-radius: 2px;
+
+  background-color: var(--color-accent-light);
+}
+
+.button::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.button::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}

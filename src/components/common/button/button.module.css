@@ -1,0 +1,27 @@
+.button {
+  padding: 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+
+  color: inherit;
+
+  background-color: var(--color-accent);
+
+  transition: background-color var(--transition-duration);
+}
+
+.button:disabled {
+  pointer-events: none;
+  background-color: var(--color-accent-light);
+}
+
+@media (hover: hover) {
+  .button:hover {
+    cursor: pointer;
+    background-color: var(--color-accent-dark);
+  }
+
+  .button:hover:disabled {
+    background-color: var(--color-accent-light);
+  }
+}

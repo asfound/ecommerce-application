@@ -1,0 +1,81 @@
+import { postcodeValidator, postcodeValidatorExistsForCountry } from 'postcode-validator';
+
+import type { ValidatorFunction } from './types';
+
+import { EMAIL_VALIDATION_ERROR, VALIDATION_ERROR } from '../constants/constants';
+import { COUNTRY_CODES } from '../constants/country-codes';
+
+export const validateEmailFormat: ValidatorFunction = (value) => {
+  const emailRegex =
+    /^(?!.*[_.-]{2})(?!^[_.-])(?!.*[_\\-]$)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,6}$/;
+  return emailRegex.test(value) ? null : EMAIL_VALIDATION_ERROR.INCORRECT_FORMAT;
+};
+
+export const validateNoSpaces: ValidatorFunction = (value) => {
+  const hasLeadingOrTrailingSpaces = value !== value.trim();
+  const hasSpaces = value.includes(' ');
+  return hasLeadingOrTrailingSpaces || hasSpaces ? VALIDATION_ERROR.WHITESPACES : null;
+};
+
+export const validateRequired: ValidatorFunction = (value) => {
+  return value.length === 0 ? VALIDATION_ERROR.REQUIRED : null;
+};
+
+export const validateMinLength = (length: number) => {
+  return (value: string): null | string => {
+    const currentLength = value.trim().length;
+    return currentLength < length ? VALIDATION_ERROR.MIN_LENGTH(length, currentLength) : null;
+  };
+};
+
+export const validateHasUppercase: ValidatorFunction = (value) => {
+  return /[A-Z]/.test(value) ? null : VALIDATION_ERROR.HAS_UPPERCASE;
+};
+
+export const validateHasLowercase: ValidatorFunction = (value) => {
+  return /[a-z]/.test(value) ? null : VALIDATION_ERROR.HAS_LOWERCASE;
+};
+
+export const validateHasDigit: ValidatorFunction = (value) => {
+  return /\d/.test(value) ? null : VALIDATION_ERROR.HAS_DIGIT;
+};
+
+export const validateOnlyEnglishLetters: ValidatorFunction = (value) => {
+  return /^[a-zA-Z0-9]+$/.test(value) ? null : VALIDATION_ERROR.ONLY_ENGLISH_LETTERS;
+};
+
+export const validateHasNoDigit: ValidatorFunction = (value) => {
+  return /\d/.test(value) ? VALIDATION_ERROR.HAS_NO_DIGIT : null;
+};
+
+export const validateMinAge = (ageInYears: number) => {
+  return (value: string): null | string => {
+    const birthDate = new Date(value);
+    const today = new Date();
+
+    const age = today.getFullYear() - birthDate.getFullYear();
+
+    return age < ageInYears ? VALIDATION_ERROR.MIN_AGE : null;
+  };
+};
+
+export const validateDatalistValue = (valuesList: string[]) => {
+  return (value: string): null | string => {
+    return valuesList.includes(value) ? null : VALIDATION_ERROR.LIST_VALUE;
+  };
+};
+
+export const validatePostalCode = (getCountryName: () => string) => {
+  return (value: string): null | string => {
+    const countryName = getCountryName();
+
+    if (countryName) {
+      const countryCode = COUNTRY_CODES[countryName];
+      return postcodeValidatorExistsForCountry(countryCode) && postcodeValidator(value, countryCode)
+        ? null
+        : VALIDATION_ERROR.POSTAL_CODE;
+    } else {
+      return null;
+    }
+  };
+};

@@ -1,0 +1,59 @@
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+
+  margin: 0 auto;
+  margin-top: 2rem;
+  padding: 3rem 2rem;
+
+  text-align: center;
+}
+
+.illustration {
+  border: 1rem solid var(--color-accent-light);
+  border-radius: var(--border-radius);
+}
+
+.heading {
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.description {
+  font-size: 1.6rem;
+  color: var(--color-accent-light);
+  white-space: pre-wrap;
+}
+
+/* same as cta link should be refactored as shared style or 'action link' component maybe
+and use same styles as common button */
+.cta {
+  display: inline-block;
+
+  min-width: 22.2rem;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+
+  background-color: var(--color-accent);
+
+  transition:
+    background-color var(--transition-duration),
+    transform var(--transition-duration);
+}
+
+.cta:hover {
+  color: inherit;
+  background-color: var(--color-dark);
+}
+
+.cta:active {
+  transform: scale(0.96);
+}

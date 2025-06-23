@@ -1,0 +1,69 @@
+.addresses {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.addressCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 22.5rem;
+}
+
+.address {
+  position: relative;
+  padding: 2rem;
+}
+
+.address:not(:last-child)::after {
+  content: '';
+
+  position: absolute;
+  bottom: -1rem;
+  left: 0;
+
+  width: 100%;
+  height: 1px;
+
+  background-color: var(--color-accent-light);
+}
+
+.title {
+  min-width: 20rem;
+  font-size: 2rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.colHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.button {
+  min-width: 21rem;
+  padding: 0.8rem;
+  border: none;
+  border-radius: var(--border-radius);
+
+  color: var(--color-accent-light);
+
+  background-color: var(--color-black);
+
+  transition: color var(--transition-duration);
+}
+
+.hidden {
+  transform: scale(0);
+  visibility: hidden;
+}
+
+@media (hover: hover) {
+  .button:hover {
+    cursor: pointer;
+    color: var(--color-white);
+  }
+}

@@ -1,0 +1,9 @@
+.logo {
+  width: 13.7rem;
+  font-size: 2.4rem;
+  font-weight: 500;
+}
+
+.team {
+  color: var(--color-black);
+}

@@ -1,0 +1,4 @@
+{
+  "pattern": "^(develop|sprint-[1-9]){1}$|^(feat|fix|hotfix|chore|refactor|revert|docs|style|test)\/RSS-ECOMM-\\d{1}_\\d{1,2}\/[a-z0-9-]+$",
+  "errorMsg": "provide correct branch name: 'prefix/issue/feature'"
+}

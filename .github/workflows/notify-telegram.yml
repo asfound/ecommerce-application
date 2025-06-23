@@ -1,0 +1,24 @@
+name: Notify Telegram
+
+on:
+  workflow_call:
+    inputs:
+      textMessage:
+        required: false
+        type: string
+    secrets:
+      TG_CHAT_ID:
+        required: true
+      TG_BOT_TOKEN:
+        required: true
+jobs:
+  notify-telegram:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send Telegram message
+        env:
+          MESSAGE: ${{ inputs.textMessage }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: .github/scripts/send-telegram-message.sh

@@ -1,0 +1,19 @@
+:root {
+  --color-white: #fcfcfc;
+  --color-light-grey: #dfe1e3;
+  --color-accent-bright: #5b79ff;
+  --color-accent: #3d5ff9;
+  --color-accent-dark: #1d45f8;
+  --color-accent-light: #a6a9c0;
+  --color-dark: #2c2c2d;
+  --color-black: #141414;
+  --color-red: #e77373;
+  --color-green: #7fccc6;
+  --color-lilac: #c7b9d9;
+  --transition-duration: 0.2s;
+  --burger-transition-duration: 0.35s;
+  --padding-card: 1rem 2rem 2rem;
+  --border-radius: 4px;
+  --font-montserrat: 'Montserrat', system-ui, helvetica, arial, sans-serif;
+  --font-poppins: 'Poppins', system-ui, helvetica, arial, sans-serif;
+}
